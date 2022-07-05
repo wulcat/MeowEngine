@@ -14,14 +14,14 @@ file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)
 
 add_executable(
-    engine-console
+    console
     ${CPP_HEADERS}
     ${CPP_SOURCES}
 )
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(
-    engine-console
+    console
     PROPERTIES
     LINK_FLAGS
     "-F../Frameworks -framework SDL2 -framework OpenGL"
@@ -29,7 +29,7 @@ set_target_properties(
 
 # Executes after build to properly link sdk framework in executable file
 add_custom_command(
-    TARGET engine-console
+    TARGET console
     POST_BUILD
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMAND ./cmake-post-build.sh
