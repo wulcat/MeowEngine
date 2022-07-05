@@ -31,3 +31,10 @@ set_target_properties(
     LINK_FLAGS
     "-F../Frameworks -framework SDL2 -framework OpenGL"
 )
+
+add_custom_command(
+    TARGET engine-console
+    POST_BUILD
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMAND ./cmake-post-build.sh
+)
