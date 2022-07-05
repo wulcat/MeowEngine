@@ -4,7 +4,7 @@
 
 verify_build_folder_exists
 clean_build_folder
-
+ls
 # Build using CMake
 #cmake -B build -S .
 #make -C build
