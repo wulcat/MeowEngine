@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.4.1)
 
 set(CMAKE_OSX_ARCHITECTURES "x86_64")
@@ -19,10 +18,6 @@ add_executable(
     ${CPP_HEADERS}
     ${CPP_SOURCES}
 )
-
-#IF(APPLE)
-#    SET(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "Build architectures for Mac OS X" FORCE)
-#ENDIF(APPLE)
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(

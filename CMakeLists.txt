@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.4.1)
 project(simple_triangle)
 
-set(CMAKE_CXX_STANDARD 23)
-
-add_executable(simple_triangle main.cpp project/main/src/main.cpp)
+#set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
+#file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+#add_executable(simple_triangle main.cpp project/main/src/main.cpp)
+#add_executable(engine_console project/main/src/main.cpp)
+#include(${CMAKE_CURRENT_SOURCE_DIR}/project/console/CMakeLists.txt)
+#include(project/console/CMakeLists.txt)

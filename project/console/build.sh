@@ -21,3 +21,6 @@ pushd build
   ninja
 # shellcheck disable=SC2164
 popd
+
+# Run
+./out/engine-console

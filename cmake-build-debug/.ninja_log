@@ -1,5 +1,0 @@
-# ninja log v5
-372	420	1657009477740694707	simple_triangle	bff5536966ab0ae7
-0	371	1657009477688767561	CMakeFiles/simple_triangle.dir/main.cpp.o	bb454301867c76cd
-3	59	1657023952193474860	build.ninja	507a340e8fed3dac
-2	311	1657023416000221262	CMakeFiles/simple_triangle.dir/project/main/src/main.cpp.o	dd2ed8305b9fbd4e
