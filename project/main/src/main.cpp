@@ -2,31 +2,14 @@
 // Created by Akira Lynn on 05/07/22.
 //
 
-#include <iostream>
-#include <SDL.h>
+#include "core/includes.hpp"
+#include "core/graphics_wrapper.hpp"
+#include "core/sdl_wrapper.hpp"
 
 #pragma once
 
 SDL_Window* window;
 SDL_GLContext context;
-
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
-
-#if defined(__EMSCRIPTEN__)
-#include <GLES2/gl2.h>
-#elif __APPLE__
-#define GL_SILENCE_DEPRECATION
-#include "TargetConditionals.h"
-#if TARGET_OS_IPHONE
-#include <OpenGLES/ES2/gl.h>
-#else
-#include <OpenGL/gl3.h>
-#endif
-#elif __ANDROID__
-#include <GLES2/gl2.h>
-#endif
 
 void render() {
     SDL_GL_MakeCurrent(window, context);
@@ -82,13 +65,7 @@ void run() {
     uint32_t height{640};
 
     // Create a new SDL window based on OpenGL.
-//    window = ast::sdl::createWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
-    SDL_Window* tempWindow{SDL_CreateWindow(
-            "A Simple Triangle",
-            SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            width, height,
-            SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)};
-    window = tempWindow;
+    window = physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
 
     // Obtain an OpenGL context based on our window.
     context = SDL_GL_CreateContext(window);

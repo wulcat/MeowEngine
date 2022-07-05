@@ -4,17 +4,17 @@
 
 #include "platform.hpp"
 
-ast::Platform ast::getCurrentPlatform() {
+physicat::Platform physicat::GetCurrentPlatform() {
     #if defined(__EMSCRIPTEN__)
-            return ast::Platform::emscripten;
+        return physicat::Platform::emscripten;
     #elif __APPLE__
-    #include "TargetConditionals.h"
-    #if TARGET_OS_IPHONE
-            return ast::Platform::ios;
-    #else
-            return ast::Platform::mac;
-    #endif
+        #include "TargetConditionals.h"
+        #if TARGET_OS_IPHONE
+            return physicat::Platform::ios;
+        #else
+            return physicat::Platform::mac;
+        #endif
     #elif __ANDROID__
-            return ast::Platform::android;
+        return physicat::Platform::android;
     #endif
 }

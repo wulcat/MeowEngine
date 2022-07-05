@@ -6,16 +6,17 @@
 
 #pragma once
 
-namespace ast
+namespace physicat
 {
     enum class Platform
     {
-        mac,
         ios,
         android,
+        windows,
+        mac,
         emscripten
     };
 
-    Platform getCurrentPlatform();
+    Platform GetCurrentPlatform();
 } // namespace ast
 
