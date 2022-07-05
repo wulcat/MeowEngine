@@ -237,4 +237,8 @@ data/roboto*.*
 
 cmake-build-debug/
 
-.idea/
+.idea
+
+third-party
+
+Frameworks

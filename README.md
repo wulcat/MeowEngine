@@ -8,7 +8,7 @@
 - Emscriptten
 - Vulkan
 - OpenGL ES3
-- SDL or GLFW
+- SDL/SDL2 (mac framework) or GLFW
 
 ## Tutorials
 - https://emscripten.org/docs/getting_started/Tutorial.html#tutorial

@@ -3,4 +3,4 @@ project(simple_triangle)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(simple_triangle main.cpp)
+add_executable(simple_triangle main.cpp project/main/src/main.cpp)
