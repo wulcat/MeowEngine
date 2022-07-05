@@ -1,5 +1,16 @@
 #!/bin/bash
 
+
+# Starts throwing error
+## Alias the 'pushd' command and have it send its output to the abyss ...
+#pushd() {
+#    command pushd "$@" > /dev/null
+#}
+#
+## Alias the 'popd' command and have it send its output to the abyss ...
+#popd() {
+#    command popd "$@" > /dev/null
+#}
 #------------------------------------------------------------------------------------
 
 

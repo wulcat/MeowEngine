@@ -27,6 +27,7 @@ set_target_properties(
     "-F../Frameworks -framework SDL2 -framework OpenGL"
 )
 
+# Executes after build to properly link sdk framework in executable file
 add_custom_command(
     TARGET engine-console
     POST_BUILD

@@ -238,7 +238,7 @@ data/roboto*.*
 cmake-build-debug/
 
 .idea
-
 third-party
-
 Frameworks
+build
+out
