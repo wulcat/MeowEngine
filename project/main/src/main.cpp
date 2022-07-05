@@ -5,9 +5,14 @@
 #include <iostream>
 #include <SDL.h>
 
-#define GL_SILENCE_DEPRECATION
-//#include <OpenGL/gl3.h>
 #pragma once
+
+SDL_Window* window;
+SDL_GLContext context;
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 #if defined(__EMSCRIPTEN__)
 #include <GLES2/gl2.h>
@@ -23,7 +28,7 @@
 #include <GLES2/gl2.h>
 #endif
 
-void render(SDL_Window* window, const SDL_GLContext& context) {
+void render() {
     SDL_GL_MakeCurrent(window, context);
 
     glClearColor(0.3f, 0.7f, 0.0f, 1.0f);
@@ -32,7 +37,7 @@ void render(SDL_Window* window, const SDL_GLContext& context) {
     SDL_GL_SwapWindow(window);
 }
 
-bool loop(SDL_Window* window, const SDL_GLContext& context) {
+bool loop() {
     SDL_Event event;
 
     // Each loop we will process any events that are waiting for us.
@@ -58,25 +63,35 @@ bool loop(SDL_Window* window, const SDL_GLContext& context) {
 
     // Perform our rendering for this frame, normally you would also perform
     // any updates to your world as well here.
-    render(window, context);
+    render();
 
     // Returning true means we want to keep looping.
     return true;
 }
+
+#ifdef EMSCRIPTEN
+
+void emscriptenLoop() {
+    loop();
+}
+
+#endif
 
 void run() {
     uint32_t width{640};
     uint32_t height{640};
 
     // Create a new SDL window based on OpenGL.
-    SDL_Window* window{SDL_CreateWindow(
+//    window = ast::sdl::createWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+    SDL_Window* tempWindow{SDL_CreateWindow(
             "A Simple Triangle",
             SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
             width, height,
             SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)};
+    window = tempWindow;
 
     // Obtain an OpenGL context based on our window.
-    SDL_GLContext context{SDL_GL_CreateContext(window)};
+    context = SDL_GL_CreateContext(window);
 
     // Setup some basic global OpenGL state.
     glClearDepthf(1.0f);
@@ -85,10 +100,14 @@ void run() {
     glEnable(GL_CULL_FACE);
     glViewport(0, 0, width, height);
 
-    while (loop(window, context))
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop(emscriptenLoop, 60, 1);
+#else
+    while (loop())
     {
         // Just waiting for the main loop to end.
     }
+#endif
 
     // Clean up after ourselves.
     SDL_GL_DeleteContext(context);
