@@ -14,14 +14,14 @@ file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)
 
 add_executable(
-        .
+    engine-console
     ${CPP_HEADERS}
     ${CPP_SOURCES}
 )
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(
-        .
+    engine-console
     PROPERTIES
     LINK_FLAGS
     "-F../Frameworks -framework SDL2 -framework OPENGL"
