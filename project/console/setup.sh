@@ -7,3 +7,6 @@
 fetch_brew_dependency "wget"
 fetch_brew_dependency "cmake"
 fetch_brew_dependency "ninja"
+
+# Download SDL lib
+fetch_third_party_lib_sdl2
