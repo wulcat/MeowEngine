@@ -1,15 +1,15 @@
 
 ## Plan of action
-- [x] Setting up project for cross-platform support (mac / windows / html)
-- [ ] Setting up Vulkan
-- [ ] Shader pipeline
+- [x] Setting up project for cross-platform build support
 - [ ] Import mesh/textures and rendering in a scene
 - [ ] Keyboard & Mouse inputs
 - [ ] Window resize
 - [ ] Importing c# written fluid-simulation in this engine
+- [ ] Setting up Vulkan
+- [ ] Shader pipeline
+- [ ] Creating 3D spatial hashing (showcase & in-built)
 - [ ] Creating support for multi-scene compilation
 - [ ] HTML navigation multi scenes on demand (async download and load scenes)
-- [ ] Creating 3D spatial hashing (showcase & in-built)
 - [ ] Support for windows & mac
 
 ## Compitability
