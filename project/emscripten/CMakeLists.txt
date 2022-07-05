@@ -27,3 +27,11 @@ set_target_properties(
     LINK_FLAGS
     "-O2 -s USE_SDL=2 -s USE_WEBGL2=1"
 )
+
+# When the build is complete we will run the 'cmake-post-build.sh' script.
+add_custom_command(
+    TARGET web
+    POST_BUILD
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMAND ./cmake-post-build.sh
+)
