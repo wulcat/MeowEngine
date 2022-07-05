@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Include the shared script from parent
+. ../shared-scripts.sh
+
+# Ask homebrew to install dependencies
+fetch_brew_dependency "wget"
+fetch_brew_dependency "cmake"
+fetch_brew_dependency "ninja"
