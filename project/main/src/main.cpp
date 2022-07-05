@@ -70,6 +70,10 @@ void run() {
     // Obtain an OpenGL context based on our window.
     context = SDL_GL_CreateContext(window);
 
+    #ifdef WIN32
+        glewInit();
+    #endif
+
     // Setup some basic global OpenGL state.
     glClearDepthf(1.0f);
     glEnable(GL_DEPTH_TEST);

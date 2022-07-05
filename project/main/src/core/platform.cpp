@@ -16,5 +16,7 @@ physicat::Platform physicat::GetCurrentPlatform() {
         #endif
     #elif __ANDROID__
         return physicat::Platform::android;
+    #elif WIN32
+        return physicat::Platform::windows;
     #endif
 }
