@@ -17,7 +17,7 @@ add_executable(
     console
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-)
+        ../main/src/core/graphics_wrapper.hpp ../main/src/core/sdl_wrapper.cpp ../main/src/core/sdl_wrapper.hpp ../main/src/core/includes.hpp)
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(
