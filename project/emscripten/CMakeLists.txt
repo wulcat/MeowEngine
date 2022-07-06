@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
-
+project(physicat)
 set(CMAKE_OSX_ARCHITECTURES "x86_64")
 # We are using C++ 17 and will make use of C++ exceptions.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
@@ -18,7 +18,7 @@ add_executable(
     web
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-        ../main/src/engine/opengl/opengl_application.cpp ../main/src/engine/opengl/opengl_application.h ../main/src/engine/vulkan/vulkan_application.cpp ../main/src/engine/vulkan/vulkan_application.h)
+)
 
 # These properties specify what kind of Emscripten build to perform and are assigned to our 'a-simple-triangle' executable target.
 set_target_properties(

@@ -11,7 +11,7 @@ namespace {
     #ifdef EMSCRIPTEN
         // Free Function in an anonymous namespace private to this file
         void EmscriptenLoop(physicat::Application* engine) {
-            engine->Loop();
+            engine->Update();
         }
     #endif
 } // namespace
