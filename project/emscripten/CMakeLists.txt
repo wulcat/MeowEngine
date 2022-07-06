@@ -18,7 +18,7 @@ add_executable(
     web
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-        ../main/src/core/platform.hpp ../main/src/core/platform.cpp)
+)
 
 # These properties specify what kind of Emscripten build to perform and are assigned to our 'a-simple-triangle' executable target.
 set_target_properties(

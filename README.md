@@ -38,3 +38,6 @@
 ## Issue Links to Query
 #### If emcc on terminal won't work?
   Activate PATH and other environment variables in the current terminal `` $source ./emsdk_env.sh ``
+  
+## Shortcuts to note
+- https://stackoverflow.com/questions/6780895/visual-studio-parameter-listing-intellisense

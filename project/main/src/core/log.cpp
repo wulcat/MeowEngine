@@ -3,7 +3,7 @@
 //
 
 #ifndef NDEBUG
-    #ifdef __ANDROID__
+    #ifdef __A  NDROID__
         #include <android/log.h>
     #endif
 #endif
