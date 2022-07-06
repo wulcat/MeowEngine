@@ -42,7 +42,7 @@ std::pair<uint32_t, uint32_t> physicat::sdl::GetDisplaySize() {
         displayHeight = static_cast<uint32_t>(EM_ASM_INT({
             return document.getElementById('canvas').height;
         }));
-    #elif
+    #else
         switch (physicat::GetCurrentPlatform()) {
             case Platform::ios:
             case Platform::android:

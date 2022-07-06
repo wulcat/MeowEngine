@@ -14,7 +14,7 @@ namespace physicat {
         Application() = default;
         virtual ~Application() = default;
 
-        void StartApplication();
+        void Begin();
         bool Update();
         virtual void Render() = 0;
     };

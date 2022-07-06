@@ -18,7 +18,7 @@ namespace {
 
 
 
-void physicat::Application::StartApplication() {
+void physicat::Application::Begin() {
     #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
         emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);

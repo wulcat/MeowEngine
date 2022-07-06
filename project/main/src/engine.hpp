@@ -13,7 +13,7 @@ namespace physicat {
     struct Engine {
         Engine();
 
-        void Run();
+        void Begin();
 
     private:
         struct Internal;
