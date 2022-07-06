@@ -28,6 +28,7 @@
 - [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
 - [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
 - [Main Loop in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
+- [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
 
 ## Setup
 - Run project/console/setup.sh to install packages
