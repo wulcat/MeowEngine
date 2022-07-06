@@ -27,7 +27,7 @@
 ## Tutorials
 - [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
 - [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
-- [Main Loop in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
+- [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
 - [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
 
 ## Setup
@@ -41,3 +41,8 @@
   
 ## Shortcuts to note
 - https://stackoverflow.com/questions/6780895/visual-studio-parameter-listing-intellisense
+
+## Mini - TODO
+- Find a way to shutdown the http.server python after running web build
+- Explore what's happening in internal_ptr script with the templates and internal_ptr thing
+- Empty namespaces name declaration & using namespaces vs include headers

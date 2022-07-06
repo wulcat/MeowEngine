@@ -71,7 +71,7 @@ SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
     std::pair<uint32_t, uint32_t> displaySize{physicat::sdl::GetDisplaySize()};
 
     SDL_Window* window{SDL_CreateWindow(
-        "Physicat Engine",
+        "Physicat Application",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         displaySize.first,
