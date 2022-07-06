@@ -13,7 +13,7 @@
 - [ ] Support for windows & mac
 
 ## Compitability
-- [x] Executable
+- [x] Console
 - [ ] Mac
 - [ ] Windows
 - [x] Web
@@ -24,7 +24,7 @@
 - OpenGL ES3
 - SDL/SDL2 (mac framework) or GLFW
 
-## Tutorials
+## References
 - [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
 - [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
 - [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)

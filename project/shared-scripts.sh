@@ -127,7 +127,11 @@ clean_build_folder() {
   rm -r build/*
 }
 
+clean_out_folder() {
+  echo "Deleting files from previous build..."
 
+  rm - r out/*
+}
 
 
 

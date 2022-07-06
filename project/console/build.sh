@@ -4,7 +4,8 @@
 
 verify_build_folder_exists
 clean_build_folder
-ls
+clean_out_folder
+
 # Build using CMake
 #cmake -B build -S .
 #make -C build
@@ -23,4 +24,4 @@ pushd build
 popd
 
 # Run
-./out/engine-console
+./out/console
