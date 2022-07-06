@@ -3,7 +3,7 @@
 //
 
 #ifndef NDEBUG
-    #ifdef __A  NDROID__
+    #ifdef __ANDROID__
         #include <android/log.h>
     #endif
 #endif
@@ -15,7 +15,7 @@
 void physicat::log(const std::string &tag, const std::string &message) {
 #ifndef NDEBUG
     #ifdef __ANDROID__
-    __android_log_print(ANDROID_LOG_DEBUG, "a-simple-triangle", "%s: %s", tag.c_str(), message.c_str());
+        __android_log_print(ANDROID_LOG_DEBUG, "a-simple-triangle", "%s: %s", tag.c_str(), message.c_str());
     #else
         std::cout << tag << ": " << message << std::endl;
     #endif
