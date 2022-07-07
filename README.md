@@ -11,6 +11,8 @@
 - [ ] Creating support for multi-scene compilation
 - [ ] HTML navigation multi scenes on demand (async download and load scenes)
 - [ ] Support for windows & mac
+- [ ] Find a way to debug coding after built application
+- [ ] Find a way to isolate and build code while developing simulations
 
 ## Compitability
 - [x] Console
@@ -29,6 +31,11 @@
 - [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
 - [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
 - [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
+- [SDL Renderer](https://dev.to/noah11012/using-sdl2-2d-accelerated-renderering-1kcb)
+- Fluid
+  - https://magnum.graphics/showcase/fluidsimulation2d/
+  - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
+  - https://google.github.io/liquidfun/
 
 ## Setup
 - Run project/console/setup.sh to install packages

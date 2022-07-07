@@ -19,6 +19,9 @@ namespace {
 
 
 void physicat::Application::Begin() {
+    scene = new Scene();
+    scene->Begin();
+
     #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
         emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);
@@ -54,9 +57,11 @@ bool physicat::Application::Update() {
         }
     }
 
+    scene->Update();
+
     // Perform our rendering for this frame, normally you would also perform
     // any updates to your world as well here.
-    Render();
+    Render(scene);
 
     // Returning true means we want to keep looping.
     return true;

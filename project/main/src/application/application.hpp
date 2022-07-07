@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../core/includes.hpp"
+#include "../simulations/scene.hpp"
 
 namespace physicat {
     struct Application {
@@ -16,7 +17,13 @@ namespace physicat {
 
         void Begin();
         bool Update();
-        virtual void Render() = 0;
+        virtual void Render(Scene* scene) = 0;
+
+        // TEMP -- start
+
+        Scene* scene{};
+
+        // TEMP -- end
     };
 } // namespace physicat
 

@@ -11,7 +11,7 @@
 namespace physicat {
     struct OpenGLApplication : public physicat::Application {
         OpenGLApplication();
-        void Render() override;
+        void Render(Scene* scene) override;
 
     private:
         struct Internal;
