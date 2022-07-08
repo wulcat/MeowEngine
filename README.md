@@ -5,6 +5,7 @@
 - [ ] Keyboard & Mouse inputs
 - [ ] Window resize
 - [x] Importing c# written fluid-simulation in this engine
+- [x] Migrating 2D spatial hashing
 - [ ] Setting up Vulkan
 - [ ] Shader pipeline
 - [ ] Creating 3D spatial hashing (showcase & in-built)
