@@ -5,6 +5,7 @@
 - [ ] Keyboard & Mouse inputs
 - [ ] Window resize
 - [x] Importing c# written fluid-simulation in this engine
+- [x] Migrating 2D spatial hashing
 - [ ] Setting up Vulkan
 - [ ] Shader pipeline
 - [ ] Creating 3D spatial hashing (showcase & in-built)
@@ -33,9 +34,9 @@
 - [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
 - [SDL Renderer](https://dev.to/noah11012/using-sdl2-2d-accelerated-renderering-1kcb)
 - Fluid
-    - https://magnum.graphics/showcase/fluidsimulation2d/
-    - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
-    - https://google.github.io/liquidfun/
+  - https://magnum.graphics/showcase/fluidsimulation2d/
+  - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
+  - https://google.github.io/liquidfun/
 
 ## Setup
 - Run project/console/setup.sh to install packages
