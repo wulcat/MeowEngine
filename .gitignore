@@ -242,3 +242,7 @@ third-party
 Frameworks
 build
 out
+Physicat.xcodeproj
+DerivedData
+Source
+Generated

@@ -37,6 +37,7 @@
   - https://magnum.graphics/showcase/fluidsimulation2d/
   - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
   - https://google.github.io/liquidfun/
+- [Shaders](https://www.shadertoy.com)
 
 ## Setup
 - Run project/console/setup.sh to install packages
