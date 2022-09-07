@@ -17,7 +17,7 @@
 
 ## Compitability
 - [x] Console
-- [ ] Mac
+- [x] Mac (x84) (Arm architecture not Supported)
 - [ ] Windows
 - [x] Web
 
@@ -43,6 +43,7 @@
 - Run project/console/setup.sh to install packages
 - Run project/console/build.sh to build the project (auto runs the executable)
 - Run project/emscripten/build.sh to build the project for web
+- Run project/macos/setup.sh and run Physicat.xcodeproj and hit play button
 
 ## Issue Links to Query
 #### If emcc on terminal won't work?
