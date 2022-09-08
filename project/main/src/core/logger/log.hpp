@@ -10,8 +10,8 @@
 #include <string>
 
 namespace physicat {
-    void log(const std::string& tag, const std::string& message);
-    void log(const std::string& tag, const std::string& message, const std::exception& error);
+    void Log(const std::string& tag, const std::string& message);
+    void Log(const std::string& tag, const std::string& message, const std::exception& error);
 } // namespace physicat
 
 

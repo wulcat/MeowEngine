@@ -17,7 +17,7 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> internal;
+        physicat::internal_ptr<Internal> InternalPointer;
     };
 } // namespace physicat
 

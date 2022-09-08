@@ -12,7 +12,7 @@
 #include "iostream"
 
 
-void physicat::log(const std::string &tag, const std::string &message) {
+void physicat::Log(const std::string &tag, const std::string &message) {
     std::cout<< " Test";
     #ifndef NDEBUG
         #ifdef __ANDROID__
@@ -23,9 +23,9 @@ void physicat::log(const std::string &tag, const std::string &message) {
     #endif
 }
 
-void physicat::log(const std::string &tag, const std::string &message, const std::exception &error) {
+void physicat::Log(const std::string &tag, const std::string &message, const std::exception &error) {
     #ifndef NDEBUG
         std::string output = message + " Exception message was: " + std::string{error.what()};
-        physicat::log(tag, output);
+    physicat::Log(tag, output);
     #endif
 }

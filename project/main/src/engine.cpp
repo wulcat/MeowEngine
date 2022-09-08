@@ -24,11 +24,11 @@ struct Engine::Internal {
     void Run() {
         static const std::string logTag{classLogTag + "run"};
 
-        physicat::log(logTag, "Initializing Engine...");
+        physicat::Log(logTag, "Initializing Engine...");
 
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
-        physicat::log(logTag, "SDL2 Initialized");
+        physicat::Log(logTag, "SDL2 Initialized");
 
         ResolveApplication()->Begin();
     }
@@ -38,11 +38,11 @@ struct Engine::Internal {
         static const std::string logTag{classLogTag + "resolving Application"};
 
         try {
-            physicat::log(logTag, "Creating OpenGL Application...");
+            physicat::Log(logTag, "Creating OpenGL Application...");
             return std::make_unique<physicat::OpenGLApplication>();
         }
         catch (const std::exception& error) {
-            physicat::log(logTag, "OpenGL Application failed to initialized.", error);
+            physicat::Log(logTag, "OpenGL Application failed to initialized.", error);
         }
 
         throw std::runtime_error(logTag + " No application can run on current environment");
@@ -53,12 +53,9 @@ struct Engine::Internal {
     }
 };
 
-Engine::Engine() :
-    internal(physicat::make_internal_ptr<Internal>()) {
-
-}
+Engine::Engine() : InternalPointer(physicat::make_internal_ptr<Internal>()) {}
 
 void Engine::Run() {
-    internal->Run();
+    InternalPointer->Run();
 }
 

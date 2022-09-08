@@ -26,7 +26,8 @@ namespace {
         int viewportHeight;
         SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
 
-        physicat::log(logTag, "Created OpenGL Context with viewport size: " + std::to_string(viewportWidth) + " , " + std::to_string(viewportHeight) );
+        physicat::Log(logTag, "Created OpenGL Context with viewport size: " + std::to_string(viewportWidth) + " , " +
+                              std::to_string(viewportHeight));
 
         glClearDepthf(1.0f);
         glEnable(GL_DEPTH_TEST);
