@@ -4,9 +4,9 @@
 
 #include "opengl_application.h"
 
-#include "../../core/graphics_wrapper.hpp"
-#include "../../core/log.hpp"
-#include "../../core/sdl_wrapper.hpp"
+#include "../../core/wrappers/graphics_wrapper.hpp"
+#include "../../core/logger/log.hpp"
+#include "../../core/wrappers/sdl_wrapper.hpp"
 
 #include <string>
 

@@ -2,9 +2,9 @@
 // Created by Akira Lynn on 06/07/22.
 //
 
-#include "includes.hpp"
+#include "../includes.hpp"
 #include "sdl_wrapper.hpp"
-#include "platform.hpp"
+#include "../platform.hpp"
 
 namespace // wth is this ._. ?
 {

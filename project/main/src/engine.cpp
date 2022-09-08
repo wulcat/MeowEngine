@@ -6,8 +6,8 @@
 
 #include "application/application.hpp"
 #include "application/opengl/opengl_application.h"
-#include "core/log.hpp"
-#include "core/sdl_wrapper.hpp"
+#include "core/logger/log.hpp"
+#include "core/wrappers/sdl_wrapper.hpp"
 #include <stdexcept>
 #include <string>
 
@@ -21,7 +21,7 @@ struct Engine::Internal {
 
     }
 
-    void Begin() {
+    void Run() {
         static const std::string logTag{classLogTag + "run"};
 
         physicat::log(logTag, "Initializing Engine...");
@@ -58,7 +58,7 @@ Engine::Engine() :
 
 }
 
-void Engine::Begin() {
-    internal->Begin();
+void Engine::Run() {
+    internal->Run();
 }
 

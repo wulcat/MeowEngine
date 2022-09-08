@@ -10,7 +10,7 @@
 
 
 int main(int, char* []) {
-    physicat::Engine().Begin();
+    physicat::Engine().Run();
 
     return 0;
 }

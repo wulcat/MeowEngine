@@ -2,7 +2,7 @@
 // Created by Akira Lynn on 06/07/22.
 //
 
-#include "../core/sdl_wrapper.hpp"
+#include "../core/wrappers/sdl_wrapper.hpp"
 #include "application.hpp"
 
 using physicat::Application;

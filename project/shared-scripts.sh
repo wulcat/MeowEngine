@@ -67,6 +67,33 @@ fetch_third_party_lib_sdl() {
   popd
 }
 
+fetch_third_party_lib_glm() {
+  verify_third_party_folder_exists
+
+  pushd ../../third-party
+    if [ ! -d "glm" ] ; then
+      echo "Fetching GLM"
+      wget https://github.com/g-truc/glm/releases/download/0.9.9.3/glm-0.9.9.3.zip
+      unzip -q glm-0.9.9.3.zip
+      rm glm-0.9.9.3.zip
+    fi
+  popd
+}
+
+fetch_third_party_lib_obj_loader() {
+  verify_third_party_folder_exists
+
+  pushd ../../third-party
+      if [ ! -d "tiny-obj-loader" ] ; then
+        echo "Fetching Tiny OBJ Loader"
+        wget https://github.com/syoyo/tinyobjloader/archive/v1.4.1.zip
+        unzip -q v1.4.1.zip
+        rm v1.4.1.zip
+        mv tinyobjloader-1.4.1 tiny-obj-loader
+      fi
+    popd
+}
+
 #------------------------------------------------------------------------------------
 
 verify_frameworks_folder_exists() {
