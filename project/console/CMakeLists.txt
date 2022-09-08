@@ -10,6 +10,8 @@ set(MAIN_SOURCE_DIR "../main/src")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/out)
 
 include_directories(${THIRD_PARTY_DIR}/SDL/include)
+include_directories(${THIRD_PARTY_DIR}/glm)
+include_directories(${THIRD_PARTY_DIR}/tiny-obj-loader)
 
 file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)
@@ -18,7 +20,7 @@ add_executable(
     console
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-)
+        ../main/src/core/wrappers/glm_wrapper.cpp ../main/src/core/wrappers/glm_wrapper.hpp ../main/src/core/mesh/vertex.cpp ../main/src/core/mesh/vertex.hpp ../main/src/core/mesh/mesh.cpp ../main/src/core/mesh/mesh.hpp)
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(

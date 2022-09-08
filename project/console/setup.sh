@@ -11,3 +11,5 @@ fetch_brew_dependency "ninja"
 # Download SDL lib
 fetch_third_party_lib_sdl
 fetch_framework_sdl2
+fetch_third_party_lib_glm
+fetch_third_party_lib_tiny_obj_loader
