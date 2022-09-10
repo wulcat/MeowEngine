@@ -8,6 +8,8 @@
 #include "../../core/logger/log.hpp"
 #include "../../core/wrappers/sdl_wrapper.hpp"
 
+#include "../../core/assets/assets.hpp"
+
 #include <string>
 
 using physicat::OpenGLApplication;
@@ -46,7 +48,12 @@ struct OpenGLApplication::Internal {
     Internal() :
         window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
         context(CreateContext(window))
-    {}
+    {
+        physicat::Mesh mesh(physicat::assets::LoadObjFile("assets/models/crate.obj"));
+
+        physicat::Log("CRATE!", "Crate has " + std::to_string(mesh.GetVertices().size()) + " vertices and " + std::to_string(mesh.GetIndices().size()) + " indices.");
+
+    }
 
     ~Internal() {
         SDL_GL_DeleteContext(context);

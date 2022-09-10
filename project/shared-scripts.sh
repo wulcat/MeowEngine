@@ -80,16 +80,16 @@ fetch_third_party_lib_glm() {
   popd
 }
 
-fetch_third_party_lib_obj_loader() {
+fetch_third_party_lib_tiny_obj_loader() {
   verify_third_party_folder_exists
 
   pushd ../../third-party
       if [ ! -d "tiny-obj-loader" ] ; then
         echo "Fetching Tiny OBJ Loader"
-        wget https://github.com/syoyo/tinyobjloader/archive/v1.4.1.zip
-        unzip -q v1.4.1.zip
-        rm v1.4.1.zip
-        mv tinyobjloader-1.4.1 tiny-obj-loader
+        wget https://github.com/tinyobjloader/tinyobjloader/archive/refs/tags/v1.0.6.zip
+        unzip -q v1.0.6.zip
+        rm v1.0.6.zip
+        mv tinyobjloader-1.0.6 tiny-obj-loader
       fi
     popd
 }
