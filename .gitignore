@@ -246,3 +246,9 @@ Physicat.xcodeproj
 DerivedData
 Source
 Generated
+
+## console
+#ipch
+#
+## mac
+#assets

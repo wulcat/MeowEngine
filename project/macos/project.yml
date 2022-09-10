@@ -25,6 +25,9 @@ targets:
       path: Generated/app.entitlements
     sources:
       - Source
+      - path: Assets
+        type: folder
+        buildPhase: resources
     settings:
       HEADER_SEARCH_PATHS:
         - $(PROJECT_DIR)/../../third-party/SDL/include

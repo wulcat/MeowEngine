@@ -19,8 +19,16 @@ if [ ! -d "Source" ]; then
   ln -s ../main/src Source
 fi
 
+# Check if we exisint symlink to our shared assets folder
+if [ ! -d "assets" ]; then
+  echo "Linking assets path to '../main/assets"
+  ln -s ../main/assets Assets
+fi
+
 # Create Xcode project
 echo "Generating Xcode project"
 xcodegen generate
+
+
 
 

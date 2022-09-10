@@ -27,7 +27,7 @@ set_target_properties(
     web
     PROPERTIES
     LINK_FLAGS
-    "-O2 -s USE_SDL=2 -s USE_WEBGL2=1"
+    "-O2 -s USE_SDL=2 -s USE_WEBGL2=1 --preload-file ../../main/assets@/assets"
 )
 
 # When the build is complete we will run the 'cmake-post-build.sh' script.
