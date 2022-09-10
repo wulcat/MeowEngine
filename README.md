@@ -11,7 +11,8 @@
 - [ ] Creating 3D spatial hashing (showcase & in-built)
 - [ ] Creating support for multi-scene compilation
 - [ ] HTML navigation multi scenes on demand (async download and load scenes)
-- [ ] Support for windows & mac
+- [ ] Support for window
+- [x] Support for mac
 - [ ] Find a way to debug coding after built application
 - [ ] Find a way to isolate and build code while developing simulations
 
