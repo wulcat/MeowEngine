@@ -2,11 +2,13 @@
 // Created by Akira Lynn on 06/07/22.
 //
 
-#include "opengl_application.h"
+#include "opengl_application.hpp"
+#include "opengl_pipeline.hpp"
 
 #include "../../core/wrappers/graphics_wrapper.hpp"
 #include "../../core/logger/log.hpp"
 #include "../../core/wrappers/sdl_wrapper.hpp"
+
 
 #include "../../core/assets/assets.hpp"
 
@@ -44,15 +46,15 @@ namespace {
 struct OpenGLApplication::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
+    const physicat::OpenGLPipeline DefaultPipeline;
+    physicat::Mesh Mesh;
 
-    Internal() :
-            Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
-            Context(CreateContext(Window))
+    Internal() : Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
+                Context(CreateContext(Window)),
+                DefaultPipeline(physicat::OpenGLPipeline("default")),
+                Mesh(physicat::assets::LoadObjFile("assets/models/crate.obj"))
     {
-        physicat::Mesh mesh(physicat::assets::LoadObjFile("assets/models/crate.obj"));
-
-        physicat::Log("CRATE!", "Crate has " + std::to_string(mesh.GetVertices().size()) + " vertices and " + std::to_string(mesh.GetIndices().size()) + " indices.");
-
+        physicat::Log("CRATE!", "Crate has " + std::to_string(Mesh.GetVertices().size()) + " vertices and " + std::to_string(Mesh.GetIndices().size()) + " indices.");
     }
 
     ~Internal() {

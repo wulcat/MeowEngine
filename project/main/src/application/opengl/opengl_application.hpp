@@ -2,8 +2,8 @@
 // Created by Akira Lynn on 06/07/22.
 //
 
-#ifndef PHYSICAT_OPENGL_APPLICATION_H
-#define PHYSICAT_OPENGL_APPLICATION_H
+#ifndef PHYSICAT_OPENGL_APPLICATION_HPP
+#define PHYSICAT_OPENGL_APPLICATION_HPP
 
 #include "../../core/internal_ptr.hpp"
 #include "../application.hpp"
@@ -19,4 +19,4 @@ namespace physicat {
     };
 } // namespace physicat
 
-#endif //PHYSICAT_OPENGL_APPLICATION_H
+#endif //PHYSICAT_OPENGL_APPLICATION_HPP

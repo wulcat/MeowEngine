@@ -10,7 +10,7 @@
 
 namespace physicat {
     struct OpenGLPipeline {
-        OpenGLPipeline(const std::string& shaderName);
+        explicit OpenGLPipeline(const std::string& shaderName);
 
     private:
         struct Internal;

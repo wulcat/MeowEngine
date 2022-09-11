@@ -13,7 +13,6 @@
 
 
 void physicat::Log(const std::string &tag, const std::string &message) {
-    std::cout<< " Test";
     #ifndef NDEBUG
         #ifdef __ANDROID__
             __android_log_print(ANDROID_LOG_DEBUG, "a-simple-triangle", "%s: %s", tag.c_str(), message.c_str());
