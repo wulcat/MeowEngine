@@ -15,7 +15,7 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> internal; // checkout pimpl pattern
+        physicat::internal_ptr<Internal> InternalPointer; // checkout pimpl pattern
     };
 } // namespace physicat
 

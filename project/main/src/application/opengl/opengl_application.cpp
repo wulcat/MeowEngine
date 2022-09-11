@@ -42,12 +42,12 @@ namespace {
 } // namespace
 
 struct OpenGLApplication::Internal {
-    SDL_Window* window;
-    SDL_GLContext context;
+    SDL_Window* Window;
+    SDL_GLContext Context;
 
     Internal() :
-        window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
-        context(CreateContext(window))
+            Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
+            Context(CreateContext(Window))
     {
         physicat::Mesh mesh(physicat::assets::LoadObjFile("assets/models/crate.obj"));
 
@@ -56,26 +56,26 @@ struct OpenGLApplication::Internal {
     }
 
     ~Internal() {
-        SDL_GL_DeleteContext(context);
-        SDL_DestroyWindow(window);
+        SDL_GL_DeleteContext(Context);
+        SDL_DestroyWindow(Window);
     }
 
     void Render() const {
-        SDL_GL_MakeCurrent(window, context);
+        SDL_GL_MakeCurrent(Window, Context);
 
         glClearColor(0.3f, 0.7f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        SDL_GL_SwapWindow(window);
+        SDL_GL_SwapWindow(Window);
     }
 };
 
 OpenGLApplication::OpenGLApplication() :
-    internal(physicat::make_internal_ptr<Internal>())
+        InternalPointer(physicat::make_internal_ptr<Internal>())
 {}
 
 void OpenGLApplication::Render() {
-    internal->Render();
+    InternalPointer->Render();
 }
 
 
