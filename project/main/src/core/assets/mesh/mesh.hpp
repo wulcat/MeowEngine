@@ -13,8 +13,8 @@ namespace physicat {
     struct Mesh {
         Mesh(const std::vector<physicat::Vertex>& vertices, const std::vector<uint32_t>& indices);
 
-        const std::vector<physicat::Vertex>& GetVertices();
-        const std::vector<uint32_t>& GetIndices(); // Is it possible to dynamically use int type for different meshes
+        const std::vector<physicat::Vertex>& GetVertices() const;
+        const std::vector<uint32_t> & GetIndices() const; // Is it possible to dynamically use int type for different meshes
 
     private:
         struct Internal;

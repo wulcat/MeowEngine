@@ -22,11 +22,11 @@ physicat::Mesh::Mesh(const std::vector<physicat::Vertex> &vertices, const std::v
     : InternalPointer(physicat::make_internal_ptr<Internal>(vertices, indices)) {
 }
 
-const std::vector<physicat::Vertex> &physicat::Mesh::GetVertices() {
+const std::vector<physicat::Vertex> &physicat::Mesh::GetVertices() const {
     return InternalPointer->Vertices;
 }
 
-const std::vector<uint32_t> &physicat::Mesh::GetIndices() {
+const std::vector<uint32_t> & physicat::Mesh::GetIndices() const {
     return InternalPointer->Indices;
 }
 

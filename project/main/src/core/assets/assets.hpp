@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_ASSETS_HPP
 #define PHYSICAT_ASSETS_HPP
 
-#include "../mesh/mesh.hpp"
+#include "mesh/mesh.hpp"
 #include <string>
 
 namespace physicat::assets {
