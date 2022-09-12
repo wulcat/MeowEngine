@@ -20,7 +20,7 @@ add_executable(
     console
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-        ../main/src/core/wrappers/glm_wrapper.cpp ../main/src/core/wrappers/glm_wrapper.hpp ../main/src/core/assets/mesh/vertex.cpp ../main/src/core/assets/mesh/vertex.hpp ../main/src/core/assets/mesh/mesh.cpp ../main/src/core/assets/mesh/mesh.hpp ../main/src/core/assets/assets.cpp ../main/src/core/assets/assets.hpp ../main/src/application/opengl/opengl_pipeline.cpp ../main/src/application/opengl/opengl_pipeline.hpp ../main/src/application/opengl/opengl_mesh.cpp ../main/src/application/opengl/opengl_mesh.hpp)
+        ../main/src/core/wrappers/glm_wrapper.cpp ../main/src/core/wrappers/glm_wrapper.hpp ../main/src/core/assets/mesh/vertex.cpp ../main/src/core/assets/mesh/vertex.hpp ../main/src/core/assets/mesh/mesh.cpp ../main/src/core/assets/mesh/mesh.hpp ../main/src/core/assets/assets.cpp ../main/src/core/assets/assets.hpp ../main/src/application/opengl/opengl_pipeline.cpp ../main/src/application/opengl/opengl_pipeline.hpp ../main/src/application/opengl/opengl_mesh.cpp ../main/src/application/opengl/opengl_mesh.hpp ../main/src/core/cameras/perspective_camera.cpp ../main/src/core/cameras/perspective_camera.hpp)
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(

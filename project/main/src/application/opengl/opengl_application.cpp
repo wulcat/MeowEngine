@@ -12,6 +12,7 @@
 
 
 #include "../../core/assets/assets.hpp"
+#include "../../core/cameras/perspective_camera.hpp"
 
 #include <string>
 
@@ -42,18 +43,27 @@ namespace {
 
         return context;
     }
+
+    physicat::PerspectiveCamera CreateCamera() {
+        std::pair<uint32_t, uint32_t> displaySize{physicat::sdl::GetDisplaySize()};
+
+        return physicat::PerspectiveCamera{static_cast<float>(displaySize.first), static_cast<float>(displaySize.second)};
+    }
 } // namespace
 
 struct OpenGLApplication::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
+
+    const physicat::PerspectiveCamera Camera;
     const physicat::OpenGLPipeline DefaultPipeline;
-    physicat::OpenGLMesh Mesh;
+    const physicat::OpenGLMesh Mesh;
 
     Internal() : Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
-                Context(CreateContext(Window)),
-                DefaultPipeline(physicat::OpenGLPipeline("default")),
-                Mesh(physicat::OpenGLMesh(physicat::assets::LoadObjFile("assets/models/crate.obj")))
+                 Context(CreateContext(Window)),
+                 Camera(CreateCamera()),
+                 DefaultPipeline(physicat::OpenGLPipeline("default")),
+                 Mesh(physicat::OpenGLMesh(physicat::assets::LoadObjFile("assets/models/crate.obj")))
     {
 //        physicat::Log("CRATE!", "Crate has " + std::to_string(Mesh.GetVertices().size()) + " vertices and " + std::to_string(Mesh.GetIndices().size()) + " indices.");
     }

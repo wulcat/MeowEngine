@@ -18,5 +18,5 @@ namespace physicat
     };
 
     Platform GetCurrentPlatform();
-} // namespace ast
+} // namespace physicat
 
