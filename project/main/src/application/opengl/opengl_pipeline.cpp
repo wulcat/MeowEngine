@@ -96,6 +96,8 @@ struct OpenGLPipeline::Internal {
         , AttributeLocationVertexPosition(glGetAttribLocation(ShaderProgramId, "vertexPosition"))
         {}
 
+    void Render(const physicat::OpenGLMesh& mesh, const glm::mat4& mvp) const {}
+
     ~Internal() {
         glDeleteProgram(ShaderProgramId);
     }
@@ -103,3 +105,7 @@ struct OpenGLPipeline::Internal {
 
 OpenGLPipeline::OpenGLPipeline(const std::string& shaderName)
     : InternalPointer(physicat::make_internal_ptr<Internal>(shaderName)) {}
+
+void physicat::OpenGLPipeline::Render(const physicat::OpenGLMesh &mesh, const glm::mat4 &mvp) const {
+    InternalPointer->Render(mesh, mvp);
+}
