@@ -2,14 +2,14 @@
 ## Plan of action
 - [x] Setting up project for cross-platform build support
 - [ ] Import mesh/textures
-- [ ] Rendering in a scene
+- [x] Rendering in a scene
 - [ ] Keyboard & Mouse inputs
 - [ ] Window resize
 - [ ] Simple tool for importing files like textures/meshes
 - [x] Importing c# written fluid-simulation in this engine
 - [x] Migrating 2D spatial hashing
 - [ ] Setting up Vulkan
-- [ ] Shader pipeline
+- [x] Shader pipeline
 - [ ] Creating 3D spatial hashing (showcase & in-built)
 - [ ] Creating support for multi-scene compilation
 - [ ] HTML navigation multi scenes on demand (async download and load scenes)
@@ -18,7 +18,10 @@
 - [x] Find a way to debug coding after built application
 - [ ] Find a way to isolate and build code while developing simulations
 
-## Compitability
+## Build
+<img src="examples/engine.png" width="500">
+
+## Compatibility
 - [x] Console
 - [x] Mac (x84) (Arm architecture not Supported)
 - [ ] Windows
