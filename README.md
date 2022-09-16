@@ -42,6 +42,10 @@
   - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
   - https://google.github.io/liquidfun/
 - [Shaders](https://www.shadertoy.com)
+- Collision Querying
+  - [There's gold mine in the comment's research on it](https://www.youtube.com/watch?v=sx4IIQL0x7c&list=RDCMUCEwhtpXrg5MmwlH04ANpL8A&start_radio=1&rv=sx4IIQL0x7c&t=1134)
+- [Basic's of c++ to make sure, code is written the right way](https://www.programiz.com/cpp-programming/memory-management)
+- [Matrices](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
 
 ## Setup
 - Run project/console/setup.sh to install packages

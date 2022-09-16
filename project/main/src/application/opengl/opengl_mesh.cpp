@@ -4,7 +4,6 @@
 
 #include "opengl_mesh.hpp"
 #include "../../core/wrappers/glm_wrapper.hpp"
-#include "../../core/wrappers/graphics_wrapper.hpp"
 
 using physicat::OpenGLMesh;
 
@@ -31,7 +30,7 @@ namespace {
 
         glGenBuffers(1, &bufferId); // create empty buffer
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndices().size() * sizeof(uint32_t), mesh.GetVertices().data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndices().size() * sizeof(uint32_t), mesh.GetIndices().data(), GL_STATIC_DRAW);
 
         return bufferId;
     }
@@ -42,7 +41,7 @@ struct OpenGLMesh::Internal {
     const GLuint BufferIdIndices;
     const uint32_t IndicesCount;
 
-    Internal(const physicat::Mesh& mesh)
+    explicit Internal(const physicat::Mesh& mesh)
         :BufferIdVertices(CreateVertexBuffer(mesh)),
          BufferIdIndices(CreateIndexBuffer(mesh)),
          IndicesCount(static_cast<uint32_t>(mesh.GetIndices().size()))
@@ -56,3 +55,15 @@ struct OpenGLMesh::Internal {
 
 physicat::OpenGLMesh::OpenGLMesh(const physicat::Mesh &mesh)
 : InternalPointer(physicat::make_internal_ptr<Internal>(mesh)) {}
+
+const GLuint &physicat::OpenGLMesh::GetVertexBufferId() const {
+    return InternalPointer->BufferIdVertices;
+}
+
+const GLuint &physicat::OpenGLMesh::GetIndexBufferId() const {
+    return InternalPointer->BufferIdIndices;
+}
+
+const uint32_t &physicat::OpenGLMesh::GetNumIndices() const {
+    return InternalPointer->IndicesCount;
+}

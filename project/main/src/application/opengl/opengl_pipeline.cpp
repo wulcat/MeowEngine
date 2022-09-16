@@ -96,7 +96,34 @@ struct OpenGLPipeline::Internal {
         , AttributeLocationVertexPosition(glGetAttribLocation(ShaderProgramId, "vertexPosition"))
         {}
 
-    void Render(const physicat::OpenGLMesh& mesh, const glm::mat4& mvp) const {}
+    void Render(const physicat::OpenGLMesh& mesh, const glm::mat4& mvp) const {
+#ifndef USING_GLES
+        // This will render a wire frame for us :)
+        // n just like that we can have a wire frame mode (not that i need it but yeah lol)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#endif
+
+        // Tell opengl to use our shader program
+        glUseProgram(ShaderProgramId);
+
+        // Populating our MVP in shader program
+        glUniformMatrix4fv(UniformLocationMVP, 1, GL_FALSE, &mvp[0][0]);
+
+        // Activating our vertex position attribute
+        glEnableVertexAttribArray(AttributeLocationVertexPosition);
+        // Configuring the vertex position attribute
+        glVertexAttribPointer(AttributeLocationVertexPosition, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+        // Binding our mesh vertices and indexes
+        glBindBuffer(GL_ARRAY_BUFFER, mesh.GetVertexBufferId());
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndexBufferId());
+
+        // Draw command providing the total number of vertices from mesh
+        glDrawElements(GL_TRIANGLES, mesh.GetNumIndices(), GL_UNSIGNED_INT, (void*)0);
+
+        // Disabling the vertex position attribute as we are done using it. (seems like file open - close streaming process)
+        glDisableVertexAttribArray(AttributeLocationVertexPosition);
+    }
 
     ~Internal() {
         glDeleteProgram(ShaderProgramId);

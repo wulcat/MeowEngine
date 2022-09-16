@@ -49,6 +49,21 @@ namespace {
 
         return physicat::PerspectiveCamera{static_cast<float>(displaySize.first), static_cast<float>(displaySize.second)};
     }
+
+    glm::mat4 CreateMeshTransform() {
+        glm::mat4 identityMatrix{1.0f};
+
+        glm::vec3 position{0.0f, 0.0f, 0.0f};
+        glm::vec3 rotationAxis{0.0f, 1.0f, 0.0f};
+        glm::vec3 scale{1.0f, 1.0f, 1.0f};
+
+        float rotationDegrees{45.0f};
+
+        return  glm::translate(identityMatrix, position) *
+                glm::rotate(identityMatrix, glm::radians(rotationDegrees), rotationAxis) *
+                glm::scale(identityMatrix, scale);
+    }
+
 } // namespace
 
 struct OpenGLApplication::Internal {
@@ -58,14 +73,16 @@ struct OpenGLApplication::Internal {
     const physicat::PerspectiveCamera Camera;
     const physicat::OpenGLPipeline DefaultPipeline;
     const physicat::OpenGLMesh Mesh;
+    const glm::mat4 MeshTransform;
 
     Internal() : Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
                  Context(CreateContext(Window)),
                  Camera(CreateCamera()),
                  DefaultPipeline(physicat::OpenGLPipeline("default")),
-                 Mesh(physicat::OpenGLMesh(physicat::assets::LoadObjFile("assets/models/crate.obj")))
+                 Mesh(physicat::OpenGLMesh(physicat::assets::LoadObjFile("assets/models/crate.obj"))),
+                 MeshTransform(CreateMeshTransform())
     {
-//        physicat::Log("CRATE!", "Crate has " + std::to_string(Mesh.GetVertices().size()) + " vertices and " + std::to_string(Mesh.GetIndices().size()) + " indices.");
+        //physicat::Log("CRATE!", "Crate has " );
     }
 
     ~Internal() {
@@ -76,8 +93,16 @@ struct OpenGLApplication::Internal {
     void Render() const {
         SDL_GL_MakeCurrent(Window, Context);
 
-        glClearColor(0.3f, 0.7f, 0.0f, 1.0f);
+        glClearColor(0.f, 0.f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        const glm::mat4 mvp {
+            Camera.GetProjectionMatrix() *
+            Camera.GetViewMatrix() *
+            MeshTransform
+        };
+
+        DefaultPipeline.Render(Mesh, mvp);
 
         SDL_GL_SwapWindow(Window);
     }
