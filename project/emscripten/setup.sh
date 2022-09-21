@@ -7,6 +7,7 @@ fetch_brew_dependency "wget"
 fetch_brew_dependency "cmake"
 
 fetch_third_party_lib_sdl
+fetch_third_party_lib_sdl_image
 fetch_third_party_lib_glm
 fetch_third_party_lib_tiny_obj_loader
 

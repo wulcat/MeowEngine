@@ -9,7 +9,9 @@ fetch_brew_dependency "xcodegen"
 
 # Download SDL lib
 fetch_third_party_lib_sdl
+fetch_third_party_lib_sdl_image
 fetch_framework_sdl2
+fetch_framework_sdl2_image
 fetch_third_party_lib_glm
 fetch_third_party_lib_tiny_obj_loader
 

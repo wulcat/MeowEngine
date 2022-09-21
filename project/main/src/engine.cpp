@@ -10,6 +10,7 @@
 #include "core/wrappers/sdl_wrapper.hpp"
 #include <stdexcept>
 #include <string>
+#include "SDL_image.h"
 
 using physicat::Engine;
 
@@ -18,7 +19,6 @@ struct Engine::Internal {
 
     Internal() :
         classLogTag("physicat::Engine::") {
-
     }
 
     void Run() {
@@ -29,6 +29,12 @@ struct Engine::Internal {
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
         physicat::Log(logTag, "SDL2 Initialized");
+
+        if(IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+            throw std::runtime_error(logTag + "Could not initialize SDL2_image");
+        }
+
+        physicat::Log(logTag, "SDL2_image initialized (supports png)");
 
         ResolveApplication()->Begin();
     }
