@@ -10,7 +10,9 @@ pushd out
 
 #python3  -m http.server 1233 & open http://localhost:1233
 
+# For mac (kill's the old server)
 lsof -nti:8001 | xargs kill -9
+
 python -m SimpleHTTPServer 8001 & open http://localhost:8001
 
 popd
