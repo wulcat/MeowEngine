@@ -12,6 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/out)
 include_directories(${THIRD_PARTY_DIR}/SDL/include)
 include_directories(${THIRD_PARTY_DIR}/glm)
 include_directories(${THIRD_PARTY_DIR}/tiny-obj-loader)
+include_directories(${THIRD_PARTY_DIR}/SDL2_image)
 
 file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)
@@ -27,7 +28,7 @@ set_target_properties(
     console
     PROPERTIES
     LINK_FLAGS
-    "-F../Frameworks -framework SDL2 -framework OpenGL"
+    "-F../Frameworks -framework SDL2 -framework SDL2_image -framework OpenGL"
 )
 
 # Executes after build to properly link sdk framework in executable file

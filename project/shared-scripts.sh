@@ -67,9 +67,26 @@ fetch_third_party_lib_sdl() {
   popd
 }
 
+fetch_third_party_lib_sdl_image() {
+  verify_third_party_folder_exists
+echo "Fetching SDL Image..."
+    # shellcheck disable=SC2164
+    pushd ../../third-party
+      if [ ! -d "SDL2_image" ] ; then
+        echo "Fetching SDL Image..."
+        wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.4.zip
+        unzip -q SDL2_image-2.0.4.zip
+        mv SDL2_image-2.0.4 SDL2_image
+        rm SDL2_image-2.0.4.zip
+      fi
+    # shellcheck disable=SC2164
+    popd
+}
+
 fetch_third_party_lib_glm() {
   verify_third_party_folder_exists
 
+  # shellcheck disable=SC2164
   pushd ../../third-party
     if [ ! -d "glm" ] ; then
       echo "Fetching GLM"
@@ -77,12 +94,14 @@ fetch_third_party_lib_glm() {
       unzip -q glm-0.9.9.3.zip
       rm glm-0.9.9.3.zip
     fi
+  # shellcheck disable=SC2164
   popd
 }
 
 fetch_third_party_lib_tiny_obj_loader() {
   verify_third_party_folder_exists
 
+  # shellcheck disable=SC2164
   pushd ../../third-party
       if [ ! -d "tiny-obj-loader" ] ; then
         echo "Fetching Tiny OBJ Loader"
@@ -91,6 +110,7 @@ fetch_third_party_lib_tiny_obj_loader() {
         rm v1.0.6.zip
         mv tinyobjloader-1.0.6 tiny-obj-loader
       fi
+    # shellcheck disable=SC2164
     popd
 }
 
@@ -102,6 +122,7 @@ verify_frameworks_folder_exists() {
   fi
 }
 
+# MacOS Lib's
 fetch_framework_sdl2() {
   verify_frameworks_folder_exists
 
@@ -136,6 +157,44 @@ fetch_framework_sdl2() {
 
   # shellcheck disable=SC2164
   popd
+}
+
+fetch_framework_sdl2_image() {
+    verify_frameworks_folder_exists
+
+    # shellcheck disable=SC2164
+    pushd Frameworks
+        if [ ! -d "SDL2_image.framework" ]; then
+            echo "Fetching SDL2_image framework from: https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.4.dmg"
+            wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.4.dmg
+
+            echo "Attaching DMG file ..."
+            hdiutil attach SDL2_image-2.0.4.dmg
+
+            echo "Copying SDL2_image.framework from DMG file ..."
+            cp -R /Volumes/SDL2_image/SDL2_image.framework .
+
+            echo "Detaching DMG file ..."
+            hdiutil detach /Volumes/SDL2_image
+            rm SDL2_image-2.0.4.dmg
+
+            # We need to code sign a couple of binaries to avoid Xcode errors
+            # shellcheck disable=SC2164
+            pushd SDL2_image.framework/Versions/A/Frameworks/webp.framework
+                echo "Code signing SDL2_image.framework / Frameworks / webp.framework ..."
+                codesign -f -s - webp
+            # shellcheck disable=SC2164
+            popd
+
+            # shellcheck disable=SC2164
+            pushd SDL2_image.framework
+                echo "Code signing SDL2_image.framework ..."
+                codesign -f -s - SDL2_image
+            # shellcheck disable=SC2164
+            popd
+        fi
+    # shellcheck disable=SC2164
+    popd
 }
 
 #------------------------------------------------------------------------------------
