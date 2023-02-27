@@ -15,13 +15,14 @@ clean_out_folder
 pushd build
   # Request that CMake configures iteself based on what it finds in the parent folder
   echo "Configuring CMake with Ninja ..."
-  cmake -B build -G Ninja ..
+  cmake -B build -G Ninja -D CMAKE_BUILD_TYPE=Debug ..
 
   # Start the build process
   echo "Building the project using Ninja ..."
   ninja
+
 # shellcheck disable=SC2164
 popd
 
 # Run
-./out/console
+#./out/console
