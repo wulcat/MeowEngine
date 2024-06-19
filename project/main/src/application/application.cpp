@@ -1,8 +1,8 @@
 //
-// Created by Akira Lynn on 06/07/22.
+// Created by Akira M on 06/07/22.
 //
 
-#include "../core/wrappers/sdl_wrapper.hpp"
+#include "sdl_wrapper.hpp"
 #include "application.hpp"
 
 using physicat::Application;

@@ -14,8 +14,11 @@ include_directories(${THIRD_PARTY_DIR}/glm)
 include_directories(${THIRD_PARTY_DIR}/tiny-obj-loader)
 include_directories(${THIRD_PARTY_DIR}/SDL2_image)
 
+# glob is not good idea
 file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)
+
+include_directories(../main/src/include)
 
 add_executable(
     console

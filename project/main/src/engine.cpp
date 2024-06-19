@@ -7,7 +7,7 @@
 #include "application/application.hpp"
 #include "application/opengl/opengl_application.hpp"
 #include "core/logger/log.hpp"
-#include "core/wrappers/sdl_wrapper.hpp"
+#include "sdl_wrapper.hpp"
 #include <stdexcept>
 #include <string>
 #include "SDL_image.h"

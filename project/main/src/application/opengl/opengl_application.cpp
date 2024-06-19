@@ -8,7 +8,7 @@
 
 #include "../../core/wrappers/graphics_wrapper.hpp"
 #include "../../core/logger/log.hpp"
-#include "../../core/wrappers/sdl_wrapper.hpp"
+#include "sdl_wrapper.hpp"
 
 
 #include "../../core/assets/assets.hpp"

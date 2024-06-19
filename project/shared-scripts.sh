@@ -69,7 +69,7 @@ fetch_third_party_lib_sdl() {
 
 fetch_third_party_lib_sdl_image() {
   verify_third_party_folder_exists
-echo "Fetching SDL Image..."
+  echo "Fetching SDL Image..."
     # shellcheck disable=SC2164
     pushd ../../third-party
       if [ ! -d "SDL2_image" ] ; then
@@ -130,27 +130,27 @@ fetch_framework_sdl2() {
   pushd Frameworks
     if [ ! -d "SDL2.framework" ]; then
       # Download the .dmg file from the SDL2 download site.
-        wget https://www.libsdl.org/release/SDL2-2.0.9.dmg
+      wget https://www.libsdl.org/release/SDL2-2.0.9.dmg
 
-        echo "Mounting DMG file ..."
-        hdiutil attach SDL2-2.0.9.dmg
+      echo "Mounting DMG file ..."
+      hdiutil attach SDL2-2.0.9.dmg
 
-        echo "Copying SDL2.framework from DMG file into the current folder ..."
-        cp -R /Volumes/SDL2/SDL2.framework .
+      echo "Copying SDL2.framework from DMG file into the current folder ..."
+      cp -R /Volumes/SDL2/SDL2.framework .
 
-        echo "Unmounting DMG file ..."
-        hdiutil detach /Volumes/SDL2
+      echo "Unmounting DMG file ..."
+      hdiutil detach /Volumes/SDL2
 
-        echo "Deleting DMG file ..."
-        rm SDL2-2.0.9.dmg
+      echo "Deleting DMG file ..."
+      rm SDL2-2.0.9.dmg
 
-        # Navigate into the SDL2.framework folder.
-        # shellcheck disable=SC2164
-        pushd SDL2.framework
-            echo "Code signing SDL2.framework ..."
-            codesign -f -s - SDL2
-        # shellcheck disable=SC2164
-        popd
+      # Navigate into the SDL2.framework folder.
+      # shellcheck disable=SC2164
+      pushd SDL2.framework
+          echo "Code signing SDL2.framework ..."
+          codesign -f -s - SDL2
+      # shellcheck disable=SC2164
+      popd
     else
       echo "SDL 2 Frameworks already exists..."
     fi

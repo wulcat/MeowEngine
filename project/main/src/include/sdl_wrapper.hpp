@@ -2,8 +2,8 @@
 // Created by Akira Lynn on 06/07/22.
 //
 
-#ifndef VULKAN_ENGINE_SDL_WRAPPER_HPP
-#define VULKAN_ENGINE_SDL_WRAPPER_HPP
+//#ifndef VULKAN_ENGINE_SDL_WRAPPER_HPP
+//#define VULKAN_ENGINE_SDL_WRAPPER_HPP
 
 #pragma once
 
@@ -16,4 +16,4 @@ namespace physicat::sdl {
     SDL_Window* CreateWindow(const uint32_t& windowFlags);
 }
 
-#endif //VULKAN_ENGINE_SDL_WRAPPER_HPP
+//#endif //VULKAN_ENGINE_SDL_WRAPPER_HPP
