@@ -11,16 +11,28 @@ namespace {
     // Refer: https://registry.khronos.org/OpenGL-Refpages/es1.1/xhtml/glBindBuffer.xml for buffer types
 
     GLuint CreateVertexBuffer(const physicat::Mesh& mesh) {
-        std::vector<glm::vec3> positions;
+        std::vector<float> bufferData;
 
         for(const auto& vertex: mesh.GetVertices()) {
-            positions.push_back(vertex.Position);
+            bufferData.push_back(vertex.Position.x);
+            bufferData.push_back(vertex.Position.y);
+            bufferData.push_back(vertex.Position.z);
+
+            bufferData.push_back(vertex.TextureCoord.x);
+            bufferData.push_back(vertex.TextureCoord.y);
         }
 
+        // Total Buffer data = pos + texturecoord (uv) = 3 + 2 = 5
+        // 5 * float size = 20 bytes
         GLuint bufferId;
         glGenBuffers(1, &bufferId); // create empty buffer
         glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-        glBufferData(GL_ARRAY_BUFFER, positions.size() * sizeof(glm::vec3), positions.data(), GL_STATIC_DRAW);
+        glBufferData(
+            GL_ARRAY_BUFFER,
+            bufferData.size() * sizeof(float),
+            bufferData.data(),
+            GL_STATIC_DRAW
+         );
 
         return bufferId;
     }

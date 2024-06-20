@@ -105,7 +105,7 @@ struct OpenGLApplication::Internal {
             MeshTransform
         };
 
-        DefaultPipeline.Render(Mesh, mvp);
+        DefaultPipeline.Render(Mesh, Texture, mvp);
 
         SDL_GL_SwapWindow(Window);
     }

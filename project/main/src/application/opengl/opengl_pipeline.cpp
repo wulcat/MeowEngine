@@ -89,19 +89,27 @@ struct OpenGLPipeline::Internal {
     const GLuint ShaderProgramId;
     const GLuint UniformLocationMVP;
     const GLuint AttributeLocationVertexPosition;
+    const GLuint AttributeLocationTextureCoord;
+    const GLsizei Stride;
+    const GLsizei OffsetPosition;
+    const GLsizei OffsetTextureCoord;
 
     explicit Internal(const std::string& shaderName)
         : ShaderProgramId(CreateShaderProgram(shaderName))
-        , UniformLocationMVP(glGetUniformLocation(ShaderProgramId, "mvp"))
-        , AttributeLocationVertexPosition(glGetAttribLocation(ShaderProgramId, "vertexPosition"))
+        , UniformLocationMVP(glGetUniformLocation(ShaderProgramId, "u_mvp"))
+        , AttributeLocationVertexPosition(glGetAttribLocation(ShaderProgramId, "a_vertexPosition"))
+        , AttributeLocationTextureCoord(glGetAttribLocation(ShaderProgramId, "a_textureCoord"))
+        , Stride(5 * sizeof (float))
+        , OffsetPosition(0)
+        , OffsetTextureCoord(3 * sizeof(float))
         {}
 
-    void Render(const physicat::OpenGLMesh& mesh, const glm::mat4& mvp) const {
-#ifndef USING_GLES
-        // This will render a wire frame for us :)
-        // n just like that we can have a wire frame mode (not that i need it but yeah lol)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-#endif
+    void Render(const physicat::OpenGLMesh& mesh, const physicat::OpenGLTexture& texture, const glm::mat4& mvp) const {
+//#ifndef USING_GLES
+//        // This will render a wire frame for us :)
+//        // n just like that we can have a wire frame mode (not that i need it but yeah lol)
+//        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//#endif
 
         // Tell opengl to use our shader program
         glUseProgram(ShaderProgramId);
@@ -112,17 +120,40 @@ struct OpenGLPipeline::Internal {
         // Activating our vertex position attribute
         glEnableVertexAttribArray(AttributeLocationVertexPosition);
         // Configuring the vertex position attribute
-        glVertexAttribPointer(AttributeLocationVertexPosition, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glVertexAttribPointer(
+            AttributeLocationVertexPosition,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            Stride,
+            (GLvoid*)(OffsetPosition)
+        );
+
+        // Activate our texture coord attribute
+        glEnableVertexAttribArray(AttributeLocationTextureCoord);
+        // Config the texture coord
+        glVertexAttribPointer(
+            AttributeLocationTextureCoord,
+            2,
+            GL_FLOAT,
+            GL_FALSE,
+            Stride,
+            (GLvoid*)(OffsetTextureCoord)
+        );
+
+        // Apply the texture we want to pain the mesh with.
+        texture.Bind();
 
         // Binding our mesh vertices and indexes
         glBindBuffer(GL_ARRAY_BUFFER, mesh.GetVertexBufferId());
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndexBufferId());
 
         // Draw command providing the total number of vertices from mesh
-        glDrawElements(GL_TRIANGLES, mesh.GetNumIndices(), GL_UNSIGNED_INT, (void*)0);
+        glDrawElements(GL_TRIANGLES, mesh.GetNumIndices(), GL_UNSIGNED_INT, (GLvoid*)0);
 
         // Disabling the vertex position attribute as we are done using it. (seems like file open - close streaming process)
         glDisableVertexAttribArray(AttributeLocationVertexPosition);
+        glDisableVertexAttribArray(AttributeLocationTextureCoord);
     }
 
     ~Internal() {
@@ -133,6 +164,6 @@ struct OpenGLPipeline::Internal {
 OpenGLPipeline::OpenGLPipeline(const std::string& shaderName)
     : InternalPointer(physicat::make_internal_ptr<Internal>(shaderName)) {}
 
-void physicat::OpenGLPipeline::Render(const physicat::OpenGLMesh &mesh, const glm::mat4 &mvp) const {
-    InternalPointer->Render(mesh, mvp);
+void physicat::OpenGLPipeline::Render(const physicat::OpenGLMesh &mesh, const physicat::OpenGLTexture &texture, const glm::mat4 &mvp) const {
+    InternalPointer->Render(mesh, texture, mvp);
 }

@@ -64,22 +64,40 @@ physicat::Mesh physicat::assets::LoadObjFile(const std::string &path) {
 
     std::vector<physicat::Vertex> vertices;
     std::vector<uint32_t> indices;
-    std::unordered_map<glm::vec3, uint32_t> uniqueVertices;
+    std::unordered_map<physicat::Vertex, uint32_t> uniqueVertices;
 
     for(const auto& shape : shapes) {
         for(const auto& index : shape.mesh.indices) {
+            // construct position vector for current mesh index
             glm::vec3 position {
                 attributes.vertices[3 * index.vertex_index + 0],
                 attributes.vertices[3 * index.vertex_index + 1],
                 attributes.vertices[3 * index.vertex_index + 2]
             };
 
-            if(uniqueVertices.count(position) == 0) {
-                uniqueVertices[position] = static_cast<uint32_t>(vertices.size());
-                vertices.push_back(physicat::Vertex{position});
+            // construct (uv) texture coordinate for current mesh index
+            glm::vec2 textureCoord {
+                attributes.texcoords[2 * index.texcoord_index + 0],
+                1.f - attributes.texcoords[2 * index.texcoord_index + 1]
+            };
+
+            // create vertex
+            physicat::Vertex vertex {
+                position,
+                textureCoord
+            };
+
+            // TODO: check this out.. what was that unique hashing with template and this
+            // This will help deduplicate vertices - we maintain a hash map where a
+            // vertex is used as a unique key with its value being which index can
+            // be used to locate the vertex. The vertex is only added if it has not
+            // been added before.
+            if(uniqueVertices.count(vertex) == 0) {
+                uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+                vertices.push_back(vertex);
             }
 
-            indices.push_back(uniqueVertices[position]);
+            indices.push_back(uniqueVertices[vertex]);
         }
     }
 
