@@ -7,7 +7,7 @@
 
 #include "mesh/mesh.hpp"
 #include <string>
-#include "bitmap.h"
+#include "bitmap.hpp"
 
 namespace physicat::assets {
     std::string LoadTextFile(const std::string& path);

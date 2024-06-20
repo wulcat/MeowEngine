@@ -13,6 +13,7 @@
 
 #include "../../core/assets/assets.hpp"
 #include "../../core/cameras/perspective_camera.hpp"
+#include "opengl_texture.hpp"
 
 #include <string>
 
@@ -73,6 +74,7 @@ struct OpenGLApplication::Internal {
     const physicat::PerspectiveCamera Camera;
     const physicat::OpenGLPipeline DefaultPipeline;
     const physicat::OpenGLMesh Mesh;
+    const physicat::OpenGLTexture Texture;
     const glm::mat4 MeshTransform;
 
     Internal() : Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
@@ -80,7 +82,8 @@ struct OpenGLApplication::Internal {
                  Camera(CreateCamera()),
                  DefaultPipeline(physicat::OpenGLPipeline("default")),
                  Mesh(physicat::OpenGLMesh(physicat::assets::LoadObjFile("assets/models/crate.obj"))),
-                 MeshTransform(CreateMeshTransform())
+                 MeshTransform(CreateMeshTransform()),
+                 Texture(physicat::OpenGLTexture(physicat::assets::LoadBitmap("assets/textures/crate.png")))
     {
         //physicat::Log("CRATE!", "Crate has " );
     }

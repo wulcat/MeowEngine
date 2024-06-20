@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 19/06/24.
 //
 
-#ifndef PHYSICAT_BITMAP_H
-#define PHYSICAT_BITMAP_H
+#ifndef PHYSICAT_BITMAP_HPP
+#define PHYSICAT_BITMAP_HPP
 
 #pragma once
 
@@ -28,4 +28,4 @@ namespace physicat {
 }
 
 
-#endif //PHYSICAT_BITMAP_H
+#endif //PHYSICAT_BITMAP_HPP

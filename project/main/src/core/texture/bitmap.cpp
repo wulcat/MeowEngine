@@ -2,7 +2,7 @@
 // Created by Akira Mujawar on 19/06/24.
 //
 
-#include "bitmap.h"
+#include "bitmap.hpp"
 
 using physicat::Bitmap;
 
