@@ -7,10 +7,12 @@
 
 #include "mesh/mesh.hpp"
 #include <string>
+#include "bitmap.h"
 
 namespace physicat::assets {
     std::string LoadTextFile(const std::string& path);
     physicat::Mesh LoadObjFile(const std::string& path);
+    physicat::Bitmap LoadBitmap(const std::string& path);
 } // namespace physicat::assets;
 
 #endif //PHYSICAT_ASSETS_HPP

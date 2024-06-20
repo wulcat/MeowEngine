@@ -5,14 +5,15 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 
 #include "assets.hpp"
-#include "../wrappers/sdl_wrapper.hpp"
+#include "sdl_wrapper.hpp"
 #include "mesh/vertex.hpp"
-#include "sstream"
+//#include "sstream"
 #include "tiny_obj_loader.h"
 #include "unordered_map"
 #include "vector"
-#include "../logger/log.hpp"
+//#include "../logger/log.hpp"
 #include <string>
+#include <SDL_image.h>
 
 
 std::string physicat::assets::LoadTextFile(const std::string &path) {
@@ -82,5 +83,45 @@ physicat::Mesh physicat::assets::LoadObjFile(const std::string &path) {
         }
     }
 
-    return physicat::Mesh(vertices, indices);
+    return { vertices, indices };
+}
+
+physicat::Bitmap physicat::assets::LoadBitmap(const std::string &path) {
+    SDL_RWops* file {SDL_RWFromFile(path.c_str(), "rb")}; // rb denotes to load binary data
+    SDL_Surface* source {IMG_Load_RW(file, 1)};
+    SDL_Rect imageFrame {0, 0, source->w, source->h};
+
+    uint32_t redMask;
+    uint32_t greenMask;
+    uint32_t blueMask;
+    uint32_t alphaMask;
+
+    // what is Endian?
+#if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+    redMask = 0xff000000;
+    greenMask = 0x00ff0000;
+    blueMask = 0x0000ff00;
+    alphaMask = 0x000000ff;
+#else
+    redMask = 0x000000ff;
+    greenMask = 0x0000ff00;
+    blueMask = 0x00ff0000;
+    alphaMask = 0xff000000;
+#endif
+
+    SDL_Surface* target {
+        SDL_CreateRGBSurface(
+            0,
+            imageFrame.w,
+            imageFrame.h,
+            32,
+            redMask, greenMask, blueMask, alphaMask
+        )
+    };
+
+    // copy data from source to target
+    SDL_BlitSurface(source, &imageFrame, target, &imageFrame);
+    SDL_FreeSurface(source);
+
+    return physicat::Bitmap(target);
 }
