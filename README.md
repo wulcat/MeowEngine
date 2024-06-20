@@ -18,6 +18,7 @@
 - [x] Find a way to debug coding after built application
 - [ ] Find a way to isolate and build code while developing simulations
 - [ ] Create build modes for debug and release
+- [ ] On repo update - auto build emscriptten for web and upload
 
 ## Build
 <img src="examples/engine.png" width="500">
