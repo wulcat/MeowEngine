@@ -35,23 +35,6 @@
 - OpenGL ES3
 - SDL/SDL2 (mac framework) or GLFW
 
-## References
-- [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
-- [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
-- [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
-- [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
-- [SDL Renderer](https://dev.to/noah11012/using-sdl2-2d-accelerated-renderering-1kcb)
-- [Ray Marching](https://www.youtube.com/watch?v=BNZtUB7yhX4)
-- Fluid
-  - https://magnum.graphics/showcase/fluidsimulation2d/
-  - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
-  - https://google.github.io/liquidfun/
-- [Shaders](https://www.shadertoy.com)
-- Collision Querying
-  - [There's gold mine in the comment's research on it](https://www.youtube.com/watch?v=sx4IIQL0x7c&list=RDCMUCEwhtpXrg5MmwlH04ANpL8A&start_radio=1&rv=sx4IIQL0x7c&t=1134)
-- [Basic's of c++ to make sure, code is written the right way](https://www.programiz.com/cpp-programming/memory-management)
-- [Matrices](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
-
 ## Setup
 - Run project/console/setup.sh to install packages
 - Run project/console/build.sh to build the project (auto runs the executable)
@@ -69,3 +52,20 @@ Activate PATH and other environment variables in the current terminal `` $source
 - Find a way to shutdown the http.server python after running web build
 - Explore what's happening in internal_ptr script with the templates and internal_ptr thing
 - Empty namespaces name declaration & using namespaces vs include headers
+
+## References
+- [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
+- [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
+- [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
+- [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
+- [SDL Renderer](https://dev.to/noah11012/using-sdl2-2d-accelerated-renderering-1kcb)
+- [Ray Marching](https://www.youtube.com/watch?v=BNZtUB7yhX4)
+- Fluid
+  - https://magnum.graphics/showcase/fluidsimulation2d/
+  - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
+  - https://google.github.io/liquidfun/
+- [Shaders](https://www.shadertoy.com)
+- Collision Querying
+  - [There's gold mine in the comment's research on it](https://www.youtube.com/watch?v=sx4IIQL0x7c&list=RDCMUCEwhtpXrg5MmwlH04ANpL8A&start_radio=1&rv=sx4IIQL0x7c&t=1134)
+- [Basic's of c++ to make sure, code is written the right way](https://www.programiz.com/cpp-programming/memory-management)
+- [Matrices](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
