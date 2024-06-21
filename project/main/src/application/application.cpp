@@ -1,5 +1,5 @@
 //
-// Created by Akira M on 06/07/22.
+// Created by Akira Mujawar on 06/07/22.
 //
 
 #include "sdl_wrapper.hpp"
