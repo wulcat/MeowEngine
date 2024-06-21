@@ -42,7 +42,7 @@ add_executable(
     web
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-        ../main/src/core/texture/bitmap.cpp ../main/src/include/bitmap.hpp)
+        ../main/src/core/assets/texture/bitmap.cpp ../main/src/include/bitmap.hpp)
 
 # These properties specify what kind of Emscripten build to perform and are assigned to our 'a-simple-triangle' executable target.
 set_target_properties(

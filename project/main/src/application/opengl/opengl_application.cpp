@@ -6,13 +6,13 @@
 #include "opengl_pipeline.hpp"
 #include "opengl_mesh.hpp"
 
-#include "../../core/wrappers/graphics_wrapper.hpp"
-#include "../../core/logger/log.hpp"
+#include "graphics_wrapper.hpp"
+#include "log.hpp"
 #include "sdl_wrapper.hpp"
 
 
-#include "../../core/assets/assets.hpp"
-#include "../../core/cameras/perspective_camera.hpp"
+#include "assets.hpp"
+#include "perspective_camera.hpp"
 #include "opengl_texture.hpp"
 
 #include <string>
