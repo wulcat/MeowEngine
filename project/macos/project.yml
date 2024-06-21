@@ -7,7 +7,7 @@ options:
   indentWidth: 4
   tabWidth: 4
   deploymentTarget:
-    macOS: "10.12"
+    macOS: "10.13"
 
 settings:
   CLANG_CXX_LANGUAGE_STANDARD: c++17
@@ -34,6 +34,7 @@ targets:
         - $(PROJECT_DIR)/../../third-party/glm
         - $(PROJECT_DIR)/../../third-party/tiny-obj-loader
         - $(PROJECT_DIR)/../../third-party/SDL2_image
+        - $(PROJECT_DIR)/../main/src/**
       LIBRARY_SEARCH_PATHS:
         - $(inherited)
         - $(PROJECT_DIR)

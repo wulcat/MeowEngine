@@ -18,10 +18,8 @@ include_directories(${THIRD_PARTY_DIR}/SDL2_image)
 file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
 file(GLOB_RECURSE CPP_SOURCES ${MAIN_SOURCE_DIR}/*.cpp)
 
-include_directories(../main/src/include/bitmap.hpp)
-#include_directories(console ${CPP_HEADERS} ${CPP_SOURCES})
+#include_directories(../main/src/include/bitmap.hpp)
 
-#message(${CMAKE_SOURCE_DIR})
 # Collect all directories under the include directory
 file(GLOB_RECURSE ALL_ENTRIES "../main/*")
 
@@ -37,20 +35,11 @@ endforeach()
 # Remove duplicates from the list of directories
 list(REMOVE_DUPLICATES ALL_DIRECTORIES)
 
-# Print the list of directories (for debugging purposes)
 message("Directories found in ${DIRECTORY_TO_SEARCH}:")
 foreach(DIR ${ALL_DIRECTORIES})
      message("${DIR}")
      include_directories(${DIR})
 endforeach()
-#message(${HEADER_DIRECTORIES})
-
-## Include each directory
-#foreach(HEADER_DIR ${HEADER_DIRECTORIES})
-##     include_directories(${MAIN_SOURCE_DIR}/${HEADER_DIR})
-#message(${HEADER_DIR})
-#     message(${MAIN_SOURCE_DIR}/${HEADER_DIR})
-#endforeach()
 
 add_executable(
     console
