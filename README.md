@@ -1,7 +1,7 @@
 
 ## Plan of action
 - [x] Setting up project for cross-platform build support
-- [ ] Import mesh/textures
+- [x] Import mesh/textures
 - [x] Rendering in a scene
 - [ ] Keyboard & Mouse inputs
 - [ ] Window resize

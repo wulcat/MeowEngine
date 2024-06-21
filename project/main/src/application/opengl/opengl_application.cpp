@@ -93,6 +93,8 @@ struct OpenGLApplication::Internal {
         SDL_DestroyWindow(Window);
     }
 
+    void Update(const float& deltaTime) {}
+
     void Render() const {
         SDL_GL_MakeCurrent(Window, Context);
 
@@ -114,6 +116,10 @@ struct OpenGLApplication::Internal {
 OpenGLApplication::OpenGLApplication() :
         InternalPointer(physicat::make_internal_ptr<Internal>())
 {}
+
+void OpenGLApplication::Update(const float &deltaTime) {
+    InternalPointer->Update(deltaTime);
+}
 
 void OpenGLApplication::Render() {
     InternalPointer->Render();

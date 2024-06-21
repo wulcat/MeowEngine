@@ -36,7 +36,7 @@ struct Engine::Internal {
 
         physicat::Log(logTag, "SDL2_image initialized (supports png)");
 
-        ResolveApplication()->Begin();
+        ResolveApplication()->StartApplication();
     }
 
     // we are using unique_ptr smart pointer as a return value so it will self destruct upon leaving its containing scope

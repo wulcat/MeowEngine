@@ -11,6 +11,8 @@
 namespace physicat {
     struct OpenGLApplication : public physicat::Application {
         OpenGLApplication();
+
+        void Update(const float& deltaTime) override;
         void Render() override;
 
     private:

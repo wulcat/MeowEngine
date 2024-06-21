@@ -11,26 +11,46 @@ namespace {
     #ifdef EMSCRIPTEN
         // Free Function in an anonymous namespace private to this file
         void EmscriptenLoop(physicat::Application* engine) {
-            engine->Update();
+            engine->LoopApplication();
         }
     #endif
 } // namespace
 
+struct Application::Internal {
+    const float FramePerSecond; // PerformanceFrequency
+    uint64_t CurrentFrameTime;
+    uint64_t PreviousFrameTime;
 
+    Internal()
+        : FramePerSecond(static_cast<float>(SDL_GetPerformanceFrequency()))
+        , CurrentFrameTime(SDL_GetPerformanceFrequency())
+        , PreviousFrameTime(CurrentFrameTime) {}
 
-void physicat::Application::Begin() {
+    float TimeStep() {
+        PreviousFrameTime = CurrentFrameTime;
+        CurrentFrameTime = SDL_GetPerformanceFrequency();
+
+        float elapsedTime {
+            (CurrentFrameTime - PreviousFrameTime) * 1000.0f
+        };
+
+        return (elapsedTime / FramePerSecond) * 0.001f;
+    }
+};
+
+void physicat::Application::StartApplication() {
     #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
         emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);
     #else
-        while (Update())
+        while (LoopApplication())
         {
             // Just waiting for the main loop to end.
         }
     #endif
 }
 
-bool physicat::Application::Update() {
+bool physicat::Application::LoopApplication() {
     SDL_Event event;
 
     // Each loop we will process any events that are waiting for us.
@@ -54,6 +74,8 @@ bool physicat::Application::Update() {
         }
     }
 
+    Update(InternalPointer->TimeStep());
+
     // Perform our rendering for this frame, normally you would also perform
     // any updates to your world as well here.
     Render();
@@ -61,3 +83,6 @@ bool physicat::Application::Update() {
     // Returning true means we want to keep looping.
     return true;
 }
+
+Application::Application()
+    : InternalPointer(physicat::make_internal_ptr<Internal>()){}

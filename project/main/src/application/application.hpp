@@ -7,16 +7,23 @@
 
 #pragma once
 
+#include <internal_ptr.hpp>
 #include "../core/includes.hpp"
 
 namespace physicat {
     struct Application {
-        Application() = default;
+        Application();
         virtual ~Application() = default;
 
-        void Begin();
-        bool Update();
+        void StartApplication();
+        bool LoopApplication();
+
+        virtual void Update(const float& deltaTime) = 0;
         virtual void Render() = 0;
+
+    private:
+        struct Internal;
+        physicat::internal_ptr<Internal> InternalPointer;
     };
 } // namespace physicat
 
