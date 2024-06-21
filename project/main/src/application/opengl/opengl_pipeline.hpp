@@ -5,17 +5,27 @@
 #ifndef PHYSICAT_OPENGL_PIPELINE_HPP
 #define PHYSICAT_OPENGL_PIPELINE_HPP
 
-#include <opengl_texture.hpp>
+//#include <opengl_texture.hpp>
 #include "../../core/wrappers/glm_wrapper.hpp"
 #include "../../core/wrappers/graphics_wrapper.hpp"
 #include "../../core/internal_ptr.hpp"
-#include "../../application/opengl/opengl_mesh.hpp"
+//#include "../../application/opengl/opengl_mesh.hpp"
+#include "static_mesh_instance.hpp"
+#include "string"
+#include "vector"
 
 namespace physicat {
+    struct OpenGLAssetManager;
+
     struct OpenGLPipeline {
-        explicit OpenGLPipeline(const std::string& shaderName);
+        OpenGLPipeline(const std::string& shaderName);
+
     public:
-        void Render(const physicat::OpenGLMesh& mesh, const physicat::OpenGLTexture& texture, const glm::mat4& mvp) const;
+        // Optimization Techniques: https://www.khronos.org/opengl/wiki/Vertex_Specification_Best_Practices
+        void Render(
+            const physicat::OpenGLAssetManager& assetManager,
+            const std::vector<physicat::StaticMeshInstance>& staticMeshInstances
+        ) const;
 
     private:
         struct Internal;
