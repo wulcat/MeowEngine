@@ -3,17 +3,14 @@
 //
 
 #include "opengl_application.hpp"
-#include "opengl_pipeline.hpp"
-#include "opengl_mesh.hpp"
 
 #include "graphics_wrapper.hpp"
 #include "log.hpp"
 #include "sdl_wrapper.hpp"
+#include "main_scene.hpp"
+#include "opengl_asset_manager.hpp"
+#include "opengl_renderer.hpp"
 
-
-#include "assets.hpp"
-#include "perspective_camera.hpp"
-#include "opengl_texture.hpp"
 
 #include <string>
 
@@ -45,24 +42,26 @@ namespace {
         return context;
     }
 
-    physicat::PerspectiveCamera CreateCamera() {
-        std::pair<uint32_t, uint32_t> displaySize{physicat::sdl::GetDisplaySize()};
-
-        return physicat::PerspectiveCamera{static_cast<float>(displaySize.first), static_cast<float>(displaySize.second)};
+    std::shared_ptr<physicat::OpenGLAssetManager> CreateAssetManager() {
+        return std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
     }
 
-    glm::mat4 CreateMeshTransform() {
-        glm::mat4 identityMatrix{1.0f};
+    physicat::OpenGLRenderer CreateRenderer(std::shared_ptr<physicat::OpenGLAssetManager> assetManager) {
+        return physicat::OpenGLRenderer(assetManager);
+    }
 
-        glm::vec3 position{0.0f, 0.0f, 0.0f};
-        glm::vec3 rotationAxis{0.0f, 1.0f, 0.0f};
-        glm::vec3 scale{1.0f, 1.0f, 1.0f};
+    std::unique_ptr<physicat::Scene> CreateMainScene(physicat::OpenGLAssetManager& assetManager) {
+        std::pair<uint32_t, uint32_t> displaySize{physicat::sdl::GetDisplaySize()};
+        std::unique_ptr<physicat::MainScene> mainScene {
+            std::make_unique<physicat::MainScene>(
+                static_cast<float>(displaySize.first),
+                static_cast<float>(displaySize.second)
+            )
+        };
 
-        float rotationDegrees{45.0f};
+        mainScene->Create(assetManager);
 
-        return  glm::translate(identityMatrix, position) *
-                glm::rotate(identityMatrix, glm::radians(rotationDegrees), rotationAxis) *
-                glm::scale(identityMatrix, scale);
+        return mainScene;
     }
 
 } // namespace
@@ -71,19 +70,14 @@ struct OpenGLApplication::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
 
-    const physicat::PerspectiveCamera Camera;
-    const physicat::OpenGLPipeline DefaultPipeline;
-    const physicat::OpenGLMesh Mesh;
-    const physicat::OpenGLTexture Texture;
-    const glm::mat4 MeshTransform;
+    const std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
+    physicat::OpenGLRenderer Renderer;
+    std::unique_ptr<physicat::Scene> Scene;
 
     Internal() : Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
                  Context(CreateContext(Window)),
-                 Camera(CreateCamera()),
-                 DefaultPipeline(physicat::OpenGLPipeline("default")),
-                 Mesh(physicat::OpenGLMesh(physicat::assets::LoadObjFile("assets/models/crate.obj"))),
-                 MeshTransform(CreateMeshTransform()),
-                 Texture(physicat::OpenGLTexture(physicat::assets::LoadBitmap("assets/textures/crate.png")))
+                 AssetManager(::CreateAssetManager()),
+                 Renderer(::CreateRenderer(AssetManager))
     {
         //physicat::Log("CRATE!", "Crate has " );
     }
@@ -93,21 +87,25 @@ struct OpenGLApplication::Internal {
         SDL_DestroyWindow(Window);
     }
 
-    void Update(const float& deltaTime) {}
+    physicat::Scene& GetScene() {
+        if(!Scene) {
+            Scene = ::CreateMainScene(*AssetManager);
+        }
 
-    void Render() const {
+        return *Scene;
+    }
+
+    void Update(const float& deltaTime) {
+        GetScene().Update(deltaTime);
+    }
+
+    void Render() {
         SDL_GL_MakeCurrent(Window, Context);
 
         glClearColor(0.f, 0.f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        const glm::mat4 mvp {
-            Camera.GetProjectionMatrix() *
-            Camera.GetViewMatrix() *
-            MeshTransform
-        };
-
-        DefaultPipeline.Render(Mesh, Texture, mvp);
+        GetScene().Render(Renderer);
 
         SDL_GL_SwapWindow(Window);
     }

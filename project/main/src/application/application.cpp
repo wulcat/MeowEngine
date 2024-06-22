@@ -23,12 +23,12 @@ struct Application::Internal {
 
     Internal()
         : FramePerSecond(static_cast<float>(SDL_GetPerformanceFrequency()))
-        , CurrentFrameTime(SDL_GetPerformanceFrequency())
+        , CurrentFrameTime(SDL_GetPerformanceCounter())
         , PreviousFrameTime(CurrentFrameTime) {}
 
     float TimeStep() {
         PreviousFrameTime = CurrentFrameTime;
-        CurrentFrameTime = SDL_GetPerformanceFrequency();
+        CurrentFrameTime = SDL_GetPerformanceCounter();
 
         float elapsedTime {
             (CurrentFrameTime - PreviousFrameTime) * 1000.0f

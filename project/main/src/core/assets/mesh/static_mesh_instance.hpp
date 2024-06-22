@@ -16,9 +16,9 @@ namespace physicat {
             const physicat::assets::StaticMeshType& staticMeshType,
             const physicat::assets::TextureType& textureType,
             const glm::vec3& position = glm::vec3{0,0,0},
-            const glm::vec3& scale = glm::vec3{0,0,0},
+            const glm::vec3& scale = glm::vec3{1,1,1},
             const glm::vec3& rotationAxis = glm::vec3{0, 1, 0},
-            const float& rotationDegrees = 0
+            const float& rotationDegrees = 45
         );
 
         void Update(const glm::mat4& projectionViewMatrix);
