@@ -16,11 +16,17 @@ namespace physicat::assets {
     };
 
     enum class StaticMeshType {
-        Crate
+        Plane,
+        Cube,
+        Sphere,
+        Cylinder,
+        Cone,
+        Torus
     };
 
     enum class TextureType {
-        Crate
+        Default,
+        Pattern
     };
 
     std::string ResolveShaderPipelinePath(const physicat::assets::ShaderPipelineType& shaderPipeline);

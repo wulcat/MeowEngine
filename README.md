@@ -18,7 +18,12 @@
 - [x] Find a way to debug coding after built application
 - [ ] Find a way to isolate and build code while developing simulations
 - [ ] Create build modes for debug and release
-- [ ] On repo update - auto build emscriptten for web and upload
+- [ ] On repo update - auto build emscripten for web and upload
+- [ ] Ability to read/write on file for saving import references (instead of hard-coded enums)
+- [ ] Add Proper logging system
+- [ ] Create Basic UI elements like a button and text
+- [ ] If simple add basic light
+- [ ] Create Unique ID generator for items
 
 ## Build
 <img src="examples/engine.png" width="500">
@@ -30,7 +35,7 @@
 - [x] Web
 
 ## Tools
-- Emscriptten
+- Emscripten
 - Vulkan
 - OpenGL ES3
 - SDL/SDL2 (mac framework) or GLFW
