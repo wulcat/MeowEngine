@@ -7,7 +7,8 @@
 
 #include "asset_manager.hpp"
 #include "internal_ptr.hpp"
-#include "opengl_pipeline.hpp"
+//#include "opengl_pipeline_base.hpp"
+//#include "opengl_mesh_pipeline.hpp"
 #include "opengl_mesh.hpp"
 #include "opengl_texture.hpp"
 
@@ -22,7 +23,8 @@ namespace physicat {
         void LoadStaticMeshes(const std::vector<physicat::assets::StaticMeshType>& staticMeshes) override;
         void LoadTextures(const std::vector<physicat::assets::TextureType>& textures) override;
 
-        const physicat::OpenGLPipeline& GetShaderPipeline(const physicat::assets::ShaderPipelineType& shaderPipeline) const;
+        template<typename T>
+        T* GetShaderPipeline(const physicat::assets::ShaderPipelineType& shaderPipeline);
         const physicat::OpenGLMesh& GetStaticMesh(const physicat::assets::StaticMeshType& staticMesh) const;
         const physicat::OpenGLTexture& GetTexture(const physicat::assets::TextureType& texture) const;
 

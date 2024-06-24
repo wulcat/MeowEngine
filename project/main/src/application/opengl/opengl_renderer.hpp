@@ -7,17 +7,17 @@
 
 #include "internal_ptr.hpp"
 #include "renderer.hpp"
+
 #include "opengl_asset_manager.hpp"
+
+
 #include <memory>
 
 namespace physicat {
     struct OpenGLRenderer : public physicat::Renderer {
-        OpenGLRenderer(std::shared_ptr<physicat::OpenGLAssetManager> assetManager);
+        OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager);
 
-        void Render(
-            const physicat::assets::ShaderPipelineType& shaderPipelineType,
-            const std::vector<physicat::StaticMeshInstance>& staticMeshInstances
-        ) override;
+        void Render(physicat::core::component::RenderComponentBase* renderComponent) override;
 
     private:
         struct Internal;

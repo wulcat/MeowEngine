@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include "asset_inventory.hpp"
-#include "static_mesh_instance.hpp"
-#include <vector>
+//#include "asset_inventory.hpp"
+//#include "static_mesh_instance.hpp"
+//#include "opengl_line_pipeline.hpp"
+#include "render_component_base.hpp"
+
+//#include <vector>
 
 namespace physicat {
     struct Renderer {
-        virtual void Render(
-            const physicat::assets::ShaderPipelineType& shaderPipelineType,
-            const std::vector<physicat::StaticMeshInstance>& staticMeshInstances
-        ) = 0;
+        virtual void Render(physicat::core::component::RenderComponentBase* renderComponent) = 0;
     };
 }
 

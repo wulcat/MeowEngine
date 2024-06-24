@@ -12,7 +12,8 @@
 
 namespace physicat::assets {
     enum class ShaderPipelineType {
-        Default
+        Default,
+        Line
     };
 
     enum class StaticMeshType {

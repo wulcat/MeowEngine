@@ -11,6 +11,8 @@ std::string physicat::assets::ResolveShaderPipelinePath(const physicat::assets::
     switch(shaderPipeline) {
         case physicat::assets::ShaderPipelineType::Default:
             return "default";
+        case physicat::assets::ShaderPipelineType::Line:
+            return "line";
     }
 }
 

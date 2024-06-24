@@ -3,8 +3,8 @@
 //
 
 #include "opengl_pipeline.hpp"
-#include "../../core/assets/assets.hpp"
-#include "../../core/logger/log.hpp"
+#include "src/core/assets/assets.hpp"
+#include "src/core/logger/log.hpp"
 #include "opengl_asset_manager.hpp"
 #include <stdexcept>
 #include <vector>
@@ -55,6 +55,7 @@ namespace {
         std::string fragmentShaderSource{"#version 120\n" + fragmentShaderCode};
 #endif
 
+        // Compile fragment and vertex shader from our compiler (method)
         GLuint shaderProgramId {glCreateProgram()};
         GLuint vertexShaderId {CompileShader(GL_VERTEX_SHADER, vertexShaderSource)};
         GLuint fragmentShaderId {CompileShader(GL_FRAGMENT_SHADER, fragmentShaderSource)};
@@ -63,9 +64,11 @@ namespace {
         glAttachShader(shaderProgramId, fragmentShaderId);
         glLinkProgram(shaderProgramId);
 
+        // Link Shader
         GLint shaderProgramLinkResult;
         glGetProgramiv(shaderProgramId, GL_LINK_STATUS, &shaderProgramLinkResult);
 
+        // Check the if our shader was successfully linked
         if(!shaderProgramLinkResult) {
             GLint errorMessageLength;
             glGetProgramiv(shaderProgramId, GL_INFO_LOG_LENGTH, &errorMessageLength);
@@ -76,8 +79,11 @@ namespace {
             throw std::runtime_error(logTag + "Shader Program failed to compile");
         }
 
+        // It's important to detach shader from that way deleting shader free's the memory
         glDetachShader(shaderProgramId, vertexShaderId);
         glDetachShader(shaderProgramId, fragmentShaderId);
+
+        // Clean up shader as they are no longer needed after linking
         glDeleteShader(vertexShaderId);
         glDeleteShader(fragmentShaderId);
 
@@ -102,31 +108,37 @@ struct OpenGLPipeline::Internal {
         , AttributeLocationTextureCoord(glGetAttribLocation(ShaderProgramId, "a_textureCoord"))
         , Stride(5 * sizeof (float))
         , OffsetPosition(0)
-        , OffsetTextureCoord(3 * sizeof(float))
-        {}
+        , OffsetTextureCoord(3 * sizeof(float)) {}
+
 
     void Render(
             const physicat::OpenGLAssetManager& assetManager,
             const std::vector<physicat::StaticMeshInstance>& staticMeshInstances
-    ) const {
+    )  {
+//        lineDraw.create(ShaderProgramId);
+//        lineDraw.draw();
+
+        this->RenderStaticMesh(assetManager, staticMeshInstances);
+    }
+
+    void RenderStaticMesh(const physicat::OpenGLAssetManager& assetManager,
+                          const std::vector<physicat::StaticMeshInstance>& staticMeshInstances) const {
+
+        // start - Activate Shader Program
+        // Tell opengl to use our shader program
+        glUseProgram(ShaderProgramId);
+
 //#ifndef USING_GLES
 //        // This will render a wire frame for us :)
 //        // n just like that we can have a wire frame mode (not that i need it but yeah lol)
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 //#endif
-
-        // Activate Shader Program
-
-        // Tell opengl to use our shader program
-        glUseProgram(ShaderProgramId);
-
         // Activating our vertex position attribute
         glEnableVertexAttribArray(AttributeLocationVertexPosition);
 
         // Activate our texture coord attribute
         glEnableVertexAttribArray(AttributeLocationTextureCoord);
-
-        // Activate Shader Program - finish
+        // end - Activate Shader Program - finish
 
         for(const auto& staticMeshInstance : staticMeshInstances) {
             const physicat::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
@@ -163,10 +175,10 @@ struct OpenGLPipeline::Internal {
 
             // Draw command providing the total number of vertices from mesh
             glDrawElements(
-                GL_TRIANGLES,
-                mesh.GetNumIndices(),
-                GL_UNSIGNED_INT,
-                reinterpret_cast<const GLvoid*>(0) // (GLvoid*)(0)
+                    GL_TRIANGLES,
+                    mesh.GetNumIndices(),
+                    GL_UNSIGNED_INT,
+                    reinterpret_cast<const GLvoid*>(0) // (GLvoid*)(0)
             );
 
         }

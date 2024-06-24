@@ -6,13 +6,15 @@
 #define PHYSICAT_OPENGL_PIPELINE_HPP
 
 //#include <opengl_texture.hpp>
-#include "../../core/wrappers/glm_wrapper.hpp"
-#include "../../core/wrappers/graphics_wrapper.hpp"
-#include "../../core/internal_ptr.hpp"
+#include "src/core/wrappers/glm_wrapper.hpp"
+#include "src/core/wrappers/graphics_wrapper.hpp"
+#include "src/core/internal_ptr.hpp"
 //#include "../../application/opengl/opengl_mesh.hpp"
 #include "static_mesh_instance.hpp"
+#include "opengl_line_pipeline.hpp"
 #include "string"
 #include "vector"
+#include "render_component_base.hpp"
 
 namespace physicat {
     struct OpenGLAssetManager;
