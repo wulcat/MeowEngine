@@ -10,6 +10,7 @@
 
 #include "opengl_pipeline_base.hpp"
 #include "line_render_component.hpp"
+#include "transform3d_component.hpp"
 
 using namespace std;
 using namespace glm;
@@ -22,7 +23,8 @@ namespace physicat::pipeline {
     public:
         void Render(
             const physicat::OpenGLAssetManager& assetManager,
-            const physicat::core::component::LineRenderComponent* lineRenderComponent
+            const physicat::core::component::LineRenderComponent* lineRenderComponent,
+            const physicat::core::component::Transform3DComponent* transform3DComponent
         ) const;
 
     private:

@@ -22,9 +22,9 @@ namespace physicat::core::component {
     public:
         glm::vec3 StartPoint;
         glm::vec3 EndPoint;
-        glm::vec3 LineColor;
+        glm::vec4 LineColor;
         std::vector<float> Vertices;
-        glm::mat4 ProjectionViewMatrix;
+//        glm::mat4 ProjectionViewMatrix;
     };
 }
 

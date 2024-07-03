@@ -42,7 +42,8 @@ struct OpenGLRenderer::Internal {
             case ShaderPipelineType::Line:
                 AssetManager->GetShaderPipeline<OpenGLLinePipeline>(ShaderPipelineType::Line)->Render(
                     *AssetManager,
-                    dynamic_cast<LineRenderComponent*>(renderComponent)
+                    dynamic_cast<LineRenderComponent*>(renderComponent),
+                    dynamic_cast<Transform3DComponent*>(lifeObject->TransformComponent)
                 );
                 break;
         }

@@ -12,7 +12,7 @@ namespace {
     }
 
     glm::mat4 CreateViewMatrix() {
-        glm::vec3 position {0.0f, 0.0f , 2.0f}; // position of camera
+        glm::vec3 position {0.0f, 2.0f , -10.0f}; // position of camera
         glm::vec3 target {0.0f, 0.0f, 0.0f}; // at what point the camera should look at
         glm::vec3 up {0.0f, 1.0f, 0.0f}; // the direction of the camera (pointing upward)
 

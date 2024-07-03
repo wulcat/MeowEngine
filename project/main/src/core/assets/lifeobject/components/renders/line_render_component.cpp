@@ -10,12 +10,10 @@ LineRenderComponent::LineRenderComponent(physicat::assets::ShaderPipelineType sh
     Shader = shader;
     StartPoint = start;
     EndPoint = end;
-
-    LineColor = glm::vec3(1,0,0);
-    ProjectionViewMatrix = glm::mat4(1.0f);
+    LineColor = glm::vec4(0.4f,1,1,0.3f);
 
     Vertices = {
-            start.x, start.y, start.z,
-            end.x, end.y, end.z,
+        start.x, start.y, start.z,
+        end.x, end.y, end.z,
     };
 }

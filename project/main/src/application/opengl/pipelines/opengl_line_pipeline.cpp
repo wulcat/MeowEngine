@@ -10,6 +10,10 @@ OpenGLLinePipeline::OpenGLLinePipeline(const GLuint &shaderProgramID)
     : ShaderProgramID(shaderProgramID) {
     glGenVertexArrays(1, &VertexArrayID);
     glGenBuffers(1, &VertexBufferID);
+
+    // TODO: This needs to be executed only once (maybe our opengl render pipeline can set this on start)
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 OpenGLLinePipeline::~OpenGLLinePipeline() {
@@ -20,7 +24,8 @@ OpenGLLinePipeline::~OpenGLLinePipeline() {
 
 void OpenGLLinePipeline::Render(
     const physicat::OpenGLAssetManager &assetManager,
-    const physicat::core::component::LineRenderComponent *lineRenderComponent) const {
+    const physicat::core::component::LineRenderComponent *lineRenderComponent,
+    const physicat::core::component::Transform3DComponent* transform3DComponent) const {
 
     glUseProgram(ShaderProgramID);
 
@@ -33,9 +38,10 @@ void OpenGLLinePipeline::Render(
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    glUniformMatrix4fv(glGetUniformLocation(ShaderProgramID, "MVP"), 1, GL_FALSE, &lineRenderComponent->ProjectionViewMatrix[0][0]);
-    glUniform3fv(glGetUniformLocation(ShaderProgramID, "color"), 1, &lineRenderComponent->LineColor[0]);
+    glUniformMatrix4fv(glGetUniformLocation(ShaderProgramID, "MVP"), 1, GL_FALSE, &transform3DComponent->TransformMatrix[0][0]);
+    glUniform4fv(glGetUniformLocation(ShaderProgramID, "color"), 1, &lineRenderComponent->LineColor[0]);
 
     glBindVertexArray(VertexArrayID);
+
     glDrawArrays(GL_LINES, 0, 2);
 }
