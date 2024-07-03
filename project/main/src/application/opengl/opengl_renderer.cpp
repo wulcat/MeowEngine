@@ -21,7 +21,7 @@ struct OpenGLRenderer::Internal {
     Internal(std::shared_ptr<physicat::OpenGLAssetManager> assetManager)
     : AssetManager(assetManager){}
 
-    void Render(physicat::core::component::RenderComponentBase* renderComponent) {
+    void Render(physicat::core::LifeObject* lifeObject) {
 
 //        AssetManager->GetShaderPipeline(shaderPipelineType).Render(
 //                *AssetManager,
@@ -29,17 +29,20 @@ struct OpenGLRenderer::Internal {
 //                lineDraw
 //        );
 
+        RenderComponentBase* renderComponent = lifeObject->RenderComponent;
+
         switch (renderComponent->GetShaderPipelineType()) {
             case ShaderPipelineType::Default:
                 AssetManager->GetShaderPipeline<OpenGLMeshPipeline>(ShaderPipelineType::Default)->Render(
                     *AssetManager,
-                    dynamic_cast<MeshRenderComponent*>(renderComponent)
+                    dynamic_cast<MeshRenderComponent*>(renderComponent),
+                    dynamic_cast<Transform3DComponent*>(lifeObject->TransformComponent)
                 );
                 break;
             case ShaderPipelineType::Line:
                 AssetManager->GetShaderPipeline<OpenGLLinePipeline>(ShaderPipelineType::Line)->Render(
-                        *AssetManager,
-                        dynamic_cast<LineRenderComponent*>(renderComponent)
+                    *AssetManager,
+                    dynamic_cast<LineRenderComponent*>(renderComponent)
                 );
                 break;
         }
@@ -49,6 +52,6 @@ struct OpenGLRenderer::Internal {
 OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager)
     : InternalPointer(physicat::make_internal_ptr<Internal>(assetManager)) {}
 
-void OpenGLRenderer::Render(physicat::core::component::RenderComponentBase* renderComponent) {
-    InternalPointer->Render(renderComponent);
+void OpenGLRenderer::Render(physicat::core::LifeObject* lifeObject) {
+    InternalPointer->Render(lifeObject);
 }

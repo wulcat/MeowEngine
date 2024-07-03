@@ -10,6 +10,7 @@
 
 #include "opengl_pipeline_base.hpp"
 #include "mesh_render_component.hpp"
+#include "transform3d_component.hpp"
 
 namespace physicat::pipeline {
     struct OpenGLMeshPipeline : public physicat::pipeline::OpenGLPipelineBase {
@@ -19,7 +20,8 @@ namespace physicat::pipeline {
     public:
         void Render(
             const physicat::OpenGLAssetManager& assetManager,
-            const physicat::core::component::MeshRenderComponent* meshRenderComponent
+            const physicat::core::component::MeshRenderComponent* meshRenderComponent,
+            const physicat::core::component::Transform3DComponent* transform3DComponent
         ) const;
 
     private:

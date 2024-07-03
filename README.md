@@ -30,7 +30,7 @@
 
 ## Compatibility
 - [x] Console
-- [x] Mac (x84) (Arm architecture not Supported)
+- [x] Mac (x84) (Arm architecture using rosetta)
 - [ ] Windows
 - [x] Web
 

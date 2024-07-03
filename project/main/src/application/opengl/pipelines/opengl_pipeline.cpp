@@ -144,7 +144,7 @@ struct OpenGLPipeline::Internal {
             const physicat::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
 
             // Populating our MVP in shader program
-            glUniformMatrix4fv(UniformLocationMVP, 1, GL_FALSE, &staticMeshInstance.GetTransformMatrix()[0][0]);
+//            glUniformMatrix4fv(UniformLocationMVP, 1, GL_FALSE, &staticMeshInstance.GetTransformMatrix()[0][0]);
 
             // Apply the texture we want to paint the mesh with.
             assetManager.GetTexture(staticMeshInstance.GetTexture()).Bind();

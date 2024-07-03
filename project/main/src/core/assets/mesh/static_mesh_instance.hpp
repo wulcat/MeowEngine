@@ -6,7 +6,7 @@
 #define PHYSICAT_STATIC_MESH_INSTANCE_HPP
 
 #include "asset_inventory.hpp"
-#include "glm_wrapper.hpp"
+//#include "glm_wrapper.hpp"
 #include "internal_ptr.hpp"
 
 namespace physicat {
@@ -14,18 +14,14 @@ namespace physicat {
     struct StaticMeshInstance {
         StaticMeshInstance(
             const physicat::assets::StaticMeshType& staticMeshType,
-            const physicat::assets::TextureType& textureType,
-            const glm::vec3& position = glm::vec3{0,0,0},
-            const glm::vec3& scale = glm::vec3{1,1,1},
-            const glm::vec3& rotationAxis = glm::vec3{0, 1, 0},
-            const float& rotationDegrees = 45
+            const physicat::assets::TextureType& textureType
         );
 
-        void Update(const glm::mat4& projectionViewMatrix);
-        void RotateBy(const float& degrees);
+//        void Update(const glm::mat4& projectionViewMatrix);
+//        void RotateBy(const float& degrees);
         physicat::assets::StaticMeshType GetMesh() const;
         physicat::assets::TextureType GetTexture() const;
-        glm::mat4 GetTransformMatrix() const;
+//        glm::mat4 GetTransformMatrix() const;
 
     private:
         struct Internal;

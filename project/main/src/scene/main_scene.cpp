@@ -9,9 +9,10 @@
 #include "log.hpp"
 #include "opengl_line_pipeline.hpp"
 
-#include "life_object.hpp"
+#include "src/core/assets/lifeobject/life_object.hpp"
 #include "mesh_render_component.hpp"
 #include "line_render_component.hpp"
+#include "transform3d_component.hpp"
 
 using physicat::MainScene;
 using physicat::assets::ShaderPipelineType;
@@ -20,6 +21,7 @@ using physicat::assets::TextureType;
 using physicat::core::component::RenderComponentBase;
 using physicat::core::component::MeshRenderComponent;
 using physicat::core::component::LineRenderComponent;
+using physicat::core::component::Transform3DComponent;
 
 namespace {
     physicat::PerspectiveCamera CreateCamera(const float& width, const float& height) {
@@ -125,85 +127,73 @@ struct MainScene::Internal {
 
 
         core::LifeObject meshObject = core::LifeObject();
+        meshObject.SetTransformComponent(
+            new Transform3DComponent(
+                glm::vec3{-0.3f, 0.4f, -2.0f},
+                glm::vec3{0.4f, 0.4f, 0.4f},
+                glm::vec3{0.6f, 0.3f, 0.1f},
+                0
+            )
+        );
         meshObject.SetRenderComponent(
             new MeshRenderComponent(
-                    physicat::assets::ShaderPipelineType::Default,
+                physicat::assets::ShaderPipelineType::Default,
                 new physicat::StaticMeshInstance{
                     StaticMeshType::Torus,
-                    TextureType::Pattern,
-                    glm::vec3{-0.3f, 0.4f, -2.0f},
-                    glm::vec3{0.4f, 0.4f, 0.4f},
-                    glm::vec3{0.6f, 0.3f, 0.1f},
-                    0.0f
+                    TextureType::Pattern
                 }
             )
         );
 
         core::LifeObject meshObject1 = core::LifeObject();
+        meshObject1.SetTransformComponent(
+            new Transform3DComponent(
+                glm::vec3{-1.4f, 1.2f, -2.5f},
+                glm::vec3{0.6f, 0.6f, 0.6f},
+                glm::vec3{0.0f, 0.4f, 0.9f},
+                0.0f
+            )
+        );
         meshObject1.SetRenderComponent(
             new MeshRenderComponent(
-                    physicat::assets::ShaderPipelineType::Default,
+                physicat::assets::ShaderPipelineType::Default,
                 new physicat::StaticMeshInstance{
-                        StaticMeshType::Cone,
-                        TextureType::Pattern,
-                        glm::vec3{-1.4f, 1.2f, -2.5f},
-                        glm::vec3{0.6f, 0.6f, 0.6f},
-                        glm::vec3{0.0f, 0.4f, 0.9f},
-                        0.0f
+                    StaticMeshType::Cone,
+                    TextureType::Pattern
                 }
             )
         );
 
-        core::LifeObject lineObject1 = core::LifeObject();
-        lineObject1.SetRenderComponent(
-                new LineRenderComponent(
-                        physicat::assets::ShaderPipelineType::Line,
-                        glm::vec3(0,0,0),
-                        glm::vec3(1,0,0)
-                )
-        );
+//        core::LifeObject lineObject1 = core::LifeObject();
+//        lineObject1.SetRenderComponent(
+//            new LineRenderComponent(
+//                physicat::assets::ShaderPipelineType::Line,
+//                glm::vec3(0,0,0),
+//                glm::vec3(1,0,0)
+//            )
+//        );
 
         LifeObjects.push_back(meshObject);
         LifeObjects.push_back(meshObject1);
-        LifeObjects.push_back(lineObject1);
+//        LifeObjects.push_back(lineObject1);
     }
 
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
 
-//        physicat::Log("MainScene", "StaticMeshes Count" + StaticMeshes.size());
-
         for(auto& lifeObject : LifeObjects) {
-//            staticMesh.RotateBy(deltaTime * 45.0f);
-            lifeObject.RenderComponent->Update(cameraMatrix);
-
-//            physicat::Log("MainScene", "mesh");
+            lifeObject.TransformComponent->Update(cameraMatrix);
         }
-//
-//        meshObject.RenderComponent->Update(cameraMatrix);
-//        meshObject1.RenderComponent->Update(cameraMatrix);
-//        lineObject1.RenderComponent->Update(cameraMatrix);
     }
 
     void Render(physicat::Renderer& renderer) {
+        // This is important for now - we can come to this later for optimization
+        // Current goal is to have full control on render as individual objects
+        // as we will have elements like UI, Static Meshes, Post Processing, Camera Culling, Editor Tools
         for(auto& lifeObject : LifeObjects) {
-//            staticMesh.RotateBy(deltaTime * 45.0f);
-            renderer.Render(lifeObject.RenderComponent);
-
-//            physicat::Log("MainScene", "mesh");
+            renderer.Render(&lifeObject);
         }
-//        renderer.Render(
-//            meshObject.RenderComponent
-//        );
-//
-//        renderer.Render(
-//                meshObject1.RenderComponent
-//        );
-//
-//        renderer.Render(
-//            lineObject1.RenderComponent
-//        );
     }
 };
 

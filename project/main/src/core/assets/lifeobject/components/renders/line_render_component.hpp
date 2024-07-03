@@ -13,11 +13,11 @@ namespace physicat::core::component {
     public:
         explicit LineRenderComponent(physicat::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end);
 
-        void Update(const glm::mat4 &projectionViewMatrix) override {
-//            MeshInstance->Update(projectionViewMatrix);
-//            MeshInstance->RotateBy(0.1f);
-            ProjectionViewMatrix = projectionViewMatrix;
-        }
+//        void Update(const glm::mat4 &projectionViewMatrix) override {
+////            MeshInstance->Update(projectionViewMatrix);
+////            MeshInstance->RotateBy(0.1f);
+//            ProjectionViewMatrix = projectionViewMatrix;
+//        }
 
     public:
         glm::vec3 StartPoint;

@@ -30,7 +30,8 @@ OpenGLMeshPipeline::~OpenGLMeshPipeline() {
 
 void OpenGLMeshPipeline::Render(
         const physicat::OpenGLAssetManager &assetManager,
-        const physicat::core::component::MeshRenderComponent *meshRenderComponent) const {
+        const physicat::core::component::MeshRenderComponent* meshRenderComponent,
+        const physicat::core::component::Transform3DComponent* transform3DComponent) const {
 
     // start - Activate Shader Program
     // Tell opengl to use our shader program
@@ -54,7 +55,7 @@ void OpenGLMeshPipeline::Render(
         const physicat::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
 
         // Populating our MVP in shader program
-        glUniformMatrix4fv(UniformLocationMVP, 1, GL_FALSE, &staticMeshInstance.GetTransformMatrix()[0][0]);
+        glUniformMatrix4fv(UniformLocationMVP, 1, GL_FALSE, &transform3DComponent->TransformMatrix[0][0]);
 
         // Apply the texture we want to paint the mesh with.
         assetManager.GetTexture(staticMeshInstance.GetTexture()).Bind();

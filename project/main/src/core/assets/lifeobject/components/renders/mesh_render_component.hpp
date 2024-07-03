@@ -14,10 +14,10 @@ namespace physicat::core::component {
     public:
         explicit MeshRenderComponent(physicat::assets::ShaderPipelineType shader, physicat::StaticMeshInstance* meshInstance);
 
-        void Update(const glm::mat4 &projectionViewMatrix) override {
-            MeshInstance->Update(projectionViewMatrix);
-            MeshInstance->RotateBy(0.1f);
-        }
+//        void Update(const glm::mat4 &projectionViewMatrix) override {
+//            MeshInstance->Update(projectionViewMatrix);
+//            MeshInstance->RotateBy(0.1f);
+//        }
 
         const physicat::StaticMeshInstance& GetMeshInstance() const {
             return *MeshInstance;
