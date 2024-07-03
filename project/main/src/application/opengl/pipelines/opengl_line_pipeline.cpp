@@ -25,7 +25,8 @@ OpenGLLinePipeline::~OpenGLLinePipeline() {
 void OpenGLLinePipeline::Render(
     const physicat::OpenGLAssetManager &assetManager,
     const physicat::core::component::LineRenderComponent *lineRenderComponent,
-    const physicat::core::component::Transform3DComponent* transform3DComponent) const {
+    const physicat::core::component::Transform3DComponent* transform3DComponent,
+    const physicat::PerspectiveCamera* camera) const {
 
     glUseProgram(ShaderProgramID);
 
@@ -38,8 +39,14 @@ void OpenGLLinePipeline::Render(
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    glUniformMatrix4fv(glGetUniformLocation(ShaderProgramID, "MVP"), 1, GL_FALSE, &transform3DComponent->TransformMatrix[0][0]);
-    glUniform4fv(glGetUniformLocation(ShaderProgramID, "color"), 1, &lineRenderComponent->LineColor[0]);
+    // vertex shader
+    glUniformMatrix4fv(glGetUniformLocation(ShaderProgramID, "u_mvp"), 1, GL_FALSE, &transform3DComponent->TransformMatrix[0][0]);
+    glUniform3fv(glGetUniformLocation(ShaderProgramID, "u_worldPosition"),1, &transform3DComponent->Position[0]);
+    glUniform3fv(glGetUniformLocation(ShaderProgramID, "u_cameraPosition"), 1, &camera->GetPosition()[0]);
+
+    // fragment shader
+    glUniform3fv(glGetUniformLocation(ShaderProgramID, "u_color"), 1, &lineRenderComponent->LineColor[0]);
+    glUniform1f(glGetUniformLocation(ShaderProgramID, "u_maxDistance"), 20.0f);
 
     glBindVertexArray(VertexArrayID);
 

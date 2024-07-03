@@ -24,6 +24,7 @@
 - [ ] Create Basic UI elements like a button and text
 - [ ] If simple add basic light
 - [ ] Create Unique ID generator for items
+- [ ] Create a template for dump-testing shaders
 
 ## Build
 <img src="examples/engine_v2.gif" width="500">

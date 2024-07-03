@@ -12,12 +12,13 @@
 //#include "opengl_line_pipeline.hpp"
 //#include "render_component_base.hpp"
 #include "life_object.hpp"
+#include "perspective_camera.hpp"
 
 //#include <vector>
 
 namespace physicat {
     struct Renderer {
-        virtual void Render(physicat::core::LifeObject* lifeObject) = 0;
+        virtual void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) = 0;
     };
 }
 

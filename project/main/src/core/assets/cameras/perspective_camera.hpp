@@ -14,6 +14,7 @@ namespace physicat {
 
         const glm::mat4& GetProjectionMatrix() const;
         const glm::mat4& GetViewMatrix() const;
+        const glm::vec3& GetPosition() const;
 
     private:
         struct Internal;

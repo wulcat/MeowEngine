@@ -244,7 +244,7 @@ struct MainScene::Internal {
         // Current goal is to have full control on render as individual objects
         // as we will have elements like UI, Static Meshes, Post Processing, Camera Culling, Editor Tools
         for(auto& lifeObject : LifeObjects) {
-            renderer.Render(&lifeObject);
+            renderer.Render(&Camera, &lifeObject);
         }
     }
 };

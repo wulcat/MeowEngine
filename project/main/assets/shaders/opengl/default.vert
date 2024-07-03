@@ -1,5 +1,9 @@
+//
+// Created by Akira Mujawar on 03/07/24.
+//
 // model, view, projection - describles the transformation
 // https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
+
 uniform mat4 u_mvp;
 
 attribute vec3 a_vertexPosition;

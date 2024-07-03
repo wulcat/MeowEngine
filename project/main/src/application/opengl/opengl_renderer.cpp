@@ -21,7 +21,7 @@ struct OpenGLRenderer::Internal {
     Internal(std::shared_ptr<physicat::OpenGLAssetManager> assetManager)
     : AssetManager(assetManager){}
 
-    void Render(physicat::core::LifeObject* lifeObject) {
+    void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) {
 
 //        AssetManager->GetShaderPipeline(shaderPipelineType).Render(
 //                *AssetManager,
@@ -43,7 +43,8 @@ struct OpenGLRenderer::Internal {
                 AssetManager->GetShaderPipeline<OpenGLLinePipeline>(ShaderPipelineType::Line)->Render(
                     *AssetManager,
                     dynamic_cast<LineRenderComponent*>(renderComponent),
-                    dynamic_cast<Transform3DComponent*>(lifeObject->TransformComponent)
+                    dynamic_cast<Transform3DComponent*>(lifeObject->TransformComponent),
+                    cameraObject
                 );
                 break;
         }
@@ -53,6 +54,6 @@ struct OpenGLRenderer::Internal {
 OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager)
     : InternalPointer(physicat::make_internal_ptr<Internal>(assetManager)) {}
 
-void OpenGLRenderer::Render(physicat::core::LifeObject* lifeObject) {
-    InternalPointer->Render(lifeObject);
+void OpenGLRenderer::Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) {
+    InternalPointer->Render(cameraObject, lifeObject);
 }
