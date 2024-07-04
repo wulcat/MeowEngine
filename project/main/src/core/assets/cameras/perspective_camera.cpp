@@ -27,7 +27,7 @@ struct PerspectiveCamera::Internal {
 
     Internal(const float& width, const float& height)
         : ProjectionMatrix(CreateProjectionMatrix(width, height))
-        , Position(0.0f, 2.0f , -10.0f)
+        , Position(0.0f, 1.0f , -10.0f)
         , ViewMatrix(CreateViewMatrix(Position)) {}
 };
 

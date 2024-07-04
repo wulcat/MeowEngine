@@ -8,3 +8,6 @@ using physicat::core::component::RenderComponentBase;
 
 RenderComponentBase::RenderComponentBase()
     : Shader(physicat::assets::ShaderPipelineType::Default) {}
+
+RenderComponentBase::RenderComponentBase(physicat::assets::ShaderPipelineType shaderPipelineType)
+    : Shader(shaderPipelineType) {}

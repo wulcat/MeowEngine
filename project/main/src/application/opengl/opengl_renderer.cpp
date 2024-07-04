@@ -7,6 +7,7 @@
 
 #include "opengl_mesh_pipeline.hpp"
 #include "opengl_line_pipeline.hpp"
+#include "opengl_grid_pipeline.hpp"
 
 
 using physicat::OpenGLRenderer;
@@ -45,6 +46,14 @@ struct OpenGLRenderer::Internal {
                     dynamic_cast<LineRenderComponent*>(renderComponent),
                     dynamic_cast<Transform3DComponent*>(lifeObject->TransformComponent),
                     cameraObject
+                );
+                break;
+            case ShaderPipelineType::Grid:
+                AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
+                        *AssetManager,
+                        renderComponent,
+                        dynamic_cast<Transform3DComponent*>(lifeObject->TransformComponent),
+                        cameraObject
                 );
                 break;
         }

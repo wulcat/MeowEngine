@@ -7,6 +7,7 @@
 #include "opengl_pipeline_base.hpp"
 #include "opengl_mesh_pipeline.hpp"
 #include "opengl_line_pipeline.hpp"
+#include "opengl_grid_pipeline.hpp"
 
 
 using physicat::OpenGLAssetManager;
@@ -52,13 +53,15 @@ namespace {
 
 #ifdef USING_GLES
         std::string vertexShaderSource {"#version 100\n" + vertexShaderCode};
-    std::string fragmentShaderSource{"#version 100\nprecision mediump float;\n" + fragmentShaderCode};
+        std::string fragmentShaderSource{"#version 100\nprecision mediump float;\n" + fragmentShaderCode};
 #else
-        std::string vertexShaderSource {"#version 120\n" + vertexShaderCode};
-        std::string fragmentShaderSource{"#version 120\n" + fragmentShaderCode};
+//        std::string vertexShaderSource {"#version 140\n" + vertexShaderCode};
+//        std::string fragmentShaderSource{"#version 140\n" + fragmentShaderCode};
+        std::string vertexShaderSource {"#version 330 core\n" + vertexShaderCode};
+        std::string fragmentShaderSource{"#version 330 core\n" + fragmentShaderCode};
+//        std::string vertexShaderSource {vertexShaderCode};
+//        std::string fragmentShaderSource{fragmentShaderCode};
 #endif
-//        physicat::Log("vertex" , vertexShaderSource);
-//        physicat::Log("frag" , fragmentShaderSource);
 
         // Compile fragment and vertex shader from our compiler (method)
         GLuint shaderProgramId {glCreateProgram()};
@@ -104,6 +107,8 @@ namespace {
                 return new OpenGLMeshPipeline(shaderProgramID);
             case ShaderPipelineType::Line:
                 return new OpenGLLinePipeline(shaderProgramID);
+            case ShaderPipelineType::Grid:
+                return new OpenGLGridPipeline(shaderProgramID);
             default:
                 return {};
         }
@@ -186,6 +191,7 @@ T* OpenGLAssetManager::GetShaderPipeline(const physicat::assets::ShaderPipelineT
 
 template OpenGLMeshPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLMeshPipeline>(const physicat::assets::ShaderPipelineType& shaderPipeline);
 template OpenGLLinePipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLLinePipeline>(const physicat::assets::ShaderPipelineType& shaderPipeline);
+template OpenGLGridPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLGridPipeline>(const physicat::assets::ShaderPipelineType& shaderPipeline);
 
 
 const physicat::OpenGLMesh& OpenGLAssetManager::GetStaticMesh(const physicat::assets::StaticMeshType& staticMesh) const {

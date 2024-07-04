@@ -37,6 +37,9 @@ namespace {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         glViewport(0, 0, viewportWidth, viewportHeight);
 
         return context;
@@ -102,7 +105,7 @@ struct OpenGLApplication::Internal {
     void Render() {
         SDL_GL_MakeCurrent(Window, Context);
 
-        glClearColor(0.f, 0.f, 0.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         GetScene().Render(Renderer);

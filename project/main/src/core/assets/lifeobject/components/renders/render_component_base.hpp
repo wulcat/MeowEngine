@@ -15,6 +15,7 @@ namespace physicat::core::component {
 
     public:
         RenderComponentBase();
+        RenderComponentBase(physicat::assets::ShaderPipelineType shaderPipelineType);
         virtual ~RenderComponentBase() = default;
 
 //        virtual void Update(const glm::mat4 &projectionViewMatrix) = 0;

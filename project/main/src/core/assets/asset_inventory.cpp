@@ -13,6 +13,8 @@ std::string physicat::assets::ResolveShaderPipelinePath(const physicat::assets::
             return "default";
         case physicat::assets::ShaderPipelineType::Line:
             return "line";
+        case physicat::assets::ShaderPipelineType::Grid:
+            return "grid";
     }
 }
 

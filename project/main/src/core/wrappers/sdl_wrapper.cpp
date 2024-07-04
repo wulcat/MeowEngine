@@ -70,8 +70,18 @@ std::pair<uint32_t, uint32_t> physicat::sdl::GetDisplaySize() {
 SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
     std::pair<uint32_t, uint32_t> displaySize{physicat::sdl::GetDisplaySize()};
 
+    // Set the attributes for SDL (here we are supporting from 1.0 to 4.0 version of shader)
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+//    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+//    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+//    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+//    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+//    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+
     SDL_Window* window{SDL_CreateWindow(
-        "Physicat Application",
+        "Physicat",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         displaySize.first,
