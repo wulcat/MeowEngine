@@ -2,6 +2,9 @@
 // Created by Akira Mujawar on 03/07/24.
 //
 
+uniform mat4 u_view;
+uniform mat4 u_projection;
+
 in vec3 v_nearPoint;
 in vec3 v_farPoint;
 
@@ -28,7 +31,7 @@ vec2 sumOfAbsoluteDerivatives(float x,float y) {
     return vec2(df_dx, df_dy);
 }
 
-vec4 grid(vec3 fragPos3D, float scale) {
+vec4 grid(vec3 fragPos3D, float scale, bool boolAxis) {
 
 
     vec2 coord = fragPos3D.xz * scale; // use the scale variable to set the distance between the lines
@@ -141,11 +144,30 @@ vec3 test22() {
     return gridColor;
 }
 
+float computeDepth(vec3 pos) {
+    vec4 clip_space_position = u_projection * u_view * vec4 (pos.xyz, 1.0);
+    return 0.5 + 0.5 * (clip_space_position.z / clip_space_position.w);
+}
+
+float computeLinearDepth(vec3 pos) {
+    float near = 0.01;
+    float far = 50;
+    vec4 clip_space_pos = u_projection * u_view * vec4(pos.xyz, 1.0);
+    float clip_space_depth = (clip_space_pos.z / clip_space_pos.w) * 2.0 - 1.0; // put back between -1 and 1
+    float linearDepth = (2.0 * near * far) / (far + near - clip_space_depth * (far - near)); // get linear value between 0.01 and 100
+    return linearDepth / far; // normalize
+}
+
 void main() {
     float t = -v_nearPoint.y / (v_farPoint.y - v_nearPoint.y);
     vec3 fragPos3D = v_nearPoint + t * (v_farPoint - v_nearPoint);
-    v_fragColor = grid(fragPos3D, 10.0) * float(t > 0);
+    gl_FragDepth = computeDepth(fragPos3D);
 
+    float linearDepth = computeLinearDepth(fragPos3D);
+    float fading = max(0, (0.5 - linearDepth));
+
+    v_fragColor = (grid(fragPos3D, 10, true) + grid(fragPos3D, 1, true)) * float(t > 0);
+    v_fragColor.a *= fading;
 
 
     //v_fragColor = vec4(test122(), 1.0); // Output grid color
