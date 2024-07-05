@@ -24,20 +24,21 @@ using physicat::core::component::LineRenderComponent;
 using physicat::core::component::Transform3DComponent;
 
 namespace {
-    physicat::PerspectiveCamera CreateCamera(const float& width, const float& height) {
-        return physicat::PerspectiveCamera(width, height);
+    physicat::PerspectiveCamera CreateCamera(const physicat::WindowSize& size) {
+        return physicat::PerspectiveCamera(static_cast<float>(size.width), static_cast<float>(size.height));
     }
 }
 
 struct MainScene::Internal {
     physicat::PerspectiveCamera Camera;
     std::vector<core::LifeObject> LifeObjects;
-//    core::LifeObject meshObject;
-//    core::LifeObject meshObject1;
-//    core::LifeObject lineObject1;
 
-    Internal(const float& screenWidth, const float& screenHeight)
-        : Camera(::CreateCamera(screenWidth, screenHeight)) {}
+    Internal(const physicat::WindowSize& size)
+        : Camera(::CreateCamera(size)) {}
+
+    void OnWindowResized(const physicat::WindowSize& size) {
+        Camera = ::CreateCamera(size);
+    }
 
     void Create(physicat::AssetManager& assetManager) {
         assetManager.LoadShaderPipelines({
@@ -197,7 +198,7 @@ struct MainScene::Internal {
         );
 
         // NOTE: The order of rendering matters when depth and transparency is involved
-        // It's not a topic i want to explore but if in future needed check out Painter's algorithm and z-buffer
+        // Not a topic i want to explore but if in future needed check out Painter's algorithm and z-buffer
         LifeObjects.push_back(meshObject);
         LifeObjects.push_back(meshObject1);
         LifeObjects.push_back(meshObject2);
@@ -224,8 +225,12 @@ struct MainScene::Internal {
     }
 };
 
-MainScene::MainScene(const float &screenWidth, const float &screenHeight)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(screenWidth, screenHeight)){}
+MainScene::MainScene(const physicat::WindowSize& size)
+    : InternalPointer(physicat::make_internal_ptr<Internal>(size)){}
+
+void MainScene::OnWindowResized(const physicat::WindowSize &size) {
+    InternalPointer->OnWindowResized(size);
+}
 
 void MainScene::Create(physicat::AssetManager &assetManager) {
     InternalPointer->Create(assetManager);

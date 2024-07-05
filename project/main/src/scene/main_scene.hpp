@@ -7,10 +7,13 @@
 
 #include "internal_ptr.hpp"
 #include "scene.hpp"
+#include "window_size.hpp"
 
 namespace physicat {
     struct MainScene : public physicat::Scene {
-        MainScene(const float& screenWidth, const float& screenHeight);
+        MainScene(const physicat::WindowSize& frameSize);
+
+        void OnWindowResized(const physicat::WindowSize& size) override;
 
         void Create(physicat::AssetManager& assetManager) override;
         void Update(const float& deltaTime) override;

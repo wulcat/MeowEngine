@@ -4,7 +4,7 @@
 - [x] Import mesh/textures
 - [x] Rendering in a scene
 - [ ] Keyboard & Mouse inputs
-- [ ] Window resize
+- [x] Window resize
 - [ ] Simple tool for importing files like textures/meshes
 - [x] Importing c# written fluid-simulation in this engine
 - [x] Migrating 2D spatial hashing
@@ -25,15 +25,16 @@
 - [ ] If simple add basic light
 - [ ] Create Unique ID generator for items
 - [ ] Create a template for dump-testing shaders
+- [ ] Documentation & UML Diagrams
 
 ## Build
 <img src="examples/engine_v2.gif" width="500">
 
 ## Compatibility
 - [x] Console
-- [x] Mac (x84) (Arm architecture using rosetta)
+- [x] Mac (x84) (Arm architecture using rosetta) (not working atm)
 - [ ] Windows
-- [x] Web
+- [x] Web (not working atm)
 
 ## Tools
 - Emscripten

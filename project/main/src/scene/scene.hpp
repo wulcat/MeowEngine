@@ -13,6 +13,8 @@ namespace physicat {
         Scene() = default;
         virtual ~Scene() = default;
 
+        virtual void OnWindowResized(const physicat::WindowSize& size) = 0;
+
         virtual void Create(physicat::AssetManager& assetManager) = 0; // Load assets
         virtual void Update(const float& deltaTime) = 0;
         virtual void Render(physicat::Renderer& renderer) = 0;

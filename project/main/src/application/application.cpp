@@ -58,14 +58,19 @@ bool physicat::Application::LoopApplication() {
     {
         switch (event.type)
         {
+            case SDL_WINDOWEVENT:
+                if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                    OnWindowResized();
+                }
+                break;
+
             // If we get a quit signal, we will return that we don't want to keep looping.
             case SDL_QUIT:
                 return false;
 
             case SDL_KEYDOWN:
                 // If we get a key down event for the ESC key, we also don't want to keep looping.
-                if (event.key.keysym.sym == SDLK_ESCAPE)
-                {
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
                     return false;
                 }
                 break;

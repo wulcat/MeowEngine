@@ -12,6 +12,8 @@ namespace physicat {
     struct OpenGLApplication : public physicat::Application {
         OpenGLApplication();
 
+        void OnWindowResized() override;
+
         void Update(const float& deltaTime) override;
         void Render() override;
 

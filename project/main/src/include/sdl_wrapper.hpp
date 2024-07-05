@@ -10,9 +10,11 @@
 #include <SDL.h>
 #include <utility>
 
-namespace physicat::sdl {
-    std::pair<uint32_t, uint32_t> GetDisplaySize();
+#include "window_size.hpp"
 
+namespace physicat::sdl {
+    physicat::WindowSize GetInitialWindowSize();
+    physicat::WindowSize GetWindowSize(SDL_Window* window);
     SDL_Window* CreateWindow(const uint32_t& windowFlags);
 }
 

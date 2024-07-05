@@ -3,7 +3,7 @@
 //
 
 #include "perspective_camera.hpp"
-
+#include "log.hpp"
 using physicat::PerspectiveCamera;
 
 namespace {
@@ -28,7 +28,9 @@ struct PerspectiveCamera::Internal {
     Internal(const float& width, const float& height)
         : ProjectionMatrix(CreateProjectionMatrix(width, height))
         , Position(0.0f, 2.0f , -4.0f)
-        , ViewMatrix(CreateViewMatrix(Position)) {}
+        , ViewMatrix(CreateViewMatrix(Position)) {
+//        physicat::Log("sdfs",)
+    }
 };
 
 physicat::PerspectiveCamera::PerspectiveCamera(const float &width, const float &height)

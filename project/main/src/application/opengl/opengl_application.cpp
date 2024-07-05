@@ -17,6 +17,18 @@
 using physicat::OpenGLApplication;
 
 namespace {
+    void UpdateViewport(SDL_Window* window) {
+        static const std::string logTag("physicat::OpenGLApplication::UpdateViewport");
+
+        int viewportWidth;
+        int viewportHeight;
+
+        SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
+        physicat::Log(logTag, "Created OpenGL context with viewport size: "+ std::to_string(viewportWidth) + " x " + std::to_string(viewportHeight));
+
+        glViewport(0,0, viewportWidth,viewportHeight);
+    }
+
     SDL_GLContext CreateContext(SDL_Window* window) {
         static const std::string logTag("physicat::OpenGLApplication::CreateContext");
 
@@ -26,12 +38,12 @@ namespace {
             glewInit();
         #endif
 
-        int viewportWidth;
-        int viewportHeight;
-        SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
+        //int viewportWidth;
+     //   int viewportHeight;
+       // SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
 
-        physicat::Log(logTag, "Created OpenGL Context with viewport size: " + std::to_string(viewportWidth) + " , " +
-                              std::to_string(viewportHeight));
+      //  physicat::Log(logTag, "Created OpenGL Context with viewport size: " + std::to_string(viewportWidth) + " , " +
+       //                       std::to_string(viewportHeight));
 
         glClearDepthf(1.0f);
 
@@ -55,7 +67,8 @@ namespace {
 //        glEnable(GL_ALPHA_TEST);
 //        glAlphaFunc(GL_GREATER, 0.1f);
 
-        glViewport(0, 0, viewportWidth, viewportHeight);
+//        glViewport(0, 0, viewportWidth, viewportHeight);
+        ::UpdateViewport(window);
 
         return context;
     }
@@ -68,12 +81,10 @@ namespace {
         return physicat::OpenGLRenderer(assetManager);
     }
 
-    std::unique_ptr<physicat::Scene> CreateMainScene(physicat::OpenGLAssetManager& assetManager) {
-        std::pair<uint32_t, uint32_t> displaySize{physicat::sdl::GetDisplaySize()};
+    std::unique_ptr<physicat::Scene> CreateMainScene(SDL_Window* window, physicat::OpenGLAssetManager& assetManager) {
         std::unique_ptr<physicat::MainScene> mainScene {
             std::make_unique<physicat::MainScene>(
-                static_cast<float>(displaySize.first),
-                static_cast<float>(displaySize.second)
+                physicat::sdl::GetWindowSize(window)
             )
         };
 
@@ -105,9 +116,14 @@ struct OpenGLApplication::Internal {
         SDL_DestroyWindow(Window);
     }
 
+    void OnWindowResized() {
+        GetScene().OnWindowResized(physicat::sdl::GetWindowSize(Window));
+        ::UpdateViewport(Window);
+    }
+
     physicat::Scene& GetScene() {
         if(!Scene) {
-            Scene = ::CreateMainScene(*AssetManager);
+            Scene = ::CreateMainScene(Window, *AssetManager);
         }
 
         return *Scene;
@@ -132,6 +148,10 @@ struct OpenGLApplication::Internal {
 OpenGLApplication::OpenGLApplication() :
         InternalPointer(physicat::make_internal_ptr<Internal>())
 {}
+
+void OpenGLApplication::OnWindowResized() {
+    InternalPointer->OnWindowResized();
+}
 
 void OpenGLApplication::Update(const float &deltaTime) {
     InternalPointer->Update(deltaTime);
