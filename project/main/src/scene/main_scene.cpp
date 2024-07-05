@@ -146,42 +146,42 @@ struct MainScene::Internal {
             )
         );
 
-//        core::LifeObject meshObject1 = core::LifeObject();
-//        meshObject1.SetTransformComponent(
-//            new Transform3DComponent(
-//                glm::vec3{-1.4f, 1.2f, 0},
-//                glm::vec3{0.6f, 0.6f, 0.6f},
-//                glm::vec3{0.0f, 0.4f, 0.9f},
-//                0.0f
-//            )
-//        );
-//        meshObject1.SetRenderComponent(
-//            new MeshRenderComponent(
-//                physicat::assets::ShaderPipelineType::Default,
-//                new physicat::StaticMeshInstance{
-//                    StaticMeshType::Cone,
-//                    TextureType::Pattern
-//                }
-//            )
-//        );
-//        core::LifeObject meshObject1 = core::LifeObject();
-//        meshObject1.SetTransformComponent(
-//                new Transform3DComponent(
-//                        glm::vec3{0, -1, 0},
-//                        glm::vec3{10.0f, 1, 10.0f},
-//                        glm::vec3{0.0f, 0.4f, 0.9f},
-//                        0.0f
-//                )
-//        );
-//        meshObject1.SetRenderComponent(
-//                new MeshRenderComponent(
-//                        physicat::assets::ShaderPipelineType::Default,
-//                        new physicat::StaticMeshInstance{
-//                                StaticMeshType::Plane,
-//                                TextureType::Pattern
-//                        }
-//                )
-//        );
+        core::LifeObject meshObject1 = core::LifeObject();
+        meshObject1.SetTransformComponent(
+            new Transform3DComponent(
+                glm::vec3{-1.4f, -0.5f, 0},
+                glm::vec3{0.6f, 0.6f, 0.6f},
+                glm::vec3{0.0f, 0.4f, 0.9f},
+                0.0f
+            )
+        );
+        meshObject1.SetRenderComponent(
+            new MeshRenderComponent(
+                physicat::assets::ShaderPipelineType::Default,
+                new physicat::StaticMeshInstance{
+                    StaticMeshType::Cone,
+                    TextureType::Pattern
+                }
+            )
+        );
+        core::LifeObject meshObject2 = core::LifeObject();
+        meshObject2.SetTransformComponent(
+                new Transform3DComponent(
+                        glm::vec3{1.0f, 0.0f, 0},
+                        glm::vec3{1.0f, 1, 1.0f},
+                        glm::vec3{0.0f, 0.4f, 0.9f},
+                        0.0f
+                )
+        );
+        meshObject2.SetRenderComponent(
+            new MeshRenderComponent(
+                physicat::assets::ShaderPipelineType::Default,
+                new physicat::StaticMeshInstance{
+                    StaticMeshType::Sphere,
+                    TextureType::Pattern
+                }
+            )
+        );
 
         core::LifeObject gridObject = core::LifeObject();
         gridObject.SetTransformComponent(
@@ -195,67 +195,14 @@ struct MainScene::Internal {
         gridObject.SetRenderComponent(
             new RenderComponentBase(physicat::assets::ShaderPipelineType::Grid)
         );
-//        gridObject.SetRenderComponent(
-//                new MeshRenderComponent(
-//                        physicat::assets::ShaderPipelineType::Grid,
-//                        new physicat::StaticMeshInstance{
-//                            StaticMeshType::Plane,
-//                            TextureType::Default
-//                        }
-//                )
-//        );
 
+        // NOTE: The order of rendering matters when depth and transparency is involved
+        // It's not a topic i want to explore but if in future needed check out Painter's algorithm and z-buffer
         LifeObjects.push_back(meshObject);
-
-//        LifeObjects.push_back(meshObject);
-
-
-
-//        for(int i = -20; i < 20; i++) {
-//            core::LifeObject lineObject1 = core::LifeObject();
-//            lineObject1.SetTransformComponent(
-//                new Transform3DComponent(
-//                    glm::vec3{0, 0, i},
-//                    glm::vec3{1, 1, 1},
-//                    glm::vec3{0.0f, 1.0f, 0.0f},
-//                    0.0f
-//                )
-//            );
-//
-//            lineObject1.SetRenderComponent(
-//                new LineRenderComponent(
-//                    physicat::assets::ShaderPipelineType::Line,
-//                    glm::vec3(-1000, 0, 0),
-//                    glm::vec3(1000, 0, 0)
-//                )
-//            );
-//
-//            LifeObjects.push_back(lineObject1);
-//        }
+        LifeObjects.push_back(meshObject1);
+        LifeObjects.push_back(meshObject2);
 
         LifeObjects.push_back(gridObject);
-//
-//        for(int i = -20; i < 20; i++) {
-//            core::LifeObject lineObject1 = core::LifeObject();
-//            lineObject1.SetTransformComponent(
-//                    new Transform3DComponent(
-//                            glm::vec3{i, 0, 0},
-//                            glm::vec3{1, 1, 1},
-//                            glm::vec3{0.0f, 1.0f, 0.0f},
-//                            0.0f
-//                    )
-//            );
-//
-//            lineObject1.SetRenderComponent(
-//                    new LineRenderComponent(
-//                            physicat::assets::ShaderPipelineType::Line,
-//                            glm::vec3(0, 0, -1000),
-//                            glm::vec3(0, 0, 1000)
-//                    )
-//            );
-//
-//            LifeObjects.push_back(lineObject1);
-//        }
     }
 
     // We can perform -> culling, input detection

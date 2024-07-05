@@ -6,7 +6,6 @@ uniform mat4 u_view;
 uniform mat4 u_projection;
 uniform vec3 position; // uniform is applied accross the shaders
 
-
 out vec3 v_nearPoint;
 out vec3 v_farPoint;
 
@@ -15,26 +14,6 @@ vec3 gridPlane[6] = vec3[](
   vec3(-1, -1, 0), vec3(1, 1, 0), vec3(-1, 1, 0),
     vec3(-1, -1, 0), vec3(1, -1, 0), vec3(1, 1, 0)
 );
-
-//vec3 gridPlane[6] = vec3[](
-  //  vec3(1, 1, 0), vec3(-1, 1, 0), vec3(-1, -1, 0),
- //   vec3(-1, -1, 0), vec3(1, -1, 0), vec3(1, 1, 0)
-//);
-
-//vec3 gridPlane[6] = vec3[](
-//vec3(-1, 1, 0),  vec3(1, 1, 0) , vec3(1, -1, 0),
-//vec3(1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0)
-//);
-
-//vec3 gridPlane[6] = vec3[](
-//vec3(-1, -1, 0), vec3(-1, 1, 0), vec3(1, 1, 0),
-//vec3(1, -1, 0), vec3(-1, -1, 0), vec3(1, 1, 0)
-//);
-
-//vec3 gridPlane[6] = vec3[](
-//    vec3(1, 1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
- //   vec3(-1, -1, 0), vec3(1, 1, 0), vec3(1, -1, 0)
-//);
 
 vec3 unprojectPoint(float x, float y, float z, mat4 view, mat4 projection) {
     mat4 viewInverse = inverse(view);

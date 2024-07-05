@@ -34,11 +34,26 @@ namespace {
                               std::to_string(viewportHeight));
 
         glClearDepthf(1.0f);
+
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
+
         glEnable(GL_CULL_FACE);
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+//        glEnable(GL_DEPTH_TEST);
+//        glDepthMask(GL_TRUE);
+//        glDepthFunc(GL_LEQUAL);
+//        glDepthRange(0.0f, 1.0f);
+//        glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+//        glEnable(GL_SAMPLE_ALPHA_TO_ONE);
+//        glEnable(GL_BLEND);
+//        glBlendEquation(GL_FUNC_ADD);
+//        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//        glEnable(GL_ALPHA_TEST);
+//        glAlphaFunc(GL_GREATER, 0.1f);
 
         glViewport(0, 0, viewportWidth, viewportHeight);
 
