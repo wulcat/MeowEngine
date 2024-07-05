@@ -9,6 +9,12 @@ using physicat::OpenGLMesh;
 
 namespace {
     // Refer: https://registry.khronos.org/OpenGL-Refpages/es1.1/xhtml/glBindBuffer.xml for buffer types
+    GLuint CreateVertexArrayID() {
+        GLuint id;
+        glGenVertexArrays(1, &id);
+
+        return id;
+    }
 
     GLuint CreateVertexBuffer(const physicat::Mesh& mesh) {
         std::vector<float> bufferData;
@@ -52,14 +58,17 @@ struct OpenGLMesh::Internal {
     const GLuint BufferIdVertices;
     const GLuint BufferIdIndices;
     const uint32_t IndicesCount;
+    const GLuint VertexArrayID;
 
     explicit Internal(const physicat::Mesh& mesh)
-        :BufferIdVertices(CreateVertexBuffer(mesh)),
-         BufferIdIndices(CreateIndexBuffer(mesh)),
-         IndicesCount(static_cast<uint32_t>(mesh.GetIndices().size()))
+        : BufferIdVertices(CreateVertexBuffer(mesh))
+        , BufferIdIndices(CreateIndexBuffer(mesh))
+        , IndicesCount(static_cast<uint32_t>(mesh.GetIndices().size()))
+        , VertexArrayID(CreateVertexArrayID())
    {}
 
     ~Internal() {
+        glDeleteVertexArrays(1, &VertexArrayID);
         glDeleteBuffers(1, &BufferIdVertices);
         glDeleteBuffers(1, &BufferIdIndices);
     }
@@ -67,6 +76,10 @@ struct OpenGLMesh::Internal {
 
 physicat::OpenGLMesh::OpenGLMesh(const physicat::Mesh &mesh)
 : InternalPointer(physicat::make_internal_ptr<Internal>(mesh)) {}
+
+const GLuint &physicat::OpenGLMesh::GetVertexArrayId() const {
+    return InternalPointer->VertexArrayID;
+}
 
 const GLuint &physicat::OpenGLMesh::GetVertexBufferId() const {
     return InternalPointer->BufferIdVertices;

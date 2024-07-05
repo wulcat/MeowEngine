@@ -32,6 +32,7 @@ namespace physicat::pipeline {
         const GLsizei Stride;
         const GLsizei OffsetPosition;
         const GLsizei OffsetTextureCoord;
+//        unsigned int VertexArrayID;
     };
 }
 

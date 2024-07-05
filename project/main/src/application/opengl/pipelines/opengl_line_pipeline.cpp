@@ -11,9 +11,9 @@ OpenGLLinePipeline::OpenGLLinePipeline(const GLuint &shaderProgramID)
     glGenVertexArrays(1, &VertexArrayID);
     glGenBuffers(1, &VertexBufferID);
 
-    // TODO: This needs to be executed only once (maybe our opengl render pipeline can set this on start)
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    // TODO: This needs to be executed only once (maybe our opengl render pipeline can set this on start)
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 OpenGLLinePipeline::~OpenGLLinePipeline() {

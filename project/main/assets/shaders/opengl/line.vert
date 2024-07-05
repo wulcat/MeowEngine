@@ -6,10 +6,10 @@ uniform mat4 u_mvp;
 uniform vec3 u_worldPosition;
 uniform vec3 u_cameraPosition;
 
-attribute vec3 a_vertexPosition;
+in vec3 a_vertexPosition;
 
 // calculate so frag shader can do a fade color by distance
-varying float o_vertexDistance;
+out float o_vertexDistance;
 
 void main()
 {

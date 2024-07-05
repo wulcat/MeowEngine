@@ -13,6 +13,7 @@ namespace physicat {
     struct OpenGLMesh {
         explicit OpenGLMesh(const physicat::Mesh& mesh);
 
+        const GLuint & GetVertexArrayId() const;
         const GLuint& GetVertexBufferId() const;
         const GLuint& GetIndexBufferId() const;
 
