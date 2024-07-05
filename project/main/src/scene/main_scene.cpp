@@ -4,6 +4,7 @@
 
 #include "main_scene.hpp"
 
+#include "camera_controller.hpp"
 #include "perspective_camera.hpp"
 #include "static_mesh_instance.hpp"
 #include "log.hpp"
@@ -31,10 +32,16 @@ namespace {
 
 struct MainScene::Internal {
     physicat::PerspectiveCamera Camera;
+    physicat::CameraController CameraController;
     std::vector<core::LifeObject> LifeObjects;
 
+    // User Input Events
+    const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
+
     Internal(const physicat::WindowSize& size)
-        : Camera(::CreateCamera(size)) {}
+        : Camera(::CreateCamera(size))
+        , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
+        , KeyboardState(SDL_GetKeyboardState(nullptr)){}
 
     void OnWindowResized(const physicat::WindowSize& size) {
         Camera = ::CreateCamera(size);
@@ -206,8 +213,37 @@ struct MainScene::Internal {
         LifeObjects.push_back(gridObject);
     }
 
+    void ProcessInput(const float& delta) {
+        if (KeyboardState[SDL_SCANCODE_UP] || KeyboardState[SDL_SCANCODE_W]) {
+            CameraController.MoveForward(delta);
+        }
+
+        if (KeyboardState[SDL_SCANCODE_DOWN] || KeyboardState[SDL_SCANCODE_S]) {
+            CameraController.MoveBackward(delta);
+        }
+
+        if (KeyboardState[SDL_SCANCODE_Q] ) {
+            CameraController.MoveUp(delta);
+        }
+
+        if (KeyboardState[SDL_SCANCODE_E]) {
+            CameraController.MoveDown(delta);
+        }
+
+        if (KeyboardState[SDL_SCANCODE_LEFT] || KeyboardState[SDL_SCANCODE_A]) {
+            CameraController.TurnLeft(delta);
+        }
+
+        if (KeyboardState[SDL_SCANCODE_RIGHT] || KeyboardState[SDL_SCANCODE_D]) {
+            CameraController.TurnRight(delta);
+        }
+    }
+
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
+        ProcessInput(deltaTime);
+//        physicat::Log("pos", std::to_string(CameraController.GetPosition().z));
+        Camera.Configure(CameraController.GetPosition(), CameraController.GetDirection());
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
 
         for(auto& lifeObject : LifeObjects) {

@@ -1,5 +1,5 @@
 //
-// Created by Akira Lynn on 12/09/22.
+// Created by Akira Mujawar on 12/09/22.
 //
 
 #include "perspective_camera.hpp"
@@ -11,39 +11,40 @@ namespace {
         return glm::perspective(glm::radians(60.0f), width / height, 0.01f, 100.0f);
     }
 
-    glm::mat4 CreateViewMatrix(glm::vec3 position) {
-        glm::vec3 target {0.0f, 0.0f, 0.0f}; // at what point the camera should look at
-        glm::vec3 up {0.0f, 1.0f, 0.0f}; // the direction of the camera (pointing upward)
-
-        return glm::lookAt(position, target, up);
+    glm::mat4 CreateViewMatrix(glm::vec3 position, glm::vec3 lookAtTarget, glm::vec3 up) {
+        return glm::lookAt(position, lookAtTarget, up);
     }
 } // namespace
 
 struct PerspectiveCamera::Internal {
     glm::vec3 Position;
-
+    glm::vec3 Up;
+    glm::vec3 LookAtTarget; //at what point the camera should look at
     glm::mat4 ProjectionMatrix;
-    glm::mat4 ViewMatrix;
 
     Internal(const float& width, const float& height)
         : ProjectionMatrix(CreateProjectionMatrix(width, height))
         , Position(0.0f, 2.0f , -4.0f)
-        , ViewMatrix(CreateViewMatrix(Position)) {
-//        physicat::Log("sdfs",)
-    }
+        , LookAtTarget(0.0f, 1.0f, 0.0f)
+        , Up(0.0f, 1.0f, 0.0f) {}
 };
 
 physicat::PerspectiveCamera::PerspectiveCamera(const float &width, const float &height)
     :  InternalPointer(make_internal_ptr<Internal>(width, height)) {}
 
-const glm::mat4 &physicat::PerspectiveCamera::GetProjectionMatrix() const {
+void PerspectiveCamera::Configure(const glm::vec3& position, const glm::vec3& direction) {
+    InternalPointer->Position = position;
+    InternalPointer->LookAtTarget = position + direction;
+}
+
+const glm::mat4 physicat::PerspectiveCamera::GetProjectionMatrix() const {
     return InternalPointer->ProjectionMatrix;
 }
 
-const glm::mat4 &physicat::PerspectiveCamera::GetViewMatrix() const {
-    return InternalPointer->ViewMatrix;
+const glm::mat4 physicat::PerspectiveCamera::GetViewMatrix() const {
+    return ::CreateViewMatrix(InternalPointer->Position, InternalPointer->LookAtTarget, InternalPointer->Up);
 }
 
-const glm::vec3 &physicat::PerspectiveCamera::GetPosition() const {
+const glm::vec3 physicat::PerspectiveCamera::GetPosition() const {
     return InternalPointer->Position;
 }
