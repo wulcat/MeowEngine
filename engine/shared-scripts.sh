@@ -114,6 +114,38 @@ fetch_third_party_lib_tiny_obj_loader() {
     popd
 }
 
+fetch_third_party_lib_imgui() {
+  verify_third_party_folder_exists
+
+  # shellcheck disable=SC2164
+  pushd ../../third-party
+    if [ ! -d "imgui" ] ; then
+      echo "Fetching imgui"
+      wget https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9.zip
+      unzip -q v1.90.9.zip
+      rm v1.90.9.zip
+      mv imgui-1.90.9 imgui
+    fi
+  # shellcheck disable=SC2164
+  popd
+}
+
+fetch_third_party_lib_tracy() {
+  verify_third_party_folder_exists
+
+  # shellcheck disable=SC2164
+  pushd ../../third-party
+    if [ ! -d "tracy" ] ; then
+      echo "Fetching tracy"
+      wget https://github.com/wolfpld/tracy/archive/refs/tags/v0.10.zip
+      unzip -q v0.10.zip
+      rm v0.10.zip
+      mv tracy-0.10 tracy
+    fi
+  # shellcheck disable=SC2164
+  popd
+}
+
 #------------------------------------------------------------------------------------
 
 verify_frameworks_folder_exists() {
@@ -218,15 +250,6 @@ clean_out_folder() {
 
   rm - r out/*
 }
-
-
-
-
-
-
-
-
-
 
 
 #------------------------------------------------------------------------------------

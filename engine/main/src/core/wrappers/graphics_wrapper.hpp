@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#ifndef VULKAN_ENGINE_GRAPHICS_WRAPPER_HPP
-#define VULKAN_ENGINE_GRAPHICS_WRAPPER_HPP
+#ifndef PHYSICAT_GRAPHICS_WRAPPER_HPP
+#define PHYSICAT_GRAPHICS_WRAPPER_HPP
 
 #pragma once
 
@@ -35,4 +35,4 @@ class graphics_wrapper {
 };
 
 
-#endif //VULKAN_ENGINE_GRAPHICS_WRAPPER_HPP
+#endif //PHYSICAT_GRAPHICS_WRAPPER_HPP

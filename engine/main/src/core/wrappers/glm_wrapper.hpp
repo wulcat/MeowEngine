@@ -1,5 +1,5 @@
 //
-// Created by Akira Lynn on 08/09/22.
+// Created by Akira Mujawar on 08/09/22.
 //
 
 #ifndef PHYSICAT_GLM_WRAPPER_HPP
@@ -14,10 +14,6 @@
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtx/hash.hpp>
-
-class glm_wrapper {
-
-};
 
 
 #endif //PHYSICAT_GLM_WRAPPER_HPP
