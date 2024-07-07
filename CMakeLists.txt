@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
-project(simple_triangle)
+project(physicat)
 
 #set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
