@@ -35,11 +35,13 @@ struct CameraController::Internal {
     Internal(const glm::vec3& position)
         : Identity(glm::mat4(1))
         , Up(glm::vec3{0.0f, 1.0f, 0.0f})
-        , HorizontalAngle(10.0f)
+        , HorizontalAngle(-90.0f)
+        , VerticalAngle(-10.0f)
         , Position(position)
         , Orientation(::ComputeOrientation(Identity, HorizontalAngle, Up))
-        , ForwardDirection(::ComputeForwardDirection(Orientation))
-        , VerticalAngle(10.0f) {}
+        , ForwardDirection(::ComputeForwardDirection(Orientation)) {
+        physicat::CameraController::Internal::LookAround(0,0);
+    }
 
     void LookAround(const float& deltaX, const float& deltaY) {
         HorizontalAngle += deltaX / TurnSpeed;

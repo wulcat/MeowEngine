@@ -39,9 +39,8 @@ float computeDepth(vec3 pos) {
     return 0.5 + 0.5 * (clip_space_position.z / clip_space_position.w);
 }
 
-float computeLinearDepth(vec3 pos) {
+float computeLinearDepth(vec3 pos, float far) {
     float near = 0.01;
-    float far = 15;
     vec4 clip_space_pos = u_projection * u_view * vec4(pos.xyz, 1.0);
     float clip_space_depth = (clip_space_pos.z / clip_space_pos.w) * 2.0 - 1.0; // put back between -1 and 1
     float linearDepth = (2.0 * near * far) / (far + near - clip_space_depth * (far - near)); // get linear value between 0.01 and 100
@@ -53,10 +52,20 @@ void main() {
     vec3 fragPos3D = v_nearPoint + t * (v_farPoint - v_nearPoint);
     gl_FragDepth = computeDepth(fragPos3D);
 
-    float linearDepth = computeLinearDepth(fragPos3D);
-    float fading = max(0, (0.5 - linearDepth));
+    if(t > 0) {
+        float linearDepth = computeLinearDepth(fragPos3D, 15);
+        float fading = max(0, (0.5 - linearDepth));
 
-    v_fragColor = (grid(fragPos3D, 2.5, true) + grid(fragPos3D, 0.5, true)) * float(t > 0);
-    v_fragColor.a *= fading;
+        v_fragColor = (grid(fragPos3D, 2.5, true) + grid(fragPos3D, 0.5, true)) ;//* float(t > 0);
+        v_fragColor.a *= fading;
+    }
+    else {
+        // just little blue for adding light to scene
+        float linearDepth = computeLinearDepth(fragPos3D, 60);
+        float fading = max(0, (0.0 - linearDepth));
+
+        v_fragColor = vec4(147.0/255, 209.0/255, 255.0/255 ,1);
+        v_fragColor.a *= 1 - fading;
+    }
 }
 

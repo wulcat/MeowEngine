@@ -3,7 +3,7 @@
 - [x] Setting up project for cross-platform build support
 - [x] Import mesh/textures
 - [x] Rendering in a scene
-- [ ] Keyboard & Mouse inputs
+- [x] Keyboard & Mouse inputs
 - [x] Window resize
 - [ ] Simple tool for importing files like textures/meshes
 - [x] Importing c# written fluid-simulation in this engine
