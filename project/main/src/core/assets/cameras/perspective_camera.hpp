@@ -12,7 +12,7 @@ namespace physicat {
     struct PerspectiveCamera {
         PerspectiveCamera(const float& width, const float& height);
 
-        void Configure(const glm::vec3& position, const glm::vec3& direction);
+        void Configure(const glm::vec3& position, const glm::vec3& up, const glm::vec3& direction);
 
         //NOTE: use ref when thing is constant (in this case its dynamic so ref can be removed)
         const glm::mat4 GetProjectionMatrix() const;

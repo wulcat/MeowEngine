@@ -13,14 +13,16 @@ namespace physicat {
     public:
         CameraController(const glm::vec3& position);
 
+        void LookAround(const float& deltaX, const float& deltaY);
         void MoveForward(const float& delta);
         void MoveBackward(const float& delta);
         void MoveUp(const float& delta);
         void MoveDown(const float& delta);
-        void TurnLeft(const float& delta);
-        void TurnRight(const float& delta);
+//        void TurnLeft(const float& delta);
+//        void TurnRight(const float& delta);
 
         glm::vec3 GetPosition() const;
+        glm::vec3 GetUp() const;
         glm::vec3 GetDirection() const;
 
     private:

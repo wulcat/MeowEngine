@@ -24,17 +24,41 @@ struct PerspectiveCamera::Internal {
 
     Internal(const float& width, const float& height)
         : ProjectionMatrix(CreateProjectionMatrix(width, height))
-        , Position(0.0f, 2.0f , -4.0f)
+        , Position(0.0f, 1.0f , -10.0f)
         , LookAtTarget(0.0f, 1.0f, 0.0f)
-        , Up(0.0f, 1.0f, 0.0f) {}
+        , Up(0.0f, 1.0f, 0.0f) {
+
+//        glm::vec3 horizontalTarget {LookAtTarget.x, 0.0f, LookAtTarget.z};
+//        horizontalTarget.normalize();
+//        float angle = glm::degrees(asin(abs(LookAtTarget.z)));
+//        if(LookAtTarget.z >= 0.0f) {
+//            if(LookAtTarget.x >= 0.0f) {
+//                angleHorizontal = 360.0f - angle;
+//            }
+//            else {
+//                angleHorizontal = 180.0f + angle;
+//            }
+//        }
+//        else {
+//            if(LookAtTarget.x >= 0.0f) {
+//                angleHorizontal = angle;
+//            }
+//            else {
+//                angleHorizontal = 180.0f - angle;
+//            }
+//        }
+//
+//        angleVertical = -glm::degrees(asin(LookAtTarget.y));
+    }
 };
 
 physicat::PerspectiveCamera::PerspectiveCamera(const float &width, const float &height)
     :  InternalPointer(make_internal_ptr<Internal>(width, height)) {}
 
-void PerspectiveCamera::Configure(const glm::vec3& position, const glm::vec3& direction) {
+void PerspectiveCamera::Configure(const glm::vec3& position, const glm::vec3& up, const glm::vec3& direction) {
     InternalPointer->Position = position;
-    InternalPointer->LookAtTarget = position + direction;
+    InternalPointer->Up = up;
+    InternalPointer->LookAtTarget = position - direction;
 }
 
 const glm::mat4 physicat::PerspectiveCamera::GetProjectionMatrix() const {

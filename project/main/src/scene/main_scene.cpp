@@ -41,7 +41,8 @@ struct MainScene::Internal {
     Internal(const physicat::WindowSize& size)
         : Camera(::CreateCamera(size))
         , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
-        , KeyboardState(SDL_GetKeyboardState(nullptr)){}
+        , KeyboardState(SDL_GetKeyboardState(nullptr))
+    {}
 
     void OnWindowResized(const physicat::WindowSize& size) {
         Camera = ::CreateCamera(size);
@@ -177,7 +178,7 @@ struct MainScene::Internal {
                 new Transform3DComponent(
                         glm::vec3{1.0f, 0.0f, 0},
                         glm::vec3{1.0f, 1, 1.0f},
-                        glm::vec3{0.0f, 0.4f, 0.9f},
+                        glm::vec3{0.5f, 0.4f, 0.9f},
                         0.0f
                 )
         );
@@ -185,7 +186,7 @@ struct MainScene::Internal {
             new MeshRenderComponent(
                 physicat::assets::ShaderPipelineType::Default,
                 new physicat::StaticMeshInstance{
-                    StaticMeshType::Sphere,
+                    StaticMeshType::Torus,
                     TextureType::Pattern
                 }
             )
@@ -214,6 +215,15 @@ struct MainScene::Internal {
     }
 
     void ProcessInput(const float& delta) {
+        int deltaMouseX;
+        int deltaMouseY;
+        uint32_t mouseState = SDL_GetRelativeMouseState(&deltaMouseX, &deltaMouseY);
+
+        if(mouseState & SDL_BUTTON(0)) {
+            CameraController.LookAround(deltaMouseX, deltaMouseY);
+        }
+
+
         if (KeyboardState[SDL_SCANCODE_UP] || KeyboardState[SDL_SCANCODE_W]) {
             CameraController.MoveForward(delta);
         }
@@ -230,20 +240,21 @@ struct MainScene::Internal {
             CameraController.MoveDown(delta);
         }
 
-        if (KeyboardState[SDL_SCANCODE_LEFT] || KeyboardState[SDL_SCANCODE_A]) {
-            CameraController.TurnLeft(delta);
-        }
-
-        if (KeyboardState[SDL_SCANCODE_RIGHT] || KeyboardState[SDL_SCANCODE_D]) {
-            CameraController.TurnRight(delta);
-        }
+//        if (KeyboardState[SDL_SCANCODE_LEFT] || KeyboardState[SDL_SCANCODE_A]) {
+//            CameraController.TurnLeft(delta);
+//        }
+//
+//        if (KeyboardState[SDL_SCANCODE_RIGHT] || KeyboardState[SDL_SCANCODE_D]) {
+//            CameraController.TurnRight(delta);
+//        }
     }
 
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
         ProcessInput(deltaTime);
-//        physicat::Log("pos", std::to_string(CameraController.GetPosition().z));
-        Camera.Configure(CameraController.GetPosition(), CameraController.GetDirection());
+
+        Camera.Configure(CameraController.GetPosition(), CameraController.GetUp(), CameraController.GetDirection());
+
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
 
         for(auto& lifeObject : LifeObjects) {
