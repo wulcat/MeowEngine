@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "core/internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 
 namespace physicat {
     struct Engine {

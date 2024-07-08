@@ -3,7 +3,7 @@
 //
 
 #include "opengl_mesh.hpp"
-#include "../../core/wrappers/glm_wrapper.hpp"
+#include "glm_wrapper.hpp"
 
 using physicat::OpenGLMesh;
 

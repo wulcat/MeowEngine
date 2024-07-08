@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_OPENGL_RENDERER_HPP
 #define PHYSICAT_OPENGL_RENDERER_HPP
 
-#include "internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 #include "renderer.hpp"
 
 #include "opengl_asset_manager.hpp"

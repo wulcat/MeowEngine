@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "src/core/internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 #include "sdl_wrapper.hpp"
 
 namespace physicat {

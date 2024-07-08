@@ -8,7 +8,7 @@
 #pragma once
 
 #include "bitmap.hpp"
-#include "internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 
 namespace physicat {
     struct OpenGLTexture {

@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_MAIN_SCENE_HPP
 #define PHYSICAT_MAIN_SCENE_HPP
 
-#include "internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 #include "scene.hpp"
 #include "window_size.hpp"
 

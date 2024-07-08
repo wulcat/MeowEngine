@@ -5,9 +5,9 @@
 #ifndef PHYSICAT_OPENGL_MESH_HPP
 #define PHYSICAT_OPENGL_MESH_HPP
 
-#include "../../core/wrappers/graphics_wrapper.hpp"
+#include "graphics_wrapper.hpp"
 #include "../../core/assets/mesh/mesh.hpp"
-#include "../../core/internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 
 namespace physicat {
     struct OpenGLMesh {

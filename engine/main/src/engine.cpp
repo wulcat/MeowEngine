@@ -5,8 +5,8 @@
 #include "engine.hpp"
 
 #include "application/application.hpp"
-#include "application/opengl_application.hpp"
-#include "core/logger/log.hpp"
+#include "src/application/graphics/opengl/opengl_application.hpp"
+#include "log.hpp"
 #include "sdl_wrapper.hpp"
 #include <stdexcept>
 #include <string>

@@ -6,7 +6,7 @@
 #define PHYSICAT_CAMERA_CONTROLLER_HPP
 
 #include "glm_wrapper.hpp"
-#include "internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 
 namespace physicat {
     struct CameraController {

@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_MESH_HPP
 #define PHYSICAT_MESH_HPP
 
-#include "../../internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 #include "vertex.hpp"
 #include "vector"
 

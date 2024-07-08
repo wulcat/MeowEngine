@@ -14,6 +14,10 @@
 #include "imgui_renderer.hpp"
 
 #include <string>
+#include <TracyOpenGL.hpp>
+#include <Tracy.hpp>
+//#include <TracyOpenCL.hpp>
+#include "../../../../../../third-party/tracy/public/common/TracySystem.hpp"
 
 using physicat::OpenGLApplication;
 
@@ -34,7 +38,7 @@ namespace {
         static const std::string logTag("physicat::OpenGLApplication::CreateContext");
 
         SDL_GLContext context {SDL_GL_CreateContext(window)};
-
+        TracyGpuContext
         #ifdef WIN32
             glewInit();
         #endif
@@ -70,6 +74,8 @@ namespace {
 
 //        glViewport(0, 0, viewportWidth, viewportHeight);
         ::UpdateViewport(window);
+//        TracyGpuContext(context, nullptr);
+
 
         return context;
     }
@@ -115,7 +121,14 @@ struct OpenGLApplication::Internal {
                  Renderer(::CreateRenderer(AssetManager)),
                  UI(CreateUI(Window, Context))
     {
+        TracyAlloc(Window, 5);
         //physicat::Log("CRATE!", "Crate has " );
+//        TracyGpuContext;
+        TracyGpuZone("x")
+//        TracyAppInfo("app_info.data()", "app_info.size()");
+//        LUXE_PROFILE_GPU("use program");
+        TracyMessageL("Starting the application");
+        TracyMessageL("Set jobs");
     }
 
     ~Internal() {
@@ -171,22 +184,27 @@ struct OpenGLApplication::Internal {
     }
 
     void Update(const float& deltaTime) {
+//        TracyMessageL("Sleep a little bit");
         UI.Update();
         GetScene().Update(deltaTime);
     }
 
     void Render() {
-
-
+        TracyMessageL( "Tick" );
+//        tracy::SetThreadName( "Message test" );
+//        ZoneScoped;
         SDL_GL_MakeCurrent(Window, Context);
 
         glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         GetScene().Render(Renderer);
+        TracyGpuZone("this")
         UI.Render();
 
         SDL_GL_SwapWindow(Window);
+        TracyGpuCollect;
+//        FrameMark;
     }
 };
 

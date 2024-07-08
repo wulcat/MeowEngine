@@ -7,7 +7,7 @@
 
 #include "asset_inventory.hpp"
 //#include "glm_wrapper.hpp"
-#include "internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 
 namespace physicat {
     // In-future try ECS for this for optimization

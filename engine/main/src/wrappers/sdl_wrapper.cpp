@@ -4,7 +4,7 @@
 
 #include "../includes.hpp"
 #include "sdl_wrapper.hpp"
-#include "../platform.hpp"
+#include "src/application/editor/platform.hpp"
 #include "log.hpp"
 
 namespace // wth is this ._. ?

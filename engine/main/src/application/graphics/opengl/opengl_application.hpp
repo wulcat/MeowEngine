@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_OPENGL_APPLICATION_HPP
 #define PHYSICAT_OPENGL_APPLICATION_HPP
 
-#include "src/core/internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 #include "application.hpp"
 
 namespace physicat {

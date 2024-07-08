@@ -6,7 +6,7 @@
 #define PHYSICAT_PERSPECTIVE_CAMERA_HPP
 
 #include "../wrappers/glm_wrapper.hpp"
-#include "../internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 
 namespace physicat {
     struct PerspectiveCamera {

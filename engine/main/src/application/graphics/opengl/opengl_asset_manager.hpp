@@ -6,7 +6,7 @@
 #define PHYSICAT_OPENGL_ASSET_MANAGER_HPP
 
 #include "asset_manager.hpp"
-#include "internal_ptr.hpp"
+#include "src/utils/internal_ptr.hpp"
 //#include "opengl_pipeline_base.hpp"
 //#include "opengl_mesh_pipeline.hpp"
 #include "opengl_mesh.hpp"
