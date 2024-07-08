@@ -142,6 +142,16 @@ fetch_third_party_lib_tracy() {
       rm v0.10.zip
       mv tracy-0.10 tracy
     fi
+
+    if [ -d "tracy" ] ; then
+      echo "Building Tracy Profiler Server ..."
+
+      # require freetype2 and capstone and sdl2
+      pushd tracy/profiler/build/unix
+        make
+      popd
+    fi
+
   # shellcheck disable=SC2164
   popd
 }

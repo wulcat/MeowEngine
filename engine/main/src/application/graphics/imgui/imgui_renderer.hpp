@@ -13,6 +13,13 @@ namespace physicat::graphics {
         void Input(const SDL_Event& event);
         void Update();
         void Render();
+
+        // Closes any child processes like tracy
+        void ClosePIDs();
+
+    private:
+        void OpenTracyProfiler();
+
     };
 }
 

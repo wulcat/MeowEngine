@@ -165,11 +165,13 @@ struct OpenGLApplication::Internal {
 
                     // If we get a quit signal, we will return that we don't want to keep looping.
                 case SDL_QUIT:
+                    UI.ClosePIDs();
                     return false;
 
                 case SDL_KEYDOWN:
                     // If we get a key down event for the ESC key, we also don't want to keep looping.
                     if (event.key.keysym.sym == SDLK_ESCAPE) {
+                        UI.ClosePIDs();
                         return false;
                     }
                     break;
