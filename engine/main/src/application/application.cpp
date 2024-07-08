@@ -4,7 +4,7 @@
 
 #include "sdl_wrapper.hpp"
 #include "application.hpp"
-
+#include "imgui_wrapper.hpp"
 using physicat::Application;
 
 namespace {
@@ -51,32 +51,8 @@ void physicat::Application::StartApplication() {
 }
 
 bool physicat::Application::LoopApplication() {
-    SDL_Event event;
-
-    // Each loop we will process any events that are waiting for us.
-    while (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-            case SDL_WINDOWEVENT:
-                if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                    OnWindowResized();
-                }
-                break;
-
-            // If we get a quit signal, we will return that we don't want to keep looping.
-            case SDL_QUIT:
-                return false;
-
-            case SDL_KEYDOWN:
-                // If we get a key down event for the ESC key, we also don't want to keep looping.
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    return false;
-                }
-                break;
-            default:
-                break;
-        }
+    if(!Input()) {
+        return false;
     }
 
     Update(InternalPointer->TimeStep());
