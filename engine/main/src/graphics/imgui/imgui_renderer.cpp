@@ -21,6 +21,7 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context) {
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
+
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(window, context);
     ImGui_ImplOpenGL3_Init("#version 400");
