@@ -20,7 +20,7 @@
 - [ ] Create build modes for debug and release
 - [ ] On repo update - auto build emscripten for web and upload
 - [ ] Ability to read/write on file for saving import references (instead of hard-coded enums)
-- [ ] Add Proper logging & profiler system
+- [x] Add Proper logging & profiler system
 - [ ] Create Basic UI elements like a button and text
 - [ ] If simple add basic light
 - [ ] Create Unique ID generator for items

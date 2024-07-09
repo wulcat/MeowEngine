@@ -6,8 +6,10 @@
 
 #include "application/application.hpp"
 #include "src/application/graphics/opengl/opengl_application.hpp"
+
 #include "log.hpp"
 #include "sdl_wrapper.hpp"
+
 #include <stdexcept>
 #include <string>
 #include "SDL_image.h"
@@ -22,6 +24,7 @@ struct Engine::Internal {
     }
 
     void Run() {
+        PT_PROFILE_SCOPE;
         static const std::string logTag{classLogTag + "run"};
 
         physicat::Log(logTag, "Initializing Engine...");
@@ -41,6 +44,7 @@ struct Engine::Internal {
 
     // we are using unique_ptr smart pointer as a return value so it will self destruct upon leaving its containing scope
     std::unique_ptr<physicat::Application> ResolveApplication() {
+        PT_PROFILE_SCOPE;
         static const std::string logTag{classLogTag + "resolving Application"};
 
         try {

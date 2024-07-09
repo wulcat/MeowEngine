@@ -4,7 +4,10 @@
 
 #include "sdl_wrapper.hpp"
 #include "application.hpp"
+
 #include "imgui_wrapper.hpp"
+#include "log.hpp"
+
 using physicat::Application;
 
 namespace {
@@ -27,6 +30,7 @@ struct Application::Internal {
         , PreviousFrameTime(CurrentFrameTime) {}
 
     float TimeStep() {
+        PT_PROFILE_SCOPE;
         PreviousFrameTime = CurrentFrameTime;
         CurrentFrameTime = SDL_GetPerformanceCounter();
 
@@ -39,6 +43,7 @@ struct Application::Internal {
 };
 
 void physicat::Application::StartApplication() {
+    PT_PROFILE_SCOPE;
     #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
         emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);
@@ -51,6 +56,8 @@ void physicat::Application::StartApplication() {
 }
 
 bool physicat::Application::LoopApplication() {
+    PT_PROFILE_SCOPE_N("Engine Update");
+
     if(!Input()) {
         return false;
     }

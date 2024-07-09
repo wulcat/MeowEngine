@@ -63,6 +63,8 @@ ImGuiRenderer::~ImGuiRenderer() {
 }
 
 void ImGuiRenderer::Update() {
+    PT_PROFILE_SCOPE_N("UI Update");;
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -71,6 +73,8 @@ void ImGuiRenderer::Update() {
 }
 
 void ImGuiRenderer::Render() {
+    PT_PROFILE_SCOPE_N("UI Render");;
+
 //    ImGui::Begin("Menu");
 //    if (ImGui::Button("Option 1")) {
 ////        std::cout << "Option 1 selected" << std::endl;
@@ -88,6 +92,8 @@ void ImGuiRenderer::Render() {
 }
 
 void ImGuiRenderer::Input(const SDL_Event& event) {
+    PT_PROFILE_SCOPE_N("UI Input");;
+
     ImGui_ImplSDL2_ProcessEvent(&event);
 
     // Handles custom SDL events

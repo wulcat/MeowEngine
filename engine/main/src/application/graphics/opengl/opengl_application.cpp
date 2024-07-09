@@ -5,19 +5,16 @@
 #include "opengl_application.hpp"
 
 #include "graphics_wrapper.hpp"
-#include "log.hpp"
 #include "sdl_wrapper.hpp"
+#include "log.hpp"
+
 #include "main_scene.hpp"
 #include "opengl_asset_manager.hpp"
+
 #include "opengl_renderer.hpp"
-//#include "imgui_wrapper.hpp"
 #include "imgui_renderer.hpp"
 
 #include <string>
-#include <TracyOpenGL.hpp>
-#include <Tracy.hpp>
-//#include <TracyOpenCL.hpp>
-#include "../../../../../../third-party/tracy/public/common/TracySystem.hpp"
 
 using physicat::OpenGLApplication;
 
@@ -38,17 +35,10 @@ namespace {
         static const std::string logTag("physicat::OpenGLApplication::CreateContext");
 
         SDL_GLContext context {SDL_GL_CreateContext(window)};
-        TracyGpuContext
+
         #ifdef WIN32
             glewInit();
         #endif
-
-        //int viewportWidth;
-     //   int viewportHeight;
-       // SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
-
-      //  physicat::Log(logTag, "Created OpenGL Context with viewport size: " + std::to_string(viewportWidth) + " , " +
-       //                       std::to_string(viewportHeight));
 
         glClearDepthf(1.0f);
 
@@ -72,10 +62,7 @@ namespace {
 //        glEnable(GL_ALPHA_TEST);
 //        glAlphaFunc(GL_GREATER, 0.1f);
 
-//        glViewport(0, 0, viewportWidth, viewportHeight);
         ::UpdateViewport(window);
-//        TracyGpuContext(context, nullptr);
-
 
         return context;
     }
@@ -120,16 +107,7 @@ struct OpenGLApplication::Internal {
                  AssetManager(::CreateAssetManager()),
                  Renderer(::CreateRenderer(AssetManager)),
                  UI(CreateUI(Window, Context))
-    {
-        TracyAlloc(Window, 5);
-        //physicat::Log("CRATE!", "Crate has " );
-//        TracyGpuContext;
-        TracyGpuZone("x")
-//        TracyAppInfo("app_info.data()", "app_info.size()");
-//        LUXE_PROFILE_GPU("use program");
-        TracyMessageL("Starting the application");
-        TracyMessageL("Set jobs");
-    }
+    {}
 
     ~Internal() {
         SDL_GL_DeleteContext(Context);
@@ -150,6 +128,7 @@ struct OpenGLApplication::Internal {
     }
 
     bool Input() {
+        PT_PROFILE_SCOPE;
         SDL_Event event;
 
         // Each loop we will process any events that are waiting for us.
@@ -186,27 +165,25 @@ struct OpenGLApplication::Internal {
     }
 
     void Update(const float& deltaTime) {
-//        TracyMessageL("Sleep a little bit");
+        PT_PROFILE_SCOPE;
+
         UI.Update();
         GetScene().Update(deltaTime);
     }
 
     void Render() {
-        TracyMessageL( "Tick" );
-//        tracy::SetThreadName( "Message test" );
-//        ZoneScoped;
+        PT_PROFILE_SCOPE;
+
         SDL_GL_MakeCurrent(Window, Context);
 
         glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         GetScene().Render(Renderer);
-        TracyGpuZone("this")
+
         UI.Render();
 
         SDL_GL_SwapWindow(Window);
-        TracyGpuCollect;
-//        FrameMark;
     }
 };
 
