@@ -121,10 +121,10 @@ fetch_third_party_lib_imgui() {
   pushd ../../third-party
     if [ ! -d "imgui" ] ; then
       echo "Fetching imgui"
-      wget https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9.zip
-      unzip -q v1.90.9.zip
-      rm v1.90.9.zip
-      mv imgui-1.90.9 imgui
+      wget https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9-docking.zip
+      unzip -q v1.90.9-docking.zip
+      rm v1.90.9-docking.zip
+      mv imgui-1.90.9-docking imgui
     fi
   # shellcheck disable=SC2164
   popd

@@ -29,6 +29,9 @@ namespace physicat::graphics {
         void DrawFrame(unsigned int frameBufferId);
         void RenderFrame();
 
+        void CreateDockingSpace();
+
+        bool renderUI;
         bool isSceneViewportFocused;
         WindowSize SceneViewportSize;
     };
