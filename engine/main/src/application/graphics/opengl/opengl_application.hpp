@@ -14,7 +14,7 @@ namespace physicat {
 
         void OnWindowResized() override;
 
-        bool Input() override;
+        bool Input(const float& deltaTime) override;
         void Update(const float& deltaTime) override;
         void Render() override;
 

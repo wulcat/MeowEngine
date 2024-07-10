@@ -6,6 +6,7 @@
 #define PHYSICAT_SCENE_HPP
 
 #include "asset_manager.hpp"
+#include "input_manager.hpp"
 #include "renderer.hpp"
 
 namespace physicat {
@@ -16,6 +17,7 @@ namespace physicat {
         virtual void OnWindowResized(const physicat::WindowSize& size) = 0;
 
         virtual void Create(physicat::AssetManager& assetManager) = 0; // Load assets
+        virtual void Input(const float& deltaTime, const physicat::input::InputManager& inputManager) = 0;
         virtual void Update(const float& deltaTime) = 0;
         virtual void Render(physicat::Renderer& renderer) = 0;
     };

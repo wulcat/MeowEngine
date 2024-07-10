@@ -233,15 +233,10 @@ struct MainScene::Internal {
         LifeObjects.push_back(gridObject);
     }
 
-    void ProcessInput(const float& delta) {
-        int deltaMouseX;
-        int deltaMouseY;
-        uint32_t mouseState = SDL_GetRelativeMouseState(&deltaMouseX, &deltaMouseY);
-
-        if(mouseState & SDL_BUTTON(0)) {
-            CameraController.LookAround(deltaMouseX, deltaMouseY);
+    void Input(const float& delta, const physicat::input::InputManager& inputManager) {
+        if(inputManager.mouseState & SDL_BUTTON_LMASK) {
+            CameraController.LookAround(inputManager.mouseDeltaX, inputManager.mouseDeltaY);
         }
-
 
         if (KeyboardState[SDL_SCANCODE_UP] || KeyboardState[SDL_SCANCODE_W]) {
             CameraController.MoveForward(delta);
@@ -270,8 +265,6 @@ struct MainScene::Internal {
 
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
-        ProcessInput(deltaTime);
-
         Camera.Configure(CameraController.GetPosition(), CameraController.GetUp(), CameraController.GetDirection());
 
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
@@ -300,6 +293,10 @@ void MainScene::OnWindowResized(const physicat::WindowSize &size) {
 
 void MainScene::Create(physicat::AssetManager &assetManager) {
     InternalPointer->Create(assetManager);
+}
+
+void MainScene::Input(const float &deltaTime, const physicat::input::InputManager& inputManager) {
+    InternalPointer->Input(deltaTime, inputManager);
 }
 
 void MainScene::Update(const float &deltaTime) {

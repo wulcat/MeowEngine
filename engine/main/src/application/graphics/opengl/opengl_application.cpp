@@ -8,28 +8,30 @@
 #include "sdl_wrapper.hpp"
 #include "log.hpp"
 
-#include "main_scene.hpp"
-#include "opengl_asset_manager.hpp"
-
 #include "opengl_renderer.hpp"
 #include "imgui_renderer.hpp"
+
+#include "opengl_framebuffer.hpp"
+#include "opengl_asset_manager.hpp"
+#include "input_manager.hpp"
+#include "main_scene.hpp"
 
 #include <string>
 
 using physicat::OpenGLApplication;
 
 namespace {
-    void UpdateViewport(SDL_Window* window) {
-        static const std::string logTag("physicat::OpenGLApplication::UpdateViewport");
-
-        int viewportWidth;
-        int viewportHeight;
-
-        SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
-        physicat::Log(logTag, "Created OpenGL context with viewport size: "+ std::to_string(viewportWidth) + " x " + std::to_string(viewportHeight));
-
-        glViewport(0,0, viewportWidth,viewportHeight);
-    }
+//    void UpdateViewport(SDL_Window* window) {
+//        static const std::string logTag("physicat::OpenGLApplication::UpdateViewport");
+//
+//        int viewportWidth;
+//        int viewportHeight;
+//
+//        SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
+//        physicat::Log(logTag, "Created OpenGL context with viewport size: "+ std::to_string(viewportWidth) + " x " + std::to_string(viewportHeight));
+//
+//        glViewport(0,0, viewportWidth,viewportHeight);
+//    }
 
     SDL_GLContext CreateContext(SDL_Window* window) {
         static const std::string logTag("physicat::OpenGLApplication::CreateContext");
@@ -62,9 +64,14 @@ namespace {
 //        glEnable(GL_ALPHA_TEST);
 //        glAlphaFunc(GL_GREATER, 0.1f);
 
-        ::UpdateViewport(window);
+//        ::UpdateViewport(window);
 
         return context;
+    }
+
+    physicat::graphics::OpenGLFrameBuffer CreateFrameBuffer() {
+        // NOTE: we launch this needs to be init properly
+        return physicat::graphics::OpenGLFrameBuffer(1000,500);
     }
 
     std::shared_ptr<physicat::OpenGLAssetManager> CreateAssetManager() {
@@ -97,6 +104,8 @@ struct OpenGLApplication::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
     physicat::graphics::ImGuiRenderer UI;
+    physicat::graphics::OpenGLFrameBuffer FrameBuffer;
+    physicat::input::InputManager InputManager;
 
     const std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
     physicat::OpenGLRenderer Renderer;
@@ -106,7 +115,9 @@ struct OpenGLApplication::Internal {
                  Context(CreateContext(Window)),
                  AssetManager(::CreateAssetManager()),
                  Renderer(::CreateRenderer(AssetManager)),
-                 UI(CreateUI(Window, Context))
+                 UI(CreateUI(Window, Context)),
+                 FrameBuffer(::CreateFrameBuffer()),
+                 InputManager()
     {}
 
     ~Internal() {
@@ -115,8 +126,15 @@ struct OpenGLApplication::Internal {
     }
 
     void OnWindowResized() {
-        GetScene().OnWindowResized(physicat::sdl::GetWindowSize(Window));
-        ::UpdateViewport(Window);
+        physicat::Log("opengl_application::", "OnWindowResized");
+//        GetScene().OnWindowResized(physicat::sdl::GetWindowSize(Window));
+//        ::UpdateViewport(Window);
+    }
+
+    void OnViewportResize(const WindowSize& size) {
+        GetScene().OnWindowResized(size);
+        glViewport(0,0, size.width,size.height);
+        FrameBuffer.RescaleFrameBuffer(size.width, size.height);
     }
 
     physicat::Scene& GetScene() {
@@ -127,18 +145,21 @@ struct OpenGLApplication::Internal {
         return *Scene;
     }
 
-    bool Input() {
+    bool Input(const float& deltaTime) {
         PT_PROFILE_SCOPE;
         SDL_Event event;
 
         // Each loop we will process any events that are waiting for us.
         while (SDL_PollEvent(&event))
         {
+            UI.Input(event);
+
             switch (event.type)
             {
                 case SDL_WINDOWEVENT:
                     if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
                         OnWindowResized();
+                        OnViewportResize(UI.GetSceneViewportSize());
                     }
                     break;
 
@@ -154,34 +175,53 @@ struct OpenGLApplication::Internal {
                         return false;
                     }
                     break;
+
+                case SDL_USEREVENT:
+                    switch (event.user.code) {
+                        case 2:
+                            OnViewportResize(UI.GetSceneViewportSize());
+                            break;
+                    }
                 default:
                     break;
             }
         }
 
-        UI.Input(event);
+        // Track keyboard and mouse clicks/hold/drag/position
+        InputManager.ProcessInput();
+
+        if(UI.IsSceneViewportFocused()) {
+            GetScene().Input(deltaTime, InputManager);
+        }
 
         return true;
     }
 
     void Update(const float& deltaTime) {
         PT_PROFILE_SCOPE;
-
-        UI.Update();
         GetScene().Update(deltaTime);
     }
 
     void Render() {
         PT_PROFILE_SCOPE;
-
         SDL_GL_MakeCurrent(Window, Context);
+
+        // We let opengl know that any after this will be drawn into custom frame buffer
+        {
+            FrameBuffer.Bind();
+
+            glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            GetScene().Render(Renderer);
+
+            FrameBuffer.Unbind();
+        }
 
         glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        GetScene().Render(Renderer);
-
-        UI.Render();
+        UI.Render(FrameBuffer.GetFrameTexture());
 
         SDL_GL_SwapWindow(Window);
     }
@@ -195,8 +235,8 @@ void OpenGLApplication::OnWindowResized() {
     InternalPointer->OnWindowResized();
 }
 
-bool OpenGLApplication::Input() {
-    return InternalPointer->Input();
+bool OpenGLApplication::Input(const float& deltaTime) {
+    return InternalPointer->Input(deltaTime);
 }
 
 void OpenGLApplication::Update(const float &deltaTime) {

@@ -27,7 +27,10 @@ namespace {
         exit(0); // Exit the parent process
     }
 }
-ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context) {
+ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
+    : isSceneViewportFocused(false)
+    , SceneViewportSize({0,0}) {
+
     physicat::Log("ImGuiRenderer","Creating...");
 
     IMGUI_CHECKVERSION();
@@ -36,6 +39,8 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context) {
     (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+//    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+//    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -60,35 +65,6 @@ ImGuiRenderer::~ImGuiRenderer() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
-}
-
-void ImGuiRenderer::Update() {
-    PT_PROFILE_SCOPE_N("UI Update");;
-
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
-    bool show;
-    ImGui::ShowDemoWindow(&show);
-}
-
-void ImGuiRenderer::Render() {
-    PT_PROFILE_SCOPE_N("UI Render");;
-
-//    ImGui::Begin("Menu");
-//    if (ImGui::Button("Option 1")) {
-////        std::cout << "Option 1 selected" << std::endl;
-//    }
-//    if (ImGui::Button("Option 2")) {
-////        std::cout << "Option 2 selected" << std::endl;
-//    }
-//    if (ImGui::Button("Option 3")) {
-////        std::cout << "Option 3 selected" << std::endl;
-//    }
-//    ImGui::End();
-
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 void ImGuiRenderer::Input(const SDL_Event& event) {
@@ -120,6 +96,24 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
+void physicat::graphics::ImGuiRenderer::Render(unsigned int frameBufferId) {
+    CreateNewFrame();
+    DrawFrame(frameBufferId);
+    RenderFrame();
+}
+
+void ImGuiRenderer::ClosePIDs() {
+    ::HandleTracyProfilerSignal(SIGQUIT);
+}
+
+bool physicat::graphics::ImGuiRenderer::IsSceneViewportFocused() const {
+    return isSceneViewportFocused;
+}
+
+const physicat::WindowSize& physicat::graphics::ImGuiRenderer::GetSceneViewportSize() const {
+    return SceneViewportSize;
+}
+
 void ImGuiRenderer::OpenTracyProfiler() {
     // Register signal handlers to clean up child process on exit
     signal(SIGINT, &::HandleTracyProfilerSignal);  // Handle Ctrl+C
@@ -143,7 +137,62 @@ void ImGuiRenderer::OpenTracyProfiler() {
     }
 }
 
-void ImGuiRenderer::ClosePIDs() {
-    ::HandleTracyProfilerSignal(SIGQUIT);
+void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
 }
 
+void physicat::graphics::ImGuiRenderer::DrawFrame(unsigned int frameBufferId) {
+//    ImGui::DockSpaceOverViewport
+    bool show;
+    ImGui::ShowDemoWindow(&show);
+
+    ImGuiWindowFlags window_flags = 0;
+    window_flags |= ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoCollapse;
+//    if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
+//    if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
+//    if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
+//    if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
+//    if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
+//    if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
+//    if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
+//    if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
+//    if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+//    if (unsaved_document)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
+//    if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
+    bool test;
+    ImGui::Begin("Scene", &test,window_flags);
+    {
+        isSceneViewportFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+
+        ImGui::BeginChild("GameRender");
+
+        const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+        if(viewportSize.x != SceneViewportSize.width || SceneViewportSize.height != SceneViewportSize.height) {
+            SceneViewportSize.width = viewportSize.x;
+            SceneViewportSize.height = viewportSize.y;
+
+            SDL_Event event;
+            SDL_zero(event);
+            event.type = SDL_USEREVENT;
+            event.user.code = 2;
+            SDL_PushEvent(&event);
+        }
+
+        ImGui::Image(
+                (ImTextureID)frameBufferId,
+                ImGui::GetContentRegionAvail(),
+                ImVec2(0, 1),
+                ImVec2(1, 0)
+        );
+    }
+    ImGui::EndChild();
+    ImGui::End();
+}
+
+void physicat::graphics::ImGuiRenderer::RenderFrame() {
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}

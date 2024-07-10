@@ -16,6 +16,7 @@ namespace physicat {
         void OnWindowResized(const physicat::WindowSize& size) override;
 
         void Create(physicat::AssetManager& assetManager) override;
+        void Input(const float &deltaTime, const physicat::input::InputManager& inputManager) override;
         void Update(const float& deltaTime) override;
         void Render(physicat::Renderer& renderer) override;
 

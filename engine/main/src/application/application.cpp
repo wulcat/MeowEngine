@@ -58,11 +58,14 @@ void physicat::Application::StartApplication() {
 bool physicat::Application::LoopApplication() {
     PT_PROFILE_SCOPE_N("Engine Update");
 
-    if(!Input()) {
+    float deltaTime = InternalPointer->TimeStep();
+
+    // If Input() returns false - close the application
+    if(!Input(deltaTime)) {
         return false;
     }
 
-    Update(InternalPointer->TimeStep());
+    Update(deltaTime);
 
     // Perform our rendering for this frame, normally you would also perform
     // any updates to your world as well here.
