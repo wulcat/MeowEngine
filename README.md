@@ -22,7 +22,7 @@
 - [ ] Ability to read/write on file for saving import references (instead of hard-coded enums)
 - [x] Add Proper logging & profiler system
 - [ ] Create Basic UI elements like a button and text
-- [ ] If simple add basic light
+- [ ] If simple, add basic light and sky box
 - [ ] Create Unique ID generator for items
 - [ ] Create a template for dump-testing shaders
 - [ ] Documentation & UML Diagrams
