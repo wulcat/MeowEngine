@@ -21,7 +21,7 @@
 - [ ] On repo update - auto build emscripten for web and upload
 - [ ] Ability to read/write on file for saving import references (instead of hard-coded enums)
 - [x] Add Proper logging & profiler system
-- [ ] Create Basic UI elements like a button and text
+- [x] Create Basic UI elements like a button and text
 - [ ] If simple, add basic light and sky box
 - [ ] Create Unique ID generator for items
 - [ ] Create a template for dump-testing shaders
@@ -29,7 +29,7 @@
 - [ ] Auto UML Creator tool
 
 ## Build
-<img src="examples/engine_v2.gif" width="500">
+<img src="examples/engine_v3.gif" width="500">
 
 ## Compatibility
 - [x] Console
