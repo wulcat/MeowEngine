@@ -20,6 +20,8 @@ namespace physicat {
         virtual void Input(const float& deltaTime, const physicat::input::InputManager& inputManager) = 0;
         virtual void Update(const float& deltaTime) = 0;
         virtual void Render(physicat::Renderer& renderer) = 0;
+
+        virtual const std::vector<core::LifeObject*> GetLifeObjects() = 0;
     };
 }
 

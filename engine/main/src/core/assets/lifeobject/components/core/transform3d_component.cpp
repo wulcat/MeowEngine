@@ -7,7 +7,8 @@
 using physicat::core::component::Transform3DComponent;
 
 Transform3DComponent::Transform3DComponent()
-    : Position(glm::vec3(0,0,0))
+    : Position({0,0,0})
+//    , PositionTest({1,1,1})
     , Scale (glm::vec3(1,1,1))
     , Rotation (glm::vec4(0,0,0,0))
     , RotationAxis(glm::vec3(0,1,0))
@@ -16,7 +17,7 @@ Transform3DComponent::Transform3DComponent()
     , TransformMatrix(IdentityMatrix) {}
 
 Transform3DComponent::Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec4 rotation)
-    : Position(position)
+    : Position({position.x, position.y, position.z})
     , Scale(scale)
     , Rotation(rotation)
     , RotationAxis(glm::vec3(0,1,0))
@@ -26,7 +27,7 @@ Transform3DComponent::Transform3DComponent(glm::vec3 position, glm::vec3 scale, 
 
 Transform3DComponent::Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec3 rotationAxis,
                                            float rotationDegrees)
-    : Position(position)
+    : Position({position.x, position.y, position.z})
     , Scale(scale)
     , Rotation(glm::vec4(0,0,0,0))
     , RotationAxis(rotationAxis)
@@ -38,7 +39,7 @@ void Transform3DComponent::Update(const glm::mat4 &projectionViewMatrix) {
 //    RotateBy(0.1f);
 
     TransformMatrix = projectionViewMatrix
-                    * glm::translate(IdentityMatrix, Position)
+                    * glm::translate(IdentityMatrix, glm::vec3(Position.X, Position.Y, Position.Z))
                     * glm::rotate(IdentityMatrix, glm::radians(RotationDegrees), RotationAxis)
                     * glm::scale(IdentityMatrix, Scale);
 }

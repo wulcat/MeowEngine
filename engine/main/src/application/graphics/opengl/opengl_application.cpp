@@ -125,16 +125,16 @@ struct OpenGLApplication::Internal {
         SDL_DestroyWindow(Window);
     }
 
-    void OnWindowResized() {
-        physicat::Log("opengl_application::", "OnWindowResized");
+//    void OnWindowResized() {
+//        physicat::Log("opengl_application::", "OnWindowResized");
 //        GetScene().OnWindowResized(physicat::sdl::GetWindowSize(Window));
 //        ::UpdateViewport(Window);
-    }
+//    }
 
     void OnViewportResize(const WindowSize& size) {
         GetScene().OnWindowResized(size);
-        glViewport(0,0, size.width,size.height);
-        FrameBuffer.RescaleFrameBuffer(size.width, size.height);
+        glViewport(0,0, size.Width,size.Height);
+        FrameBuffer.RescaleFrameBuffer(size.Width, size.Height);
     }
 
     physicat::Scene& GetScene() {
@@ -157,10 +157,9 @@ struct OpenGLApplication::Internal {
             switch (event.type)
             {
                 case SDL_WINDOWEVENT:
-                    if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                        OnWindowResized();
-                        OnViewportResize(UI.GetSceneViewportSize());
-                    }
+//                    if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
+//                        OnWindowResized();
+//                    }
                     break;
 
                     // If we get a quit signal, we will return that we don't want to keep looping.
@@ -178,9 +177,15 @@ struct OpenGLApplication::Internal {
 
                 case SDL_USEREVENT:
                     switch (event.user.code) {
-                        case 2:
-                            OnViewportResize(UI.GetSceneViewportSize());
+                        case 2: {
+                            const WindowSize size = *(WindowSize *) event.user.data1;
+                            OnViewportResize(size);
                             break;
+                        }
+                        case 3: {
+                            InputManager.isActive = *(bool *) event.user.data1;
+                            break;
+                        }
                     }
                 default:
                     break;
@@ -190,9 +195,7 @@ struct OpenGLApplication::Internal {
         // Track keyboard and mouse clicks/hold/drag/position
         InputManager.ProcessInput();
 
-        if(UI.IsSceneViewportFocused()) {
-            GetScene().Input(deltaTime, InputManager);
-        }
+        GetScene().Input(deltaTime, InputManager);
 
         return true;
     }
@@ -221,7 +224,7 @@ struct OpenGLApplication::Internal {
         glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        UI.Render(FrameBuffer.GetFrameTexture());
+        UI.Render(GetScene(), FrameBuffer.GetFrameTexture());
 
         SDL_GL_SwapWindow(Window);
     }
@@ -231,9 +234,9 @@ OpenGLApplication::OpenGLApplication() :
         InternalPointer(physicat::make_internal_ptr<Internal>())
 {}
 
-void OpenGLApplication::OnWindowResized() {
-    InternalPointer->OnWindowResized();
-}
+//void OpenGLApplication::OnWindowResized() {
+//    InternalPointer->OnWindowResized();
+//}
 
 bool OpenGLApplication::Input(const float& deltaTime) {
     return InternalPointer->Input(deltaTime);

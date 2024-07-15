@@ -13,6 +13,7 @@
 #include "imgui_wrapper.hpp"
 #include "imgui_renderer.hpp"
 #include "bridge_wrapper.hpp"
+//#include <filesystem>
 
 using physicat::graphics::ImGuiRenderer;
 
@@ -28,8 +29,11 @@ namespace {
     }
 }
 ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
-    : isSceneViewportFocused(false)
-    , SceneViewportSize({0,0}) {
+//    : isSceneViewportFocused(false)
+//    , SceneViewportSize({0,0})
+    : StructurePanel()
+    , WorldRenderPanel()
+    , LogPanel() {
 
     physicat::Log("ImGuiRenderer","Creating...");
 
@@ -96,9 +100,9 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void physicat::graphics::ImGuiRenderer::Render(unsigned int frameBufferId) {
+void physicat::graphics::ImGuiRenderer::Render(physicat::Scene& scene, unsigned int frameBufferId) {
     CreateNewFrame();
-    DrawFrame(frameBufferId);
+    DrawFrame(scene, frameBufferId);
     RenderFrame();
 }
 
@@ -106,13 +110,13 @@ void ImGuiRenderer::ClosePIDs() {
     ::HandleTracyProfilerSignal(SIGQUIT);
 }
 
-bool physicat::graphics::ImGuiRenderer::IsSceneViewportFocused() const {
-    return isSceneViewportFocused;
-}
-
-const physicat::WindowSize& physicat::graphics::ImGuiRenderer::GetSceneViewportSize() const {
-    return SceneViewportSize;
-}
+//bool physicat::graphics::ImGuiRenderer::IsSceneViewportFocused() const {
+//    return isSceneViewportFocused;
+//}
+//
+//const physicat::WindowSize& physicat::graphics::ImGuiRenderer::GetSceneViewportSize() const {
+//    return SceneViewportSize;
+//}
 
 void ImGuiRenderer::OpenTracyProfiler() {
     // Register signal handlers to clean up child process on exit
@@ -143,56 +147,21 @@ void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
     ImGui::NewFrame();
 }
 
-void physicat::graphics::ImGuiRenderer::DrawFrame(unsigned int frameBufferId) {
-//    ImGui::DockSpaceOverViewport
-//    bool show;
-
+void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32_t frameBufferId) {
     CreateDockingSpace();
 
-    ImGui::ShowDemoWindow(&renderUI);
+//    CreateRender3DPanel(frameBufferId);
+//    CreateLifeObjectSelectorPanel(scene);
 
-    ImGuiWindowFlags window_flags = 0;
-//    window_flags |= ImGuiWindowFlags_NoMove;
-    window_flags |= ImGuiWindowFlags_NoCollapse;
-//    if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
-//    if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
-//    if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
-//    if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
-//    if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
-//    if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
-//    if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
-//    if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
-//    if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-//    if (unsaved_document)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
-//    if (no_close)           p_open = NULL; // Don't pass our bool* to Begin
-//    bool test;
-    ImGui::Begin("Scene", &renderUI,window_flags);
-    {
-        isSceneViewportFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
+    StructurePanel.Draw(scene);
+    EditPanel.Draw(StructurePanel.GetSelectedItem());
+    WorldRenderPanel.Draw(reinterpret_cast<void*>(frameBufferId));
+    LogPanel.Draw();
 
-        ImGui::BeginChild("GameRender");
+//    CreateObjectEditorPanel(temp);
+//    CreateLogPanel();
 
-        const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-        if(viewportSize.x != SceneViewportSize.width || SceneViewportSize.height != SceneViewportSize.height) {
-            SceneViewportSize.width = viewportSize.x;
-            SceneViewportSize.height = viewportSize.y;
-
-            SDL_Event event;
-            SDL_zero(event);
-            event.type = SDL_USEREVENT;
-            event.user.code = 2;
-            SDL_PushEvent(&event);
-        }
-
-        ImGui::Image(
-                (ImTextureID)frameBufferId,
-                ImGui::GetContentRegionAvail(),
-                ImVec2(0, 1),
-                ImVec2(1, 0)
-        );
-    }
-    ImGui::EndChild();
-    ImGui::End();
+    ImGui::ShowDemoWindow(&IsRendering);
 }
 
 void ImGuiRenderer::RenderFrame() {
@@ -237,7 +206,7 @@ void ImGuiRenderer::CreateDockingSpace() {
 //        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 //    }
 
-    ImGui::Begin("DockSpace Demo", &renderUI, window_flags); {
+    ImGui::Begin("DockSpace Demo", &IsRendering, window_flags); {
 //        if (!opt_padding)
 //            ImGui::PopStyleVar();
 //

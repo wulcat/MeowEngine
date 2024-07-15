@@ -20,6 +20,8 @@ namespace physicat {
         void Update(const float& deltaTime) override;
         void Render(physicat::Renderer& renderer) override;
 
+        const std::vector<core::LifeObject*> GetLifeObjects() override;
+
     private:
         struct Internal;
         physicat::internal_ptr<Internal> InternalPointer;

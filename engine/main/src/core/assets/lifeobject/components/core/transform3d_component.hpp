@@ -11,6 +11,7 @@
 //#include "glm_wrapper.hpp"
 
 #include "transform_component_base.hpp"
+#include "math_wrapper.hpp"
 
 namespace physicat::core::component {
     class Transform3DComponent : public physicat::core::component::TransformComponentBase {
@@ -22,7 +23,8 @@ namespace physicat::core::component {
         void Update(const glm::mat4& projectionViewMatrix) override;
         void RotateBy(const float& degrees);
 
-        glm::vec3 Position;
+//        physicat::math::Vector3 PositionTest;
+        physicat::math::Vector3 Position;
         glm::vec3 Scale;
 
         // find proper way to handle rotations

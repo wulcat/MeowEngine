@@ -17,7 +17,7 @@ namespace physicat {
 
         void StartApplication();
         bool LoopApplication();
-        virtual void OnWindowResized() = 0;
+//        virtual void OnWindowResized() = 0;
 
         virtual bool Input(const float& deltaTime) = 0;
         virtual void Update(const float& deltaTime) = 0;

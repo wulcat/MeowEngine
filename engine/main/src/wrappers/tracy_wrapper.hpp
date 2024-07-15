@@ -19,8 +19,8 @@
 
 #define PT_PROFILE_SCOPE ZoneScoped
 #define PT_PROFILE_SCOPE_N(x) ZoneScopedN(x)
-#define PT_PROFILE_ALLOC(p, size) TracyCAllocS(p, size, 12)
-#define PT_PROFILE_PROFILE_FREE(p) TracyCFreeS(p, 12)
+#define PT_PROFILE_ALLOC(p, size) TracyCAllocS(p, size, 12);
+#define PT_PROFILE_FREE(p) TracyCFreeS(p, 12);
 
 //        TracyGpuContext
 //        TracyMessageL("Sleep a little bit");

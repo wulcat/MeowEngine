@@ -12,6 +12,7 @@ namespace physicat::input {
     public:
         void ProcessInput();
 
+        bool isActive;
         uint32_t mouseState;
         int mouseDeltaX;
         int mouseDeltaY;

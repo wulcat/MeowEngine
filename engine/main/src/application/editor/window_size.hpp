@@ -10,8 +10,8 @@
 
 namespace physicat {
     struct WindowSize {
-        uint32_t width {0};
-        uint32_t height {0};
+        uint32_t Width {0};
+        uint32_t Height {0};
     };
 }
 

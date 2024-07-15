@@ -26,6 +26,7 @@
 - [ ] Create Unique ID generator for items
 - [ ] Create a template for dump-testing shaders
 - [ ] Documentation & UML Diagrams
+- [ ] Auto UML Creator tool
 
 ## Build
 <img src="examples/engine_v2.gif" width="500">

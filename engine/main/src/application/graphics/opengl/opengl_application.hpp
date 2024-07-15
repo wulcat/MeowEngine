@@ -12,7 +12,7 @@ namespace physicat {
     struct OpenGLApplication : public physicat::Application {
         OpenGLApplication();
 
-        void OnWindowResized() override;
+//        void OnWindowResized() override;
 
         bool Input(const float& deltaTime) override;
         void Update(const float& deltaTime) override;

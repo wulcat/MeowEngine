@@ -26,7 +26,7 @@ using physicat::core::component::Transform3DComponent;
 
 namespace {
     physicat::PerspectiveCamera CreateCamera(const physicat::WindowSize& size) {
-        return physicat::PerspectiveCamera(static_cast<float>(size.width), static_cast<float>(size.height));
+        return physicat::PerspectiveCamera(static_cast<float>(size.Width), static_cast<float>(size.Height));
     }
 }
 
@@ -135,7 +135,7 @@ struct MainScene::Internal {
 //            }
 //        );
 
-        core::LifeObject groundObject = core::LifeObject();
+        core::LifeObject groundObject = core::LifeObject("Ground");
         groundObject.SetTransformComponent(
                 new Transform3DComponent(
                         glm::vec3{0.0f, -0.1f, 0},
@@ -154,7 +154,7 @@ struct MainScene::Internal {
                 )
         );
 
-        core::LifeObject meshObject = core::LifeObject();
+        core::LifeObject meshObject = core::LifeObject("Cube");
         meshObject.SetTransformComponent(
             new Transform3DComponent(
                 glm::vec3{0.0f, 0.0f, 2},
@@ -173,7 +173,7 @@ struct MainScene::Internal {
             )
         );
 
-        core::LifeObject meshObject1 = core::LifeObject();
+        core::LifeObject meshObject1 = core::LifeObject("Cone");
         meshObject1.SetTransformComponent(
             new Transform3DComponent(
                 glm::vec3{-1.4f, -0.5f, 0},
@@ -191,7 +191,7 @@ struct MainScene::Internal {
                 }
             )
         );
-        core::LifeObject meshObject2 = core::LifeObject();
+        core::LifeObject meshObject2 = core::LifeObject("Torus");
         meshObject2.SetTransformComponent(
                 new Transform3DComponent(
                         glm::vec3{1.0f, 0.0f, 0},
@@ -210,7 +210,7 @@ struct MainScene::Internal {
             )
         );
 
-        core::LifeObject gridObject = core::LifeObject();
+        core::LifeObject gridObject = core::LifeObject("Grid");
         gridObject.SetTransformComponent(
             new Transform3DComponent(
                 glm::vec3{0, 0, 0},
@@ -234,6 +234,10 @@ struct MainScene::Internal {
     }
 
     void Input(const float& delta, const physicat::input::InputManager& inputManager) {
+        if(!inputManager.isActive) {
+            return;
+        }
+
         if(inputManager.mouseState & SDL_BUTTON_LMASK) {
             CameraController.LookAround(inputManager.mouseDeltaX, inputManager.mouseDeltaY);
         }
@@ -305,6 +309,16 @@ void MainScene::Update(const float &deltaTime) {
 
 void MainScene::Render(physicat::Renderer &renderer) {
     InternalPointer->Render(renderer);
+}
+
+const vector<physicat::core::LifeObject*> physicat::MainScene::GetLifeObjects() {
+    // NOTE: Temp solution. Find a better way to keep things in stack for gameplay and heap for ui editor.
+    std::vector<physicat::core::LifeObject*> itemPointers;
+    for (auto& item : InternalPointer->LifeObjects) {
+        itemPointers.push_back(&item);
+    }
+
+    return itemPointers;
 }
 
 

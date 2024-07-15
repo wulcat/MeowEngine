@@ -22,7 +22,7 @@ namespace physicat::core {
     // ecs + hirachey (bubble effect)
     class LifeObject {
     public:
-        LifeObject();
+        LifeObject(std::string name);
 
         void SetTransformComponent(component::TransformComponentBase* component);
         void SetRenderComponent(component::RenderComponentBase* component);
@@ -32,8 +32,18 @@ namespace physicat::core {
         component::TransformComponentBase* TransformComponent;
         component::RenderComponentBase* RenderComponent;
         component::PhysicsComponentBase* PhysicsComponent;
+
+        int Id;
+        std::string Name;
+        int GetChildCount() {return 0;}
+
+        static int s_IdCounter;
+        static int s_GetNewId();
     };
+
+
 }
+
 
 
 #endif //PHYSICAT_LIFE_OBJECT_HPP

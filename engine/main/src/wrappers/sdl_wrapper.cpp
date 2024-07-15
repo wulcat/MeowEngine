@@ -98,8 +98,8 @@ SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
         "Physicat",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        windowSize.width,
-        windowSize.height,
+        windowSize.Width,
+        windowSize.Height,
         windowFlags
     )};
 
