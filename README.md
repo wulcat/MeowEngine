@@ -29,7 +29,7 @@
 - [ ] Auto UML Creator tool
 
 ## Build
-<img src="examples/engine_v3.gif" width="500">
+<img src="examples/engine_v3.gif" width="700">
 
 ## Compatibility
 - [x] Console
