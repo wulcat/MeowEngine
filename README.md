@@ -25,8 +25,9 @@
 - [ ] If simple, add basic light and sky box
 - [ ] Create Unique ID generator for items
 - [ ] Create a template for dump-testing shaders
-- [ ] Documentation & UML Diagrams
-- [ ] Auto UML Creator tool
+- [x] Documentation & UML Diagrams
+- [x] Auto UML Creator tool
+- [ ] Add Unit Testing
 
 ## Build
 <img src="examples/engine_v3.gif" width="700">

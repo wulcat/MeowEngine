@@ -7,6 +7,8 @@
 fetch_brew_dependency "wget"
 fetch_brew_dependency "cmake"
 fetch_brew_dependency "ninja"
+fetch_brew_dependency "doxygen"
+fetch_brew_dependency "graphviz"
 
 # Download SDL lib
 fetch_third_party_lib_sdl
