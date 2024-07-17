@@ -47,7 +47,7 @@ namespace // wth is this ._. ?
 
 physicat::WindowSize physicat::sdl::GetInitialWindowSize() {
 #ifdef __EMSCRIPTEN__
-    ::GetEmscriptenCanvasSize();
+    return ::GetEmscriptenCanvasSize();
 #else
     const physicat::Platform platform{physicat::GetCurrentPlatform()};
 
@@ -69,7 +69,7 @@ physicat::WindowSize physicat::sdl::GetWindowSize(SDL_Window* window) {
     uint32_t displayHeight{0};
 
     #ifdef __EMSCRIPTEN__
-        ::GetEmscriptenCanvasSize();
+        return ::GetEmscriptenCanvasSize();
     #else
         int width {0};
         int height {0};
@@ -83,10 +83,22 @@ physicat::WindowSize physicat::sdl::GetWindowSize(SDL_Window* window) {
 SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
     physicat::WindowSize windowSize{physicat::sdl::GetInitialWindowSize()};
 
+
+#ifdef __EMSCRIPTEN__
+        // GL 3.0 + GLSL 130
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+    //    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    //    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    //    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#else
     // Set the attributes for SDL (here we are supporting from 1.0 to 4.0 version of shader)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#endif
 
 //    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 //    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);

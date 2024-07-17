@@ -1,26 +1,29 @@
 #!/bin/bash
 
 # Include the shared scripts and utility methods that are common to all platforms.
-. ../shared-scripts.sh
+. installer/platforms/shared-scripts.sh
 
-# Make sure we have a 'build' folder.
-if [ ! -d "build" ]; then
-    mkdir build
-fi
+## Make sure we have a 'build' folder.
+#if [ ! -d "build" ]; then
+#    mkdir build
+#fi
 
-# Remove the 'out' folder if it exists.
-if [ -d "out" ]; then
-    rm -rf out
-fi
+verify_build_folder_exists "web"
+clean_build_folder "web"
+
+## Remove the 'out' folder if it exists.
+#if [ -d "out" ]; then
+#    rm -rf out
+#fi
 
 # In order to find the Emscripten build tools, we need to configure some environment variables so they are available during the build. The required environment variables are initialized by sourcing the 'emsdk_env.sh' that ships with the Emscripten SDK.
-pushd ../../third-party/emscripten
+pushd libs/third-party/emscripten
     echo "Configuring Emscripten environment variables"
     source ./emsdk_env.sh
 popd
 
 # Hop into the 'build' folder to start our CMake build.
-pushd build
+pushd installer/platforms/web/build
 
     # Because we sourced the Emscripten environment variables, we can use the 'EMSCRIPTEN' var to know where the current SDK can be found, which we need so we can locate the 'Emscripten.cmake' toolchain file.
     EMSCRIPTEN_CMAKE_PATH=${EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake

@@ -41,7 +41,7 @@ namespace {
     }
 
     GLuint CreateShaderProgram(const std::string& shaderName) {
-        const std::string logTag{"physicat::OpenGLPipeline::CreateShaderProgram"};
+        const std::string logTag{"physicat::OpenGLAssetManager::CreateShaderProgram"};
         physicat::Log(logTag, "Creating Pipeline for '" + shaderName + "'");
 
         const std::string vertexShaderCode {

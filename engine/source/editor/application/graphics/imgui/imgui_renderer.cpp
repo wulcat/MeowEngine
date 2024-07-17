@@ -37,6 +37,12 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
 
     physicat::Log("ImGuiRenderer","Creating...");
 
+    #ifdef __EMSCRIPTEN__
+        const char* glsl_version = "#version 300 es";
+    #else
+        const char* glsl_version = "#version 400";
+    #endif
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -51,7 +57,7 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(window, context);
-    ImGui_ImplOpenGL3_Init("#version 400");
+    ImGui_ImplOpenGL3_Init(glsl_version);
 
 #ifdef __APPLE__
     createMacMenu();

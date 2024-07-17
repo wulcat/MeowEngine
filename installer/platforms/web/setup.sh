@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Include the shared scripts and utility methods that are common to all platforms.
-. ../shared-scripts.sh
+. installer/platforms/shared-scripts.sh
 
 fetch_brew_dependency "wget"
 fetch_brew_dependency "cmake"
@@ -12,7 +12,7 @@ fetch_third_party_lib_glm
 fetch_third_party_lib_tiny_obj_loader
 
 # If required, download and configure the Emscripten SDK into the third-party folder.
-pushd ../../third-party
+pushd libs/third-party
     if [ ! -d "emscripten" ]; then
         echo "Fetching Emscripten SDK ..."
 
@@ -40,3 +40,13 @@ pushd ../../third-party
         popd
     fi
 popd
+
+#Next steps:
+#- To conveniently access emsdk tools from the command line,
+#  consider adding the following directories to your PATH:
+#    /Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten
+#    /Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten/upstream/emscripten
+#- This can be done for the current shell by running:
+#    source "/Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten/emsdk_env.sh"
+#- Configure emsdk in your shell startup scripts by running:
+#    echo 'source "/Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten/emsdk_env.sh"' >> $HOME/.zprofile

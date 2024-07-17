@@ -44,6 +44,8 @@ struct Application::Internal {
 
 void physicat::Application::StartApplication() {
     PT_PROFILE_SCOPE;
+    physicat::Log("physicat::Application::StartApplication", "Starting Application");
+
     #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
         emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);

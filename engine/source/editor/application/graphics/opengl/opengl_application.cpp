@@ -65,7 +65,7 @@ namespace {
 //        glAlphaFunc(GL_GREATER, 0.1f);
 
 //        ::UpdateViewport(window);
-
+        physicat::Log(logTag, "Context Created");
         return context;
     }
 
@@ -232,7 +232,9 @@ struct OpenGLApplication::Internal {
 
 OpenGLApplication::OpenGLApplication() :
         InternalPointer(physicat::make_internal_ptr<Internal>())
-{}
+{
+    physicat::Log("physicat::Application::OpenGLApplication", "OpenGL application created");
+}
 
 //void OpenGLApplication::OnWindowResized() {
 //    InternalPointer->OnWindowResized();
