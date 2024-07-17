@@ -251,4 +251,5 @@ Generated
 #
 ## mac
 #assets
-documentation
+docs
+/builds/
