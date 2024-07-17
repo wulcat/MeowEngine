@@ -28,18 +28,18 @@ install_manifest.txt
 # Roslyn cache directories
 *.ide/
 
-# MSTest test Results
-[Tt]est[Rr]esult*/
-[Bb]uild[Ll]og.*
+## MSTest test Results
+#[Tt]est[Rr]esult*/
+#[Bb]uild[Ll]og.*
 
 #NUNIT
 *.VisualState.xml
 TestResult.xml
 
 # Build Results of an ATL Project
-[Dd]ebugPS/
-[Rr]eleasePS/
-dlldata.c
+#[Dd]ebugPS/
+#[Rr]eleasePS/
+#dlldata.c
 
 *_i.c
 *_p.c
@@ -116,7 +116,7 @@ AutoTest.Net/
 .sass-cache/
 
 # Installshield output folder
-[Ee]xpress/
+#[Ee]xpress/
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/

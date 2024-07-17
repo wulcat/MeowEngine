@@ -30,19 +30,36 @@ fetch_brew_dependency() {
 
 #------------------------------------------------------------------------------------
 
+verify_libs_folder_exists() {
+  if [ ! -d "libs" ]; then
+    mkdir libs
+  fi
+}
 
 # if third-party folder doesn't exist we create it
 verify_third_party_folder_exists() {
-  if [ ! -d "third-party" ]; then
-    mkdir third-party
+  verify_libs_folder_exists
+
+  if [ ! -d "libs/third-party" ]; then
+    mkdir libs/third-party
   fi
+}
+
+verify_frameworks_folder_exists() {
+  verify_libs_folder_exists
+
+  pushd libs || exit
+    if [ ! -d "Frameworks" ]; then
+      mkdir Frameworks
+    fi
+  popd || exit
 }
 
 fetch_third_party_lib_sdl() {
   verify_third_party_folder_exists
 
   # shellcheck disable=SC2164
-  pushd third-party
+  pushd libs/third-party
     if [ ! -d "SDL" ] ; then
       echo "Fetching SDL..."
 
@@ -68,7 +85,7 @@ fetch_third_party_lib_sdl_image() {
   verify_third_party_folder_exists
   echo "Fetching SDL Image..."
     # shellcheck disable=SC2164
-    pushd third-party
+    pushd libs/third-party
       if [ ! -d "SDL2_image" ] ; then
         echo "Fetching SDL Image..."
         wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.4.zip
@@ -84,7 +101,7 @@ fetch_third_party_lib_glm() {
   verify_third_party_folder_exists
 
   # shellcheck disable=SC2164
-  pushd third-party
+  pushd libs/third-party
     if [ ! -d "glm" ] ; then
       echo "Fetching GLM"
       wget https://github.com/g-truc/glm/releases/download/0.9.9.3/glm-0.9.9.3.zip
@@ -99,7 +116,7 @@ fetch_third_party_lib_tiny_obj_loader() {
   verify_third_party_folder_exists
 
   # shellcheck disable=SC2164
-  pushd third-party
+  pushd libs/third-party
       if [ ! -d "tiny-obj-loader" ] ; then
         echo "Fetching Tiny OBJ Loader"
         wget https://github.com/tinyobjloader/tinyobjloader/archive/refs/tags/v1.0.6.zip
@@ -115,7 +132,7 @@ fetch_third_party_lib_imgui() {
   verify_third_party_folder_exists
 
   # shellcheck disable=SC2164
-  pushd third-party
+  pushd libs/third-party
     if [ ! -d "imgui" ] ; then
       echo "Fetching imgui"
       wget https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9-docking.zip
@@ -131,7 +148,7 @@ fetch_third_party_lib_tracy() {
   verify_third_party_folder_exists
 
   # shellcheck disable=SC2164
-  pushd third-party
+  pushd libs/third-party
     if [ ! -d "tracy" ] ; then
       echo "Fetching tracy"
       wget https://github.com/wolfpld/tracy/archive/refs/tags/v0.10.zip
@@ -154,18 +171,6 @@ fetch_third_party_lib_tracy() {
 }
 
 #------------------------------------------------------------------------------------
-
-verify_frameworks_folder_exists() {
-  if [ ! -d "libs" ]; then
-    mkdir libs
-  fi
-
-  pushd libs || exit
-    if [ ! -d "Frameworks" ]; then
-      mkdir Frameworks
-    fi
-  popd || exit
-}
 
 # MacOS Lib's
 fetch_framework_sdl2() {
@@ -264,7 +269,7 @@ clean_ninja_folder() { #clean_build_folder
 
   echo "Cleaning build folder"
 
-  rm -r engine/installer/platforms/"$platform"/build/*
+  rm -r installer/platforms/"$platform"/build/*
 }
 
 clean_build_folder() { #clean_out_folder

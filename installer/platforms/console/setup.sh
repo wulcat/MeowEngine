@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Include the shared script from parent
-. engine/installer/platforms/shared-scripts.sh
+. installer/platforms/shared-scripts.sh
 
 # Ask homebrew to install dependencies
 fetch_brew_dependency "wget"

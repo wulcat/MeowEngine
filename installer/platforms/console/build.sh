@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. engine/installer/platforms/shared-scripts.sh
+. installer/platforms/shared-scripts.sh
 
 # Default value for platform
 #platform=""
@@ -31,7 +31,7 @@ clean_build_folder "$platform"
 
 # Build using Ninja
 # shellcheck disable=SC2164
-pushd engine/installer/platforms/"$platform"/build
+pushd installer/platforms/"$platform"/build
   # Request that CMake configures itself based on what it finds in the parent folder
   echo "Configuring CMake with Ninja ..."
   cmake -B build -G Ninja -D CMAKE_BUILD_TYPE=Debug ..
