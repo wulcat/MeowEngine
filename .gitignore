@@ -237,13 +237,12 @@ data/roboto*.*
 cmake-build-debug/
 
 .idea
-third-party
-Frameworks
-build
-out
-Physicat.xcodeproj
-DerivedData
-Source
+/third-party
+/libs
+#build
+#out
+#Physicat.xcodeproj
+#DerivedData
 Generated
 
 ## console
@@ -251,5 +250,5 @@ Generated
 #
 ## mac
 #assets
-docs
+/docs
 /builds/
