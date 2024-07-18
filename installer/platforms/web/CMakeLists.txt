@@ -61,7 +61,7 @@ set_target_properties(
     web
     PROPERTIES
     LINK_FLAGS
-    "-O2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS=\"['png']\" -s USE_WEBGL2=1 --preload-file ../../../../engine/assets@/assets"
+    "-O2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS=\"['png', 'jpg']\" -s USE_WEBGL2=1 --preload-file ../../../../engine/assets@/assets"
 )
 
 # When the build is complete we will run the 'cmake-post-build.sh' script.
