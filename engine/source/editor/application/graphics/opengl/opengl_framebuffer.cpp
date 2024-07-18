@@ -60,6 +60,10 @@ void OpenGLFrameBuffer::RescaleFrameBuffer(const float &width, const float &heig
     glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBufferId);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
 void OpenGLFrameBuffer::Bind() const {
