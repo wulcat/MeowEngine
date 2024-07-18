@@ -66,6 +66,11 @@ namespace {
 
 //        ::UpdateViewport(window);
         physicat::Log(logTag, "Context Created");
+
+        // Check WebGL version
+        const char* version = (const char*)glGetString(GL_VERSION);
+        physicat::Log("physicat::graphics::OpenGLFrameBuffer: WEBGL Version", version);
+
         return context;
     }
 

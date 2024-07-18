@@ -52,8 +52,11 @@ namespace {
         };
 
 #ifdef USING_GLES
-        std::string vertexShaderSource {"#version 100\n" + vertexShaderCode};
-        std::string fragmentShaderSource{"#version 100\nprecision mediump float;\n" + fragmentShaderCode};
+        physicat::Log(logTag, "#version 300 es") ;
+//        std::string vertexShaderSource {"#version 100\n" + vertexShaderCode};
+//        std::string fragmentShaderSource{"#version 100\nprecision mediump float;\n" + fragmentShaderCode};
+        std::string vertexShaderSource {"#version 300 es\nprecision mediump float;\n" + vertexShaderCode};
+        std::string fragmentShaderSource{"#version 300 es\nprecision mediump float;\n" + fragmentShaderCode};
 #else
 //        std::string vertexShaderSource {"#version 140\n" + vertexShaderCode};
 //        std::string fragmentShaderSource{"#version 140\n" + fragmentShaderCode};

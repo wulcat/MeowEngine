@@ -8,7 +8,8 @@
 #pragma once
 
 #if defined(__EMSCRIPTEN__)
-    #include "GLES2/gl2.h"
+//    #include "GLES2/gl2.h"
+    #include "GLES3/gl3.h"
     #define USING_GLES
 #elif defined(__APPLE__)
     //Ignore the OpenGL deprecation warnings.
