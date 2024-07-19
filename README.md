@@ -37,7 +37,7 @@
 - [x] Console
 - [x] Mac (x84) (Arm architecture using rosetta) (not working atm)
 - [ ] Windows
-- [x] Web (not working atm)
+- [x] Web
 
 ## Tools
 - Emscripten
