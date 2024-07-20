@@ -8,7 +8,7 @@
 #pragma once
 
 #include <string>
-#include <tracy_wrapper.hpp>
+#include "tracy_wrapper.hpp"
 
 namespace physicat {
     // Things we need

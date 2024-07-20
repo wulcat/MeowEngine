@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_VERTEX_HPP
 #define PHYSICAT_VERTEX_HPP
 
-#include "../../wrappers/glm_wrapper.hpp"
+#include "glm_wrapper.hpp"
 
 namespace physicat {
     struct Vertex {

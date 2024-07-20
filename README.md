@@ -34,6 +34,9 @@
 ## Build
 <img src="screenshots/engine_v3.gif" width="700">
 
+## Folder Structure
+<img src="screenshots/directory-diagram.png">
+
 ## Compatibility
 - [x] Console
 - [x] Mac (x84) (Arm architecture using rosetta) (not working atm)

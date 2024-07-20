@@ -6,7 +6,7 @@
 
 #include "assets.hpp"
 #include "sdl_wrapper.hpp"
-#include "mesh/vertex.hpp"
+#include "vertex.hpp"
 //#include "sstream"
 #include "tiny_obj_loader.h"
 #include "unordered_map"

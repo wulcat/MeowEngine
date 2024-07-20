@@ -2,7 +2,7 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#include "../includes.hpp"
+#include "emscripten_wrapper.hpp"
 #include "sdl_wrapper.hpp"
 #include "platform.hpp"
 #include "log.hpp"

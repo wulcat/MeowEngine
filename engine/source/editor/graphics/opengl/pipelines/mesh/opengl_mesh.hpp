@@ -6,7 +6,7 @@
 #define PHYSICAT_OPENGL_MESH_HPP
 
 #include "graphics_wrapper.hpp"
-#include "../../core/assets/mesh/mesh.hpp"
+#include "mesh.hpp"
 #include "internal_ptr.hpp"
 
 namespace physicat {
