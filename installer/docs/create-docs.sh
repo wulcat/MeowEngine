@@ -1,5 +1,5 @@
 #!/bin/bash
 
-pushd engine/installer/docs
+pushd installer/docs
   doxygen Doxyfile
 popd

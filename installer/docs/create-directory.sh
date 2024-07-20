@@ -3,7 +3,7 @@
 #tree -d -o directory_structure.txt
 pushd engine || exit
   tree -d source > directory-tree.txt
-  python installer/docs/compile-directory.py
+  python ../installer/docs/compile-directory.py
 
   dot -Tpng directory-tree.dot -o directory-diagram.png
 
