@@ -66,11 +66,20 @@ Activate PATH and other environment variables in the current terminal `` $source
 - https://stackoverflow.com/questions/6780895/visual-studio-parameter-listing-intellisense
 
 ## Mini - TODO
-- Find a way to shutdown the http.server python after running web build
 - Explore what's happening in internal_ptr script with the templates and internal_ptr thing
 - Empty namespaces name declaration & using namespaces vs include headers
 
 ## References
+- Engine Structure
+  - https://isetta.io/blogs/engine-architecture/
+  - https://github.com/suldashi/infinitower
+  - https://docs.unrealengine.com/4.27/en-US/Basics/DirectoryStructure/
+  - https://slaptijack.com/programming/project-structure-for-cpp.html
+  - https://github.com/godotengine/godot
+- ECS
+  - https://austinmorlan.com/posts/entity_component_system/
+- Optimization
+  - https://jarlowrey.com/blog/game-optimizations
 - [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
 - [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
 - [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)

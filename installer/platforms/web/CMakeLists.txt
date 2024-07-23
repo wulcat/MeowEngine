@@ -53,7 +53,7 @@ add_executable(
     ${THIRD_PARTY_DIR}/imgui/imgui.cpp ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_sdl2.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
     ${CPP_HEADERS}
     ${CPP_SOURCES}
-        ../../../engine/source/core/assets/texture/bitmap.cpp ../../../engine/source/core/assets/texture/bitmap.hpp)
+)
 
 
 # These properties specify what kind of Emscripten build to perform and are assigned to our 'a-simple-triangle' executable target.
