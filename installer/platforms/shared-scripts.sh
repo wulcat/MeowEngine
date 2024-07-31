@@ -170,6 +170,35 @@ fetch_third_party_lib_tracy() {
   popd
 }
 
+# for ECS imlementation
+fetch_third_party_lib_entt()
+{
+  verify_third_party_folder_exists
+
+  # shellcheck disable=SC2164
+    pushd libs/third-party
+      if [ ! -d "entt" ] ; then
+        echo "Fetching entt"
+        wget https://github.com/skypjack/entt/archive/refs/tags/v3.13.2.zip
+        unzip -q v3.13.2.zip
+        rm v3.13.2.zip
+        mv entt-3.13.2 entt
+      fi
+
+      if [ -d "entt" ] ; then
+        echo "Building Entt documentation ..."
+
+        # require freetype2 and capstone and sdl2
+        pushd entt/build || exit
+          cmake .. -DENTT_BUILD_DOCS=ON
+          make
+        popd || exit
+      fi
+
+    # shellcheck disable=SC2164
+    popd
+}
+
 #------------------------------------------------------------------------------------
 
 # MacOS Lib's

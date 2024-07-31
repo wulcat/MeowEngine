@@ -4,6 +4,7 @@
 
 #include "main_scene.hpp"
 
+#include "entt_wrapper.hpp"
 #include "camera_controller.hpp"
 #include "perspective_camera.hpp"
 #include "static_mesh_instance.hpp"

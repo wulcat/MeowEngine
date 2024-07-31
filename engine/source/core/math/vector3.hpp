@@ -21,6 +21,7 @@ namespace physicat::math {
         float Y;
         float Z;
 
+        // allows us to something like vec[1] = 2 instead of vec.y = 2
         float& operator[](int index) {
             switch (index) {
                 case 0: return X;

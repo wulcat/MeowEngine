@@ -34,6 +34,7 @@ include_directories(${THIRD_PARTY_DIR}/SDL2_image)
 include_directories(${THIRD_PARTY_DIR}/imgui)
 include_directories(${THIRD_PARTY_DIR}/imgui/backends)
 include_directories(${THIRD_PARTY_DIR}/tracy/public/tracy)
+include_directories(${THIRD_PARTY_DIR}/entt/single_include)
 
 # glob is not good idea
 file(GLOB_RECURSE CPP_HEADERS ${MAIN_SOURCE_DIR}/*.hpp)
