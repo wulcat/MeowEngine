@@ -139,7 +139,7 @@ void ImGuiRenderer::OpenTracyProfiler() {
 
     if (tracy_profiler_pid == 0) {
         // Child process
-        const char* path = "profiler/build/unix/Tracy-release";
+        const char* path = "dependencies/profiler/build/unix/Tracy-release";
         if (execl(path, path, (char*)NULL) == -1) {
             perror("execl");
             exit(1);
