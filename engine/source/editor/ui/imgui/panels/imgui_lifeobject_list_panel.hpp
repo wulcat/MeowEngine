@@ -9,6 +9,7 @@
 //#include "opengl_framebuffer.hpp"
 //#include "window_size.hpp"
 #include "imgui_wrapper.hpp"
+#include "life_object_component.hpp"
 
 namespace physicat::graphics::ui {
     struct ImGuiStructurePanel {
@@ -17,10 +18,10 @@ namespace physicat::graphics::ui {
 
         void Draw(physicat::Scene &scene);
 
-        void CreateSelectableItem(core::LifeObject* item);
+        void CreateSelectableItem(physicat::Scene &scene, physicat::entity::LifeObjectComponent& lifeObject, entt::entity item);
 
         // Returns true if item is selected
-        physicat::core::LifeObject* GetSelectedItem();
+        entt::entity GetSelectedItem();
 
     private:
         const ImGuiTreeNodeFlags DefaultSelectableFlags;
@@ -30,7 +31,8 @@ namespace physicat::graphics::ui {
         bool IsActive;
         ImGuiWindowFlags WindowFlags;
 //        std::weak_ptr<core::LifeObject> SelectedItem;
-        core::LifeObject* SelectedItem;
+//        core::LifeObject* SelectedItem;
+        entt::entity SelectedEntity;
     };
 }
 

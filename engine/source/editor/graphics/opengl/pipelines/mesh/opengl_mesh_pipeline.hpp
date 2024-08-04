@@ -23,6 +23,11 @@ namespace physicat::pipeline {
             const physicat::core::component::MeshRenderComponent* meshRenderComponent,
             const physicat::core::component::Transform3DComponent* transform3DComponent
         ) const;
+//        void Render(
+//                const physicat::OpenGLAssetManager& assetManager,
+//                const physicat::entity::StaticMeshRenderComponent* meshRenderComponent,
+//                const physicat::entity::Transform3dComponent* transform3DComponent
+//        ) const;
 
     private:
         const GLuint ShaderProgramID;

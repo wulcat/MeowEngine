@@ -11,6 +11,7 @@
 //#include "static_mesh_instance.hpp"
 //#include "opengl_line_pipeline.hpp"
 //#include "render_component_base.hpp"
+#include "entt_wrapper.hpp"
 #include "life_object.hpp"
 #include "perspective_camera.hpp"
 
@@ -18,7 +19,8 @@
 
 namespace physicat {
     struct Renderer {
-        virtual void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) = 0;
+//        virtual void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) = 0;
+        virtual void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) = 0;
     };
 }
 

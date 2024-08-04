@@ -17,7 +17,8 @@ namespace physicat {
     struct OpenGLRenderer : public physicat::Renderer {
         OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager);
 
-        void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) override;
+//        void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) override;
+        void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) override;
 
     private:
         struct Internal;

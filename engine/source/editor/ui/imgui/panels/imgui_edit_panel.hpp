@@ -7,13 +7,14 @@
 
 #include "life_object.hpp"
 #include "math_wrapper.hpp"
+#include "scene.hpp"
 
 namespace physicat::graphics::ui {
     struct ImGuiEditPanel {
         ImGuiEditPanel();
         ~ImGuiEditPanel();
 
-        void Draw(core::LifeObject* lifeObject);
+        void Draw(physicat::Scene &scene, entt::entity lifeObject);
 
     private:
         bool CanDrawPanel;

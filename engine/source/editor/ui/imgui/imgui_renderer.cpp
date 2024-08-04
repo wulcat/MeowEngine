@@ -160,7 +160,7 @@ void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32
 //    CreateLifeObjectSelectorPanel(scene);
 
     StructurePanel.Draw(scene);
-    EditPanel.Draw(StructurePanel.GetSelectedItem());
+    EditPanel.Draw(scene, StructurePanel.GetSelectedItem());
     WorldRenderPanel.Draw(reinterpret_cast<void*>(frameBufferId));
     LogPanel.Draw();
 
