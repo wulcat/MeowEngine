@@ -10,16 +10,17 @@
 namespace physicat::entity {
     struct LifeObjectComponent {
     public:
-        LifeObjectComponent(std::string name)
-        {
-            Name = name;
-        }
+        LifeObjectComponent(std::string name);
+
         int Id;
         std::string Name;
 
         const int GetChildCount() {
             return 0;
         }
+
+        static int s_IdCounter;
+        static int s_GetNewId();
     };
 }
 

@@ -38,7 +38,7 @@ void ImGuiStructurePanel::Draw(physicat::Scene &scene) {
         auto view = registers->view<physicat::entity::LifeObjectComponent>();
         for(auto entity: view)
         {
-            auto lifeObject =  view.get<physicat::entity::LifeObjectComponent>(entity);
+            auto& lifeObject =  view.get<physicat::entity::LifeObjectComponent>(entity);
             CreateSelectableItem(
                 scene,
                 lifeObject,

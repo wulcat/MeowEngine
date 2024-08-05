@@ -5,6 +5,8 @@
 #include <transform3d_component.hpp>
 #include "imgui_edit_panel.hpp"
 #include "imgui_wrapper.hpp"
+#include "life_object_component.hpp"
+#include "log.hpp"
 
 physicat::graphics::ui::ImGuiEditPanel::ImGuiEditPanel() {
 
@@ -22,25 +24,16 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(physicat::Scene &scene, entt::
     {
         auto registry = scene.GetEntities();
 
+        // NOTE: There's a issue when a edit is made to edit panel and a new item is selected without loosing focus from edit panel
         if(registry->valid(lifeObject))
         {
-//            registry.
             auto& transform = registry->get<physicat::core::component::Transform3DComponent>(lifeObject);
-
             ImGui::InputFloat3("Position", &transform.Position[0]);
         }
-//        if(lifeObject) {
-//            ImGui::SeparatorText("Transform"); {
-////            float value = 0;
-////            ImGui::InputFloat("##value", &value, 1.0f);
-//
-//                physicat::core::component::Transform3DComponent* transform = dynamic_cast<physicat::core::component::Transform3DComponent*>(lifeObject->TransformComponent);
-//
-//                ImGui::InputFloat3("Position", &transform->Position[0]);
-////                ImGui::InputFloat3("Scale", vec4a);
-////                ImGui::InputFloat3("Rotation", vec4a);
-//            }
-//        }
+        else
+        {
+            physicat::Log("Selected Entity: ", "Entity not valid");
+        }
 
         ImGui::End();
     }
