@@ -9,7 +9,7 @@
 #include "opengl_framebuffer.hpp"
 #include "window_size.hpp"
 
-#include "imgui_lifeobject_list_panel.hpp"
+#include "imgui_structure_panel.hpp"
 #include "imgui_edit_panel.hpp"
 #include "imgui_world_render_panel.hpp"
 #include "imgui_log_panel.hpp"

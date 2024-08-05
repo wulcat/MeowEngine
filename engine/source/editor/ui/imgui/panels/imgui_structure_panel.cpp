@@ -2,7 +2,7 @@
 // Created by Akira Mujawar on 13/07/24.
 //
 
-#include "imgui_lifeobject_list_panel.hpp"
+#include "imgui_structure_panel.hpp"
 
 //#include <SDL_video.h>
 //#include <SDL_events.h>

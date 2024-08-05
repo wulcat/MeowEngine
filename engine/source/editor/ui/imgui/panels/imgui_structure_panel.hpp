@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 13/07/24.
 //
 
-#ifndef PHYSICAT_IMGUI_LIFEOBJECT_LIST_PANEL_HPP
-#define PHYSICAT_IMGUI_LIFEOBJECT_LIST_PANEL_HPP
+#ifndef PHYSICAT_IMGUI_STRUCTURE_PANEL_HPP
+#define PHYSICAT_IMGUI_STRUCTURE_PANEL_HPP
 
 #include <scene.hpp>
 //#include "opengl_framebuffer.hpp"
@@ -37,4 +37,4 @@ namespace physicat::graphics::ui {
 }
 
 
-#endif //PHYSICAT_IMGUI_LIFEOBJECT_LIST_PANEL_HPP
+#endif //PHYSICAT_IMGUI_STRUCTURE_PANEL_HPP
