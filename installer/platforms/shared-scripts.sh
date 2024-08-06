@@ -199,6 +199,23 @@ fetch_third_party_lib_entt()
     popd
 }
 
+fetch_third_party_lib_physx()
+{
+  verify_third_party_folder_exists
+
+  # shellcheck disable=SC2164
+  pushd libs/third-party
+    if [ ! -d "physx" ] ; then
+      echo "Fetching PhysX 5.0"
+      wget https://github.com/NVIDIA-Omniverse/PhysX/archive/refs/tags/106.0-physx-5.4.1.zip
+      unzip -q 106.0-physx-5.4.1.zip
+      rm 106.0-physx-5.4.1.zip
+      mv PhysX-106.0-physx-5.4.1 physx
+    fi
+  # shellcheck disable=SC2164
+  popd
+}
+
 #------------------------------------------------------------------------------------
 
 # MacOS Lib's
