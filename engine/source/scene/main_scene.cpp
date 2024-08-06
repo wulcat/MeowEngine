@@ -11,7 +11,6 @@
 #include "log.hpp"
 #include "opengl_line_pipeline.hpp"
 
-#include "life_object.hpp"
 #include "mesh_render_component.hpp"
 #include "line_render_component.hpp"
 #include "transform3d_component.hpp"
@@ -37,7 +36,7 @@ namespace {
 struct MainScene::Internal {
     physicat::PerspectiveCamera Camera;
     physicat::CameraController CameraController;
-    std::vector<core::LifeObject> LifeObjects;
+//    std::vector<core::LifeObject> LifeObjects;
 
     entt::registry Registry;
 

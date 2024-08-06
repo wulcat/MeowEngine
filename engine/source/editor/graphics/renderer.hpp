@@ -12,7 +12,6 @@
 //#include "opengl_line_pipeline.hpp"
 //#include "render_component_base.hpp"
 #include "entt_wrapper.hpp"
-#include "life_object.hpp"
 #include "perspective_camera.hpp"
 
 //#include <vector>

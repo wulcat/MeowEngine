@@ -28,7 +28,7 @@
 - [x] Documentation & UML Diagrams
 - [x] Auto UML Creator tool
 - [ ] Add Unit Testing
-- [ ] Implement ECS
+- [x] Implement ECS
 - [ ] Dynamic Window Layout & save'n'load
 
 ## Build

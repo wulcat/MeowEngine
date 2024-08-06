@@ -5,7 +5,6 @@
 #ifndef PHYSICAT_IMGUI_EDIT_PANEL_HPP
 #define PHYSICAT_IMGUI_EDIT_PANEL_HPP
 
-#include "life_object.hpp"
 #include "math_wrapper.hpp"
 #include "scene.hpp"
 
