@@ -207,13 +207,19 @@ fetch_third_party_lib_physx()
   pushd libs/third-party
     if [ ! -d "physx" ] ; then
       echo "Fetching PhysX 5.0"
-      wget https://github.com/NVIDIA-Omniverse/PhysX/archive/refs/tags/106.0-physx-5.4.1.zip
-      unzip -q 106.0-physx-5.4.1.zip
-      rm 106.0-physx-5.4.1.zip
-      mv PhysX-106.0-physx-5.4.1 physx
     fi
   # shellcheck disable=SC2164
   popd
+
+  # linux-aarch64 | linux
+  pushd libs/third-party/physx/physx || exit
+    ./generate_projects.sh linux
+
+    pushd compiler/linux-release || exit
+        make clean
+        make -j4
+    popd || exit
+  popd || exit
 }
 
 #------------------------------------------------------------------------------------
