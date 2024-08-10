@@ -21,6 +21,7 @@
 - [ ] Creating wrapper for switching between different physics engine
 - [ ] Creating library for performing maths functions
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
+- [ ] Implement Tracy throughout engine especially for tracking memory allocations
 - [ ] Creating vehicle using PhysX
 - [ ] If simple, add basic light and sky box
 - [ ] Position, Scale, Rotation handles after selecting objects  
