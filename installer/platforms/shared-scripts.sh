@@ -207,6 +207,7 @@ fetch_third_party_lib_physx()
   pushd libs/third-party
     if [ ! -d "physx" ] ; then
       echo "Fetching PhysX 5.0"
+      git clone https://github.com/wulcat/PhysX.git physx
     fi
   # shellcheck disable=SC2164
   popd
