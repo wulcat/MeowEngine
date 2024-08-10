@@ -89,7 +89,24 @@ target_link_libraries(Physicat PUBLIC OpenCL::OpenCL TracyClient ${CMAKE_DL_LIBS
 
 # Link native menu option for mac
 #include_directories(${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
-target_link_libraries(Physicat PUBLIC ${SDL2_LIBRARIES} ${OPENGL_LIBRARIES} "-framework Cocoa")
+
+target_link_libraries(Physicat PUBLIC
+   ${SDL2_LIBRARIES}
+   ${OPENGL_LIBRARIES} "-framework Cocoa"
+)
+
+find_library(PHYSX_LIB NAMES libPhysX_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
+find_library(PHYSX_COMMON_LIB NAMES libPhysXCommon_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
+find_library(PHYSX_FOUNDATION_LIB NAMES libPhysXFoundation_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
+find_library(PHYSX_EXTENSIONS_LIB NAMES libPhysXExtensions_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
+
+target_link_libraries(Physicat PUBLIC
+     ${PHYSX_LIB}
+     ${PHYSX_COMMON_LIB}
+     ${PHYSX_FOUNDATION_LIB}
+     ${PHYSX_EXTENSIONS_LIB}
+)
+
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(
