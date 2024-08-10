@@ -5,31 +5,43 @@
 - [x] Rendering in a scene
 - [x] Keyboard & Mouse inputs
 - [x] Window resize
-- [ ] Simple tool for importing files like textures/meshes
 - [x] Importing c# written fluid-simulation in this engine
 - [x] Migrating 2D spatial hashing
-- [ ] Setting up Vulkan
 - [x] Shader pipeline
-- [ ] Creating 3D spatial hashing (showcase & in-built)
-- [ ] Creating support for multi-scene compilation
-- [ ] HTML navigation multi scenes on demand (async download and load scenes)
-- [ ] Support for window
 - [x] Support for mac
 - [x] Find a way to debug coding after built application
-- [ ] Find a way to isolate and build code while developing simulations
-- [ ] Create build modes for debug and release
-- [ ] On repo update - auto build emscripten for web and upload
-- [ ] Ability to read/write on file for saving import references (instead of hard-coded enums)
 - [x] Add Proper logging & profiler system
 - [x] Create Basic UI elements like a button and text
-- [ ] If simple, add basic light and sky box
-- [ ] Create Unique ID generator for items
-- [ ] Create a template for dump-testing shaders
 - [x] Documentation & UML Diagrams
 - [x] Auto UML Creator tool
-- [ ] Add Unit Testing
 - [x] Implement ECS
+- [x] Add physics library (jolt / physx / box2d / bullet3) -> physx
+- [ ] Add FPS Counter
+- [ ] Implementing PhysX 
+- [ ] Creating wrapper for switching between different physics engine
+- [ ] Creating library for performing maths functions
+- [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
+- [ ] Creating vehicle using PhysX
+- [ ] If simple, add basic light and sky box
+- [ ] Position, Scale, Rotation handles after selecting objects  
+- [ ] Improving current shader pipeline to handle shaders dynamically
+- [ ] Create Unique ID generator for items
+- [ ] Documenting done items and different approaches and used libraries
+- [ ] Researching on auto-build deployment and build status
+- [ ] On repo update - auto build emscripten for web and upload
+- [ ] Creating support for multi-scene compilation
+- [ ] File Manager (Reading from file paths and avoiding enums)
+- [ ] Ability to read/write on file for saving import references (instead of hard-coded enums)
+- [ ] Create build modes for debug and release
+- [ ] Find a way to isolate and build code while developing simulations
+- [ ] HTML navigation multi scenes on demand (async download and load scenes)
+- [ ] Support for window
+- [ ] Create a template for dump-testing shaders
+- [ ] Add Unit Testing
 - [ ] Dynamic Window Layout & save'n'load
+- [ ] Simple tool for importing files like textures/meshes
+- [ ] Setting up Vulkan
+- [ ] Creating 3D spatial hashing (showcase & in-built)
 
 ## Build
 <img src="screenshots/engine_v3.gif" width="700">
@@ -38,8 +50,8 @@
 <img src="screenshots/directory-diagram.png">
 
 ## Compatibility
-- [x] Console
-- [x] Mac (x84) (Arm architecture using rosetta) (not working atm)
+- [x] Unix Console on Mac
+- [x] Mac (x84) (Rosetta)
 - [ ] Windows
 - [x] Web
 
