@@ -95,13 +95,14 @@ target_link_libraries(Physicat PUBLIC
    ${OPENGL_LIBRARIES} "-framework Cocoa"
 )
 
-find_library(PHYSX_LIB NAMES libPhysX_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
+# BUG: some weird issue here. PHYSX_LIB is somehow already set to a physic common lib path.
+find_library(PHYSX_LIBRARY NAMES libPhysX_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
 find_library(PHYSX_COMMON_LIB NAMES libPhysXCommon_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
 find_library(PHYSX_FOUNDATION_LIB NAMES libPhysXFoundation_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
 find_library(PHYSX_EXTENSIONS_LIB NAMES libPhysXExtensions_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
 
 target_link_libraries(Physicat PUBLIC
-     ${PHYSX_LIB}
+     ${PHYSX_LIBRARY}
      ${PHYSX_COMMON_LIB}
      ${PHYSX_FOUNDATION_LIB}
      ${PHYSX_EXTENSIONS_LIB}
