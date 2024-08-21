@@ -16,7 +16,7 @@
 - [x] Auto UML Creator tool
 - [x] Implement ECS
 - [x] Add physics library (jolt / physx / box2d / bullet3) -> physx
-- [ ] Add FPS Counter
+- [x] Add FPS Counter
 - [ ] Implementing PhysX 
 - [ ] Creating wrapper for switching between different physics engine
 - [ ] Creating library for performing maths functions
