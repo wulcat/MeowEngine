@@ -18,6 +18,7 @@
 #include "life_object_component.hpp"
 #include "transform3d_component.hpp"
 
+
 using physicat::MainScene;
 using physicat::assets::ShaderPipelineType;
 using physicat::assets::StaticMeshType;
@@ -39,6 +40,8 @@ struct MainScene::Internal {
 //    std::vector<core::LifeObject> LifeObjects;
 
     entt::registry Registry;
+    float Time;
+
 
     // User Input Events
     const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
@@ -47,13 +50,16 @@ struct MainScene::Internal {
         : Camera(::CreateCamera(size))
         , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
         , KeyboardState(SDL_GetKeyboardState(nullptr))
+        , Time(0)
     {}
 
     void OnWindowResized(const physicat::WindowSize& size) {
         Camera = ::CreateCamera(size);
     }
 
-    void Create(physicat::AssetManager& assetManager) {
+    void Create(physicat::AssetManager& assetManager, physicat::simulator::Physics& inPhysics) {
+        inPhysics.Create();
+
         assetManager.LoadShaderPipelines({
             ShaderPipelineType::Grid,
             ShaderPipelineType::Default,
@@ -325,8 +331,15 @@ struct MainScene::Internal {
 //        }
     }
 
+    void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) {
+        inPhysics.Update(inFixedDeltaTime);
+    }
+
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
+        Time = deltaTime;
+
+
         Camera.Configure(CameraController.GetPosition(), CameraController.GetUp(), CameraController.GetDirection());
 
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
@@ -342,7 +355,7 @@ struct MainScene::Internal {
         for(auto entity: view)
         {
             auto& transform = view.get<physicat::core::component::Transform3DComponent>(entity);
-            transform.Update(cameraMatrix);
+            transform.Update(deltaTime, cameraMatrix);
         }
     }
 
@@ -364,12 +377,16 @@ void MainScene::OnWindowResized(const physicat::WindowSize &size) {
     InternalPointer->OnWindowResized(size);
 }
 
-void MainScene::Create(physicat::AssetManager &assetManager) {
-    InternalPointer->Create(assetManager);
+void MainScene::Create(physicat::AssetManager &assetManager, physicat::simulator::Physics& inPhysics) {
+    InternalPointer->Create(assetManager, inPhysics);
 }
 
 void MainScene::Input(const float &deltaTime, const physicat::input::InputManager& inputManager) {
     InternalPointer->Input(deltaTime, inputManager);
+}
+
+void MainScene::FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics &inPhysics) {
+    InternalPointer->FixedUpdate(inFixedDeltaTime, inPhysics);
 }
 
 void MainScene::Update(const float &deltaTime) {
@@ -380,19 +397,13 @@ void MainScene::Render(physicat::Renderer &renderer) {
     InternalPointer->Render(renderer);
 }
 
+const float& MainScene::GetDeltaTime() {
+    return InternalPointer->Time ;
+}
+
 entt::registry* MainScene::GetEntities() {
     return &InternalPointer->Registry;
 }
-
-//const vector<physicat::core::LifeObject*> physicat::MainScene::GetLifeObjects() {
-//    // NOTE: Temp solution. Find a better way to keep things in stack for gameplay and heap for ui editor.
-//    std::vector<physicat::core::LifeObject*> itemPointers;
-//    for (auto& item : InternalPointer->LifeObjects) {
-//        itemPointers.push_back(&item);
-//    }
-//
-//    return itemPointers;
-//}
 
 
 

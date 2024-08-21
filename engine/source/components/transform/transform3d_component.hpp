@@ -20,7 +20,7 @@ namespace physicat::core::component {
         Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec4 rotation);
         Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec3 rotationAxis, float rotationDegrees);
 
-        void Update(const glm::mat4& projectionViewMatrix) override;
+        void Update(const float& deltaTime, const glm::mat4& projectionViewMatrix) override;
         void RotateBy(const float& degrees);
 
 //        physicat::math::Vector3 PositionTest;

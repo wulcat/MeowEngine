@@ -20,7 +20,7 @@ namespace physicat::graphics {
         ~ImGuiRenderer();
 
         void Input(const SDL_Event& event);
-        void Render(physicat::Scene& scene, unsigned int frameBufferId);
+        void Render(physicat::Scene& scene, unsigned int frameBufferId, const double fps);
 
         // Closes any child processes like tracy
         void ClosePIDs();
@@ -32,7 +32,7 @@ namespace physicat::graphics {
         void OpenTracyProfiler();
 
         void CreateNewFrame();
-        void DrawFrame(physicat::Scene& scene, uint32_t frameBufferId);
+        void DrawFrame(physicat::Scene& scene, uint32_t frameBufferId, const double fps);
         void RenderFrame();
 
         void CreateDockingSpace();

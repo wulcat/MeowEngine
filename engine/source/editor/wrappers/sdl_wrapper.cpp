@@ -81,6 +81,9 @@ physicat::WindowSize physicat::sdl::GetWindowSize(SDL_Window* window) {
 }
 
 SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
+    // Enable double buffering (this is usually the default)
+    // 1: Enable VSync || 0: Disable VSync
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     physicat::WindowSize windowSize{physicat::sdl::GetInitialWindowSize()};
 
 

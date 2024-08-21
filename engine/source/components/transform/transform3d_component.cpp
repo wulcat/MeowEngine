@@ -35,8 +35,8 @@ Transform3DComponent::Transform3DComponent(glm::vec3 position, glm::vec3 scale, 
     , IdentityMatrix(glm::mat4(1.0f))
     , TransformMatrix(IdentityMatrix) {}
 
-void Transform3DComponent::Update(const glm::mat4 &projectionViewMatrix) {
-    RotateBy(0.3f);
+void Transform3DComponent::Update(const float& deltaTime, const glm::mat4 &projectionViewMatrix) {
+    RotateBy(15.0f * deltaTime);
 
     TransformMatrix = projectionViewMatrix
                     * glm::translate(IdentityMatrix, glm::vec3(Position.X, Position.Y, Position.Z))

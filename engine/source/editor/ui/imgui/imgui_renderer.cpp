@@ -106,9 +106,9 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void physicat::graphics::ImGuiRenderer::Render(physicat::Scene& scene, unsigned int frameBufferId) {
+void physicat::graphics::ImGuiRenderer::Render(physicat::Scene& scene, unsigned int frameBufferId, const double fps) {
     CreateNewFrame();
-    DrawFrame(scene, frameBufferId);
+    DrawFrame(scene, frameBufferId, fps);
     RenderFrame();
 }
 
@@ -153,7 +153,7 @@ void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
     ImGui::NewFrame();
 }
 
-void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32_t frameBufferId) {
+void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32_t frameBufferId, const double fps) {
     CreateDockingSpace();
 
 //    CreateRender3DPanel(frameBufferId);
@@ -162,7 +162,7 @@ void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32
 
     EditPanel.Draw(scene, StructurePanel.GetSelectedItem());
     StructurePanel.Draw(scene);
-    WorldRenderPanel.Draw(reinterpret_cast<void*>(frameBufferId));
+    WorldRenderPanel.Draw(reinterpret_cast<void*>(frameBufferId), fps);
     LogPanel.Draw();
 
 //    CreateObjectEditorPanel(temp);

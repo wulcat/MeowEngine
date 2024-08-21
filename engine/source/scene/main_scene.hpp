@@ -15,12 +15,13 @@ namespace physicat {
 
         void OnWindowResized(const physicat::WindowSize& size) override;
 
-        void Create(physicat::AssetManager& assetManager) override;
+        void Create(physicat::AssetManager& assetManager, physicat::simulator::Physics& inPhysics) override;
         void Input(const float &deltaTime, const physicat::input::InputManager& inputManager) override;
+        void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) override;
         void Update(const float& deltaTime) override;
         void Render(physicat::Renderer& renderer) override;
 
-//        const std::vector<core::LifeObject*> GetLifeObjects() override;
+        const float& GetDeltaTime() override;
         entt::registry* GetEntities() override;
 
     private:

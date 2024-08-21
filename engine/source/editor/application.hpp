@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <fps_counter.hpp>
 #include "internal_ptr.hpp"
 #include "emscripten_wrapper.hpp"
 
@@ -20,8 +21,12 @@ namespace physicat {
 //        virtual void OnWindowResized() = 0;
 
         virtual bool Input(const float& deltaTime) = 0;
+        virtual void FixedUpdate(const float& inFixedDeltaTime) = 0;
         virtual void Update(const float& deltaTime) = 0;
         virtual void Render() = 0;
+
+
+        static FpsCounter FpsCounter;
 
     private:
         struct Internal;

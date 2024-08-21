@@ -21,7 +21,7 @@ ImGuiWorldRenderPanel::~ImGuiWorldRenderPanel() {
     PT_PROFILE_FREE("ImGuiWorldRenderPanel");
 }
 
-void ImGuiWorldRenderPanel::Draw(void* frameBufferId) {
+void ImGuiWorldRenderPanel::Draw(void* frameBufferId, const float& inFps) {
 
     ImGui::Begin("Scene", &IsActive,WindowFlags); {
         const bool isFocused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows);
@@ -59,6 +59,19 @@ void ImGuiWorldRenderPanel::Draw(void* frameBufferId) {
             ImVec2(0, 1),
             ImVec2(1, 0)
         );
+
+        int fontSize = 2;
+//        float smoothing = 0.99f; // larger=more smoothing
+        //float smoothing = std::pow(0.9, (int)(1 / inTime) * 60 / 1000);
+//        LastFPS = (LastFPS * smoothing) + ((int)(1 / inTime) * (1.0-smoothing));
+
+        const char* fpsText = std::to_string((int)inFps).c_str();
+        float textWidth = ImGui::CalcTextSize(fpsText).x * fontSize; // Get the text width
+        ImVec2 textPos = ImVec2(SceneViewportSize.Width - textWidth - ImGui::GetStyle().WindowPadding.x, ImGui::GetStyle().WindowPadding.y);
+        ImGui::SetCursorPos(textPos);
+        ImGui::SetWindowFontScale(fontSize);
+        ImGui::Text("%s", fpsText);
+        ImGui::SetWindowFontScale(1.0f);
     }
 
     ImGui::EndChild();

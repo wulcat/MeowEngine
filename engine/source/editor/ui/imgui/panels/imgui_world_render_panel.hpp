@@ -14,12 +14,13 @@ namespace physicat::editor {
         ImGuiWorldRenderPanel();
         ~ImGuiWorldRenderPanel();
 
-        void Draw(void* frameBufferId);
+        void Draw(void* frameBufferId, const float& inFps);
 
     private:
         bool IsActive;
         bool IsFocused; // soon come up with good naming conventions
         ImGuiWindowFlags WindowFlags;
+//        int LastFPS;
 
         WindowSize SceneViewportSize;
     };
