@@ -168,7 +168,7 @@ void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32
 //    CreateObjectEditorPanel(temp);
 //    CreateLogPanel();
 
-    ImGui::ShowDemoWindow(&IsRendering);
+   // ImGui::ShowDemoWindow(&IsRendering);
 }
 
 void ImGuiRenderer::RenderFrame() {

@@ -4,7 +4,7 @@
 
 #include "transform3d_component.hpp"
 
-using physicat::core::component::Transform3DComponent;
+using physicat::entity::Transform3DComponent;
 
 Transform3DComponent::Transform3DComponent()
     : Position({0,0,0})

@@ -17,15 +17,22 @@
 
 #include "life_object_component.hpp"
 #include "transform3d_component.hpp"
+#include "box_collider_data.hpp"
+#include "collider_component.hpp"
+
+#include "rigidbody_component.hpp"
 
 
 using physicat::MainScene;
-using physicat::assets::ShaderPipelineType;
-using physicat::assets::StaticMeshType;
-using physicat::assets::TextureType;
-using physicat::core::component::RenderComponentBase;
-using physicat::core::component::MeshRenderComponent;
-using physicat::core::component::LineRenderComponent;
+//using physicat::assets::ShaderPipelineType;
+//using physicat::assets::StaticMeshType;
+//using physicat::assets::TextureType;
+
+using namespace physicat::assets;
+using namespace physicat::entity;
+//using physicat::core::component::RenderComponentBase;
+//using physicat::core::component::MeshRenderComponent;
+//using physicat::core::component::LineRenderComponent;
 //using physicat::core::component::Transform3DComponent;
 
 namespace {
@@ -61,23 +68,23 @@ struct MainScene::Internal {
         inPhysics.Create();
 
         assetManager.LoadShaderPipelines({
-            ShaderPipelineType::Grid,
-            ShaderPipelineType::Default,
-            ShaderPipelineType::Line
+            assets::ShaderPipelineType::Grid,
+            assets::ShaderPipelineType::Default,
+            assets::ShaderPipelineType::Line
         });
 
         assetManager.LoadStaticMeshes({
-            StaticMeshType::Plane,
-            StaticMeshType::Cube,
-            StaticMeshType::Sphere,
-            StaticMeshType::Cylinder,
-            StaticMeshType::Cone,
-            StaticMeshType::Torus
+              assets::StaticMeshType::Plane,
+              assets::StaticMeshType::Cube,
+              assets::StaticMeshType::Sphere,
+              assets::StaticMeshType::Cylinder,
+              assets::StaticMeshType::Cone,
+              assets::StaticMeshType::Torus
         });
 
         assetManager.LoadTextures({
-            TextureType::Default,
-            TextureType::Pattern
+              assets::TextureType::Default,
+              assets::TextureType::Pattern
         });
 
 //        StaticMeshes.push_back(
@@ -247,54 +254,72 @@ struct MainScene::Internal {
 // before ecs - end
 
         const auto meshEntity = Registry.create();
-        Registry.emplace<physicat::entity::LifeObjectComponent>(meshEntity, "torus");
-        Registry.emplace<physicat::core::component::Transform3DComponent>(
+        Registry.emplace<entity::LifeObjectComponent>(meshEntity, "torus");
+        Registry.emplace<entity::Transform3DComponent>(
             meshEntity,
             glm::vec3{0, 0, 0},
             glm::vec3{1.0, 1.0f, 1.0f},
             glm::vec3{0.0f, 1.0f, 0.0f},
             0.0f
         );
-        Registry.emplace<physicat::core::component::MeshRenderComponent>(
+        Registry.emplace<entity::MeshRenderComponent>(
             meshEntity,
-            physicat::assets::ShaderPipelineType::Default,
+            assets::ShaderPipelineType::Default,
             new physicat::StaticMeshInstance{
-                    StaticMeshType::Torus,
-                    TextureType::Pattern
+                    assets::StaticMeshType::Torus,
+                    assets::TextureType::Pattern
             }
         );
 
         const auto cubeEntity = Registry.create();
-        Registry.emplace<physicat::entity::LifeObjectComponent>(cubeEntity, "cube");
-        Registry.emplace<physicat::core::component::Transform3DComponent>(
+        Registry.emplace<entity::LifeObjectComponent>(cubeEntity, "cube");
+        Registry.emplace<entity::Transform3DComponent>(
                 cubeEntity,
                 glm::vec3{0.0f, 0.0f, 2},
                 glm::vec3{0.5f, 0.5f,0.5f},
                 glm::vec3{0.0f, 1.0f, 0.0f},
                 0
         );
-        Registry.emplace<physicat::core::component::MeshRenderComponent>(
+        Registry.emplace<entity::MeshRenderComponent>(
                 cubeEntity,
-                physicat::assets::ShaderPipelineType::Default,
+                assets::ShaderPipelineType::Default,
                 new physicat::StaticMeshInstance{
-                        StaticMeshType::Cube,
-                        TextureType::Pattern
+                        assets::StaticMeshType::Cube,
+                        assets::TextureType::Pattern
                 }
         );
+        Registry.emplace<entity::ColliderComponent>(
+            cubeEntity,
+            entity::ColliderType::BOX,
+            new entity::BoxColliderData(&Registry.get<entity::Transform3DComponent>(cubeEntity))
+        );
+        Registry.emplace<entity::RigidbodyComponent>(
+            cubeEntity
+        );
+
+        // setup object
+        // later query for all rigidbody, get the physx, get the collider and construct for physics
 
         const auto gridEntity = Registry.create();
-        Registry.emplace<physicat::entity::LifeObjectComponent>(gridEntity, "grid");
-        Registry.emplace<physicat::core::component::Transform3DComponent>(
+        Registry.emplace<entity::LifeObjectComponent>(gridEntity, "grid");
+        Registry.emplace<entity::Transform3DComponent>(
                 gridEntity,
                 glm::vec3{0, 0, 0},
                 glm::vec3{1.0, 1.0f, 1.0f},
                 glm::vec3{0.0f, 1.0f, 0.0f},
                 0.0f
         );
-        Registry.emplace<physicat::core::component::RenderComponentBase>(
+        Registry.emplace<entity::RenderComponentBase>(
             gridEntity,
-            physicat::assets::ShaderPipelineType::Grid
+            assets::ShaderPipelineType::Grid
         );
+
+        // TODO: can we have same class name with different namespaces?
+        // Creating physics for all bodies in game
+        for(auto &&[entity, transform, collider, rigidbody]
+        : Registry.view<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>().each()) {
+            inPhysics.AddRigidbody(transform, collider, rigidbody);
+        }
     }
 
     void Input(const float& delta, const physicat::input::InputManager& inputManager) {
@@ -333,13 +358,23 @@ struct MainScene::Internal {
 
     void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) {
         inPhysics.Update(inFixedDeltaTime);
+
+        // Apply update physics transform to entities
+        auto view = Registry.view<entity::Transform3DComponent, entity::RigidbodyComponent>();
+        for(auto entity: view)
+        {
+            auto& transform = view.get<entity::Transform3DComponent>(entity);
+            auto& rigidbody = view.get<entity::RigidbodyComponent>(entity);
+
+            // update transform using rigidbody transform;
+            rigidbody.UpdateTransform(transform);
+        }
     }
 
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
         Time = deltaTime;
-
-
+        
         Camera.Configure(CameraController.GetPosition(), CameraController.GetUp(), CameraController.GetDirection());
 
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
@@ -350,13 +385,47 @@ struct MainScene::Internal {
 
 //        physicat::Log("Camera", std::to_string(Camera.GetPosition().z));
 
-        auto view = Registry.view<physicat::core::component::Transform3DComponent>();
+        auto view = Registry.view<entity::Transform3DComponent>();
 
         for(auto entity: view)
         {
-            auto& transform = view.get<physicat::core::component::Transform3DComponent>(entity);
+            auto& transform = view.get<entity::Transform3DComponent>(entity);
             transform.Update(deltaTime, cameraMatrix);
         }
+
+        //        auto view = registry.view<physicat::core::component::Transform3DComponent>();
+//        for(auto entity: view)
+//        {
+//            auto transform = view.get<physicat::core::component::Transform3DComponent>(entity);
+//
+//        }
+
+//        auto view = registry.view<entity::Transform3dComponent>();
+//        registry.view<physicat::entity::Transform3dComponent>().each([](auto entity, auto &physicat::entity::Transform3dComponent) {
+//            // ...
+//        });
+//
+//        for(auto &&[entt::entity, physicat::entity::Transform3dComponent]: registry.view<entity::Transform3dComponent>().each()) {
+//            // ...
+//        }
+//        for(auto &&[entity,renderComponent, transform]: registry.view<entity::MeshRenderComponent, entity::Transform3DComponent>().each())
+//        {
+//            AssetManager->GetShaderPipeline<OpenGLMeshPipeline>(ShaderPipelineType::Default)->Render(
+//                    *AssetManager,
+//                    &renderComponent,
+//                    &transform
+//            );
+//        }
+//
+//        for(auto &&[entity,renderComponent, transform]: registry.view<entity::RenderComponentBase, entity::Transform3DComponent>().each())
+//        {
+//            AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
+//                    *AssetManager,
+//                    &renderComponent,
+//                    &transform,
+//                    cameraObject
+//            );
+//        }
     }
 
     void Render(physicat::Renderer& renderer) {

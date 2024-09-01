@@ -4,7 +4,7 @@
 
 #include "line_render_component.hpp"
 
-using physicat::core::component::LineRenderComponent;
+using physicat::entity::LineRenderComponent;
 
 LineRenderComponent::LineRenderComponent(physicat::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end) {
     Shader = shader;

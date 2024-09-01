@@ -13,8 +13,8 @@
 #include "transform_component_base.hpp"
 #include "math_wrapper.hpp"
 
-namespace physicat::core::component {
-    class Transform3DComponent : public physicat::core::component::TransformComponentBase {
+namespace physicat::entity {
+    class Transform3DComponent : public physicat::entity::TransformComponentBase {
     public:
         Transform3DComponent();
         Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec4 rotation);

@@ -8,8 +8,8 @@
 #include "render_component_base.hpp"
 
 // the grid will come in this
-namespace physicat::core::component {
-    class LineRenderComponent : public physicat::core::component::RenderComponentBase {
+namespace physicat::entity {
+    class LineRenderComponent : public physicat::entity::RenderComponentBase {
     public:
         explicit LineRenderComponent(physicat::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end);
 

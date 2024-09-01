@@ -27,8 +27,18 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(physicat::Scene &scene, entt::
         // NOTE: There's a issue when a edit is made to edit panel and a new item is selected without loosing focus from edit panel
         if(registry->valid(lifeObject))
         {
-            auto& transform = registry->get<physicat::core::component::Transform3DComponent>(lifeObject);
-            ImGui::InputFloat3("Position", &transform.Position[0]);
+            entity::Transform3DComponent& transform = registry->get<physicat::entity::Transform3DComponent>(lifeObject);
+            entity::RigidbodyComponent* rigidbody = registry->try_get<physicat::entity::RigidbodyComponent>(lifeObject);
+
+            // If there's a rigidbody to avoid continuous transform update we add "enter" after edit's. Else it will auto update on edit.
+            if(rigidbody) {
+                if (ImGui::InputFloat3("Label", &transform.Position[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue)) {
+                    rigidbody->OverrideTransform(transform);
+                }
+            }
+            else {
+                ImGui::InputFloat3("Position", &transform.Position[0]);
+            }
         }
         else
         {

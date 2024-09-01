@@ -34,7 +34,7 @@ void ImGuiStructurePanel::Draw(physicat::Scene &scene) {
 
     ImGui::SetNextWindowSize(ImVec2(430, 450), ImGuiCond_FirstUseEver);
 
-    ImGui::Begin("Scene Objects", &IsActive); {
+    ImGui::Begin("Structure", &IsActive); {
         auto view = registers->view<physicat::entity::LifeObjectComponent>();
         for(auto entity: view)
         {

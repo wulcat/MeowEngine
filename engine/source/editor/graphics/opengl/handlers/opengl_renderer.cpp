@@ -13,7 +13,7 @@
 using physicat::OpenGLRenderer;
 
 using namespace physicat::pipeline;
-using namespace physicat::core::component;
+using namespace physicat::entity;
 using physicat::assets::ShaderPipelineType;
 
 struct OpenGLRenderer::Internal {
@@ -76,7 +76,7 @@ struct OpenGLRenderer::Internal {
 //        for(auto &&[entt::entity, physicat::entity::Transform3dComponent]: registry.view<entity::Transform3dComponent>().each()) {
 //            // ...
 //        }
-        for(auto &&[entity,renderComponent, transform]: registry.view<physicat::core::component::MeshRenderComponent, physicat::core::component::Transform3DComponent>().each())
+        for(auto &&[entity,renderComponent, transform]: registry.view<entity::MeshRenderComponent, entity::Transform3DComponent>().each())
         {
             AssetManager->GetShaderPipeline<OpenGLMeshPipeline>(ShaderPipelineType::Default)->Render(
                     *AssetManager,
@@ -85,7 +85,7 @@ struct OpenGLRenderer::Internal {
             );
         }
 
-        for(auto &&[entity,renderComponent, transform]: registry.view<physicat::core::component::RenderComponentBase, physicat::core::component::Transform3DComponent>().each())
+        for(auto &&[entity,renderComponent, transform]: registry.view<entity::RenderComponentBase, entity::Transform3DComponent>().each())
         {
             AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
                     *AssetManager,

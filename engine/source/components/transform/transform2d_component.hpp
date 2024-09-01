@@ -8,8 +8,8 @@
 
 #include "transform_component_base.hpp"
 
-namespace physicat::core::component {
-    class Transform2DComponent : public physicat::core::component::TransformComponentBase{
+namespace physicat::entity {
+    class Transform2DComponent : public physicat::entity::TransformComponentBase{
 
     };
 }

@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_COMPONENT_BASE_HPP
 #define PHYSICAT_COMPONENT_BASE_HPP
 
-namespace physicat::core::component {
+namespace physicat::entity {
     class ComponentBase {
         // component method's like init & update - virtual
     };

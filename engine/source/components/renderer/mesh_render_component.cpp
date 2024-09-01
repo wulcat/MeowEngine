@@ -4,7 +4,7 @@
 
 #include "mesh_render_component.hpp"
 
-using physicat::core::component::MeshRenderComponent;
+using physicat::entity::MeshRenderComponent;
 
 MeshRenderComponent::MeshRenderComponent(physicat::assets::ShaderPipelineType shader, physicat::StaticMeshInstance *meshInstance)
     : MeshInstance(meshInstance) {

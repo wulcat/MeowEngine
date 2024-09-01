@@ -8,8 +8,8 @@
 #include "component_base.hpp"
 #include "glm_wrapper.hpp"
 
-namespace physicat::core::component {
-    class TransformComponentBase : public physicat::core::component::ComponentBase {
+namespace physicat::entity {
+class TransformComponentBase : public physicat::entity::ComponentBase {
 
     public:
         TransformComponentBase();

@@ -4,6 +4,6 @@
 
 #include "transform_component_base.hpp"
 
-using physicat::core::component::TransformComponentBase;
+using physicat::entity::TransformComponentBase;
 
 TransformComponentBase::TransformComponentBase() {}

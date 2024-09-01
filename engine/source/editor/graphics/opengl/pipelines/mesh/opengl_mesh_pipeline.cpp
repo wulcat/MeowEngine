@@ -96,8 +96,8 @@ OpenGLMeshPipeline::~OpenGLMeshPipeline() {
 
 void OpenGLMeshPipeline::Render(
         const physicat::OpenGLAssetManager &assetManager,
-        const physicat::core::component::MeshRenderComponent* meshRenderComponent,
-        const physicat::core::component::Transform3DComponent* transform3DComponent) const {
+        const physicat::entity::MeshRenderComponent* meshRenderComponent,
+        const physicat::entity::Transform3DComponent* transform3DComponent) const {
 
     const physicat::StaticMeshInstance& staticMeshInstance = meshRenderComponent->GetMeshInstance();
     const physicat::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());

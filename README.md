@@ -17,12 +17,14 @@
 - [x] Implement ECS
 - [x] Add physics library (jolt / physx / box2d / bullet3) -> physx
 - [x] Add FPS Counter
-- [ ] Implementing PhysX 
-- [ ] Creating wrapper for switching between different physics engine
+- [x] Implementing PhysX (left handed or right handed)
+- [ ] Multithreading for rendering and update loop
 - [ ] Creating library for performing maths functions
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
 - [ ] Creating vehicle using PhysX
+- [ ] Break...
+- [ ] Creating wrapper for switching between different physics engine
 - [ ] If simple, add basic light and sky box
 - [ ] Position, Scale, Rotation handles after selecting objects  
 - [ ] Improving current shader pipeline to handle shaders dynamically

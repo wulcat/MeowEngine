@@ -18,8 +18,8 @@ OpenGLGridPipeline::~OpenGLGridPipeline() {
 
 void OpenGLGridPipeline::Render(
         const physicat::OpenGLAssetManager &assetManager,
-        const physicat::core::component::RenderComponentBase *renderComponent,
-        const physicat::core::component::Transform3DComponent* transform3DComponent,
+        const physicat::entity::RenderComponentBase *renderComponent,
+        const physicat::entity::Transform3DComponent* transform3DComponent,
         const physicat::PerspectiveCamera* camera) const {
 
     glUseProgram(ShaderProgramID);

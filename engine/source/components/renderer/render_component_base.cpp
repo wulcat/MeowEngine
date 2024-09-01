@@ -4,7 +4,7 @@
 
 #include "render_component_base.hpp"
 
-using physicat::core::component::RenderComponentBase;
+using physicat::entity::RenderComponentBase;
 
 RenderComponentBase::RenderComponentBase()
     : Shader(physicat::assets::ShaderPipelineType::Default) {}

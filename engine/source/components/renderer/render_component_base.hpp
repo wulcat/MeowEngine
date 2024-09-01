@@ -9,9 +9,9 @@
 //#include <static_mesh_instance.hpp>
 #include "asset_inventory.hpp"
 
-namespace physicat::core::component {
+namespace physicat::entity {
     // This class is extended for mesh, debug & ui rendering
-    class RenderComponentBase : public physicat::core::component::ComponentBase {
+    class RenderComponentBase : public physicat::entity::ComponentBase {
 
     public:
         RenderComponentBase();

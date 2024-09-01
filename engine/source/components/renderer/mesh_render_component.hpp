@@ -8,8 +8,8 @@
 #include "render_component_base.hpp"
 #include "static_mesh_instance.hpp"
 
-namespace physicat::core::component {
-    class MeshRenderComponent : public physicat::core::component::RenderComponentBase { ;
+namespace physicat::entity {
+    class MeshRenderComponent : public physicat::entity::RenderComponentBase { ;
 
     public:
         explicit MeshRenderComponent(physicat::assets::ShaderPipelineType shader, physicat::StaticMeshInstance* meshInstance);
