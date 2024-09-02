@@ -236,7 +236,6 @@ data/roboto*.*
 
 cmake-build-debug/
 
-.idea
 /third-party
 /libs
 #build
