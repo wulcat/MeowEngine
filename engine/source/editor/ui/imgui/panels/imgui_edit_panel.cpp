@@ -32,12 +32,18 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(physicat::Scene &scene, entt::
 
             // If there's a rigidbody to avoid continuous transform update we add "enter" after edit's. Else it will auto update on edit.
             if(rigidbody) {
-                if (ImGui::InputFloat3("Label", &transform.Position[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue)) {
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("Position");
+                ImGui::SameLine();
+                if (ImGui::InputFloat3("##hidden_label", &transform.Position[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue)) {
                     rigidbody->OverrideTransform(transform);
                 }
             }
             else {
-                ImGui::InputFloat3("Position", &transform.Position[0]);
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("Position");
+                ImGui::SameLine();
+                ImGui::InputFloat3("##hidden_label", &transform.Position[0]);
             }
         }
         else
