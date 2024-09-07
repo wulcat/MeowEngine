@@ -24,6 +24,7 @@
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
 - [ ] Creating vehicle using PhysX
 - [ ] Break...
+- [ ] Updating bash files for supporting physx on mac and web builds
 - [ ] Creating wrapper for switching between different physics engine
 - [ ] If simple, add basic light and sky box
 - [ ] Position, Scale, Rotation handles after selecting objects  
