@@ -23,6 +23,7 @@
 #include <fps_counter.hpp>
 #include "window.hpp"
 #include "SDL_image.h"
+#include "custom_barrier.hpp"
 
 using namespace std;
 
@@ -49,6 +50,7 @@ namespace physicat {
                 throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
             }
 
+            Barrier = std::make_shared<CustomBarrier>(2);
             WindowContext = std::make_unique<physicat::Window>();
             AssetManager = std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
 //            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
@@ -91,6 +93,7 @@ namespace physicat {
         std::atomic<int> ThreadCount;
         std::condition_variable WaitForThreadEndCondition;
         std::mutex WaitForThreadEndMutex;
+        std::shared_ptr<CustomBarrier> Barrier;
 
         void MainThreadLoop() {
             // init
@@ -115,6 +118,7 @@ namespace physicat {
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 // reduce thread count
+                Barrier.get()->Wait();
             }
 
             std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
@@ -148,6 +152,7 @@ namespace physicat {
                 SDL_GL_SwapWindow(WindowContext->window);
 
                 Render();
+                Barrier.get()->Wait();
             }
 
             // exit
@@ -167,7 +172,8 @@ namespace physicat {
             while(IsApplicationRunning)
             {
                 PT_PROFILE_SCOPE;
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+//                Barrier.get()->Wait();
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(2000));
