@@ -53,11 +53,13 @@ namespace physicat {
             Barrier = std::make_shared<CustomBarrier>(2);
             WindowContext = std::make_unique<physicat::Window>();
             AssetManager = std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
-//            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
+            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
             UI = std::make_unique<physicat::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
-//            FrameBuffer = std::make_unique<physicat::graphics::OpenGLFrameBuffer>(1000,500);
+            FrameBuffer = std::make_unique<physicat::graphics::OpenGLFrameBuffer>(1000,500);
             InputManager = std::make_unique<physicat::input::InputManager>();
 //            Physics = std::make_shared<physicat::simulator::PhysXPhysics>();
+
+            Scene = std::make_shared<physicat::MainScene>(physicat::sdl::GetWindowSize(WindowContext->window));
 
             // NOTE: Clearing context in main thread before using for render thread fixes a crash
             // which occurs while drag window
@@ -77,9 +79,9 @@ namespace physicat {
 
             AssetManager.reset();
 
-//            FrameBuffer.reset();
+            FrameBuffer.reset();
             UI.reset();
-//            Renderer.reset();
+            Renderer.reset();
             WindowContext.reset();
 
             physicat::Log("Application", "Ended");
@@ -98,7 +100,8 @@ namespace physicat {
         void MainThreadLoop() {
             // init
             physicat::Log("Main Thread", "Started");
-
+            Scene.get()->Create(Physics);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             // loop
             while(IsApplicationRunning)
             {
@@ -130,12 +133,14 @@ namespace physicat {
         }
 
         void RenderThreadLoop() {
+
             // init
             physicat::Log("Render Thread", "Started");
             ThreadCount++;
 
             SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
-
+            Scene.get()->Load(AssetManager);
+//            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
             // loop
             while (IsApplicationRunning) {
                 PT_PROFILE_SCOPE;
@@ -144,14 +149,15 @@ namespace physicat {
                 physicat::Log("Render Thread", "Running");
 
                 // Clear frame
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Issue OpenGL draw calls
+                Render();
 
                 // Swap buffers
                 SDL_GL_SwapWindow(WindowContext->window);
 
-                Render();
+
                 Barrier.get()->Wait();
             }
 
@@ -172,7 +178,7 @@ namespace physicat {
             while(IsApplicationRunning)
             {
                 PT_PROFILE_SCOPE;
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
 //                Barrier.get()->Wait();
             }
 
@@ -224,6 +230,9 @@ namespace physicat {
                             case 2: {
                                 const WindowSize size = *(WindowSize *) event.user.data1;
 //                                OnViewportResize(size);
+//                                Scene->OnWindowResized(size);
+//                                glViewport(0,0, size.Width,size.Height);
+//                                FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
                                 break;
                             }
                             case 3: {
@@ -244,7 +253,9 @@ namespace physicat {
             return true;
         };
 
-        void Update(const float& deltaTime) { };
+        void Update(const float& deltaTime) {
+            Scene.get()->Update(10);
+        };
 
         // render ----------------
         std::thread RenderThread;
@@ -257,7 +268,75 @@ namespace physicat {
         // but render thread will access this all the time
         std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
 
-        void Render() { };
+        void Render() {
+            Uint64 currentTime = SDL_GetPerformanceCounter();
+            {
+                PT_PROFILE_SCOPE_N("setting current");
+                // We let opengl know that any after this will be drawn into custom frame buffer
+                {
+                    PT_PROFILE_SCOPE_N("framebuffer");
+                    FrameBuffer.get()->Bind();
+
+                    {
+                        PT_PROFILE_SCOPE_N("scene render");
+                        glClearColor(50 / 255.0f, 50 / 255.0f, 0 / 255.0f, 1.0f);
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                        Scene.get()->Render(*Renderer);
+
+                        FrameBuffer.get()->Unbind();
+                    }
+                }
+
+                glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                {
+                    PT_PROFILE_SCOPE_N("UI render");
+//                    UI.Render(GetScene(), FrameBuffer.GetFrameTexture(), FpsCounter.getSmoothFPS());
+                    UI.get()->Render(*Scene.get(), FrameBuffer.get()->GetFrameTexture(), 1);
+                }
+
+                {
+                    PT_PROFILE_SCOPE_N("waiting");
+
+//
+//                    // Frame timing logic
+//                    Uint64 frameEndTime = SDL_GetPerformanceCounter();
+//                    double frameDuration = (double) (frameEndTime - currentTime) / frequency;
+//
+//                    while (frameDuration < targetFrameTime) {
+//                        frameEndTime = SDL_GetPerformanceCounter();
+//                        frameDuration = (double) (frameEndTime - currentTime) / frequency;
+//                    }
+//
+//                    previousTime = frameEndTime;
+                }
+                {
+//                    FpsCounter.frameEnd();
+                    PT_PROFILE_SCOPE_N("swap");
+//                    SDL_GL_SwapWindow(Window);
+
+
+
+//                // Manual Frame Synchronization --
+//                // Insert a fence sync object at the end of the previous frame's commands
+//                GLsync sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+//                // Wait until the fence is signaled, meaning the previous frame is done
+//                GLenum result = glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GLuint64(1e9)); // Timeout in nanoseconds
+//
+//                // Optionally handle the result to check if it timed out or was successful
+//                if (result == GL_WAIT_FAILED) {
+//                    // Handle the error
+//                }
+//
+//                // Clean up the sync object after use
+//                glDeleteSync(sync);
+//                 -- end
+                }
+            }
+
+        };
 
         // physics thread ----------------
         std::shared_ptr<physicat::simulator::Physics> Physics;
