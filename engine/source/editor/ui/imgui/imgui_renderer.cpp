@@ -25,7 +25,7 @@ namespace {
             kill(tracy_profiler_pid, SIGTERM); // Send termination signal to child
             waitpid(tracy_profiler_pid, nullptr, 0); // Wait for child to terminate
         }
-        exit(0); // Exit the parent process
+//        exit(0); // Exit the parent process // shouldn't do this or the application destruction won't happen
     }
 }
 ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
