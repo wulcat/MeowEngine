@@ -125,7 +125,7 @@ namespace physicat {
 
                 Update(0);
 
-                if(!Input(0))
+                if(!Input(0.02f))
                 {
                     IsApplicationRunning = false;
                     // if threads are waiting for thread sync we unpause them
@@ -258,7 +258,7 @@ namespace physicat {
             while (SDL_PollEvent(&event))
             {
                 InputBuffer.GetFront().push(event);
-                
+
                 UI->Input(event);
 
                 switch (event.type)
@@ -307,7 +307,7 @@ namespace physicat {
             // Track keyboard and mouse clicks/hold/drag/position
             InputManager->ProcessInput();
 
-//            GetScene().Input(deltaTime, InputManager);
+            Scene.get()->Input(deltaTime, *InputManager.get());
 
             return true;
         };
