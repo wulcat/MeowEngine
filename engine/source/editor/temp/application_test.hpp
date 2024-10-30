@@ -23,7 +23,9 @@
 #include <fps_counter.hpp>
 #include "window.hpp"
 #include "SDL_image.h"
-#include "custom_barrier.hpp"
+#include "thread_barrier.hpp"
+#include "queue"
+#include "double_buffer.hpp"
 
 using namespace std;
 
@@ -50,7 +52,9 @@ namespace physicat {
                 throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
             }
 
-            Barrier = std::make_shared<CustomBarrier>(2);
+            ProcessThreadBarrier = std::make_shared<ThreadBarrier>(2);
+            SwapBufferThreadBarrier = std::make_shared<ThreadBarrier>(2);
+
             WindowContext = std::make_unique<physicat::Window>();
             AssetManager = std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
             Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
@@ -95,7 +99,15 @@ namespace physicat {
         std::atomic<int> ThreadCount;
         std::condition_variable WaitForThreadEndCondition;
         std::mutex WaitForThreadEndMutex;
-        std::shared_ptr<CustomBarrier> Barrier;
+
+        std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
+        std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
+
+        //WindowSize sizeTemp;
+//        std::queue<SDL_Event> inputQueue;
+        physicat::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = physicat::DoubleBuffer<std::queue<SDL_Event>>();
+//        physicat::DoubleBuffer<int> Test = physicat::DoubleBuffer<int>();
+        // ecs -> double buffer template -> command buffer
 
         void MainThreadLoop() {
             // init
@@ -109,21 +121,35 @@ namespace physicat {
 
                 // update thread count++
 
-                physicat::Log("Main Thread", "Running");
+//                physicat::Log("Main Thread", "Running");
 
                 Update(0);
 
                 if(!Input(0))
                 {
                     IsApplicationRunning = false;
+                    // if threads are waiting for thread sync we unpause them
+                    ProcessThreadBarrier->End();
+                    SwapBufferThreadBarrier->End();
                     physicat::Log("Main Thread", "Ending");
+                    break;
                 }
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                // reduce thread count
-                Barrier.get()->Wait();
+//                physicat::Log("Main Thread", "waiting process");
+                // wait for all threads to sync up for frame ending
+                ProcessThreadBarrier.get()->Wait();
+
+                // swap buffers
+                InputBuffer.Swap();
+
+//                physicat::Log("Main Thread", "waiting swap");
+                // wait until buffers are synced
+                // ideally since other threads are waiting this should release all of them automatically
+                SwapBufferThreadBarrier.get()->Wait();
             }
 
+            physicat::Log("Main Thread", "waiting for closing all threads");
             std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
             WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0;});
             physicat::Log("Main Thread", "Ended");
@@ -146,7 +172,28 @@ namespace physicat {
                 PT_PROFILE_SCOPE;
                 // Synchronize with the main thread
                 // Lock mutex, get game state updates, unlock
-                physicat::Log("Render Thread", "Running");
+//                physicat::Log("Render Thread", "Running");
+
+                // input
+
+                while(!InputBuffer.GetBack().empty()) {
+                    SDL_Event event = InputBuffer.GetBack().front();
+                    InputBuffer.GetBack().pop();
+
+                    switch (event.type) {
+                        case SDL_USEREVENT:
+                            switch (event.user.code) {
+                                case 2: {
+                                    const WindowSize size = *(WindowSize *) event.user.data1;
+
+                                    glViewport(0, 0, size.Width, size.Height);
+                                    FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
+                                    physicat::Log("Render Thread", "rescale userevent");
+                                    break;
+                                }
+                            }
+                    }
+                }
 
                 // Clear frame
 //                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -154,11 +201,20 @@ namespace physicat {
                 // Issue OpenGL draw calls
                 Render();
 
-                // Swap buffers
-                SDL_GL_SwapWindow(WindowContext->window);
+                {
+                    PT_PROFILE_SCOPE_N("Swapping GL Buffer");
+                    // Swap buffers
+                    SDL_GL_SwapWindow(WindowContext->window);
+                }
+//                physicat::Log("Render Thread", "process waiting");
+                // wait for all threads to sync up for frame ending
+                ProcessThreadBarrier.get()->Wait();
+//                physicat::Log("Render Thread", "swap waiting");
+                // wait until buffers are synced on main thread
+                SwapBufferThreadBarrier.get()->Wait();
 
-
-                Barrier.get()->Wait();
+//                glViewport(0,0, sizeTemp.Width,sizeTemp.Height);
+//                FrameBuffer->RescaleFrameBuffer(sizeTemp.Width, sizeTemp.Height);
             }
 
             // exit
@@ -194,7 +250,6 @@ namespace physicat {
         std::unique_ptr<physicat::input::InputManager> InputManager;
         std::shared_ptr<physicat::Scene> Scene;
 
-
         bool Input(const float& deltaTime) {
             PT_PROFILE_SCOPE;
             SDL_Event event;
@@ -202,6 +257,8 @@ namespace physicat {
             // Each loop we will process any events that are waiting for us.
             while (SDL_PollEvent(&event))
             {
+                InputBuffer.GetFront().push(event);
+                
                 UI->Input(event);
 
                 switch (event.type)
@@ -230,7 +287,9 @@ namespace physicat {
                             case 2: {
                                 const WindowSize size = *(WindowSize *) event.user.data1;
 //                                OnViewportResize(size);
-//                                Scene->OnWindowResized(size);
+                                Scene->OnWindowResized(size);
+                                physicat::Log("mian Thread", "rescale userevent");
+//                                sizeTemp = size;
 //                                glViewport(0,0, size.Width,size.Height);
 //                                FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
                                 break;
@@ -269,6 +328,7 @@ namespace physicat {
         std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
 
         void Render() {
+
             Uint64 currentTime = SDL_GetPerformanceCounter();
             {
                 PT_PROFILE_SCOPE_N("setting current");
