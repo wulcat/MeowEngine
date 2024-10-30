@@ -2,19 +2,24 @@
 // Created by Akira Mujawar on 27/10/24.
 //
 
-#ifndef PHYSICAT_CUSTOM_BARRIER_HPP
-#define PHYSICAT_CUSTOM_BARRIER_HPP
+#ifndef PHYSICAT_THREAD_BARRIER_HPP
+#define PHYSICAT_THREAD_BARRIER_HPP
 
 #include "mutex"
 #include "thread"
 #include "condition_variable"
 
-class CustomBarrier {
+class ThreadBarrier {
 public:
-    CustomBarrier(int totalThreadCount)
+    ThreadBarrier(int totalThreadCount)
     : TotalThreadCount(totalThreadCount) {}
 
     void Wait() {
+        if(ShouldEnd)
+        {
+            return;
+        }
+
         // prevent race condition by blocking till out of scope
         std::unique_lock<std::mutex> lock(waitMutex);
 
@@ -25,8 +30,7 @@ public:
         // when both physics and render thread are waiting
         if(WaitThreadCount == TotalThreadCount) {
             // we all threads are waiting, tell them to unpause/ continue
-            ShouldThreadWait = false;
-            waitCondition.notify_all();
+            Release();
         }
         else {
             // make all threads wait for frame to finish
@@ -42,14 +46,29 @@ public:
         WaitThreadCount--;
     }
 
+    /**
+     * releases waiting threads on demand
+     */
+    void Release() {
+        ShouldThreadWait = false;
+        waitCondition.notify_all();
+    }
+
+    void End()
+    {
+        ShouldEnd = true;
+        Release();
+    }
+
 private:
     int TotalThreadCount;
     int WaitThreadCount;
     bool ShouldThreadWait;
+    bool ShouldEnd;
 
     std::mutex waitMutex;
     std::condition_variable waitCondition;
 };
 
 
-#endif //PHYSICAT_CUSTOM_BARRIER_HPP
+#endif //PHYSICAT_THREAD_BARRIER_HPP
