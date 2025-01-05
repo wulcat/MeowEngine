@@ -1,11 +1,12 @@
 //
-// Created by Akira Lynn on 06/07/22.
+// Created by Akira Mujawar on 06/07/22.
 //
 
 #include "engine.hpp"
 
-#include "application.hpp"
-#include "opengl_application.hpp"
+//#include "application.hpp"
+//#include "opengl_application.hpp"
+#include "application_test.hpp"
 
 #include "log.hpp"
 #include "sdl_wrapper.hpp"
@@ -29,15 +30,15 @@ struct Engine::Internal {
 
         physicat::Log(logTag, "Initializing Engine...");
 
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+//        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
-        physicat::Log(logTag, "SDL2 Initialized");
+//        physicat::Log(logTag, "SDL2 Initialized");
+//
+//        if(IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+//            throw std::runtime_error(logTag + "Could not initialize SDL2_image");
+//        }
 
-        if(IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
-            throw std::runtime_error(logTag + "Could not initialize SDL2_image");
-        }
-
-        physicat::Log(logTag, "SDL2_image initialized (supports png)");
+//        physicat::Log(logTag, "SDL2_image initialized (supports png)");
 
         ResolveApplication()->StartApplication();
     }

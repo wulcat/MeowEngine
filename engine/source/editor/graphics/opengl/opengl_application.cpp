@@ -104,7 +104,7 @@ namespace {
             )
         };
 
-        mainScene->Create(assetManager, inPhysics);
+//        mainScene->Create(assetManager, inPhysics);
 
         return mainScene;
     }

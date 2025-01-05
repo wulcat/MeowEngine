@@ -16,6 +16,7 @@ namespace physicat::sdl {
     physicat::WindowSize GetInitialWindowSize();
     physicat::WindowSize GetWindowSize(SDL_Window* window);
     SDL_Window* CreateWindow(const uint32_t& windowFlags);
+    SDL_GLContext CreateContext(SDL_Window* window);
 }
 
 #endif //PHYSICAT_SDL_WRAPPER_HPP

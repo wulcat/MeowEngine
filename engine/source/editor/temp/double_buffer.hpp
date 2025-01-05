@@ -12,25 +12,25 @@ using namespace std;
 namespace physicat {
     template <typename T>
     class DoubleBuffer {
+
     public:
-        DoubleBuffer() : Front{}, Back{} {}
-//        DoubleBuffer(T front, T back);
+        DoubleBuffer() : Current{}, Final{} {}
 
         void Swap() {
-            std::swap(Front, Back);
+            std::swap(Current, Final);
         }
 
-        T& GetFront() {
-            return Front;
+        T& GetCurrent() {
+            return Current;
         }
 
-        T& GetBack() {
-            return Back;
+        T& GetFinal() {
+            return Final;
         }
 
     private:
-        T Front;
-        T Back;
+        T Current;
+        T Final;
     };
 }
 

@@ -6,6 +6,7 @@
 #include "sdl_wrapper.hpp"
 #include "platform.hpp"
 #include "log.hpp"
+#include "graphics_wrapper.hpp"
 
 namespace // wth is this ._. ?
 {
@@ -123,4 +124,46 @@ SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
     }
 
     return window;
+}
+
+SDL_GLContext physicat::sdl::CreateContext(SDL_Window* window) {
+    static const std::string logTag("physicat::OpenGLApplication::CreateContext");
+
+    SDL_GLContext context {SDL_GL_CreateContext(window)};
+    SDL_GL_SetSwapInterval(1);// wth si this lol? from 100-450 to 1700 fps?
+    SDL_GL_MakeCurrent(window, context);
+#ifdef WIN32
+    glewInit();
+#endif
+
+    glClearDepthf(1.0f);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+
+    glEnable(GL_CULL_FACE);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+//        glEnable(GL_DEPTH_TEST);
+//        glDepthMask(GL_TRUE);
+//        glDepthFunc(GL_LEQUAL);
+//        glDepthRange(0.0f, 1.0f);
+//        glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
+//        glEnable(GL_SAMPLE_ALPHA_TO_ONE);
+//        glEnable(GL_BLEND);
+//        glBlendEquation(GL_FUNC_ADD);
+//        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//        glEnable(GL_ALPHA_TEST);
+//        glAlphaFunc(GL_GREATER, 0.1f);
+
+//        ::UpdateViewport(window);
+    physicat::Log(logTag, "Context Created");
+
+    // Check WebGL version
+    const char* version = (const char*)glGetString(GL_VERSION);
+    physicat::Log("physicat::graphics::OpenGLFrameBuffer: WEBGL Version", version);
+
+    return context;
 }

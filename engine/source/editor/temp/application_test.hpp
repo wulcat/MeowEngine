@@ -176,9 +176,9 @@ namespace physicat {
 
                 // input
 
-                while(!InputBuffer.GetBack().empty()) {
-                    SDL_Event event = InputBuffer.GetBack().front();
-                    InputBuffer.GetBack().pop();
+                while(!InputBuffer.GetFinal().empty()) {
+                    SDL_Event event = InputBuffer.GetFinal().front();
+                    InputBuffer.GetFinal().pop();
 
                     switch (event.type) {
                         case SDL_USEREVENT:
@@ -254,10 +254,18 @@ namespace physicat {
             PT_PROFILE_SCOPE;
             SDL_Event event;
 
+            while(!InputBuffer.GetFront().empty())
+            {
+                event = InputBuffer.GetFront().front();
+                InputBuffer.GetFront().pop();
+
+                // perform the task
+            }
+
             // Each loop we will process any events that are waiting for us.
             while (SDL_PollEvent(&event))
             {
-                InputBuffer.GetFront().push(event);
+                InputBuffer.GetCurrent().push(event);
 
                 UI->Input(event);
 
@@ -339,7 +347,7 @@ namespace physicat {
 
                     {
                         PT_PROFILE_SCOPE_N("scene render");
-                        glClearColor(50 / 255.0f, 50 / 255.0f, 0 / 255.0f, 1.0f);
+                        glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                         Scene.get()->Render(*Renderer);
