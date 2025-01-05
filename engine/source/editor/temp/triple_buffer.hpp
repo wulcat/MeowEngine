@@ -26,7 +26,7 @@ namespace physicat {
             return  Final;
         }
 
-    private:
+    protected:
         T Current;
         T Staging;
         T Final;
