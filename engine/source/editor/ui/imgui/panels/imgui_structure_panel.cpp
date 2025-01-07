@@ -29,18 +29,18 @@ physicat::graphics::ui::ImGuiStructurePanel::~ImGuiStructurePanel() {
 
 }
 
-void ImGuiStructurePanel::Draw(physicat::Scene &scene) {
-    auto registers = scene.GetEntities();
+void ImGuiStructurePanel::Draw(entt::registry& registry) {
+//    auto registers = scene.GetEntities();
 
     ImGui::SetNextWindowSize(ImVec2(430, 450), ImGuiCond_FirstUseEver);
 
     ImGui::Begin("Structure", &IsActive); {
-        auto view = registers->view<physicat::entity::LifeObjectComponent>();
+        auto view = registry.view<physicat::entity::LifeObjectComponent>();
         for(auto entity: view)
         {
             auto& lifeObject =  view.get<physicat::entity::LifeObjectComponent>(entity);
             CreateSelectableItem(
-                scene,
+                registry,
                 lifeObject,
                 entity
             );
@@ -51,11 +51,14 @@ void ImGuiStructurePanel::Draw(physicat::Scene &scene) {
 
 }
 
-void ImGuiStructurePanel::CreateSelectableItem(physicat::Scene &scene, physicat::entity::LifeObjectComponent& lifeObject, entt::entity item) {
-    auto registers = scene.GetEntities();
+void ImGuiStructurePanel::CreateSelectableItem(entt::registry& registry, physicat::entity::LifeObjectComponent& lifeObject, entt::entity item) {
+//    auto registers = scene.GetEntities();
 
-    const int id = lifeObject.Id;
-    const bool isSelected = registers->valid(SelectedEntity) && registers->get<physicat::entity::LifeObjectComponent>(SelectedEntity).Id == id;
+//    const int id = lifeObject.Id;
+    const int id = static_cast<int>(item);
+
+//    const bool isSelected = registry.valid(SelectedEntity) && registry.get<physicat::entity::LifeObjectComponent>(SelectedEntity).Id == id;
+    const bool isSelected = registry.valid(SelectedEntity) && static_cast<int>(SelectedEntity) == id;
     ImGuiTreeNodeFlags flags = lifeObject.GetChildCount() == 0 ? DefaultSelectableNoListFlags : DefaultSelectableFlags;
 
     // If the item is selected we add selected flag
@@ -69,7 +72,7 @@ void ImGuiStructurePanel::CreateSelectableItem(physicat::Scene &scene, physicat:
     // If item gets clicked with cache item
     if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
         SelectedEntity = item ;
-        physicat::Log("Object Selected: ", std::to_string(lifeObject.Id));
+        physicat::Log("Object Selected: ", std::to_string(id));
     }
 }
 

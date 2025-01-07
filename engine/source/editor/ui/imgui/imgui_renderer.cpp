@@ -13,6 +13,7 @@
 #include "imgui_wrapper.hpp"
 #include "imgui_renderer.hpp"
 #include "bridge_wrapper.hpp"
+//#include "entt_wrapper.hpp"
 //#include <filesystem>
 
 using physicat::graphics::ImGuiRenderer;
@@ -106,9 +107,9 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void physicat::graphics::ImGuiRenderer::Render(physicat::Scene& scene, unsigned int frameBufferId, const double fps) {
+void physicat::graphics::ImGuiRenderer::Render(entt::registry& registry, unsigned int frameBufferId, const double fps) {
     CreateNewFrame();
-    DrawFrame(scene, frameBufferId, fps);
+    DrawFrame(registry, frameBufferId, fps);
     RenderFrame();
 }
 
@@ -153,15 +154,15 @@ void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
     ImGui::NewFrame();
 }
 
-void physicat::graphics::ImGuiRenderer::DrawFrame(physicat::Scene& scene, uint32_t frameBufferId, const double fps) {
+void physicat::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, uint32_t frameBufferId, const double fps) {
     CreateDockingSpace();
 
 //    CreateRender3DPanel(frameBufferId);
 //    CreateLifeObjectSelectorPanel(scene);
 
 
-    EditPanel.Draw(scene, StructurePanel.GetSelectedItem());
-    StructurePanel.Draw(scene);
+    EditPanel.Draw(registry, StructurePanel.GetSelectedItem());
+    StructurePanel.Draw(registry);
     WorldRenderPanel.Draw(reinterpret_cast<void*>(frameBufferId), fps);
     LogPanel.Draw();
 

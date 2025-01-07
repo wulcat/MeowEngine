@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_IMGUI_RENDERER_HPP
 #define PHYSICAT_IMGUI_RENDERER_HPP
 
-#include <scene.hpp>
+//#include <scene.hpp>
 #include "opengl_framebuffer.hpp"
 #include "window_size.hpp"
 
@@ -13,6 +13,7 @@
 #include "imgui_edit_panel.hpp"
 #include "imgui_world_render_panel.hpp"
 #include "imgui_log_panel.hpp"
+#include "entt_wrapper.hpp"
 
 namespace physicat::graphics {
     struct ImGuiRenderer {
@@ -20,7 +21,7 @@ namespace physicat::graphics {
         ~ImGuiRenderer();
 
         void Input(const SDL_Event& event);
-        void Render(physicat::Scene& scene, unsigned int frameBufferId, const double fps);
+        void Render(entt::registry& registry, unsigned int frameBufferId, const double fps);
 
         // Closes any child processes like tracy
         void ClosePIDs();
@@ -32,7 +33,7 @@ namespace physicat::graphics {
         void OpenTracyProfiler();
 
         void CreateNewFrame();
-        void DrawFrame(physicat::Scene& scene, uint32_t frameBufferId, const double fps);
+        void DrawFrame(entt::registry& registry, uint32_t frameBufferId, const double fps);
         void RenderFrame();
 
         void CreateDockingSpace();
