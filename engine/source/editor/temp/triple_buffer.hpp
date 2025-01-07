@@ -5,6 +5,8 @@
 #ifndef PHYSICAT_TRIPLE_BUFFER_HPP
 #define PHYSICAT_TRIPLE_BUFFER_HPP
 
+#include "utility"
+
 using namespace std;
 
 namespace physicat {
@@ -24,6 +26,11 @@ namespace physicat {
 
         T& GetFinal() {
             return  Final;
+        }
+
+        void Swap() {
+            std::swap(Current, Staging);
+            std::swap(Current, Final);
         }
 
     protected:

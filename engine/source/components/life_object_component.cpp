@@ -6,11 +6,11 @@
 
 physicat::entity::LifeObjectComponent::LifeObjectComponent(std::string name)
 : Name(name)
-, Id(physicat::entity::LifeObjectComponent::s_GetNewId())
+//, Id(physicat::entity::LifeObjectComponent::s_GetNewId())
 {}
 
-int physicat::entity::LifeObjectComponent::s_GetNewId() {
-    return s_IdCounter++;
-}
+//int physicat::entity::LifeObjectComponent::s_GetNewId() {
+//    return s_IdCounter++;
+//}
 
-int physicat::entity::LifeObjectComponent::s_IdCounter = 0;
+//int physicat::entity::LifeObjectComponent::s_IdCounter = 0;

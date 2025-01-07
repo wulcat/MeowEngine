@@ -6,6 +6,7 @@
 #define PHYSICAT_BUFFER_HPP
 
 #include "utility"
+#include "tracy_wrapper.hpp"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ namespace physicat {
         DoubleBuffer() : Current{}, Final{} {}
 
         void Swap() {
+            PT_PROFILE_SCOPE;
             std::swap(Current, Final);
         }
 

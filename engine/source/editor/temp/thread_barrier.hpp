@@ -8,6 +8,7 @@
 #include "mutex"
 #include "thread"
 #include "condition_variable"
+#include "tracy_wrapper.hpp"
 
 class ThreadBarrier {
 public:
@@ -15,6 +16,7 @@ public:
     : TotalThreadCount(totalThreadCount) {}
 
     void Wait() {
+        PT_PROFILE_SCOPE;
         if(ShouldEnd)
         {
             return;

@@ -12,15 +12,15 @@ namespace physicat::entity {
     public:
         LifeObjectComponent(std::string name);
 
-        int Id;
+//        int Id;
         std::string Name;
 
         const int GetChildCount() {
             return 0;
         }
-
-        static int s_IdCounter;
-        static int s_GetNewId();
+//
+//        static int s_IdCounter;
+//        static int s_GetNewId();
     };
 }
 
