@@ -22,6 +22,26 @@ void physicat::Log(const std::string &tag, const std::string &message) {
     #endif
 }
 
+void physicat::Log(const std::string &tag, const int &message) {
+#ifndef NDEBUG
+#ifdef __ANDROID__
+//    __android_log_print(ANDROID_LOG_DEBUG, "a-simple-triangle", "%s: %s", tag.c_str(), message.c_str());
+#else
+    std::cout << tag << ": " << message << std::endl;
+#endif
+#endif
+}
+
+void physicat::Log(const std::string &tag, const float &message) {
+#ifndef NDEBUG
+#ifdef __ANDROID__
+    //    __android_log_print(ANDROID_LOG_DEBUG, "a-simple-triangle", "%s: %s", tag.c_str(), message.c_str());
+#else
+    std::cout << tag << ": " << message << std::endl;
+#endif
+#endif
+}
+
 void physicat::Log(const std::string &tag, const std::string &message, const std::exception &error) {
     #ifndef NDEBUG
         std::string output = message + " Exception message was: " + std::string{error.what()};

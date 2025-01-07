@@ -17,6 +17,9 @@ namespace physicat {
     // In-game logger to debug logs specific to game code
 
     void Log(const std::string& tag, const std::string& message);
+    void Log(const std::string& tag, const int& message);
+    void Log(const std::string& tag, const float& message);
+
     void Log(const std::string& tag, const std::string& message, const std::exception& error);
 } // namespace physicat
 
