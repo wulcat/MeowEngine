@@ -27,6 +27,7 @@ namespace physicat {
         bool HasComponent(entt::id_type inId);
         bool HasProperty(std::string inPropertyName);
         std::string GetComponentName(entt::id_type inId);
+        std::vector<ReflectionProperty> GetProperties(std::string inClassName);
 
         template<typename Type>
         void Reflect();

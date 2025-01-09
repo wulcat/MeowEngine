@@ -7,12 +7,14 @@
 
 #include "string"
 #include "functional"
+#include "property_type.hpp"
 
 using namespace std;
 
 namespace physicat {
     struct ReflectionProperty {
         std::string Name;
+        physicat::PropertyType Type;
         std::function<void(void *, const void *)> Set;
         std::function<void *(void *)> Get;
     };

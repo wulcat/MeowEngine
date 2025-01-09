@@ -13,8 +13,11 @@ bool physicat::EnttReflection::HasProperty(std::string inPropertyName) {
 }
 
 std::string physicat::EnttReflection::GetComponentName(entt::id_type inId) {
-//    auto test = Components[inId];
     return Components[inId];
+}
+
+std::vector<physicat::ReflectionProperty> physicat::EnttReflection::GetProperties(std::string inClassName) {
+    return Properties[inClassName];
 }
 
 void physicat::EnttReflection::RegisterComponent(entt::id_type inId, std::string inName) {

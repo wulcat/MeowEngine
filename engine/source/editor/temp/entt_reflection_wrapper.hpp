@@ -30,7 +30,8 @@ namespace physicat {
         ReflectionTest.RegisterProperty(\
             #Class,\
             {\
-                #Property,\
+                #Property,                          \
+                GetPropertyType<Type>(),                                    \
                 [](void* obj, const void* value) { ((Class*)obj)->Property = *(Type*)value; },\
                 [](void* obj) -> void* { return &(((Class*)obj)->Property);}\
             }\
