@@ -5,6 +5,10 @@
 #ifndef PHYSICAT_PROPERTY_TYPE_HPP
 #define PHYSICAT_PROPERTY_TYPE_HPP
 
+#include "type_traits"
+#include "typeinfo"
+
+using namespace std;
 
 namespace physicat {
     enum PropertyType {
@@ -30,6 +34,11 @@ namespace physicat {
         else {
             return PropertyType::NOT_DEFINED;
         }
+    }
+
+    template<typename Type>
+    constexpr const std::type_info& GetPropertyTypeId() {
+        return typeid(Type);
     }
 
 }

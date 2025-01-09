@@ -42,8 +42,17 @@ namespace physicat {
 
     template<typename Type>
     void EnttReflection::Reflect() {
-        if constexpr(std::is_class_v<Type>) {
+        if constexpr (std::is_fundamental_v<Type>) {
+//            return PropertyType::PRIMITIVE;
+        }
+        else if constexpr (std::is_array_v<Type>) {
+//            return PropertyType::ARRAY;
+        }
+        else if constexpr (std::is_class_v<Type>) {
             Type::Reflect();
+        }
+        else {
+//            return PropertyType::NOT_DEFINED;
         }
     }
 }

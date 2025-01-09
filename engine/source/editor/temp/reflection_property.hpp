@@ -13,8 +13,10 @@ using namespace std;
 
 namespace physicat {
     struct ReflectionProperty {
-        std::string Name;
-        physicat::PropertyType Type;
+        std::string Name; // name of property
+        physicat::PropertyType Type; // type of class
+        const type_info& TypeId; // type id of class
+        std::string TypeName; // name of class
         std::function<void(void *, const void *)> Set;
         std::function<void *(void *)> Get;
     };
