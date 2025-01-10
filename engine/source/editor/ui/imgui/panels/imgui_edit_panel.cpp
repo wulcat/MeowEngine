@@ -2,13 +2,12 @@
 // Created by Akira Mujawar on 13/07/24.
 //
 
-#include <transform3d_component.hpp>
-#include "rigidbody_component.hpp"
-
 #include "imgui_edit_panel.hpp"
 #include "imgui_wrapper.hpp"
-#include "life_object_component.hpp"
 #include "log.hpp"
+
+#include "entt_reflection_wrapper.hpp"
+#include "imgui_input_extension.hpp"
 
 physicat::graphics::ui::ImGuiEditPanel::ImGuiEditPanel() {
 
@@ -24,34 +23,37 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, entt
 
     ImGui::Begin("Edit", &CanDrawPanel);
     {
-//        auto registry = scene.GetEntities();
-
         // NOTE: There's a issue when a edit is made to edit panel and a new item is selected without loosing focus from edit panel
         if(registry.valid(lifeObject))
         {
-            entity::Transform3DComponent& transform = registry.get<physicat::entity::Transform3DComponent>(lifeObject);
-            entity::RigidbodyComponent* rigidbody = registry.try_get<physicat::entity::RigidbodyComponent>(lifeObject);
+            // for each component or
+            for(pair<unsigned int, entt::basic_sparse_set<>&> component : registry.storage()){
+                if(component.second.contains(lifeObject)) {
+                    entt::id_type type = component.first;
+                    const std::string componentName = ReflectionTest.GetComponentName(type);
+                    void* componentObject = component.second.value(lifeObject);
 
-
-
-            // If there's a rigidbody to avoid continuous transform update we add "enter" after edit's. Else it will auto update on edit.
-            if(rigidbody) {
-                ImGui::AlignTextToFramePadding();
-                ImGui::Text("Position");
-                ImGui::SameLine();
-                if (ImGui::InputFloat3("##hidden_label", &transform.Position[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue)) {
-                    rigidbody->OverrideTransform(transform);
+                    // Display Component Name
+                    if(ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+                        // Display Reflected Properties
+                        physicat::ImGuiInputExtension::ShowProperty(componentName, componentObject);
+                        ImGui::Spacing();
+                    }
                 }
             }
-            else {
-                ImGui::AlignTextToFramePadding();
-                ImGui::Text("Position");
-                ImGui::SameLine();
-                if (ImGui::InputFloat3("##hidden_label", &transform.Position[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue)) {
+
+//            entity::Transform3DComponent& transform = registry.get<physicat::entity::Transform3DComponent>(lifeObject);
+//            entity::RigidbodyComponent* rigidbody = registry.try_get<physicat::entity::RigidbodyComponent>(lifeObject);
+
+//            // If there's a rigidbody to avoid continuous transform update we add "enter" after edit's. Else it will auto update on edit.
+//            if(rigidbody) {
+//                ImGui::AlignTextToFramePadding();
+//                ImGui::Text("Position");
+//                ImGui::SameLine();
+//                if (ImGui::InputFloat3("##hidden_label", &transform.Position[0], "%.3f", ImGuiInputTextFlags_EnterReturnsTrue)) {
 //                    rigidbody->OverrideTransform(transform);
-                }
-//                ImGui::InputFloat3("##hidden_label", &transform.Position[0]);
-            }
+//                }
+//            }
         }
         else
         {
