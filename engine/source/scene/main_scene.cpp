@@ -44,7 +44,7 @@ namespace {
 // this -> type -> value
 // component -> property -> property
 
-physicat::EnttReflection ReflectionTest;
+//physicat::EnttReflection ReflectionTest;
 
 struct MainScene::Internal {
     physicat::PerspectiveCamera Camera;

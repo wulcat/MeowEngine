@@ -10,7 +10,7 @@
 #include "vector3.hpp"
 
 void physicat::ImGuiInputExtension::ShowProperty(const std::string& inClassName, void* inObject) {
-    std::vector<physicat::ReflectionProperty> properties = ReflectionTest.GetProperties(inClassName);
+    std::vector<physicat::ReflectionProperty> properties = physicat::Reflection.GetProperties(inClassName);
 
     // Display Component Properties
     for (const auto &property: properties) {

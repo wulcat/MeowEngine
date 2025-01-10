@@ -30,7 +30,7 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, entt
             for(pair<unsigned int, entt::basic_sparse_set<>&> component : registry.storage()){
                 if(component.second.contains(lifeObject)) {
                     entt::id_type type = component.first;
-                    const std::string componentName = ReflectionTest.GetComponentName(type);
+                    const std::string componentName = physicat::Reflection.GetComponentName(type);
                     void* componentObject = component.second.value(lifeObject);
 
                     // Display Component Name

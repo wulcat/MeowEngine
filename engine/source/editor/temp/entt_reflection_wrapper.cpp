@@ -3,3 +3,5 @@
 //
 
 #include "entt_reflection_wrapper.hpp"
+
+physicat::EnttReflection physicat::Reflection;

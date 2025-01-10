@@ -8,18 +8,15 @@
 
 #include "entt_reflection.hpp"
 
-//namespace {
-    extern physicat::EnttReflection ReflectionTest;
-//}
-//physicat::EnttReflection ReflectionTest;
-
 namespace physicat {
+    extern physicat::EnttReflection Reflection;
+
     // SPINAE principle :- substitution failure is not a error
-    #define REFLECT(Type) ReflectionTest.Reflect<Type>()
+    #define REFLECT(Type) physicat::Reflection.Reflect<Type>()
 
     #define REGISTER_ENTT_COMPONENT(Component) \
         \
-        ReflectionTest.RegisterComponent(\
+        physicat::Reflection.RegisterComponent(\
             entt::type_hash<Component>().value(), \
             #Component\
         );\
@@ -27,7 +24,7 @@ namespace physicat {
         REFLECT(Component);
 
     #define REGISTER_PROPERTY(Class, Property, Type)\
-        ReflectionTest.RegisterProperty(\
+        physicat::Reflection.RegisterProperty(\
             #Class,\
             {\
                 #Property,                          \
