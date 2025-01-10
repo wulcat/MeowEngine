@@ -84,6 +84,18 @@ struct MainScene::Internal {
                                            assets::TextureType::Default,
                                            assets::TextureType::Pattern
                                    });
+
+        REGISTER_ENTT_COMPONENT(LifeObjectComponent);
+
+        REGISTER_ENTT_COMPONENT(Transform2DComponent);
+        REGISTER_ENTT_COMPONENT(Transform3DComponent);
+
+        REGISTER_ENTT_COMPONENT(ColliderComponent);
+        REGISTER_ENTT_COMPONENT(RigidbodyComponent);
+
+        REGISTER_ENTT_COMPONENT(RenderComponentBase);
+        REGISTER_ENTT_COMPONENT(LineRenderComponent);
+        REGISTER_ENTT_COMPONENT(MeshRenderComponent);
     }
 
     void Create(std::shared_ptr<physicat::simulator::Physics> inPhysics) {

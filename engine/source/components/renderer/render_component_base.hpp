@@ -14,6 +14,8 @@ namespace physicat::entity {
     class RenderComponentBase : public physicat::entity::ComponentBase {
 
     public:
+        static void Reflect();
+
         RenderComponentBase();
         RenderComponentBase(physicat::assets::ShaderPipelineType shaderPipelineType);
         virtual ~RenderComponentBase() = default;

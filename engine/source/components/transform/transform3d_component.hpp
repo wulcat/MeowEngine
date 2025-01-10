@@ -16,6 +16,8 @@
 namespace physicat::entity {
     class Transform3DComponent : public physicat::entity::TransformComponentBase {
     public:
+        static void Reflect();
+
         Transform3DComponent();
         Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec4 rotation);
         Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec3 rotationAxis, float rotationDegrees);

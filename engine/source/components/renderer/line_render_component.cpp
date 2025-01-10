@@ -3,8 +3,15 @@
 //
 
 #include "line_render_component.hpp"
+#include <log.hpp>
 
 using physicat::entity::LineRenderComponent;
+
+void physicat::entity::LineRenderComponent::Reflect() {
+//    REGISTER_PROPERTY(Transform3DComponent, Position, physicat::math::Vector3);
+
+    physicat::Log("Reflected", "LineRenderComponent");
+}
 
 LineRenderComponent::LineRenderComponent(physicat::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end) {
     Shader = shader;

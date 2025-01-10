@@ -15,6 +15,8 @@ namespace physicat::entity {
     class ColliderComponent : public entity::ComponentBase {
 
     public:
+        static void Reflect();
+
         ColliderComponent(entity::ColliderType inType, entity::BoxColliderData* inData);
         virtual ~ColliderComponent() = default;
 

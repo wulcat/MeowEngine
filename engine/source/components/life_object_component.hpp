@@ -5,15 +5,17 @@
 #ifndef PHYSICAT_LIFE_OBJECT_COMPONENT_HPP
 #define PHYSICAT_LIFE_OBJECT_COMPONENT_HPP
 
-#include "string"
+#include "pstring.hpp"
 
 namespace physicat::entity {
     struct LifeObjectComponent {
     public:
+        static void Reflect();
+
         LifeObjectComponent(std::string name);
 
 //        int Id;
-        std::string Name;
+        physicat::PString Name;
 
         const int GetChildCount() {
             return 0;

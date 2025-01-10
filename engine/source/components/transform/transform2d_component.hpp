@@ -10,7 +10,8 @@
 
 namespace physicat::entity {
     class Transform2DComponent : public physicat::entity::TransformComponentBase{
-
+    public:
+        static void Reflect();
     };
 }
 

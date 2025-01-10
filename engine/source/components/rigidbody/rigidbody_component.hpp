@@ -14,6 +14,7 @@ using namespace physicat::entity;
 namespace physicat::entity {
     class RigidbodyComponent : public physicat::entity::ComponentBase {
     public:
+        static void Reflect();
         explicit RigidbodyComponent();
         virtual ~RigidbodyComponent() = default;
 

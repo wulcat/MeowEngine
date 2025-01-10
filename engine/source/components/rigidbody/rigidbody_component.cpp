@@ -3,6 +3,13 @@
 //
 
 #include "rigidbody_component.hpp"
+#include "log.hpp"
+
+void physicat::entity::RigidbodyComponent::Reflect(){
+//    REGISTER_PROPERTY(RigidbodyComponent, Position, physicat::math::Vector3);
+
+    physicat::Log("Reflected", "RigidbodyComponent");
+}
 
 physicat::entity::RigidbodyComponent::RigidbodyComponent() {
 

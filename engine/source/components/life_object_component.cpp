@@ -3,6 +3,14 @@
 //
 
 #include "life_object_component.hpp"
+#include <log.hpp>
+#include "entt_reflection_wrapper.hpp"
+
+void physicat::entity::LifeObjectComponent::Reflect() {
+    REGISTER_PROPERTY(LifeObjectComponent, Name, physicat::PString);
+
+    physicat::Log("Reflected", "LifeObjectComponent");
+}
 
 physicat::entity::LifeObjectComponent::LifeObjectComponent(std::string name)
 : Name(name)

@@ -9,9 +9,19 @@
 #include "static_mesh_instance.hpp"
 
 namespace physicat::entity {
+    class DummyClass {
+    public:
+        static void Reflect();
+
+        int MeshType;
+        float Size;
+    };
+
     class MeshRenderComponent : public physicat::entity::RenderComponentBase { ;
 
     public:
+        static void Reflect();
+
         explicit MeshRenderComponent(physicat::assets::ShaderPipelineType shader, physicat::StaticMeshInstance* meshInstance);
 
 //        void Update(const glm::mat4 &projectionViewMatrix) override {
@@ -22,6 +32,8 @@ namespace physicat::entity {
         const physicat::StaticMeshInstance& GetMeshInstance() const {
             return *MeshInstance;
         }
+
+        DummyClass Data;
 
     private:
         physicat::StaticMeshInstance* MeshInstance;

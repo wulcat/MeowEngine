@@ -7,6 +7,8 @@
 
 namespace physicat::math {
     struct Vector3 {
+        static void Reflect();
+
         Vector3()
         : X (0)
         , Y (0)
