@@ -6,20 +6,26 @@
 #define PHYSICAT_REFLECTION_PROPERTY_CHANGE_HPP
 
 #include "entt_wrapper.hpp"
-#include "stack"
 
 namespace physicat {
     class ReflectionPropertyChange {
     private:
         ReflectionPropertyChange() {}
     public:
-        ReflectionPropertyChange(const std::string& inPropertyChangeName, void* inChangeData);
+        ReflectionPropertyChange(const std::string& inPropertyChangeName, void* inChangeData, std::function<void(void*)> inDataDeleter);
         ~ReflectionPropertyChange();
+
+        static void Assign(ReflectionPropertyChange*& inTarget, ReflectionPropertyChange* inValue) {
+            if(inValue != nullptr) {
+                inTarget = inValue;
+            }
+        }
 
         int EntityId;
         entt::id_type ComponentType;
-        std::stack <std::string> PropertyNames;
-        void *Data;
+        std::vector <std::string> PropertyNames;
+        void* Data;
+        std::function<void(void*)> DataDeleter;
     };
 }
 

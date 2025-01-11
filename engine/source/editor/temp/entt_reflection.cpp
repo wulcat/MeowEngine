@@ -4,6 +4,8 @@
 
 #include "entt_reflection.hpp"
 
+#include "log.hpp"
+
 bool physicat::EnttReflection::HasComponent(entt::id_type inId) {
     return Components.find(inId) != Components.end();
 }
@@ -33,4 +35,34 @@ void physicat::EnttReflection::RegisterProperty(std::string inClassName, Reflect
 //    }
 }
 
-physicat::EnttReflection ReflectionTest();
+void physicat::EnttReflection::ApplyPropertyChange(physicat::ReflectionPropertyChange& inPropertyChange, entt::registry& inRegistry) {
+    auto changedEntity = static_cast<entt::entity>(inPropertyChange.EntityId);
+    entt::basic_registry<>::common_type *componentStorage = inRegistry.storage(inPropertyChange.ComponentType);
+    void *classObject = componentStorage->value(changedEntity);
+
+    for(int i = inPropertyChange.PropertyNames.size() - 1; i > 0; i--) {
+        std::string propertyName = inPropertyChange.PropertyNames[i];
+        std::vector<physicat::ReflectionProperty> properties = GetProperties(propertyName);
+
+        // remove once we have the data
+        i--;
+
+        for (const physicat::ReflectionProperty &property: properties) {
+            propertyName = inPropertyChange.PropertyNames[i];
+            if (property.Name == propertyName) {
+                // if it was last property, we apply the data
+                if(i == 0) {
+                    property.Set(classObject, inPropertyChange.Data);
+                }
+                    // if it wasn't last property, we get the property object for next iteration
+                else {
+                    classObject = property.Get(classObject);
+                }
+
+                // we have found our property, move out of for loop
+                break;
+            }
+        }
+    }
+
+}

@@ -9,6 +9,7 @@
 #include "entt_wrapper.hpp"
 #include "vector"
 #include "reflection_property.hpp"
+#include "reflection_property_change.hpp"
 #include "string"
 #include "log.hpp"
 using namespace std;
@@ -34,6 +35,7 @@ namespace physicat {
 
         void RegisterComponent(entt::id_type inId,  std::string inName);
         void RegisterProperty(std::string inClassName, ReflectionProperty inProperty);
+        void ApplyPropertyChange(physicat::ReflectionPropertyChange& inPropertyChange, entt::registry& inRegistry);
 
     private:
         std::unordered_map<entt::id_type, std::string> Components;
