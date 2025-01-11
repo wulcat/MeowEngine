@@ -8,13 +8,15 @@
 #include "math_wrapper.hpp"
 //#include "scene.hpp"
 #include "entt_wrapper.hpp"
+#include "reflection_property_change.hpp"
+#include "queue"
 
 namespace physicat::graphics::ui {
     struct ImGuiEditPanel {
         ImGuiEditPanel();
         ~ImGuiEditPanel();
 
-        void Draw(entt::registry& registry, entt::entity lifeObject);
+        void Draw(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, entt::entity lifeObject);
 
     private:
         bool CanDrawPanel;

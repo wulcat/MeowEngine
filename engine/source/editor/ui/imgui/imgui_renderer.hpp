@@ -14,6 +14,7 @@
 #include "imgui_world_render_panel.hpp"
 #include "imgui_log_panel.hpp"
 #include "entt_wrapper.hpp"
+#include "queue"
 
 namespace physicat::graphics {
     struct ImGuiRenderer {
@@ -21,7 +22,7 @@ namespace physicat::graphics {
         ~ImGuiRenderer();
 
         void Input(const SDL_Event& event);
-        void Render(entt::registry& registry, unsigned int frameBufferId, const double fps);
+        void Render(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps);
 
         // Closes any child processes like tracy
         void ClosePIDs();
@@ -33,7 +34,7 @@ namespace physicat::graphics {
         void OpenTracyProfiler();
 
         void CreateNewFrame();
-        void DrawFrame(entt::registry& registry, uint32_t frameBufferId, const double fps);
+        void DrawFrame(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, uint32_t frameBufferId, const double fps);
         void RenderFrame();
 
         void CreateDockingSpace();

@@ -107,9 +107,9 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void physicat::graphics::ImGuiRenderer::Render(entt::registry& registry, unsigned int frameBufferId, const double fps) {
+void physicat::graphics::ImGuiRenderer::Render(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     CreateNewFrame();
-    DrawFrame(registry, frameBufferId, fps);
+    DrawFrame(registry, inUIInputQueue, frameBufferId, fps);
     RenderFrame();
 }
 
@@ -154,14 +154,14 @@ void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
     ImGui::NewFrame();
 }
 
-void physicat::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, uint32_t frameBufferId, const double fps) {
+void physicat::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
     CreateDockingSpace();
 
 //    CreateRender3DPanel(frameBufferId);
 //    CreateLifeObjectSelectorPanel(scene);
 
 
-    EditPanel.Draw(registry, StructurePanel.GetSelectedItem());
+    EditPanel.Draw(registry, inUIInputQueue, StructurePanel.GetSelectedItem());
     StructurePanel.Draw(registry);
     WorldRenderPanel.Draw(reinterpret_cast<void*>(frameBufferId), fps);
     LogPanel.Draw();

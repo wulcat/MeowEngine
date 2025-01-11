@@ -17,7 +17,7 @@ physicat::graphics::ui::ImGuiEditPanel::~ImGuiEditPanel() {
 
 }
 
-void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, entt::entity lifeObject) {
+void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, entt::entity lifeObject) {
     ImGuiWindowFlags window_flags = 0;
     window_flags |= ImGuiWindowFlags_NoCollapse;
 
