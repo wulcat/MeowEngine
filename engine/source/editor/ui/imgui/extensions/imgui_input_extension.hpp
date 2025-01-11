@@ -7,15 +7,17 @@
 
 #include "string"
 #include "reflection_property.hpp"
+#include "reflection_property_change.hpp"
 
 using namespace std;
 
 namespace physicat {
     class ImGuiInputExtension {
     public:
-        static void ShowProperty(const std::string& inClassName, void* inObject);
-        static void ShowPrimitive(const physicat::ReflectionProperty& inProperty, void* inObject);
-        static void ShowClassOrStruct(const physicat::ReflectionProperty& inProperty, void* inObject);
+        static physicat::ReflectionPropertyChange* ShowProperty(const std::string& inClassName, void* inObject);
+        static physicat::ReflectionPropertyChange* ShowPrimitive(const physicat::ReflectionProperty& inProperty, void* inObject);
+        static physicat::ReflectionPropertyChange* ShowClassOrStruct(const physicat::ReflectionProperty& inProperty, void* inObject);
+
         static void ShowTabExample();
         static void ShowPushItemWidthExample();
         static void TextInputWithLimitedText(const char* label, float textPercentage, char* inputBuffer, size_t bufferSize);

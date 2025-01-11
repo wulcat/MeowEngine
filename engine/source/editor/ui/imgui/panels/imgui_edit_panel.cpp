@@ -42,6 +42,31 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, entt
                 }
             }
 
+////            void* componentObject;
+//            entt::id_type componentId; //
+//            std::string componentName = physicat::Reflection.GetComponentName(componentId);
+////            std::string propertyName = ""; //
+//            int propertyDataInt = 8;
+//            const void* propertyData = &propertyDataInt; //
+//            std::vector<physicat::ReflectionProperty> componentProperties = physicat::Reflection.GetProperties(componentName);
+//            // entt , name , value
+//            // entt , name , name , value
+//            // entt , name , name , name , value
+//            ReflectionPropertyChange change(0, 0);
+//
+//
+//
+//            for(physicat::ReflectionProperty property : componentProperties) {
+//                if(property.Name == propertyName) {
+//                    // if last last propertyName
+////                    property.Set(componentObject, propertyData);
+////                      else property.Get() then move forward in loop
+//                    break;
+//                }
+//            }
+
+            // entt component id -> queue<property.name> -> value data pointer
+
 //            entity::Transform3DComponent& transform = registry.get<physicat::entity::Transform3DComponent>(lifeObject);
 //            entity::RigidbodyComponent* rigidbody = registry.try_get<physicat::entity::RigidbodyComponent>(lifeObject);
 

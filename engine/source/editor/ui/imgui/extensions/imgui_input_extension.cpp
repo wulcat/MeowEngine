@@ -9,8 +9,9 @@
 #include "pstring.hpp"
 #include "vector3.hpp"
 
-void physicat::ImGuiInputExtension::ShowProperty(const std::string& inClassName, void* inObject) {
+physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowProperty(const std::string& inClassName, void* inObject) {
     std::vector<physicat::ReflectionProperty> properties = physicat::Reflection.GetProperties(inClassName);
+    physicat::ReflectionPropertyChange* change = nullptr;
 
     // Display Component Properties
     for (const auto &property: properties) {
@@ -19,7 +20,7 @@ void physicat::ImGuiInputExtension::ShowProperty(const std::string& inClassName,
                 break;
             case physicat::PRIMITIVE: {
                 ImGui::Indent();
-                ImGuiInputExtension::ShowPrimitive(property, inObject);
+                physicat::ReflectionPropertyChange::Assign(change, ImGuiInputExtension::ShowPrimitive(property, inObject));
                 ImGui::Unindent();
                 break;
             }
@@ -31,61 +32,99 @@ void physicat::ImGuiInputExtension::ShowProperty(const std::string& inClassName,
                 break;
             case physicat::CLASS_OR_STRUCT: {
                 ImGui::Indent();
-                ImGuiInputExtension::ShowClassOrStruct(property, inObject);
+                physicat::ReflectionPropertyChange::Assign(change, ImGuiInputExtension::ShowClassOrStruct(property, inObject));
                 ImGui::Unindent();
                 break;
             }
         }
     }
+
+    return change;
 }
 
-void physicat::ImGuiInputExtension::ShowPrimitive(const physicat::ReflectionProperty& inProperty, void* inObject) {
+physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowPrimitive(const physicat::ReflectionProperty& inProperty, void* inObject) {
+    physicat::ReflectionPropertyChange* change = nullptr;
+
     if(inProperty.TypeId == typeid(int)) {
         void* value = inProperty.Get(inObject);
+        int changeHolder = *static_cast<int*>(value);
+        auto uniqueId = reinterpret_cast<uintptr_t>(value);
+
+        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
         ImGui::SameLine();
         ImGui::SetCursorPosX(200);
-        ImGui::InputScalar("##hidden_label", ImGuiDataType_U32, value, nullptr, nullptr);
+
+        if(ImGui::InputScalar(labelName.c_str(), ImGuiDataType_U32, &changeHolder, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
+            change = new physicat::ReflectionPropertyChange(inProperty.Name, new int(changeHolder), [](void* inPointer){ delete static_cast<int*>(inPointer); });
+        }
     }
     else if(inProperty.TypeId == typeid(float)) {
         void* value = inProperty.Get(inObject);
+        float changeHolder = *static_cast<float*>(value);
+        auto uniqueId = reinterpret_cast<uintptr_t>(value);
+
+        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
         ImGui::SameLine();
         ImGui::SetCursorPosX(200);
-        ImGui::InputScalar("##hidden_label", ImGuiDataType_Float, value, nullptr, nullptr);
+
+        if(ImGui::InputScalar(labelName.c_str(), ImGuiDataType_Float, &changeHolder, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
+            change = new physicat::ReflectionPropertyChange(inProperty.Name, new float(changeHolder), [](void* inPointer){ delete static_cast<float*>(inPointer); });
+        }
     }
+
+    return change;
 }
 
-void physicat::ImGuiInputExtension::ShowClassOrStruct(const physicat::ReflectionProperty& inProperty, void* inObject) {
+physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowClassOrStruct(const physicat::ReflectionProperty& inProperty, void* inObject) {
+    physicat::ReflectionPropertyChange* change = nullptr;
+
     if(inProperty.TypeId == typeid(physicat::PString)) {
-        physicat::PString& value = *static_cast<physicat::PString*>(inProperty.Get(inObject));
+        void* value = inProperty.Get(inObject);
+        physicat::PString changeHolder = *static_cast<physicat::PString*>(value);
+        auto uniqueId = reinterpret_cast<uintptr_t>(value);
+
+        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
         ImGui::SameLine();
         ImGui::SetCursorPosX(200);
-        ImGui::InputText("##hidden_label", value.data(), sizeof(value));
+
+        if(ImGui::InputText(labelName.c_str(), changeHolder.data(), 32, ImGuiInputTextFlags_EnterReturnsTrue)) {
+            change = new physicat::ReflectionPropertyChange(inProperty.Name, new physicat::PString(changeHolder), [](void* inPointer){ delete static_cast<physicat::PString*>(inPointer); });
+        }
     }
     else if(inProperty.TypeId == typeid(physicat::math::Vector3)) {
-        physicat::math::Vector3& value = *static_cast<physicat::math::Vector3*>(inProperty.Get(inObject));
+        void* value = inProperty.Get(inObject);
+        physicat::math::Vector3 changeHolder = *static_cast<physicat::math::Vector3*>(value);
+        auto uniqueId = reinterpret_cast<uintptr_t>(value);
+
+        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
         ImGui::SameLine();
         ImGui::SetCursorPosX(200);
-        ImGui::InputFloat3("##hidden_label", &value[0]);
+
+        if(ImGui::InputFloat3(labelName.c_str(), &changeHolder[0], nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
+            change = new physicat::ReflectionPropertyChange(inProperty.Name, new physicat::math::Vector3(changeHolder), [](void* inPointer){ delete static_cast<physicat::math::Vector3*>(inPointer); });
+        }
     }
     else {
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if(ImGui::TreeNode(inProperty.Name.c_str())) {
-            ShowProperty(inProperty.TypeName, inProperty.Get(inObject));
+            physicat::ReflectionPropertyChange::Assign(change, ShowProperty(inProperty.TypeName, inProperty.Get(inObject)));
             ImGui::TreePop();
         }
     }
+
+    return change;
 }
 
 void physicat::ImGuiInputExtension::ShowTabExample() {
@@ -99,7 +138,7 @@ void physicat::ImGuiInputExtension::ShowTabExample() {
         ImGui::TableNextColumn();
         char buffer[128] = "Default Text";
         ImGui::InputText("##input", buffer, sizeof(buffer));
-//                    ImGui::InputFloat3("##hidden_label", &value[0]);
+//                    ImGui::InputFloat3("##hidden_labedl", &value[0]);
 
         ImGui::EndTable();
     }
