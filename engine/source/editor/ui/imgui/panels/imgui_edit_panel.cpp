@@ -35,27 +35,22 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, entt
 
                     // Display Component Name
                     if(ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-                        // Display Reflected Properties
-                        physicat::ImGuiInputExtension::ShowProperty(componentName, componentObject);
+                        if(
+                            physicat::ReflectionPropertyChange* change = physicat::ImGuiInputExtension::ShowProperty(componentName, componentObject);
+                            change != nullptr
+                        ){
+                            change->EntityId = static_cast<int>(lifeObject);
+                            change->ComponentType = type;
+
+//                            physicat::Log("Edit Panel", *static_cast<float*>(change->Data));
+                            inUIInputQueue.push(*change);
+                        }
+
                         ImGui::Spacing();
                     }
                 }
             }
 
-////            void* componentObject;
-//            entt::id_type componentId; //
-//            std::string componentName = physicat::Reflection.GetComponentName(componentId);
-////            std::string propertyName = ""; //
-//            int propertyDataInt = 8;
-//            const void* propertyData = &propertyDataInt; //
-//            std::vector<physicat::ReflectionProperty> componentProperties = physicat::Reflection.GetProperties(componentName);
-//            // entt , name , value
-//            // entt , name , name , value
-//            // entt , name , name , name , value
-//            ReflectionPropertyChange change(0, 0);
-//
-//
-//
 //            for(physicat::ReflectionProperty property : componentProperties) {
 //                if(property.Name == propertyName) {
 //                    // if last last propertyName

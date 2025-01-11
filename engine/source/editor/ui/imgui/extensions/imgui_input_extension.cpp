@@ -118,8 +118,14 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowClassOrSt
     }
     else {
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+
         if(ImGui::TreeNode(inProperty.Name.c_str())) {
             physicat::ReflectionPropertyChange::Assign(change, ShowProperty(inProperty.TypeName, inProperty.Get(inObject)));
+
+            if(change != nullptr) {
+                change->ClassProperties.push_back(inProperty);
+            }
+
             ImGui::TreePop();
         }
     }
