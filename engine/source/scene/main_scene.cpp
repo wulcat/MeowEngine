@@ -30,10 +30,6 @@ using physicat::MainScene;
 
 using namespace physicat::assets;
 using namespace physicat::entity;
-//using physicat::core::component::RenderComponentBase;
-//using physicat::core::component::MeshRenderComponent;
-//using physicat::core::component::LineRenderComponent;
-//using physicat::core::component::Transform3DComponent;
 
 namespace {
     physicat::PerspectiveCamera CreateCamera(const physicat::WindowSize& size) {
@@ -43,8 +39,6 @@ namespace {
 
 // this -> type -> value
 // component -> property -> property
-
-//physicat::EnttReflection ReflectionTest;
 
 struct MainScene::Internal {
     physicat::PerspectiveCamera Camera;
