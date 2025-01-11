@@ -4,7 +4,6 @@
 
 #include "main_scene.hpp"
 
-#include "entt_wrapper.hpp"
 #include "camera_controller.hpp"
 #include "perspective_camera.hpp"
 #include "static_mesh_instance.hpp"
@@ -13,6 +12,7 @@
 
 #include "mesh_render_component.hpp"
 #include "line_render_component.hpp"
+#include "transform2d_component.hpp"
 #include "transform3d_component.hpp"
 
 #include "life_object_component.hpp"
@@ -21,7 +21,8 @@
 #include "collider_component.hpp"
 
 #include "rigidbody_component.hpp"
-
+#include "entt_buffer.hpp"
+#include "entt_reflection_wrapper.hpp"
 
 using physicat::MainScene;
 //using physicat::assets::ShaderPipelineType;
@@ -43,11 +44,11 @@ namespace {
 struct MainScene::Internal {
     physicat::PerspectiveCamera Camera;
     physicat::CameraController CameraController;
-//    std::vector<core::LifeObject> LifeObjects;
 
-    entt::registry Registry;
+    EnttBuffer RegistryBuffer;
+    std::queue<physicat::ReflectionPropertyChange> UiInputPropertyChangesQueue;
+
     float Time;
-
 
     // User Input Events
     const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
@@ -57,6 +58,7 @@ struct MainScene::Internal {
         , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
         , KeyboardState(SDL_GetKeyboardState(nullptr))
         , Time(0)
+        , RegistryBuffer()
     {}
 
     void OnWindowResized(const physicat::WindowSize& size) {
@@ -311,7 +313,27 @@ struct MainScene::Internal {
 //        for(auto& lifeObject : LifeObjects) {
 //            renderer.Render(&Camera, &lifeObject);
 //        }
-        renderer.Render(&Camera, Registry);
+        renderer.Render(&Camera, RegistryBuffer.GetFinal());
+    }
+
+    void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) {
+        renderer.RenderUI(RegistryBuffer.GetFinal(), UiInputPropertyChangesQueue , frameBufferId, fps);
+    }
+
+    void SwapBuffer() {
+        RegistryBuffer.Swap();
+    }
+
+    void SyncThreadData() {
+        while(!UiInputPropertyChangesQueue.empty()) {
+            ReflectionPropertyChange& change = UiInputPropertyChangesQueue.front();
+
+            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetCurrent());
+            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetStaging());
+            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetFinal());
+
+            UiInputPropertyChangesQueue.pop();
+        }
     }
 };
 
@@ -345,12 +367,20 @@ void MainScene::Render(physicat::Renderer &renderer) {
     InternalPointer->Render(renderer);
 }
 
+void MainScene::RenderUI(physicat::Renderer &renderer, unsigned int frameBufferId, const double fps) {
+    InternalPointer->RenderUI(renderer, frameBufferId, fps);
+}
+
 const float& MainScene::GetDeltaTime() {
     return InternalPointer->Time ;
 }
 
-entt::registry* MainScene::GetEntities() {
-    return &InternalPointer->Registry;
+void MainScene::SwapBuffer() {
+    InternalPointer->SwapBuffer();
+}
+
+void MainScene::SyncThreadData() {
+    InternalPointer->SyncThreadData();
 }
 
 

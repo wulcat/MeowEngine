@@ -21,9 +21,11 @@ namespace physicat {
         void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) override;
         void Update(const float& deltaTime) override;
         void Render(physicat::Renderer& renderer) override;
+        void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
+        void SwapBuffer() override;
+        void SyncThreadData() override;
 
         const float& GetDeltaTime() override;
-        entt::registry* GetEntities() override;
 
     private:
         struct Internal;
