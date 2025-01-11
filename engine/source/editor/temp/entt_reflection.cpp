@@ -37,32 +37,25 @@ void physicat::EnttReflection::RegisterProperty(std::string inClassName, Reflect
 
 void physicat::EnttReflection::ApplyPropertyChange(physicat::ReflectionPropertyChange& inPropertyChange, entt::registry& inRegistry) {
     auto changedEntity = static_cast<entt::entity>(inPropertyChange.EntityId);
+
     entt::basic_registry<>::common_type *componentStorage = inRegistry.storage(inPropertyChange.ComponentType);
+    std::string componentName = GetComponentName(inPropertyChange.ComponentType);
+
     void *classObject = componentStorage->value(changedEntity);
 
-    for(int i = inPropertyChange.PropertyNames.size() - 1; i > 0; i--) {
-        std::string propertyName = inPropertyChange.PropertyNames[i];
-        std::vector<physicat::ReflectionProperty> properties = GetProperties(propertyName);
+    // if component has direct changes
+    if(inPropertyChange.ClassProperties.empty()) {
+        ApplyPropertyChangeData(componentName, inPropertyChange, classObject);
+    }
+    // if classes / struct within component has changes
+    else {
+        for(int i = inPropertyChange.ClassProperties.size() - 1; i >= 0; i--) {
+            physicat::ReflectionProperty property = inPropertyChange.ClassProperties[i];
+            classObject = property.Get(classObject);
 
-        // remove once we have the data
-        i--;
-
-        for (const physicat::ReflectionProperty &property: properties) {
-            propertyName = inPropertyChange.PropertyNames[i];
-            if (property.Name == propertyName) {
-                // if it was last property, we apply the data
-                if(i == 0) {
-                    property.Set(classObject, inPropertyChange.Data);
-                }
-                    // if it wasn't last property, we get the property object for next iteration
-                else {
-                    classObject = property.Get(classObject);
-                }
-
-                // we have found our property, move out of for loop
-                break;
+            if(i == 0) {
+                ApplyPropertyChangeData(property.TypeName, inPropertyChange, classObject);
             }
         }
     }
-
 }

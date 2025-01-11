@@ -8,11 +8,11 @@
 #include "log.hpp"
 
 physicat::ReflectionPropertyChange::ReflectionPropertyChange(const std::string& inPropertyChangeName, void* inChangeData, std::function<void(void*)> inDataDeleter)
-        : PropertyNames()
+        : PropertyName(inPropertyChangeName)
+        , ClassProperties()
         , Data(inChangeData)
         , DataDeleter(std::move(inDataDeleter)){
     physicat::Log("physicat::ReflectionPropertyChange", "Constructed");
-    PropertyNames.push_back(inPropertyChangeName);
 }
 
 physicat::ReflectionPropertyChange::~ReflectionPropertyChange() {

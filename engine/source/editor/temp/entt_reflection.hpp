@@ -35,7 +35,18 @@ namespace physicat {
 
         void RegisterComponent(entt::id_type inId,  std::string inName);
         void RegisterProperty(std::string inClassName, ReflectionProperty inProperty);
+
         void ApplyPropertyChange(physicat::ReflectionPropertyChange& inPropertyChange, entt::registry& inRegistry);
+
+        void ApplyPropertyChangeData(std::string& inClassName, physicat::ReflectionPropertyChange& inPropertyChange, void* inClassObject) {
+            std::vector<physicat::ReflectionProperty> properties = GetProperties(inClassName);
+
+            for(const physicat::ReflectionProperty &property : properties) {
+                if(property.Name == inPropertyChange.PropertyName) {
+                    property.Set(inClassObject, inPropertyChange.Data);
+                }
+            }
+        }
 
     private:
         std::unordered_map<entt::id_type, std::string> Components;
