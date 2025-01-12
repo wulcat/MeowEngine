@@ -113,7 +113,7 @@ namespace physicat {
             PT_PROFILE_SCOPE;
             physicat::Log("Main Thread", "Started");
 
-            Scene.get()->Create(Physics);
+            Scene->Create(Physics);
 
 //            physicat::Log("Main Thread", "waiting for creating all threads");
 //            std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
@@ -167,8 +167,8 @@ namespace physicat {
                 // swap buffers
                 InputBuffer.Swap();
 
-                Scene.get()->SyncThreadData();
-                Scene.get()->SwapBuffer();
+                Scene->SyncThreadData();
+                Scene->SwapBuffer();
 
                 // wait until buffers are synced
                 // ideally since other threads are waiting this should release all of them automatically
@@ -190,7 +190,7 @@ namespace physicat {
             ThreadCount++;
 
             SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
-            Scene.get()->Load(AssetManager);
+            Scene->Load(AssetManager);
 
             // loop
             while (IsApplicationRunning) {
@@ -200,6 +200,8 @@ namespace physicat {
                 while(!InputBuffer.GetFinal().empty()) {
                     SDL_Event event = InputBuffer.GetFinal().front();
                     InputBuffer.GetFinal().pop();
+
+                    UI->Input(event);
 
                     switch (event.type) {
                         case SDL_USEREVENT:
@@ -228,12 +230,12 @@ namespace physicat {
                     SDL_GL_SwapWindow(WindowContext->window);
                 }
 
-                physicat::Log("Render Thread", "Waiting for other threads to finish processing");
+                // physicat::Log("Render Thread", "Waiting for other threads to finish processing");
 
                 // wait for all threads to sync up for frame ending
                 ProcessThreadBarrier.get()->Wait();
 
-                physicat::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
+                // physicat::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
                 // wait until buffers are synced on main thread
                 SwapBufferThreadBarrier.get()->Wait();
             }
@@ -294,8 +296,6 @@ namespace physicat {
             {
                 InputBuffer.GetCurrent().push(event);
 
-                UI->Input(event);
-
                 switch (event.type)
                 {
                     case SDL_WINDOWEVENT:
@@ -340,14 +340,14 @@ namespace physicat {
             // Track keyboard and mouse clicks/hold/drag/position
             InputManager->ProcessInput();
 
-            Scene.get()->Input(deltaTime, *InputManager.get());
+            Scene->Input(deltaTime, *InputManager.get());
 
             return true;
         };
 
         void Update(const float& deltaTime) {
             PT_PROFILE_SCOPE;
-            Scene.get()->Update(10);
+            Scene->Update(10);
         };
 
         // render ----------------
@@ -387,7 +387,7 @@ namespace physicat {
 
             {
                 PT_PROFILE_SCOPE_N("UI render");
-                Scene->RenderUI(*Renderer, FrameBuffer.get()->GetFrameTexture(), 1);
+                Scene->RenderUI(*Renderer, FrameBuffer->GetFrameTexture(), 1);
             }
 
 //                {
