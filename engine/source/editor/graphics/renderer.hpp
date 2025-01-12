@@ -7,19 +7,15 @@
 
 #pragma once
 
-//#include "asset_inventory.hpp"
-//#include "static_mesh_instance.hpp"
-//#include "opengl_line_pipeline.hpp"
-//#include "render_component_base.hpp"
 #include "entt_wrapper.hpp"
 #include "perspective_camera.hpp"
-
-//#include <vector>
+#include "reflection_property_change.hpp"
+#include "queue"
 
 namespace physicat {
     struct Renderer {
-//        virtual void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) = 0;
         virtual void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) = 0;
+        virtual void RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) = 0;
     };
 }
 

@@ -18,9 +18,12 @@ using physicat::assets::ShaderPipelineType;
 
 struct OpenGLRenderer::Internal {
     const std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
+    const std::shared_ptr<physicat::graphics::ImGuiRenderer> UI;
 
-    Internal(std::shared_ptr<physicat::OpenGLAssetManager> assetManager)
-    : AssetManager(assetManager){}
+    Internal(std::shared_ptr<physicat::OpenGLAssetManager> assetManager,
+             std::shared_ptr<physicat::graphics::ImGuiRenderer> inUIRenderer)
+    : AssetManager(assetManager)
+    , UI(inUIRenderer){}
 
 //    void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) {
 //
@@ -95,16 +98,21 @@ struct OpenGLRenderer::Internal {
             );
         }
     }
+
+    void RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+        UI.get()->Render(registry, inUIInputQueue, frameBufferId, fps);
+    }
 };
 
-OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(assetManager)) {}
+OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager,
+                               const std::shared_ptr<physicat::graphics::ImGuiRenderer>& uiRenderer)
+    : InternalPointer(physicat::make_internal_ptr<Internal>(assetManager, uiRenderer)) {}
 
-//void OpenGLRenderer::Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) {
-//    InternalPointer->Render(cameraObject, lifeObject);
-//}
 
-void OpenGLRenderer::Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry)
-{
+void OpenGLRenderer::Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) {
     InternalPointer->Render(cameraObject, registry);
+}
+
+void OpenGLRenderer::RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+    InternalPointer->RenderUI(registry, inUIInputQueue, frameBufferId, fps);
 }

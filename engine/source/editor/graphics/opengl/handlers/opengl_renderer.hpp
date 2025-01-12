@@ -9,16 +9,17 @@
 #include "renderer.hpp"
 
 #include "opengl_asset_manager.hpp"
-
+#include "imgui_renderer.hpp"
 
 #include <memory>
 
 namespace physicat {
     struct OpenGLRenderer : public physicat::Renderer {
-        OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager);
+        OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager,
+                       const std::shared_ptr<physicat::graphics::ImGuiRenderer>& uiRenderer);
 
-//        void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) override;
         void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) override;
+        void RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
 
     private:
         struct Internal;
