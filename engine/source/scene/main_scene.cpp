@@ -325,6 +325,28 @@ struct MainScene::Internal {
     }
 
     void SyncThreadData() {
+        // Add a template method to apply changes
+        // Each component will have a apply data method
+        // We will have data and component methods
+        // Data will always my permanant with no apply data method
+        // Components will always have apply method
+        // Sync Transform Component
+        auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent>();
+        auto finalView = RegistryBuffer.GetFinal().view<physicat::entity::Transform3DComponent>();
+
+        for(entt::entity entity : currentView) {
+            auto current = currentView.get<physicat::entity::Transform3DComponent>(entity);
+            auto& final = finalView.get<physicat::entity::Transform3DComponent>(entity);
+
+            final.Position = current.Position;
+        }
+
+        // create a template method
+        // pass the component
+        // every component needs to have a sync method
+
+        // Apply UI Inputs
+        // can go to our extended entt buffer class
         while(!UiInputPropertyChangesQueue.empty()) {
             ReflectionPropertyChange& change = UiInputPropertyChangesQueue.front();
 
