@@ -26,10 +26,14 @@
 #include "thread_barrier.hpp"
 #include "queue"
 #include "double_buffer.hpp"
+#include "entt_reflection_wrapper.hpp"
+//#include "entt_reflection.hpp"
 
 using namespace std;
 
 namespace physicat {
+//    extern physicat::EnttReflection ReflectionTest;
+
     struct ApplicationTest {
     public:
         ApplicationTest() {}
@@ -57,11 +61,14 @@ namespace physicat {
 
             WindowContext = std::make_unique<physicat::Window>();
             AssetManager = std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
-            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
-            UI = std::make_unique<physicat::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
+            UI = std::make_shared<physicat::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
+            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager, UI);
+
             FrameBuffer = std::make_unique<physicat::graphics::OpenGLFrameBuffer>(1000,500);
             InputManager = std::make_unique<physicat::input::InputManager>();
-//            Physics = std::make_shared<physicat::simulator::PhysXPhysics>();
+            Physics = std::make_shared<physicat::simulator::PhysXPhysics>();
+//            ReflectionTest = {};
+//            ReflectionTest.HasProperty("");
 
             Scene = std::make_shared<physicat::MainScene>(physicat::sdl::GetWindowSize(WindowContext->window));
 
@@ -111,12 +118,23 @@ namespace physicat {
 
         void MainThreadLoop() {
             // init
+            PT_PROFILE_SCOPE;
             physicat::Log("Main Thread", "Started");
+
             Scene.get()->Create(Physics);
+
+//            physicat::Log("Main Thread", "waiting for creating all threads");
+//            std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
+//            WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0;});
+//
+//            physicat::Log("Main Thread", "Created");
+
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
             // loop
             while(IsApplicationRunning)
             {
+                PT_PROFILE_SCOPE;
                 // if thread count == 0 on main notify
 
                 // update thread count++
@@ -127,6 +145,7 @@ namespace physicat {
 
                 if(!Input(0.02f))
                 {
+                    PT_PROFILE_SCOPE_N("Main Thread Ending");
                     IsApplicationRunning = false;
                     // if threads are waiting for thread sync we unpause them
                     ProcessThreadBarrier->End();
@@ -135,18 +154,34 @@ namespace physicat {
                     break;
                 }
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+//                std::this_thread::sleep_for(std::chrono::milliseconds(100));
 //                physicat::Log("Main Thread", "waiting process");
+
+                // - frames updating (processing / rendering)
+                //      - wait for all threads to finish processing the frame
+                // - swap buffers
+                // - merge data
+                //      - wait for swapping and merging to finish
+                // - continue for new frame
+
                 // wait for all threads to sync up for frame ending
+
                 ProcessThreadBarrier.get()->Wait();
+
+
+//                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
                 // swap buffers
                 InputBuffer.Swap();
 
-//                physicat::Log("Main Thread", "waiting swap");
+                Scene.get()->SyncThreadData();
+                Scene.get()->SwapBuffer();
+
+                // physicat::Log("Main Thread", "waiting swap");
                 // wait until buffers are synced
                 // ideally since other threads are waiting this should release all of them automatically
                 SwapBufferThreadBarrier.get()->Wait();
+
             }
 
             physicat::Log("Main Thread", "waiting for closing all threads");
@@ -166,6 +201,8 @@ namespace physicat {
 
             SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
             Scene.get()->Load(AssetManager);
+
+
 //            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
             // loop
             while (IsApplicationRunning) {
@@ -218,7 +255,7 @@ namespace physicat {
             }
 
             // exit
-            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
             ThreadCount--;
 
             physicat::Log("Render Thread", "Ended");
@@ -229,16 +266,21 @@ namespace physicat {
 
         void PhysicsThreadLoop() {
             physicat::Log("Physics Thread", "Started");
+
+
             ThreadCount++;
+            Physics->Create();
+
 
             while(IsApplicationRunning)
             {
                 PT_PROFILE_SCOPE;
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
-//                Barrier.get()->Wait();
+                FixedUpdate(1);
+//                ProcessThreadBarrier.get()->Wait();
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
             ThreadCount--;
 
             physicat::Log("Physics Thread", "Ended");
@@ -254,13 +296,14 @@ namespace physicat {
             PT_PROFILE_SCOPE;
             SDL_Event event;
 
-            while(!InputBuffer.GetFront().empty())
-            {
-                event = InputBuffer.GetFront().front();
-                InputBuffer.GetFront().pop();
-
-                // perform the task
-            }
+//            while(!InputBuffer.GetCurrent().empty())
+//            {
+//                event = InputBuffer.GetCurrent().front();
+//                InputBuffer.GetCurrent().pop();
+//
+//                // perform the task
+//                physicat::Log("InputBuffer", "Event");
+//            }
 
             // Each loop we will process any events that are waiting for us.
             while (SDL_PollEvent(&event))
@@ -321,6 +364,7 @@ namespace physicat {
         };
 
         void Update(const float& deltaTime) {
+            PT_PROFILE_SCOPE;
             Scene.get()->Update(10);
         };
 
@@ -328,7 +372,7 @@ namespace physicat {
         std::thread RenderThread;
         // we decouple window / context into a class
         std::unique_ptr<physicat::Window> WindowContext;
-        std::unique_ptr<physicat::graphics::ImGuiRenderer> UI;
+        std::shared_ptr<physicat::graphics::ImGuiRenderer> UI;
         std::unique_ptr<physicat::OpenGLRenderer> Renderer;
         std::unique_ptr<physicat::graphics::OpenGLFrameBuffer> FrameBuffer;
         // this is shared because even main thread will access asset manager and sometimes physics
@@ -362,7 +406,7 @@ namespace physicat {
                 {
                     PT_PROFILE_SCOPE_N("UI render");
 //                    UI.Render(GetScene(), FrameBuffer.GetFrameTexture(), FpsCounter.getSmoothFPS());
-                    UI.get()->Render(*Scene.get(), FrameBuffer.get()->GetFrameTexture(), 1);
+                    Scene.get()->RenderUI(*Renderer, FrameBuffer.get()->GetFrameTexture(), 1);
                 }
 
                 {
@@ -409,7 +453,9 @@ namespace physicat {
         // physics thread ----------------
         std::shared_ptr<physicat::simulator::Physics> Physics;
 
-        void FixedUpdate(const float& inFixedDeltaTime) {};
+        void FixedUpdate(const float& inFixedDeltaTime) {
+            Physics->Update(inFixedDeltaTime);
+        };
 
         static FpsCounter FpsCounter;
     };
