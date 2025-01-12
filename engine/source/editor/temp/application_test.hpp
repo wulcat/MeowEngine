@@ -67,8 +67,6 @@ namespace physicat {
             FrameBuffer = std::make_unique<physicat::graphics::OpenGLFrameBuffer>(1000,500);
             InputManager = std::make_unique<physicat::input::InputManager>();
             Physics = std::make_shared<physicat::simulator::PhysXPhysics>();
-//            ReflectionTest = {};
-//            ReflectionTest.HasProperty("");
 
             Scene = std::make_shared<physicat::MainScene>(physicat::sdl::GetWindowSize(WindowContext->window));
 
@@ -99,8 +97,6 @@ namespace physicat {
 #endif
         }
 
-//        bool LoopApplication() {}
-
         // multithreading
         std::atomic<bool> IsApplicationRunning;
         std::atomic<int> ThreadCount;
@@ -110,11 +106,7 @@ namespace physicat {
         std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
         std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
 
-        //WindowSize sizeTemp;
-//        std::queue<SDL_Event> inputQueue;
         physicat::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = physicat::DoubleBuffer<std::queue<SDL_Event>>();
-//        physicat::DoubleBuffer<int> Test = physicat::DoubleBuffer<int>();
-        // ecs -> double buffer template -> command buffer
 
         void MainThreadLoop() {
             // init
@@ -147,6 +139,7 @@ namespace physicat {
                 {
                     PT_PROFILE_SCOPE_N("Main Thread Ending");
                     IsApplicationRunning = false;
+
                     // if threads are waiting for thread sync we unpause them
                     ProcessThreadBarrier->End();
                     SwapBufferThreadBarrier->End();
@@ -177,20 +170,17 @@ namespace physicat {
                 Scene.get()->SyncThreadData();
                 Scene.get()->SwapBuffer();
 
-                // physicat::Log("Main Thread", "waiting swap");
                 // wait until buffers are synced
                 // ideally since other threads are waiting this should release all of them automatically
                 SwapBufferThreadBarrier.get()->Wait();
-
             }
 
-            physicat::Log("Main Thread", "waiting for closing all threads");
+            physicat::Log("Main Thread", "Waiting for other threads to end");
+
             std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
             WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0;});
+
             physicat::Log("Main Thread", "Ended");
-            // exit
-
-
         }
 
         void RenderThreadLoop() {
@@ -202,17 +192,11 @@ namespace physicat {
             SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
             Scene.get()->Load(AssetManager);
 
-
-//            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager);
             // loop
             while (IsApplicationRunning) {
                 PT_PROFILE_SCOPE;
                 // Synchronize with the main thread
-                // Lock mutex, get game state updates, unlock
-//                physicat::Log("Render Thread", "Running");
-
                 // input
-
                 while(!InputBuffer.GetFinal().empty()) {
                     SDL_Event event = InputBuffer.GetFinal().front();
                     InputBuffer.GetFinal().pop();
@@ -233,7 +217,7 @@ namespace physicat {
                 }
 
                 // Clear frame
-//                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Issue OpenGL draw calls
                 Render();
@@ -243,15 +227,15 @@ namespace physicat {
                     // Swap buffers
                     SDL_GL_SwapWindow(WindowContext->window);
                 }
-//                physicat::Log("Render Thread", "process waiting");
+
+                physicat::Log("Render Thread", "Waiting for other threads to finish processing");
+
                 // wait for all threads to sync up for frame ending
                 ProcessThreadBarrier.get()->Wait();
-//                physicat::Log("Render Thread", "swap waiting");
+
+                physicat::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
                 // wait until buffers are synced on main thread
                 SwapBufferThreadBarrier.get()->Wait();
-
-//                glViewport(0,0, sizeTemp.Width,sizeTemp.Height);
-//                FrameBuffer->RescaleFrameBuffer(sizeTemp.Width, sizeTemp.Height);
             }
 
             // exit
@@ -336,13 +320,11 @@ namespace physicat {
                     case SDL_USEREVENT:
                         switch (event.user.code) {
                             case 2: {
+                                physicat::Log("Main Thread", "Rescaled Window");
+
                                 const WindowSize size = *(WindowSize *) event.user.data1;
-//                                OnViewportResize(size);
                                 Scene->OnWindowResized(size);
-                                physicat::Log("mian Thread", "rescale userevent");
-//                                sizeTemp = size;
-//                                glViewport(0,0, size.Width,size.Height);
-//                                FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
+
                                 break;
                             }
                             case 3: {
@@ -382,37 +364,35 @@ namespace physicat {
         void Render() {
 
             Uint64 currentTime = SDL_GetPerformanceCounter();
+
+            PT_PROFILE_SCOPE_N("setting current");
+            // We let opengl know that any after this will be drawn into custom frame buffer
             {
-                PT_PROFILE_SCOPE_N("setting current");
-                // We let opengl know that any after this will be drawn into custom frame buffer
+                PT_PROFILE_SCOPE_N("framebuffer");
+                FrameBuffer->Bind();
+
                 {
-                    PT_PROFILE_SCOPE_N("framebuffer");
-                    FrameBuffer.get()->Bind();
+                    PT_PROFILE_SCOPE_N("scene render");
+                    glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                    {
-                        PT_PROFILE_SCOPE_N("scene render");
-                        glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
-                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    Scene->Render(*Renderer);
 
-                        Scene.get()->Render(*Renderer);
-
-                        FrameBuffer.get()->Unbind();
-                    }
+                    FrameBuffer->Unbind();
                 }
+            }
 
-                glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                {
-                    PT_PROFILE_SCOPE_N("UI render");
-//                    UI.Render(GetScene(), FrameBuffer.GetFrameTexture(), FpsCounter.getSmoothFPS());
-                    Scene.get()->RenderUI(*Renderer, FrameBuffer.get()->GetFrameTexture(), 1);
-                }
+            {
+                PT_PROFILE_SCOPE_N("UI render");
+                Scene->RenderUI(*Renderer, FrameBuffer.get()->GetFrameTexture(), 1);
+            }
 
-                {
-                    PT_PROFILE_SCOPE_N("waiting");
+//                {
+//                    PT_PROFILE_SCOPE_N("waiting");
 
-//
 //                    // Frame timing logic
 //                    Uint64 frameEndTime = SDL_GetPerformanceCounter();
 //                    double frameDuration = (double) (frameEndTime - currentTime) / frequency;
@@ -423,13 +403,11 @@ namespace physicat {
 //                    }
 //
 //                    previousTime = frameEndTime;
-                }
-                {
+//                }
+//                {
 //                    FpsCounter.frameEnd();
-                    PT_PROFILE_SCOPE_N("swap");
+//                    PT_PROFILE_SCOPE_N("swap");
 //                    SDL_GL_SwapWindow(Window);
-
-
 
 //                // Manual Frame Synchronization --
 //                // Insert a fence sync object at the end of the previous frame's commands
@@ -445,9 +423,7 @@ namespace physicat {
 //                // Clean up the sync object after use
 //                glDeleteSync(sync);
 //                 -- end
-                }
-            }
-
+//                }
         };
 
         // physics thread ----------------
