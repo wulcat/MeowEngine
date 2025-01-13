@@ -1,3 +1,18 @@
+### Build Status (non-compilable)
+> Implementing multi-threading which involves `main, render and physics thread` to 
+> handle different game states (produced & consumed).
+> This involves decoupling the root engine code base and since it's still ongoing,
+> currently build is not possible.
+
+## Build
+<img src="screenshots/engine_v3.gif" width="700">
+
+## Compatibility
+- [x] Unix Console on Mac
+- [x] Mac (x84) (Rosetta)
+- [ ] Windows
+- [x] Web
+
 
 ## Plan of action
 - [x] Setting up project for cross-platform build support
@@ -47,17 +62,8 @@
 - [ ] Setting up Vulkan
 - [ ] Creating 3D spatial hashing (showcase & in-built)
 
-## Build
-<img src="screenshots/engine_v3.gif" width="700">
-
 ## Folder Structure
 <img src="screenshots/directory-diagram.png">
-
-## Compatibility
-- [x] Unix Console on Mac
-- [x] Mac (x84) (Rosetta)
-- [ ] Windows
-- [x] Web
 
 ## Tools
 - Emscripten
@@ -111,3 +117,16 @@ Activate PATH and other environment variables in the current terminal `` $source
   - [There's gold mine in the comment's research on it](https://www.youtube.com/watch?v=sx4IIQL0x7c&list=RDCMUCEwhtpXrg5MmwlH04ANpL8A&start_radio=1&rv=sx4IIQL0x7c&t=1134)
 - [Basic's of c++ to make sure, code is written the right way](https://www.programiz.com/cpp-programming/memory-management)
 - [Matrices](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
+
+## Documentation & Questions notes
+- What are macros
+
+[//]: # (  - When are macros compiled)
+  - Why use macros?
+  - methods cannot be called globally? why?
+  - variables can be declared but not reused globally has to be from method? why?
+  - What does reflection actually mean? headrd a lot in c# and now while doing multithreading in c++ as well.
+  - what is ui binding? - property change emit event listner
+
+[//]: # ( - typename... arg and &&...arg && std::forward(args)...)
+[//]: # ( - NUMA architecture & SALSA)

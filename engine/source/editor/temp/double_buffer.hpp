@@ -17,11 +17,6 @@ namespace physicat {
     public:
         DoubleBuffer() : Current{}, Final{} {}
 
-        void Swap() {
-            PT_PROFILE_SCOPE;
-            std::swap(Current, Final);
-        }
-
         T& GetCurrent() {
             return Current;
         }
@@ -30,7 +25,12 @@ namespace physicat {
             return Final;
         }
 
-    private:
+        void Swap() {
+            PT_PROFILE_SCOPE;
+            std::swap(Current, Final);
+        }
+
+    protected:
         T Current;
         T Final;
     };

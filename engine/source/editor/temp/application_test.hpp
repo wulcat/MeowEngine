@@ -113,7 +113,7 @@ namespace physicat {
             PT_PROFILE_SCOPE;
             physicat::Log("Main Thread", "Started");
 
-            Scene->Create(Physics);
+            Scene->Create();
 
 //            physicat::Log("Main Thread", "waiting for creating all threads");
 //            std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);

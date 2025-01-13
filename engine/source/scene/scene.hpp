@@ -18,7 +18,7 @@ namespace physicat {
         virtual void OnWindowResized(const physicat::WindowSize& size) = 0;
 
         virtual void Load(std::shared_ptr<physicat::AssetManager> assetManager) = 0;
-        virtual void Create(std::shared_ptr<physicat::simulator::Physics> inPhysics) = 0; // Load assets
+        virtual void Create() = 0; // Load assets
         virtual void Input(const float& deltaTime, const physicat::input::InputManager& inputManager) = 0;
         virtual void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) = 0;
         virtual void Update(const float& deltaTime) = 0;
