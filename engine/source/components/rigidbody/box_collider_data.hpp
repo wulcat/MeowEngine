@@ -12,7 +12,7 @@
 namespace physicat::entity {
     class BoxColliderData : public entity::ColliderData {
     public:
-        explicit BoxColliderData(const entity::Transform3DComponent* inTransform);
+        explicit BoxColliderData();
         virtual ~BoxColliderData() = default;
 
         physx::PxGeometry& GetGeometry() override;

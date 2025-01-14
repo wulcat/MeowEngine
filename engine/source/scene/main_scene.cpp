@@ -28,7 +28,7 @@ using physicat::MainScene;
 //using physicat::assets::ShaderPipelineType;
 //using physicat::assets::StaticMeshType;
 //using physicat::assets::TextureType;
-
+#include "physx_physics.hpp"
 using namespace physicat::assets;
 using namespace physicat::entity;
 
@@ -234,19 +234,23 @@ struct MainScene::Internal {
 //        }
     }
 
-    void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) {
-        inPhysics.Update(inFixedDeltaTime);
+    void FixedUpdate(const float& inFixedDeltaTime) {
+//        inPhysics.Update(inFixedDeltaTime);
 
-        // Apply update physics transform to entities
-        auto view = Registry.view<entity::Transform3DComponent, entity::RigidbodyComponent>();
+//        // Apply update physics transform to entities
+        auto view = RegistryBuffer.GetStaging().view<entity::Transform3DComponent, entity::RigidbodyComponent>();
         for(auto entity: view)
         {
             auto& transform = view.get<entity::Transform3DComponent>(entity);
             auto& rigidbody = view.get<entity::RigidbodyComponent>(entity);
 
+            rigidbody.PrintPosition();
+//            physicat::Log("Fixed Update", )
             // update transform using rigidbody transform;
-            rigidbody.UpdateTransform(transform);
+//            rigidbody.UpdateTransform(transform);
         }
+
+
     }
 
     // We can perform -> culling, input detection
@@ -263,8 +267,7 @@ struct MainScene::Internal {
 
 //        physicat::Log("Camera", std::to_string(Camera.GetPosition().z));
 
-        auto view = Registry.view<entity::Transform3DComponent>();
-
+        auto view = RegistryBuffer.GetCurrent().view<entity::Transform3DComponent>();
         for(auto entity: view)
         {
             auto& transform = view.get<entity::Transform3DComponent>(entity);
@@ -351,7 +354,7 @@ struct MainScene::Internal {
             ReflectionPropertyChange& change = UiInputPropertyChangesQueue.front();
 
             physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetCurrent());
-            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetStaging());
+//            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetStaging());
             physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetFinal());
 
             UiInputPropertyChangesQueue.pop();
@@ -369,16 +372,20 @@ void MainScene::OnWindowResized(const physicat::WindowSize &size) {
 void MainScene::Load(std::shared_ptr<physicat::AssetManager> assetManager) {
     InternalPointer->Load(assetManager);
 }
-void MainScene::Create(std::shared_ptr<physicat::simulator::Physics> inPhysics) {
-    InternalPointer->Create(inPhysics);
+void MainScene::Create() {
+    InternalPointer->Create();
+}
+
+void MainScene::CreatePhysics(physicat::simulator::Physics* inPhysics) {
+    InternalPointer->CreatePhysics(inPhysics);
 }
 
 void MainScene::Input(const float &deltaTime, const physicat::input::InputManager& inputManager) {
     InternalPointer->Input(deltaTime, inputManager);
 }
 
-void MainScene::FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics &inPhysics) {
-    InternalPointer->FixedUpdate(inFixedDeltaTime, inPhysics);
+void MainScene::FixedUpdate(const float& inFixedDeltaTime) {
+    InternalPointer->FixedUpdate(inFixedDeltaTime);
 }
 
 void MainScene::Update(const float &deltaTime) {

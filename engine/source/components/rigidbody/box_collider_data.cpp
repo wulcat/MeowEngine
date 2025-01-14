@@ -7,7 +7,7 @@
 
 using namespace physicat::entity;
 
-BoxColliderData::BoxColliderData(const entity::Transform3DComponent *inTransform)
+BoxColliderData::BoxColliderData()
 {
     //physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0,10,0));
     Geometry = physx::PxBoxGeometry(physx::PxVec3(0.5f, 0.5f, 0.5f));

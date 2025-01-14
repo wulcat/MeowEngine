@@ -17,8 +17,9 @@ namespace physicat {
 
         virtual void Load(std::shared_ptr<physicat::AssetManager> assetManager) override;
         void Create() override;
+        void CreatePhysics(physicat::simulator::Physics* inPhysics) override;
         void Input(const float &deltaTime, const physicat::input::InputManager& inputManager) override;
-        void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) override;
+        void FixedUpdate(const float& inFixedDeltaTime) override;
         void Update(const float& deltaTime) override;
         void Render(physicat::Renderer& renderer) override;
         void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) override;

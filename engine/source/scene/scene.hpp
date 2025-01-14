@@ -19,8 +19,9 @@ namespace physicat {
 
         virtual void Load(std::shared_ptr<physicat::AssetManager> assetManager) = 0;
         virtual void Create() = 0; // Load assets
+        virtual void CreatePhysics(physicat::simulator::Physics* inPhysics) = 0;
         virtual void Input(const float& deltaTime, const physicat::input::InputManager& inputManager) = 0;
-        virtual void FixedUpdate(const float& inFixedDeltaTime, physicat::simulator::Physics& inPhysics) = 0;
+        virtual void FixedUpdate(const float& inFixedDeltaTime) = 0;
         virtual void Update(const float& deltaTime) = 0;
         virtual void Render(physicat::Renderer& renderer) = 0;
         virtual void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) = 0;

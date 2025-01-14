@@ -4,13 +4,18 @@
 
 #include "entt_buffer.hpp"
 
-//template<typename BufferType>
-physicat::EnttBuffer::EnttBuffer() {}
+physicat::EnttBuffer::EnttBuffer()
+ : Staging() {}
+
+entt::registry& physicat::EnttBuffer::GetStaging() {
+    return Staging;
+}
 
 entt::entity physicat::EnttBuffer::Create() {
     entt::entity entity = Current.create();
-    Staging.create();
-    Final.create();
+    Final.create(entity);
+
+    StagingCreation.enqueue(entity);
 
     return entity;
 }

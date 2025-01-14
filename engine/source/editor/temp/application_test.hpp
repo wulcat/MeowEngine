@@ -261,6 +261,7 @@ namespace physicat {
             while(IsApplicationRunning)
             {
                 PT_PROFILE_SCOPE;
+
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 FixedUpdate(1);
 //                ProcessThreadBarrier.get()->Wait();
@@ -430,7 +431,9 @@ namespace physicat {
         std::shared_ptr<physicat::simulator::Physics> Physics;
 
         void FixedUpdate(const float& inFixedDeltaTime) {
+            Scene->CreatePhysics(Physics.get());
             Physics->Update(inFixedDeltaTime);
+            Scene->FixedUpdate(1);
         };
 
         static FpsCounter FpsCounter;
