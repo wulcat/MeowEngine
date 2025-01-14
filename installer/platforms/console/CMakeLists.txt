@@ -31,6 +31,7 @@ include_directories(${THIRD_PARTY_DIR}/SDL/include)
 include_directories(${THIRD_PARTY_DIR}/glm)
 include_directories(${THIRD_PARTY_DIR}/tiny-obj-loader)
 include_directories(${THIRD_PARTY_DIR}/SDL2_image)
+include_directories(${THIRD_PARTY_DIR}/concurrentqueue)
 include_directories(${THIRD_PARTY_DIR}/imgui)
 include_directories(${THIRD_PARTY_DIR}/imgui/backends)
 include_directories(${THIRD_PARTY_DIR}/tracy/public/tracy)
@@ -66,12 +67,13 @@ foreach(DIR ${ALL_DIRECTORIES})
 endforeach()
 
 add_executable(
-    Physicat
-    ${THIRD_PARTY_DIR}/tracy/public/TracyClient.cpp
-    ${THIRD_PARTY_DIR}/imgui/imgui.cpp ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_sdl2.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-    ${CPP_HEADERS}
-    ${CPP_SOURCES}
-    ${M_SOURCES}
+     Physicat
+     ${THIRD_PARTY_DIR}/tracy/public/TracyClient.cpp
+     ${THIRD_PARTY_DIR}/concurrentqueue/concurrentqueue.h
+     ${THIRD_PARTY_DIR}/imgui/imgui.cpp ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_sdl2.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+     ${CPP_HEADERS}
+     ${CPP_SOURCES}
+     ${M_SOURCES}
 )
 
 # Link profiler with console executable

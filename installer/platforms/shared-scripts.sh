@@ -55,6 +55,32 @@ verify_frameworks_folder_exists() {
   popd || exit
 }
 
+fetch_third_party_concurrent_queue_library() {
+  verify_third_party_folder_exists
+
+  # shellcheck disable=SC2164
+    pushd libs/third-party
+      if [ ! -d "concurrentqueue" ] ; then
+        echo "Fetching Concurrent Queue..."
+
+        # Download the SDL2 source zip file
+        wget https://github.com/cameron314/concurrentqueue/archive/refs/tags/v1.0.4.zip
+
+        # Unzip the file into the current folder
+        unzip -q v1.0.4.zip
+
+        # Rename the SDL2-2.0.9 folder to SDL
+        mv concurrentqueue-1.0.4 concurrentqueue
+
+        # Clean up by deleting the zip file that we downloaded.
+        rm v1.0.4.zip
+      else
+        echo "Concurrent queue library already exists in third party folder."
+      fi
+    # shellcheck disable=SC2164
+    popd
+}
+
 fetch_third_party_lib_sdl() {
   verify_third_party_folder_exists
 
