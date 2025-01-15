@@ -41,6 +41,15 @@ namespace physicat::math {
                 default: return X;
             }
         }
+
+        Vector3 operator-(const Vector3& in) const {
+            return {
+                X - in.X,
+                Y - in.Y,
+                Z - in.Z
+            };
+        }
+
     };
 }
 
