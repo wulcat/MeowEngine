@@ -299,6 +299,9 @@ namespace physicat {
 
                 switch (event.type)
                 {
+                    case SDL_MOUSEBUTTONDOWN:
+                        InputManager->SetMouseDown();
+                        break;
                     case SDL_WINDOWEVENT:
 //                    if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
 //                        OnWindowResized();
@@ -342,7 +345,7 @@ namespace physicat {
             InputManager->ProcessInput();
 
             Scene->Input(deltaTime, *InputManager.get());
-
+            InputManager->isMouseDown = false;
             return true;
         };
 
