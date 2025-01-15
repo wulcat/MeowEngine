@@ -21,12 +21,26 @@ void physicat::entity::RigidbodyComponent::SetPhysicsBody(physx::PxRigidDynamic 
 
 void RigidbodyComponent::UpdateTransform(Transform3DComponent &inTransform) {
     auto pose = DynamicBody->getGlobalPose();
-    inTransform.Position.X = pose.p.x;
-    inTransform.Position.Y = pose.p.y;
-    inTransform.Position.Z = pose.p.z;
+    inTransform.Position.X = pose.p.x + Delta.X;
+    inTransform.Position.Y = pose.p.y + Delta.Y;
+    inTransform.Position.Z = pose.p.z + Delta.Z;
+
+//    physicat::Log("Update Transform", DeltaY);
+    Delta.X = 0;
+    Delta.Y = 0;
+    Delta.Z = 0;
+
+    DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
+//    PrintPosition();
 }
 
 void RigidbodyComponent::OverrideTransform(Transform3DComponent &inTransform) {
-    DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
+//    DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
+}
+
+void physicat::entity::RigidbodyComponent::AddDelta(physicat::math::Vector3 inDelta) {
+    Delta.X += inDelta.X;
+    Delta.Y += inDelta.Y;
+    Delta.Z += inDelta.Z;
 }
 
