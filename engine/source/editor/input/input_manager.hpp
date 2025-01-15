@@ -11,11 +11,13 @@ namespace physicat::input {
     struct InputManager {
     public:
         void ProcessInput();
+        void SetMouseDown();
 
         bool isActive;
         uint32_t mouseState;
         int mouseDeltaX;
         int mouseDeltaY;
+        bool isMouseDown;
     };
 }
 

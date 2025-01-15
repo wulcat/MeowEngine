@@ -9,3 +9,7 @@ void physicat::input::InputManager::ProcessInput() {
     // Update Mouse State
     mouseState = SDL_GetRelativeMouseState(&mouseDeltaX, &mouseDeltaY);
 }
+
+void physicat::input::InputManager::SetMouseDown() {
+    isMouseDown = true;
+}
