@@ -25,13 +25,11 @@ void RigidbodyComponent::UpdateTransform(Transform3DComponent &inTransform) {
     inTransform.Position.Y = pose.p.y + Delta.Y;
     inTransform.Position.Z = pose.p.z + Delta.Z;
 
-//    physicat::Log("Update Transform", DeltaY);
     Delta.X = 0;
     Delta.Y = 0;
     Delta.Z = 0;
 
     DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
-//    PrintPosition();
 }
 
 void RigidbodyComponent::OverrideTransform(Transform3DComponent &inTransform) {

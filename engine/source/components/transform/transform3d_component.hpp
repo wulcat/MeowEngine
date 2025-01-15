@@ -18,11 +18,13 @@ namespace physicat::entity {
     public:
         static void Reflect();
 
-        Transform3DComponent();
-        Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec4 rotation);
-        Transform3DComponent(glm::vec3 position, glm::vec3 scale, glm::vec3 rotationAxis, float rotationDegrees);
+        Transform3DComponent(const glm::mat4& inProjectionMatrix);
+        Transform3DComponent(const glm::mat4& inProjectionMatrix, glm::vec3 position, glm::vec3 scale, glm::vec4 rotation);
+        Transform3DComponent(const glm::mat4& inProjectionMatrix, glm::vec3 position, glm::vec3 scale, glm::vec3 rotationAxis, float rotationDegrees);
 
-        void Update(const float& deltaTime, const glm::mat4& projectionViewMatrix) override;
+        void CalculateTransformMatrix(const glm::mat4& inProjectionMatrix);
+
+        void Update(const float& deltaTime) override;
         void RotateBy(const float& degrees);
 
 //        physicat::math::Vector3 PositionTest;

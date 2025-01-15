@@ -15,7 +15,7 @@ class TransformComponentBase : public physicat::entity::ComponentBase {
         TransformComponentBase();
         virtual ~TransformComponentBase() = default;
 
-        virtual void Update(const float& deltaTime, const glm::mat4& projectionViewMatrix) = 0;
+        virtual void Update(const float& deltaTime) = 0;
     };
 }
 
