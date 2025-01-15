@@ -26,6 +26,7 @@ namespace physicat {
         virtual void Render(physicat::Renderer& renderer) = 0;
         virtual void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) = 0;
         virtual void SwapBuffer() = 0;
+        virtual void SyncPhysicsThreadData() = 0;
         virtual void SyncThreadData() = 0;
 
         // Currently returns delta time

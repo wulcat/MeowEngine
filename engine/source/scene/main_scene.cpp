@@ -48,6 +48,7 @@ struct MainScene::Internal {
     EnttBuffer RegistryBuffer;
     std::queue<physicat::ReflectionPropertyChange> UiInputPropertyChangesQueue;
 
+
     float Time;
 
     // User Input Events
@@ -99,38 +100,42 @@ struct MainScene::Internal {
         REGISTER_ENTT_COMPONENT(MeshRenderComponent);
     }
 
-    void Create(std::shared_ptr<physicat::simulator::Physics> inPhysics) {
-//        inPhysics.Create();
+    void CreatePhysics(physicat::simulator::Physics* inPhysics) {
+        RegistryBuffer.CreateInStaging();
+        RegistryBuffer.AddInStaging(inPhysics);
+    }
 
-
-        const auto meshEntity = Registry.create();
-        Registry.emplace<entity::LifeObjectComponent>(meshEntity, "torus");
-        Registry.emplace<entity::Transform3DComponent>(
-            meshEntity,
-            glm::vec3{0, 0, 0},
-            glm::vec3{1.0, 1.0f, 1.0f},
-            glm::vec3{0.0f, 1.0f, 0.0f},
-            0.0f
+    void Create() {
+        auto entity = RegistryBuffer.Create();
+        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(entity, "torus");
+        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+                entity,
+                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                glm::vec3{5, 0, 0},
+                glm::vec3{1.0, 1.0f, 1.0f},
+                glm::vec3{0.0f, 1.0f, 0.0f},
+                12.0f
         );
-        Registry.emplace<entity::MeshRenderComponent>(
-            meshEntity,
-            assets::ShaderPipelineType::Default,
-            new physicat::StaticMeshInstance{
-                    assets::StaticMeshType::Torus,
-                    assets::TextureType::Pattern
-            }
+        RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
+                entity,
+                assets::ShaderPipelineType::Default,
+                new physicat::StaticMeshInstance{
+                        assets::StaticMeshType::Torus,
+                        assets::TextureType::Pattern
+                }
         );
 
-        const auto cubeEntity = Registry.create();
-        Registry.emplace<entity::LifeObjectComponent>(cubeEntity, "cube");
-        Registry.emplace<entity::Transform3DComponent>(
+        const auto cubeEntity = RegistryBuffer.Create();
+        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity, "cube");
+        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                 cubeEntity,
-                glm::vec3{0.0f, 0.0f, 2},
+                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                glm::vec3{0.0f, 20.0f, 2},
                 glm::vec3{0.5f, 0.5f,0.5f},
                 glm::vec3{0.0f, 1.0f, 0.0f},
                 0
         );
-        Registry.emplace<entity::MeshRenderComponent>(
+        RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
                 cubeEntity,
                 assets::ShaderPipelineType::Default,
                 new physicat::StaticMeshInstance{
@@ -138,54 +143,55 @@ struct MainScene::Internal {
                         assets::TextureType::Pattern
                 }
         );
-        Registry.emplace<entity::ColliderComponent>(
+        RegistryBuffer.AddComponent<entity::ColliderComponent>(
             cubeEntity,
             entity::ColliderType::BOX,
-            new entity::BoxColliderData(&Registry.get<entity::Transform3DComponent>(cubeEntity))
+            new entity::BoxColliderData()
         );
-        Registry.emplace<entity::RigidbodyComponent>(
+        RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
             cubeEntity
         );
-
-        const auto cubeEntity1 = Registry.create();
-        Registry.emplace<entity::LifeObjectComponent>(cubeEntity1, "cube1");
-        Registry.emplace<entity::Transform3DComponent>(
-                cubeEntity1,
-                glm::vec3{0.0f, 0.0f, 2},
-                glm::vec3{0.5f, 0.5f,0.5f},
-                glm::vec3{0.0f, 1.0f, 0.0f},
-                0
-        );
-        Registry.emplace<entity::MeshRenderComponent>(
-                cubeEntity1,
-                assets::ShaderPipelineType::Default,
-                new physicat::StaticMeshInstance{
-                        assets::StaticMeshType::Cube,
-                        assets::TextureType::Pattern
-                }
-        );
-        Registry.emplace<entity::ColliderComponent>(
-                cubeEntity1,
-                entity::ColliderType::BOX,
-                new entity::BoxColliderData(&Registry.get<entity::Transform3DComponent>(cubeEntity1))
-        );
-        Registry.emplace<entity::RigidbodyComponent>(
-                cubeEntity1
-        );
+//
+//        const auto cubeEntity1 = RegistryBuffer.Create();
+//        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity1, "cube1");
+//        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+//                cubeEntity1,
+//                glm::vec3{0.0f, 0.0f, 2},
+//                glm::vec3{0.5f, 0.5f,0.5f},
+//                glm::vec3{0.0f, 1.0f, 0.0f},
+//                0
+//        );
+//        RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
+//                cubeEntity1,
+//                assets::ShaderPipelineType::Default,
+//                new physicat::StaticMeshInstance{
+//                        assets::StaticMeshType::Cube,
+//                        assets::TextureType::Pattern
+//                }
+//        );
+//        RegistryBuffer.AddComponent<entity::ColliderComponent>(
+//                cubeEntity1,
+//                entity::ColliderType::BOX,
+//                new entity::BoxColliderData(&Registry.get<entity::Transform3DComponent>(cubeEntity1))
+//        );
+//        RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
+//                cubeEntity1
+//        );
 
         // setup object
         // later query for all rigidbody, get the physx, get the collider and construct for physics
 
-        const auto gridEntity = Registry.create();
-        Registry.emplace<entity::LifeObjectComponent>(gridEntity, "grid");
-        Registry.emplace<entity::Transform3DComponent>(
+        const auto gridEntity = RegistryBuffer.Create();
+        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(gridEntity, "grid");
+        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                 gridEntity,
+                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
                 glm::vec3{0, 0, 0},
                 glm::vec3{1.0, 1.0f, 1.0f},
                 glm::vec3{0.0f, 1.0f, 0.0f},
                 0.0f
         );
-        Registry.emplace<entity::RenderComponentBase>(
+        RegistryBuffer.AddComponent<entity::RenderComponentBase>(
             gridEntity,
             assets::ShaderPipelineType::Grid
         );
@@ -207,6 +213,35 @@ struct MainScene::Internal {
 
         if(inputManager.mouseState & SDL_BUTTON_LMASK) {
             CameraController.LookAround(inputManager.mouseDeltaX, inputManager.mouseDeltaY);
+        }
+
+        if(inputManager.isMouseDown && (inputManager.mouseState & SDL_BUTTON_RMASK)) {
+            const auto cubeEntity = RegistryBuffer.Create();
+            RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity, "cube");
+            RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+                    cubeEntity,
+                    Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                    glm::vec3{0.0f, 20.0f, 2},
+                    glm::vec3{0.5f, 0.5f,0.5f},
+                    glm::vec3{0.0f, 1.0f, 0.0f},
+                    0
+            );
+            RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
+                    cubeEntity,
+                    assets::ShaderPipelineType::Default,
+                    new physicat::StaticMeshInstance{
+                            assets::StaticMeshType::Cube,
+                            assets::TextureType::Pattern
+                    }
+            );
+            RegistryBuffer.AddComponent<entity::ColliderComponent>(
+                    cubeEntity,
+                    entity::ColliderType::BOX,
+                    new entity::BoxColliderData()
+            );
+            RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
+                    cubeEntity
+            );
         }
 
         if (KeyboardState[SDL_SCANCODE_UP] || KeyboardState[SDL_SCANCODE_W]) {
@@ -244,10 +279,7 @@ struct MainScene::Internal {
             auto& transform = view.get<entity::Transform3DComponent>(entity);
             auto& rigidbody = view.get<entity::RigidbodyComponent>(entity);
 
-            rigidbody.PrintPosition();
-//            physicat::Log("Fixed Update", )
-            // update transform using rigidbody transform;
-//            rigidbody.UpdateTransform(transform);
+            rigidbody.UpdateTransform(transform);
         }
 
 
@@ -268,10 +300,10 @@ struct MainScene::Internal {
 //        physicat::Log("Camera", std::to_string(Camera.GetPosition().z));
 
         auto view = RegistryBuffer.GetCurrent().view<entity::Transform3DComponent>();
-        for(auto entity: view)
-        {
+        for(auto entity: view) {
             auto& transform = view.get<entity::Transform3DComponent>(entity);
-            transform.Update(deltaTime, cameraMatrix);
+            transform.Update(deltaTime);
+            transform.CalculateTransformMatrix(cameraMatrix);
         }
 
         //        auto view = registry.view<physicat::core::component::Transform3DComponent>();
@@ -325,6 +357,23 @@ struct MainScene::Internal {
 
     void SwapBuffer() {
         RegistryBuffer.Swap();
+    }
+
+    void SyncPhysicsThreadData() {
+        auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+        auto stagingView = RegistryBuffer.GetStaging().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+        auto finalView = RegistryBuffer.GetFinal().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+
+        for(entt::entity entity : stagingView) {
+            auto staging = stagingView.get<physicat::entity::Transform3DComponent>(entity);
+            auto& rigidbody = stagingView.get<physicat::entity::RigidbodyComponent>(entity);
+            auto final = finalView.get<physicat::entity::Transform3DComponent>(entity);
+
+            auto& current = currentView.get<physicat::entity::Transform3DComponent>(entity);
+
+            rigidbody.AddDelta(current.Position - final.Position);
+            current.Position = staging.Position;
+        }
     }
 
     void SyncThreadData() {
@@ -408,6 +457,9 @@ void MainScene::SwapBuffer() {
     InternalPointer->SwapBuffer();
 }
 
+void MainScene::SyncPhysicsThreadData() {
+    InternalPointer->SyncPhysicsThreadData();
+}
 void MainScene::SyncThreadData() {
     InternalPointer->SyncThreadData();
 }

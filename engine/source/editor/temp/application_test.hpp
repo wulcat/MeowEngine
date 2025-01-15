@@ -102,6 +102,7 @@ namespace physicat {
         std::atomic<int> ThreadCount;
         std::condition_variable WaitForThreadEndCondition;
         std::mutex WaitForThreadEndMutex;
+        std::atomic<bool> IsSyncingPhysicsThread;
 
         std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
         std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
@@ -167,8 +168,18 @@ namespace physicat {
                 // swap buffers
                 InputBuffer.Swap();
 
+                // swap
+                if(!IsSyncingPhysicsThread) {
+                    IsSyncingPhysicsThread = true;
+                    Scene->SyncPhysicsThreadData();
+                    IsSyncingPhysicsThread = false;
+                }
+
                 Scene->SyncThreadData();
+
                 Scene->SwapBuffer();
+
+
 
                 // wait until buffers are synced
                 // ideally since other threads are waiting this should release all of them automatically
@@ -262,8 +273,8 @@ namespace physicat {
             {
                 PT_PROFILE_SCOPE;
 
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 FixedUpdate(1);
+                std::this_thread::sleep_for(std::chrono::milliseconds(20));
 //                ProcessThreadBarrier.get()->Wait();
             }
 
@@ -436,7 +447,12 @@ namespace physicat {
         void FixedUpdate(const float& inFixedDeltaTime) {
             Scene->CreatePhysics(Physics.get());
             Physics->Update(inFixedDeltaTime);
-            Scene->FixedUpdate(1);
+
+            if(!IsSyncingPhysicsThread) {
+                IsSyncingPhysicsThread = true;
+                Scene->FixedUpdate(1);
+                IsSyncingPhysicsThread = false;
+            }
         };
 
         static FpsCounter FpsCounter;
