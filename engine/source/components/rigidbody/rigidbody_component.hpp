@@ -31,11 +31,13 @@ namespace physicat::entity {
         void OverrideTransform(entity::Transform3DComponent& inTransform);
 
         void AddDelta(physicat::math::Vector3 inDelta);
+        void CacheDelta(physicat::math::Vector3 inDelta);
         void SetPhysicsBody(physx::PxRigidDynamic* inBody);
 
     private:
         physx::PxRigidDynamic* DynamicBody;
         physicat::math::Vector3 Delta;
+        physicat::math::Vector3 CachedDelta;
     };
 }
 

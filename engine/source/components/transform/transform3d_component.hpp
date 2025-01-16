@@ -5,11 +5,6 @@
 #ifndef PHYSICAT_TRANSFORM3D_COMPONENT_HPP
 #define PHYSICAT_TRANSFORM3D_COMPONENT_HPP
 
-//#include <glm/vec3.hpp>
-//#include <glm/vec4.hpp>
-//#include <glm/mat4x4.hpp>
-//#include "glm_wrapper.hpp"
-
 #include "transform_component_base.hpp"
 #include "math_wrapper.hpp"
 
@@ -27,7 +22,6 @@ namespace physicat::entity {
         void Update(const float& deltaTime) override;
         void RotateBy(const float& degrees);
 
-//        physicat::math::Vector3 PositionTest;
         physicat::math::Vector3 Position;
         glm::vec3 Scale;
 

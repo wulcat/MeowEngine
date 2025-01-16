@@ -26,13 +26,13 @@ namespace physicat {
         virtual void Render(physicat::Renderer& renderer) = 0;
         virtual void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) = 0;
         virtual void SwapBuffer() = 0;
+        virtual void CalculateDeltaData() = 0;
         virtual void SyncPhysicsThreadData() = 0;
         virtual void SyncThreadData() = 0;
 
         // Currently returns delta time
         // TODO: This will be converted into time manager which can contain more data.
         virtual const float& GetDeltaTime() = 0;
-//        virtual entt::registry* GetEntities() = 0;
     };
 }
 

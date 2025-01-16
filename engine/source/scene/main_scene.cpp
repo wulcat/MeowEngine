@@ -24,11 +24,11 @@
 #include "entt_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
 
-using physicat::MainScene;
-//using physicat::assets::ShaderPipelineType;
-//using physicat::assets::StaticMeshType;
-//using physicat::assets::TextureType;
 #include "physx_physics.hpp"
+
+using physicat::MainScene;
+
+
 using namespace physicat::assets;
 using namespace physicat::entity;
 
@@ -152,32 +152,33 @@ struct MainScene::Internal {
         RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
             cubeEntity
         );
-//
-//        const auto cubeEntity1 = RegistryBuffer.Create();
-//        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity1, "cube1");
-//        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
-//                cubeEntity1,
-//                glm::vec3{0.0f, 0.0f, 2},
-//                glm::vec3{0.5f, 0.5f,0.5f},
-//                glm::vec3{0.0f, 1.0f, 0.0f},
-//                0
-//        );
-//        RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
-//                cubeEntity1,
-//                assets::ShaderPipelineType::Default,
-//                new physicat::StaticMeshInstance{
-//                        assets::StaticMeshType::Cube,
-//                        assets::TextureType::Pattern
-//                }
-//        );
-//        RegistryBuffer.AddComponent<entity::ColliderComponent>(
-//                cubeEntity1,
-//                entity::ColliderType::BOX,
-//                new entity::BoxColliderData(&Registry.get<entity::Transform3DComponent>(cubeEntity1))
-//        );
-//        RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
-//                cubeEntity1
-//        );
+
+        const auto cubeEntity1 = RegistryBuffer.Create();
+        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity1, "cube1");
+        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+                cubeEntity1,
+                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                glm::vec3{0.0f, 0.0f, 2},
+                glm::vec3{0.5f, 0.5f,0.5f},
+                glm::vec3{0.0f, 1.0f, 0.0f},
+                0
+        );
+        RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
+                cubeEntity1,
+                assets::ShaderPipelineType::Default,
+                new physicat::StaticMeshInstance{
+                        assets::StaticMeshType::Cube,
+                        assets::TextureType::Pattern
+                }
+        );
+        RegistryBuffer.AddComponent<entity::ColliderComponent>(
+                cubeEntity1,
+                entity::ColliderType::BOX,
+                new entity::BoxColliderData()
+        );
+        RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
+                cubeEntity1
+        );
 
         // setup object
         // later query for all rigidbody, get the physx, get the collider and construct for physics
@@ -196,13 +197,6 @@ struct MainScene::Internal {
             gridEntity,
             assets::ShaderPipelineType::Grid
         );
-
-//        // TODO: can we have same class name with different namespaces?
-//        // Creating physics for all bodies in game
-//        for(auto &&[entity, transform, collider, rigidbody]
-//        : Registry.view<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>().each()) {
-//            inPhysics.AddRigidbody(transform, collider, rigidbody);
-//        }
 
         physicat::Log("Creating", "Created");
     }
@@ -367,6 +361,22 @@ struct MainScene::Internal {
         RegistryBuffer.Swap();
     }
 
+    void CalculateDeltaData() {
+
+        auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+        auto stagingView = RegistryBuffer.GetStaging().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+        auto finalView = RegistryBuffer.GetFinal().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+
+        for(entt::entity entity : stagingView) {
+
+            auto& staging = stagingView.get<physicat::entity::RigidbodyComponent>(entity);
+            auto final = finalView.get<physicat::entity::Transform3DComponent>(entity);
+            auto current = currentView.get<physicat::entity::Transform3DComponent>(entity);
+
+            staging.CacheDelta(current.Position - final.Position);
+        }
+    }
+
     void SyncPhysicsThreadData() {
         auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
         auto stagingView = RegistryBuffer.GetStaging().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
@@ -375,7 +385,7 @@ struct MainScene::Internal {
         for(entt::entity entity : stagingView) {
             auto staging = stagingView.get<physicat::entity::Transform3DComponent>(entity);
             auto& rigidbody = stagingView.get<physicat::entity::RigidbodyComponent>(entity);
-            auto final = finalView.get<physicat::entity::Transform3DComponent>(entity);
+            auto& final = finalView.get<physicat::entity::Transform3DComponent>(entity);
 
             auto& current = currentView.get<physicat::entity::Transform3DComponent>(entity);
 
@@ -465,6 +475,9 @@ void MainScene::SwapBuffer() {
     InternalPointer->SwapBuffer();
 }
 
+void MainScene::CalculateDeltaData() {
+    InternalPointer->CalculateDeltaData();
+}
 void MainScene::SyncPhysicsThreadData() {
     InternalPointer->SyncPhysicsThreadData();
 }

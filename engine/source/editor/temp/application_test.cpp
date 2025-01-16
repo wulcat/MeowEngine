@@ -15,18 +15,18 @@
 
 // -------------------- thread updates start
 
-// loop physics
-// - add / remove life objects as per request -> & sync
+// loop physics thread
 // - update
+// - process request for creating life object
 
-// loop render
+// loop render thread
 // - process input requests from buffer
 // - update game using final buffer
-// - update ui using final buffer
+// - update ui using final buffer (queue for any ui inputs)
 // - swap (internal render buffer)
 
-// loop scene update (main)
-// - update
+// loop main thread
+// - game update
 // - input
 //   - device input
 //   - process input manager
@@ -35,6 +35,8 @@
 // - sync thread data
 //   - apply current buffer to final buffer
 //   - apply ui changes from queue to current & final buffer (physics in tbd)
+//   - add life objects as per requests - (can be from ui inputs / game update)
+//   - queue request for physics to added life objects
 // - swap game buffer
 
 // -------------------- thread updates end

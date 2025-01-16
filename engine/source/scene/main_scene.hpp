@@ -24,6 +24,7 @@ namespace physicat {
         void Render(physicat::Renderer& renderer) override;
         void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
         void SwapBuffer() override;
+        void CalculateDeltaData() override;
         void SyncPhysicsThreadData() override;
         void SyncThreadData() override;
 

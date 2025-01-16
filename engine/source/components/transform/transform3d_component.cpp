@@ -8,13 +8,13 @@
 #include "entt_reflection_wrapper.hpp"
 
 using physicat::entity::Transform3DComponent;
-//physicat::EnttReflection ReflectionTest;
+
 void physicat::entity::Transform3DComponent::Reflect() {
     REGISTER_PROPERTY(Transform3DComponent, Position, physicat::math::Vector3);
 //    REGISTER_PROPERTY(Transform3DComponent, Scale, glm::vec3);
 
     REGISTER_PROPERTY(Transform3DComponent, RotationDegrees, float);
-    
+
     physicat::Log("Reflected", "Transform3DComponent");
 }
 
@@ -26,9 +26,7 @@ Transform3DComponent::Transform3DComponent(const glm::mat4& inProjectionMatrix)
     , RotationAxis(glm::vec3(0,1,0))
     , RotationDegrees(0)
     , IdentityMatrix(glm::mat4(1.0f))
-    , TransformMatrix(IdentityMatrix)
-        , TestInt(9)
-        , TestFloat(11.0f) {
+    , TransformMatrix(IdentityMatrix) {
     CalculateTransformMatrix(inProjectionMatrix);
 }
 
@@ -39,9 +37,7 @@ Transform3DComponent::Transform3DComponent(const glm::mat4& inProjectionMatrix, 
     , RotationAxis(glm::vec3(0,1,0))
     , RotationDegrees(0)
     , IdentityMatrix(glm::mat4(1.0f))
-    , TransformMatrix(IdentityMatrix)
-    , TestInt(9)
-    , TestFloat(11.0f) {
+    , TransformMatrix(IdentityMatrix) {
     CalculateTransformMatrix(inProjectionMatrix);
 }
 
@@ -53,9 +49,7 @@ Transform3DComponent::Transform3DComponent(const glm::mat4& inProjectionMatrix, 
     , RotationAxis(rotationAxis)
     , RotationDegrees(rotationDegrees)
     , IdentityMatrix(glm::mat4(1.0f))
-    , TransformMatrix(IdentityMatrix)
-        , TestInt(9)
-        , TestFloat(11.0f) {
+    , TransformMatrix(IdentityMatrix) {
     CalculateTransformMatrix(inProjectionMatrix);
 }
 
@@ -69,7 +63,7 @@ void Transform3DComponent::CalculateTransformMatrix(const glm::mat4 &inProjectio
 void Transform3DComponent::Update(const float& deltaTime) {
     float random = (float)std::rand() / RAND_MAX;
     Position.Y += random * 0.02f;
-//    physicat::Log("Random", (float)std::rand() / RAND_MAX);
+
     RotateBy(1.0f * random * 0.2f);
 }
 

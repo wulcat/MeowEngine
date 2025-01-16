@@ -36,9 +36,21 @@ void RigidbodyComponent::OverrideTransform(Transform3DComponent &inTransform) {
     DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
 }
 
+void physicat::entity::RigidbodyComponent::CacheDelta(physicat::math::Vector3 inDelta) {
+    CachedDelta.X += inDelta.X;
+    CachedDelta.Y += inDelta.Y;
+    CachedDelta.Z += inDelta.Z;
+}
+
 void physicat::entity::RigidbodyComponent::AddDelta(physicat::math::Vector3 inDelta) {
-    Delta.X += inDelta.X;
-    Delta.Y += inDelta.Y;
-    Delta.Z += inDelta.Z;
+    Delta.X += inDelta.X + CachedDelta.X;
+    Delta.Y += inDelta.Y + CachedDelta.Y;
+    Delta.Z += inDelta.Z + CachedDelta.Z;
+
+    CachedDelta.X = 0;
+    CachedDelta.Y = 0;
+    CachedDelta.Z = 0;
+
+    physicat::Log("Main Thread Delta Sync Write", TestDelta);
 }
 

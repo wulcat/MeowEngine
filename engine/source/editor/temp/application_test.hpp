@@ -169,10 +169,22 @@ namespace physicat {
                 InputBuffer.Swap();
 
                 // swap
+                // delta add to final rigidbody all frames after main thread calculations
+                // delta is buffered 3 ways
+                // write from main thread on this
+                // read from render thread on this
+
+                // staging accesses final rigidbody takes the delta
+
                 if(!IsSyncingPhysicsThread) {
                     IsSyncingPhysicsThread = true;
+//                    physicat::Log("Main" , "Synced Frame");
                     Scene->SyncPhysicsThreadData();
                     IsSyncingPhysicsThread = false;
+                }
+                else {
+//                    physicat::Log("Main" , "Skipped Frame");
+                    Scene->CalculateDeltaData();
                 }
 
                 Scene->SyncThreadData();
