@@ -51,6 +51,6 @@ void physicat::entity::RigidbodyComponent::AddDelta(physicat::math::Vector3 inDe
     CachedDelta.Y = 0;
     CachedDelta.Z = 0;
 
-    physicat::Log("Main Thread Delta Sync Write", TestDelta);
+//    physicat::Log("Main Thread Delta Sync Write", TestDelta);
 }
 

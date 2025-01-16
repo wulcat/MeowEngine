@@ -54,7 +54,7 @@ void physicat::simulator::PhysXPhysics::Update(float inFixedDeltaTime) {
   //  {
 
   // physicat::Log("", std::to_string(body->getGlobalPose().p.y));
-        gScene->simulate(inFixedDeltaTime);
+        gScene->simulate(0.02f);
         gScene->fetchResults(true);
   //  }
 }

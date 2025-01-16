@@ -44,13 +44,14 @@ struct Engine::Internal {
     }
 
     // we are using unique_ptr smart pointer as a return value so it will self destruct upon leaving its containing scope
-    std::unique_ptr<physicat::Application> ResolveApplication() {
+    std::unique_ptr<physicat::ApplicationTest> ResolveApplication() {
         PT_PROFILE_SCOPE;
         static const std::string logTag{classLogTag + "resolving Application"};
 
         try {
             physicat::Log(logTag, "Creating OpenGL Application...");
-            return std::make_unique<physicat::OpenGLApplication>();
+//            return std::make_unique<physicat::OpenGLApplication>();
+            return std::make_unique<physicat::ApplicationTest>();
         }
         catch (const std::exception& error) {
             physicat::Log(logTag, "OpenGL Application failed to initialized.", error);

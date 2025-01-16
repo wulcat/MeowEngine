@@ -245,6 +245,7 @@ namespace physicat {
                 //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 // Issue OpenGL draw calls
+
                 Render();
 
                 {
@@ -252,7 +253,14 @@ namespace physicat {
                     // Swap buffers
                     SDL_GL_SwapWindow(WindowContext->window);
                 }
-
+                // renderring & swapping buffer again gives consistent frames - look into it more for stability
+//                Render();
+//
+//                {
+//                    PT_PROFILE_SCOPE_N("Swapping GL Buffer");
+//                    // Swap buffers
+//                    SDL_GL_SwapWindow(WindowContext->window);
+//                }
                 // physicat::Log("Render Thread", "Waiting for other threads to finish processing");
 
                 // wait for all threads to sync up for frame ending

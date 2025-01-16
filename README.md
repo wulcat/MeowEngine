@@ -34,19 +34,23 @@
 - [x] Add FPS Counter
 - [x] Implementing PhysX (left handed or right handed)
 - [x] Multithreading for rendering and update loop
-- [ ] Thread for Physics
+- [x] Thread for Physics
 - [x] Adding reflections for dynamic UI
 - [x] Adding property changes to track UI updates
 - [x] Creating objects in runtime (on start/end of main thread)
+- [ ] Bringing back VSync & Delta Time Calculations
 - [ ] Creating library for performing maths functions
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
-- [ ] Creating vehicle using PhysX
-- [ ] Break...
+- [ ] Basic simulation tests
+- [ ] Able to see physics colliders
+- [ ] Break....... Rejuvenating
 - [ ] Updating bash files for supporting physx on mac and web builds
+- [ ] Creating vehicle using PhysX
+- [ ] Position, Scale, Rotation handles after selecting objects
+- [ ] Add Unit Testing
 - [ ] Creating wrapper for switching between different physics engine
-- [ ] If simple, add basic light and sky box
-- [ ] Position, Scale, Rotation handles after selecting objects  
+- [ ] If simple, add basic light and sky box 
 - [ ] Improving current shader pipeline to handle shaders dynamically
 - [ ] Create Unique ID generator for items
 - [ ] Documenting done items and different approaches and used libraries
@@ -60,7 +64,6 @@
 - [ ] HTML navigation multi scenes on demand (async download and load scenes)
 - [ ] Support for window
 - [ ] Create a template for dump-testing shaders
-- [ ] Add Unit Testing
 - [ ] Dynamic Window Layout & save'n'load
 - [ ] Simple tool for importing files like textures/meshes
 - [ ] Setting up Vulkan

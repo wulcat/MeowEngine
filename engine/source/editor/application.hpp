@@ -11,6 +11,12 @@
 #include "internal_ptr.hpp"
 #include "emscripten_wrapper.hpp"
 
+#include "thread"
+#include "log.hpp" // temp
+#include "entt_reflection.hpp"
+
+using namespace std;
+
 namespace physicat {
     struct Application {
         Application();
@@ -25,6 +31,46 @@ namespace physicat {
         virtual void Update(const float& deltaTime) = 0;
         virtual void Render() = 0;
 
+        std::atomic<bool> IsApplicationRunning;
+        std::thread MainThread;
+        std::thread RenderThread;
+
+//        void MainLoop()
+//        {
+//            while(IsApplicationRunning)
+//            {
+//                float deltaTime = InternalPointer->TimeStep();
+//                FpsCounter.frameStart();
+//                // If Input() returns false - close the application
+//                if(!Input(deltaTime)) {
+//                    IsApplicationRunning = false;
+//                }
+//
+//                if(InternalPointer->FixedStep()) {
+//                    FixedUpdate(InternalPointer->Accumulator + InternalPointer->FixedTimeStep);
+//                }
+//
+//                Update(deltaTime);
+//
+//                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+//            }
+//
+//            // wait for all threads to complete
+//        }
+
+        void RenderLoop()
+        {
+            while(IsApplicationRunning)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                Render();
+
+            }
+        }
+
+        // this will go from 0 to 2
+        // for now only 0 to 1 for rendering & main thread
+//        static int mainThreadBufferIndex;
 
         static FpsCounter FpsCounter;
 

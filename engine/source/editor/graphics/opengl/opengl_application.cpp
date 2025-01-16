@@ -86,7 +86,10 @@ namespace {
     }
 
     physicat::OpenGLRenderer CreateRenderer(std::shared_ptr<physicat::OpenGLAssetManager> assetManager) {
-        return physicat::OpenGLRenderer(assetManager);
+        SDL_GLContext test;
+        std::shared_ptr<physicat::graphics::ImGuiRenderer> test1;
+        test1 = make_shared<physicat::graphics::ImGuiRenderer>(nullptr, test);
+        return physicat::OpenGLRenderer(assetManager, test1);
     }
 
     physicat::graphics::ImGuiRenderer CreateUI(SDL_Window* window, SDL_GLContext& context) {
@@ -215,7 +218,7 @@ struct OpenGLApplication::Internal {
 
     void FixedUpdate(const float& inFixedDeltaTime) {
         PT_PROFILE_SCOPE;
-        GetScene().FixedUpdate(inFixedDeltaTime, *Physics);
+//        GetScene().FixedUpdate(inFixedDeltaTime, *Physics);
     }
 
     void Update(const float& deltaTime) {
@@ -255,7 +258,7 @@ struct OpenGLApplication::Internal {
 
             {
                 PT_PROFILE_SCOPE_N("UI render");
-                UI.Render(GetScene(), FrameBuffer.GetFrameTexture(), FpsCounter.getSmoothFPS());
+//                UI.Render(GetScene(), FrameBuffer.GetFrameTexture(), FpsCounter.getSmoothFPS());
             }
 
             {
@@ -301,7 +304,8 @@ struct OpenGLApplication::Internal {
 OpenGLApplication::OpenGLApplication() :
         InternalPointer(physicat::make_internal_ptr<Internal>())
 {
-    physicat::Log("physicat::Application::OpenGLApplication", "OpenGL application created");
+//    IsRunning = true; IsApplicationRunning
+    physicat::Log(" physicat::Application::OpenGLApplication", "OpenGL application created");
 }
 
 //void OpenGLApplication::OnWindowResized() {
