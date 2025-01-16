@@ -46,7 +46,8 @@ struct MainScene::Internal {
     physicat::CameraController CameraController;
 
     EnttBuffer RegistryBuffer;
-    std::queue<physicat::ReflectionPropertyChange> UiInputPropertyChangesQueue;
+    std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
+    moodycamel::ConcurrentQueue<std::shared_ptr<physicat::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
 
 
     float Time;
@@ -282,7 +283,14 @@ struct MainScene::Internal {
             rigidbody.UpdateTransform(transform);
         }
 
-
+        std::shared_ptr<physicat::ReflectionPropertyChange> change;
+        while(PhysicsUiInputPropertyChangesQueue.try_dequeue(change)) {
+            if(view.contains(static_cast<entt::entity>(change->EntityId))) {
+                physicat::Reflection.ApplyPropertyChange(*change, RegistryBuffer.GetStaging());
+                auto [transform, rigidbody] = view.get<entity::Transform3DComponent, entity::RigidbodyComponent>(static_cast<entt::entity>(change->EntityId));
+                rigidbody.OverrideTransform(transform);
+            }
+        }
     }
 
     // We can perform -> culling, input detection
@@ -400,12 +408,12 @@ struct MainScene::Internal {
         // Apply UI Inputs
         // can go to our extended entt buffer class
         while(!UiInputPropertyChangesQueue.empty()) {
-            ReflectionPropertyChange& change = UiInputPropertyChangesQueue.front();
+            std::shared_ptr<physicat::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
 
-            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetCurrent());
-//            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetStaging());
-            physicat::Reflection.ApplyPropertyChange(change, RegistryBuffer.GetFinal());
+            physicat::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetCurrent());
+            physicat::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetFinal());
 
+            PhysicsUiInputPropertyChangesQueue.enqueue(change);
             UiInputPropertyChangesQueue.pop();
         }
     }

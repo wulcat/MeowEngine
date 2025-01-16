@@ -33,7 +33,7 @@ void RigidbodyComponent::UpdateTransform(Transform3DComponent &inTransform) {
 }
 
 void RigidbodyComponent::OverrideTransform(Transform3DComponent &inTransform) {
-//    DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
+    DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
 }
 
 void physicat::entity::RigidbodyComponent::AddDelta(physicat::math::Vector3 inDelta) {
