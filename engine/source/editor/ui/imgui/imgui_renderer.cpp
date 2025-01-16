@@ -107,7 +107,7 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void physicat::graphics::ImGuiRenderer::Render(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+void physicat::graphics::ImGuiRenderer::Render(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     CreateNewFrame();
     DrawFrame(registry, inUIInputQueue, frameBufferId, fps);
     RenderFrame();
@@ -154,7 +154,7 @@ void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
     ImGui::NewFrame();
 }
 
-void physicat::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
+void physicat::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
     CreateDockingSpace();
 
 //    CreateRender3DPanel(frameBufferId);

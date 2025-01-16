@@ -17,7 +17,7 @@ physicat::graphics::ui::ImGuiEditPanel::~ImGuiEditPanel() {
 
 }
 
-void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, entt::entity lifeObject) {
+void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, entt::entity lifeObject) {
     ImGuiWindowFlags window_flags = 0;
     window_flags |= ImGuiWindowFlags_NoCollapse;
 
@@ -43,7 +43,7 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std:
                             change->ComponentType = type;
 
 //                            physicat::Log("Edit Panel", *static_cast<float*>(change->Data));
-                            inUIInputQueue.push(*change);
+                            inUIInputQueue.push(std::make_shared<physicat::ReflectionPropertyChange>(*change));
                         }
 
                         ImGui::Spacing();

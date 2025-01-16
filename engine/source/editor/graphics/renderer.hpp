@@ -15,7 +15,7 @@
 namespace physicat {
     struct Renderer {
         virtual void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) = 0;
-        virtual void RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) = 0;
+        virtual void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) = 0;
     };
 }
 

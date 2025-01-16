@@ -99,7 +99,7 @@ struct OpenGLRenderer::Internal {
         }
     }
 
-    void RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+    void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
         UI.get()->Render(registry, inUIInputQueue, frameBufferId, fps);
     }
 };
@@ -113,6 +113,6 @@ void OpenGLRenderer::Render(physicat::PerspectiveCamera* cameraObject, entt::reg
     InternalPointer->Render(cameraObject, registry);
 }
 
-void OpenGLRenderer::RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+void OpenGLRenderer::RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUI(registry, inUIInputQueue, frameBufferId, fps);
 }

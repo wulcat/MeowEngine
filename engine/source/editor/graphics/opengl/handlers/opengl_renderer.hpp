@@ -19,7 +19,7 @@ namespace physicat {
                        const std::shared_ptr<physicat::graphics::ImGuiRenderer>& uiRenderer);
 
         void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) override;
-        void RenderUI(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
+        void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
 
     private:
         struct Internal;

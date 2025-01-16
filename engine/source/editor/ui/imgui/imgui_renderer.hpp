@@ -22,7 +22,7 @@ namespace physicat::graphics {
         ~ImGuiRenderer();
 
         void Input(const SDL_Event& event);
-        void Render(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, unsigned int frameBufferId, const double fps);
+        void Render(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps);
 
         // Closes any child processes like tracy
         void ClosePIDs();
@@ -34,7 +34,7 @@ namespace physicat::graphics {
         void OpenTracyProfiler();
 
         void CreateNewFrame();
-        void DrawFrame(entt::registry& registry, std::queue<physicat::ReflectionPropertyChange>& inUIInputQueue, uint32_t frameBufferId, const double fps);
+        void DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps);
         void RenderFrame();
 
         void CreateDockingSpace();
