@@ -33,7 +33,11 @@
 - [x] Add physics library (jolt / physx / box2d / bullet3) -> physx
 - [x] Add FPS Counter
 - [x] Implementing PhysX (left handed or right handed)
-- [ ] Multithreading for rendering and update loop
+- [x] Multithreading for rendering and update loop
+- [ ] Thread for Physics
+- [x] Adding reflections for dynamic UI
+- [x] Adding property changes to track UI updates
+- [x] Creating objects in runtime (on start/end of main thread)
 - [ ] Creating library for performing maths functions
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
