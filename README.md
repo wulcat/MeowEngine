@@ -1,10 +1,12 @@
+## Physicat Engine
+
 ### Build Status (non-compilable)
 > Implementing multi-threading which involves `main, render and physics thread` to 
 > handle different game states (produced & consumed).
 > This involves decoupling the root engine code base and since it's still ongoing,
 > currently build is not possible.
 
-## Build
+
 <img src="screenshots/engine_v3.gif" width="700">
 
 ## Compatibility
@@ -126,14 +128,19 @@ Activate PATH and other environment variables in the current terminal `` $source
 - [Matrices](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
 
 ## Documentation & Questions notes
-- What are macros
 
-[//]: # (  - When are macros compiled)
+> [!CAUTION]
+> - test.
+> - test 2 [^2].
+
+- What are macros
+- When are macros compiled
   - Why use macros?
   - methods cannot be called globally? why?
   - variables can be declared but not reused globally has to be from method? why?
   - What does reflection actually mean? headrd a lot in c# and now while doing multithreading in c++ as well.
   - what is ui binding? - property change emit event listner
 
-[//]: # ( - typename... arg and &&...arg && std::forward(args)...)
-[//]: # ( - NUMA architecture & SALSA)
+- typename... arg and &&...arg && std::forward(args)...
+- std::apply
+- NUMA architecture & SALSA
