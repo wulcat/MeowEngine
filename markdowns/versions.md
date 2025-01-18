@@ -1,9 +1,9 @@
 ## Versions
-- [v0.1 (screenshot)](<img src="screenshots/engine_v3.gif" width="700">)
+- [v0.1 (screenshot)](<img src="screenshots/engine_v1.gif" width="700">)
   - Creates application using SDL & OpenGL
   - Reads files (obj & vert, frag shaders)
   - Mesh rendering with camera projection
-- [v0.2 (gif)](<img src="screenshots/engine_v3.gif" width="700">)
+- [v0.2 (gif)](<img src="screenshots/engine_v2.gif" width="700">)
   - Basic rotations and positioning for objects
   - Reads texture and applies to mesh
 - [v0.3 (gif)](<img src="screenshots/engine_v3.gif" width="700">)
@@ -11,7 +11,7 @@
   - Frame Buffer for rendering scene into window panel
   - Keyboard and Mouse Input Handling
   - Free camera movement
-- [v0.4 (gif)](<img src="screenshots/engine_v3.gif" width="700">)
+- [v0.4 (gif)](<img src="screenshots/physicat_engine_v0.4.gif" width="700">)
   - Engine supports multithreading splitting into main, render and physics threads
   - Added PhysX for simulating physics
   - Added Reflections to display and edit components properties dynamically through UI
