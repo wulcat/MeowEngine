@@ -3,7 +3,7 @@
 ### Folder Structure
 <img src="../screenshots/directory-diagram.png">
 
-### Installing Packages [(Version Notes)](markdowns/versions.md)
+### Installing Packages [(Version Notes)](../markdowns/versions.md)
 - Run project/console/setup.sh to install packages
 - Run project/console/build.sh to build the project (auto runs the executable)
 - Run project/emscripten/build.sh to build the project for web
