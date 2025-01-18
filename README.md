@@ -20,13 +20,14 @@ complexities of physics simulations and engine design,
 providing a unique opportunity to learn and experiment 
 with modern technologies and architectural concepts.
 
+## [Checkout web demo]()
 <img src="screenshots/engine_v3.gif" width="700">
 
 ## Compatibility 
-- [x] Unix Console on Mac [(download)]()
-- [x] Mac (x84) (Rosetta) [(download)]()
+- [x] Unix Console on Mac
+- [x] Mac (x84) (Rosetta)
 - [ ] Windows
-- [x] Web [(demo)]()
+- [x] Web
 
 > [!NOTE]
 > Currently `PhysX` is non-compilable for web. `Web builds` are on halt.
@@ -36,17 +37,29 @@ with modern technologies and architectural concepts.
 - [Compile Physicat Engine](markdowns/how_to_build.md)
 - [Build documentation](markdowns/how_to_build.md)
 - [See Versions](markdowns/versions.md)
+- Downloads (not available)
 
 ## Dependencies [(full list)](markdowns/dependencies.md)
-- Emscripten
-- OpenGL ES3
-  - Mac: OpenGLES/ES2/gl.h
-  - Emscripten: GLES2/gl2.h
-- SDL/SDL2 (mac framework) or GLFW
-- Imgui
-- Tracy Profiler
-- PhysX
+- [OpenGL ES3](https://www.opengl.org)
+- [SDL2](https://www.libsdl.org/release)
+-  [SDL2 Image v2.0.4](https://www.libsdl.org/projects/SDL_image)
+- [Tiny obj loader v1.0.6](https://github.com/tinyobjloader/tinyobjloader)
+- [Imgui v1.90.9-docking](https://github.com/ocornut/imgui)
+- [Tracy Profiler v0.10](https://github.com/wolfpld/tracy)
+- [NVIDIA PhysX 5.0](https://github.com/NVIDIA-Omniverse/PhysX)
+- [Entt v3.13.2](https://github.com/skypjack/entt)
+- [ConcurrentQueue v1.0.4 by ](https://github.com/cameron314/concurrentqueue)
 - DOxygen
+- Homebrew
+- Ninja
+- CMake
+- Mac Specific
+  - SDL 2 Framework
+  - SDL 2 Image Framework
+  - OpenGLES/ES2/gl.h
+- Web Specific
+  - Emscripten
+  - GLES2/gl2.h
 
 ## References [(learning resources)](markdowns/references.md)
 While it may not cover everything, this list highlights the most valuable 

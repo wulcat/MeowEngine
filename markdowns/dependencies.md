@@ -1,11 +1,22 @@
 
 ## Dependencies
-- Emscripten
-- OpenGL ES3
-  - Mac: OpenGLES/ES2/gl.h
-  - Emscripten: GLES2/gl2.h
-- SDL/SDL2 (mac framework) or GLFW
-- Imgui
-- Tracy Profiler
-- PhysX
-- Concurrent Queue
+- [OpenGL ES3](https://www.opengl.org)
+- [SDL2](https://www.libsdl.org/release)
+-  [SDL2 Image v2.0.4](https://www.libsdl.org/projects/SDL_image)
+- [Tiny obj loader v1.0.6](https://github.com/tinyobjloader/tinyobjloader)
+- [Imgui v1.90.9-docking](https://github.com/ocornut/imgui)
+- [Tracy Profiler v0.10](https://github.com/wolfpld/tracy)
+- [NVIDIA PhysX 5.0](https://github.com/NVIDIA-Omniverse/PhysX)
+- [Entt v3.13.2](https://github.com/skypjack/entt)
+- [ConcurrentQueue v1.0.4 by ](https://github.com/cameron314/concurrentqueue)
+- DOxygen
+- Homebrew
+- Ninja
+- CMake
+- Mac Specific
+  - SDL 2 Framework
+  - SDL 2 Image Framework
+  - OpenGLES/ES2/gl.h
+- Web Specific
+  - Emscripten
+  - GLES2/gl2.h
