@@ -1,18 +1,19 @@
-## Physicat Engine
+## Physicat 3D Simulation Engine
 
 > [!CAUTION]
-> ### Build Status (non-compilable)
+> #### Build Status (non-compilable)
 > Implementing multi-threading which involves `main, render and physics thread` to
 > handle different game states (produced & consumed).
 > This involves decoupling the root engine code base and since it's still ongoing,
 > currently build is not possible.
-> 
+
 - Physicat is a personal exploration into the world of physics engine development
 - Focuses on:
   - Multithreading for optimized performance.
   - Profiling Tools for debugging and performance tracking.
   - Editor Tools
   - Physics Simulations
+  - [Plan of action to know more...](markdowns/plan_of_action.md)
 
 The ultimate goal of Physicat is to delve deep into the 
 complexities of physics simulations and engine design,
@@ -21,21 +22,20 @@ with modern technologies and architectural concepts.
 
 <img src="screenshots/engine_v3.gif" width="700">
 
-## Compatibility
+## Compatibility 
 - [x] Unix Console on Mac
 - [x] Mac (x84) (Rosetta)
 - [ ] Windows
 - [x] Web
 
-> [!NOTE] 
-> ### Build Status (non-compilable)
-> Currently PhysX is non-compilable for web. Web builds are on halt.
+> [!NOTE]
+> Currently `PhysX` is non-compilable for web. `Web builds` are on halt.
 > Will be revisiting once multithreading is implemented.
 
-## Folder Structure
+## Documentation [(how to build?)](markdowns/how_to_build.md)
 <img src="screenshots/directory-diagram.png">
 
-## Dependencies
+## Dependencies [(full list)](markdowns/dependencies.md)
 - Emscripten
 - OpenGL ES3
   - Mac: OpenGLES/ES2/gl.h
@@ -44,4 +44,7 @@ with modern technologies and architectural concepts.
 - Imgui
 - Tracy Profiler
 - PhysX
-- [More tools...](markdowns/dependencies.md)
+
+## References [(learning materials...)](markdowns/references.md)
+While it may not cover everything, this list highlights the most valuable 
+resources I've gathered during development.

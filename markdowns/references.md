@@ -1,0 +1,41 @@
+## References
+- Engine Structure
+    - https://isetta.io/blogs/engine-architecture/
+    - https://github.com/suldashi/infinitower
+    - https://docs.unrealengine.com/4.27/en-US/Basics/DirectoryStructure/
+    - https://slaptijack.com/programming/project-structure-for-cpp.html
+    - https://github.com/godotengine/godot
+- ECS
+    - https://austinmorlan.com/posts/entity_component_system/
+- Optimization
+    - https://jarlowrey.com/blog/game-optimizations
+- [Setting up Emscripten](https://emscripten.org/docs/getting_started/Tutorial.html#tutorial)
+- [Building for cross platform](https://marcelbraghetto.github.io/a-simple-triangle/2019/03/02/part-01/)
+- [Main Update in Emscripten](https://emscripten.org/docs/porting/emscripten-runtime-environment.html)
+- [Pimpl Pattern](https://oliora.github.io/2015/12/29/pimpl-and-rule-of-zero.html)
+- [SDL Renderer](https://dev.to/noah11012/using-sdl2-2d-accelerated-renderering-1kcb)
+- [Ray Marching](https://www.youtube.com/watch?v=BNZtUB7yhX4)
+- Fluid
+    - https://magnum.graphics/showcase/fluidsimulation2d/
+    - https://github.com/PavelDoGreat/WebGL-Fluid-Simulation
+    - https://google.github.io/liquidfun/
+- [Shaders](https://www.shadertoy.com)
+- Collision Querying
+    - [There's gold mine in the comment's research on it](https://www.youtube.com/watch?v=sx4IIQL0x7c&list=RDCMUCEwhtpXrg5MmwlH04ANpL8A&start_radio=1&rv=sx4IIQL0x7c&t=1134)
+- [Basic's of c++ to make sure, code is written the right way](https://www.programiz.com/cpp-programming/memory-management)
+- [Matrices](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
+- https://stackoverflow.com/questions/6780895/visual-studio-parameter-listing-intellisense
+
+## Learning to code
+- Explore what's happening in internal_ptr script with the templates and internal_ptr thing
+- Empty namespaces name declaration & using namespaces vs include headers
+- What are macros
+- When are macros compiled
+  - Why use macros?
+  - methods cannot be called globally? why?
+  - variables can be declared but not reused globally has to be from method? why?
+  - What does reflection actually mean? headrd a lot in c# and now while doing multithreading in c++ as well.
+  - what is ui binding? - property change emit event listner
+- typename... arg and &&...arg && std::forward(args)...
+- std::apply
+- NUMA architecture & SALSA
