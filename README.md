@@ -1,5 +1,5 @@
 # Meow Engine
-> <b>A journey to physics simulations!</b>
+<h3><b>A journey to physics simulations!</b></h3>
 
 - Meow Engine is a personal exploration into the world of physics engine development
 - Focuses on:
