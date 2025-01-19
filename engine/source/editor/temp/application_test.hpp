@@ -103,6 +103,7 @@ namespace physicat {
         std::condition_variable WaitForThreadEndCondition;
         std::mutex WaitForThreadEndMutex;
         std::atomic<bool> IsSyncingPhysicsThread;
+        std::mutex SyncPhysicMutex;
 
         std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
         std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
@@ -175,17 +176,14 @@ namespace physicat {
                 // read from render thread on this
 
                 // staging accesses final rigidbody takes the delta
-
-                if(!IsSyncingPhysicsThread) {
-                    IsSyncingPhysicsThread = true;
-//                    physicat::Log("Main" , "Synced Frame");
+                if(SyncPhysicMutex.try_lock()) {
                     Scene->SyncPhysicsThreadData();
-                    IsSyncingPhysicsThread = false;
+                    SyncPhysicMutex.unlock();
                 }
                 else {
-//                    physicat::Log("Main" , "Skipped Frame");
                     Scene->CalculateDeltaData();
                 }
+
 
                 Scene->SyncThreadData();
 
@@ -468,10 +466,9 @@ namespace physicat {
             Scene->CreatePhysics(Physics.get());
             Physics->Update(inFixedDeltaTime);
 
-            if(!IsSyncingPhysicsThread) {
-                IsSyncingPhysicsThread = true;
+            if(SyncPhysicMutex.try_lock()) {
                 Scene->FixedUpdate(1);
-                IsSyncingPhysicsThread = false;
+                SyncPhysicMutex.unlock();
             }
         };
 
