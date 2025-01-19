@@ -1,13 +1,13 @@
 # Meow Engine
-<b>A journey to physics simulations!</b>
+> <b>A journey to physics simulations!</b>
 
-> - Meow Engine is a personal exploration into the world of physics engine development
-> - Focuses on:
->  - Multithreading for optimized performance.
->  - Profiling tools for debugging and performance tracking.
->  - Editor tools
->  - Physics simulations
->  - [Next plan of action...](markdowns/plan_of_action.md)
+- Meow Engine is a personal exploration into the world of physics engine development
+- Focuses on:
+  - Multithreading for optimized performance.
+  - Profiling tools for debugging and performance tracking.
+  - Editor tools
+  - Physics simulations
+  - [Next plan of action...](markdowns/plan_of_action.md)
 
 The ultimate goal of Meow Engine is to delve deep into the 
 complexities of physics simulations and engine design,
