@@ -1,4 +1,5 @@
-# Physicat 3D Simulation Engine
+# Meow Engine
+## A journey to physics simulations!
 
 > [!CAUTION]
 > #### Build Status (non-compilable)
@@ -7,7 +8,7 @@
 > This involves decoupling the root engine code base and since it's still ongoing,
 > currently build is not possible.
 
-- Physicat is a personal exploration into the world of physics engine development
+- Meow Engine is a personal exploration into the world of physics engine development
 - Focuses on:
   - Multithreading for optimized performance.
   - Profiling tools for debugging and performance tracking.
@@ -15,7 +16,7 @@
   - Physics simulations
   - [Next plan of action...](markdowns/plan_of_action.md)
 
-The ultimate goal of Physicat is to delve deep into the 
+The ultimate goal of Meow Engine is to delve deep into the 
 complexities of physics simulations and engine design,
 providing a unique opportunity to learn and experiment 
 with modern technologies and architectural concepts.
@@ -34,7 +35,7 @@ with modern technologies and architectural concepts.
 > Will be revisiting once multithreading is implemented.
 
 ## Building & docs 
-- [Compile Physicat Engine](markdowns/how_to_build.md)
+- [Compile Meow Engine](markdowns/how_to_build.md)
 - [Build documentation](markdowns/how_to_build.md)
 - [See Versions](markdowns/versions.md)
 - Downloads (not available)

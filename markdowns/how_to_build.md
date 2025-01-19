@@ -7,7 +7,7 @@
 - Run project/console/setup.sh to install packages
 - Run project/console/build.sh to build the project (auto runs the executable)
 - Run project/emscripten/build.sh to build the project for web
-- Run project/macos/setup.sh and run Physicat.xcodeproj and hit play button
+- Run project/macos/setup.sh and run MeowEngine.xcodeproj and hit play button
 
 ### Making a build
 - Documentation in progress

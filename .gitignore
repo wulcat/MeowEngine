@@ -240,7 +240,7 @@ cmake-build-debug/
 /libs
 #build
 #out
-#Physicat.xcodeproj
+#MeowEngine.xcodeproj
 #DerivedData
 Generated
 
