@@ -1,5 +1,5 @@
 //
-// Created by Akira Lynn on 11/09/22.
+// Created by Akira Mujawar on 11/09/22.
 //
 
 #ifndef PHYSICAT_ASSETS_HPP

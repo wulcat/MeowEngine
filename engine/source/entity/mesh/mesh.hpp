@@ -1,5 +1,5 @@
 //
-// Created by Akira Lynn on 08/09/22.
+// Created by Akira Mujawar on 08/09/22.
 //
 
 #ifndef PHYSICAT_MESH_HPP
