@@ -1,20 +1,13 @@
 # Meow Engine
 <b>A journey to physics simulations!</b>
 
-> [!CAUTION]
-> #### Build Status (non-compilable)
-> Implementing multi-threading which involves `main, render and physics thread` to
-> handle different game states (produced & consumed).
-> This involves decoupling the root engine code base and since it's still ongoing,
-> currently build is not possible.
-
-- Meow Engine is a personal exploration into the world of physics engine development
-- Focuses on:
-  - Multithreading for optimized performance.
-  - Profiling tools for debugging and performance tracking.
-  - Editor tools
-  - Physics simulations
-  - [Next plan of action...](markdowns/plan_of_action.md)
+> - Meow Engine is a personal exploration into the world of physics engine development
+> - Focuses on:
+>  - Multithreading for optimized performance.
+>  - Profiling tools for debugging and performance tracking.
+>  - Editor tools
+>  - Physics simulations
+>  - [Next plan of action...](markdowns/plan_of_action.md)
 
 The ultimate goal of Meow Engine is to delve deep into the 
 complexities of physics simulations and engine design,
