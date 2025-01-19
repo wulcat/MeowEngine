@@ -44,9 +44,9 @@ popd
 #Next steps:
 #- To conveniently access emsdk tools from the command line,
 #  consider adding the following directories to your PATH:
-#    /Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten
-#    /Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten/upstream/emscripten
+#    MeowEngine/libs/third-party/emscripten
+#    MeowEngine/libs/third-party/emscripten/upstream/emscripten
 #- This can be done for the current shell by running:
-#    source "/Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten/emsdk_env.sh"
+#    source "MeowEngine/libs/third-party/emscripten/emsdk_env.sh"
 #- Configure emsdk in your shell startup scripts by running:
-#    echo 'source "/Users/akira/Desktop/fwrsa_data/Z/projects/simulations/physicat/libs/third-party/emscripten/emsdk_env.sh"' >> $HOME/.zprofile
+#    echo 'source "MeowEngine/libs/third-party/emscripten/emsdk_env.sh"' >> $HOME/.zprofile

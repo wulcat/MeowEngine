@@ -1,4 +1,4 @@
-name: Physicat
+name: MeowEngine
 
 options:
   bundleIdPrefix: io.github.marcelbraghetto
@@ -16,7 +16,7 @@ settings:
   CLANG_WARN_DOCUMENTATION_COMMENTS: false
 
 targets:
-  Physicat:
+  MeowEngine:
     type: application
     platform: macOS
     info:

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
-project(physicat)
+project(MeowEngine)
 
 set(CMAKE_OSX_ARCHITECTURES "x86_64")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fexceptions")
@@ -67,7 +67,7 @@ foreach(DIR ${ALL_DIRECTORIES})
 endforeach()
 
 add_executable(
-     Physicat
+     MeowEngine
      ${THIRD_PARTY_DIR}/tracy/public/TracyClient.cpp
      ${THIRD_PARTY_DIR}/concurrentqueue/concurrentqueue.h
      ${THIRD_PARTY_DIR}/imgui/imgui.cpp ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_sdl2.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
@@ -86,13 +86,13 @@ add_library(
 )
 #target_include_directories(TracyClient PUBLIC ../../public/tracy)
 target_compile_definitions(TracyClient PUBLIC TRACY_ENABLE=1)
-target_link_libraries(Physicat PUBLIC OpenCL::OpenCL TracyClient ${CMAKE_DL_LIBS})
-#target_link_libraries(Physicat PUBLIC OpenGL::OpenGL TracyClient ${CMAKE_DL_LIBS})
+target_link_libraries(MeowEngine PUBLIC OpenCL::OpenCL TracyClient ${CMAKE_DL_LIBS})
+#target_link_libraries(MeowEngine PUBLIC OpenGL::OpenGL TracyClient ${CMAKE_DL_LIBS})
 
 # Link native menu option for mac
 #include_directories(${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
 
-target_link_libraries(Physicat PUBLIC
+target_link_libraries(MeowEngine PUBLIC
    ${SDL2_LIBRARIES}
    ${OPENGL_LIBRARIES} "-framework Cocoa"
 )
@@ -103,7 +103,7 @@ find_library(PHYSX_COMMON_LIB NAMES libPhysXCommon_static_64.a PATHS ${THIRD_PAR
 find_library(PHYSX_FOUNDATION_LIB NAMES libPhysXFoundation_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
 find_library(PHYSX_EXTENSIONS_LIB NAMES libPhysXExtensions_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
 
-target_link_libraries(Physicat PUBLIC
+target_link_libraries(MeowEngine PUBLIC
      ${PHYSX_LIBRARY}
      ${PHYSX_COMMON_LIB}
      ${PHYSX_FOUNDATION_LIB}
@@ -113,7 +113,7 @@ target_link_libraries(Physicat PUBLIC
 
 # This is to ensure executable knows how to attach frameworks or other things to itself
 set_target_properties(
-        Physicat
+        MeowEngine
     PROPERTIES
     LINK_FLAGS
     "-F${LIBRARY_DIR}/Frameworks -framework SDL2 -framework SDL2_image -framework OpenGL"
@@ -123,7 +123,7 @@ set_target_properties(
 
 # Executes after build to properly link sdk framework in executable file
 add_custom_command(
-    TARGET Physicat
+    TARGET MeowEngine
     POST_BUILD
     WORKING_DIRECTORY ${INSTALLER_DIR}
     COMMAND ./cmake-post-build.sh -p console

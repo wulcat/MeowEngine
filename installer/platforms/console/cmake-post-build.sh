@@ -32,4 +32,4 @@ popd || exit
 echo "Adding Frameworks @rpath to binary ..."
 ## TODO: Some error on this file
 
-install_name_tool -add_rpath @loader_path/dependencies/Frameworks ../../../builds/console/Physicat
+install_name_tool -add_rpath @loader_path/dependencies/Frameworks ../../../builds/console/MeowEngine

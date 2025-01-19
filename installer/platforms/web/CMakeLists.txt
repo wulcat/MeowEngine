@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4.1)
-project(physicat)
+project(MeowEngine)
 
 set(CMAKE_OSX_ARCHITECTURES "x86_64")
 # We are using C++ 17 and will make use of C++ exceptions.
@@ -47,7 +47,7 @@ foreach(DIR ${ALL_DIRECTORIES})
     include_directories(${DIR})
 endforeach()
 
-# The 'a-simple-triangle' executable is the output target for our Emscripten application and is why we end up with 'a-simple-triangle.js' in the output folder. Note that it will use the C++ source code from the shared 'main' folder through the collated sources.
+# The 'web' executable is the output target for our Emscripten application and is why we end up with 'web.js' in the output folder. Note that it will use the C++ source code from the shared 'main' folder through the collated sources.
 add_executable(
     web
     ${THIRD_PARTY_DIR}/imgui/imgui.cpp ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp ${THIRD_PARTY_DIR}/imgui/imgui_demo.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_sdl2.cpp ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
