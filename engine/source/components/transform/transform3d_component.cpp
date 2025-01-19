@@ -62,7 +62,7 @@ void Transform3DComponent::CalculateTransformMatrix(const glm::mat4 &inProjectio
 
 void Transform3DComponent::Update(const float& deltaTime) {
     float random = (float)std::rand() / RAND_MAX;
-    Position.Y += random * 0.02f;
+    Position.Y += 1.2f * deltaTime;
 
     RotateBy(1.0f * random * 0.2f);
 }

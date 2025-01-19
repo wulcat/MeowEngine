@@ -54,7 +54,7 @@ void MeowEngine::simulator::PhysXPhysics::Update(float inFixedDeltaTime) {
   //  {
 
   // MeowEngine::Log("", std::to_string(body->getGlobalPose().p.y));
-        gScene->simulate(0.02f);
+        gScene->simulate(inFixedDeltaTime);
         gScene->fetchResults(true);
   //  }
 }

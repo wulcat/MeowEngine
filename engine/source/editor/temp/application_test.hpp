@@ -20,7 +20,7 @@
 #include "input_manager.hpp"
 #include "main_scene.hpp"
 #include "physx_physics.hpp"
-#include <fps_counter.hpp>
+#include <frame_rate_counter.hpp>
 #include "window.hpp"
 #include "SDL_image.h"
 #include "thread_barrier.hpp"
@@ -74,6 +74,10 @@ namespace MeowEngine {
             // which occurs while drag window
             SDL_GL_MakeCurrent(WindowContext->window, nullptr);
 
+            MainThreadFrameRate = std::make_unique<FrameRateCounter>(60, 1); // 60 frames per second
+            RenderThreadFrameRate = std::make_unique<FrameRateCounter>(60, 100);
+            PhysicsThreadFrameRate = std::make_unique<FrameRateCounter>(50, 1); // per 0.02 sec
+
             // create threads and start keep infinite thread
             RenderThread = std::thread(&MeowEngine::ApplicationTest::RenderThreadLoop, this);
             PhysicsThread = std::thread(&MeowEngine::ApplicationTest::PhysicsThreadLoop, this);
@@ -104,6 +108,7 @@ namespace MeowEngine {
         std::mutex WaitForThreadEndMutex;
         std::atomic<bool> IsSyncingPhysicsThread;
         std::mutex SyncPhysicMutex;
+        std::unique_ptr<FrameRateCounter> MainThreadFrameRate;
 
         std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
         std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
@@ -128,16 +133,18 @@ namespace MeowEngine {
             // loop
             while(IsApplicationRunning)
             {
+                MainThreadFrameRate->Calculate();
+
                 PT_PROFILE_SCOPE;
                 // if thread count == 0 on main notify
 
                 // update thread count++
 
 //                MeowEngine::Log("Main Thread", "Running");
+//                MeowEngine::Log("Frame Rate: ", static_cast<float>(MainThreadFrameRate->DeltaTime));
+                Update(MainThreadFrameRate->DeltaTime);
 
-                Update(0);
-
-                if(!Input(0.02f))
+                if(!Input(MainThreadFrameRate->DeltaTime))
                 {
                     PT_PROFILE_SCOPE_N("Main Thread Ending");
                     IsApplicationRunning = false;
@@ -189,7 +196,7 @@ namespace MeowEngine {
 
                 Scene->SwapBuffer();
 
-
+                MainThreadFrameRate->LockFrameRate();
 
                 // wait until buffers are synced
                 // ideally since other threads are waiting this should release all of them automatically
@@ -204,6 +211,8 @@ namespace MeowEngine {
             MeowEngine::Log("Main Thread", "Ended");
         }
 
+        std::unique_ptr<FrameRateCounter> RenderThreadFrameRate;
+
         void RenderThreadLoop() {
 
             // init
@@ -215,6 +224,9 @@ namespace MeowEngine {
 
             // loop
             while (IsApplicationRunning) {
+//                Uint64 currentTime = SDL_GetPerformanceCounter();
+                RenderThreadFrameRate->Calculate();
+
                 PT_PROFILE_SCOPE;
                 // Synchronize with the main thread
                 // input
@@ -251,6 +263,11 @@ namespace MeowEngine {
                     // Swap buffers
                     SDL_GL_SwapWindow(WindowContext->window);
                 }
+// Frame timing logic
+
+//                RenderThreadFrameRate->LockFrameRate();
+//                MeowEngine::Log("Frequency", ((int)SDL_GetPerformanceFrequency()) * 0.001f);
+
                 // renderring & swapping buffer again gives consistent frames - look into it more for stability
 //                Render();
 //
@@ -260,13 +277,15 @@ namespace MeowEngine {
 //                    SDL_GL_SwapWindow(WindowContext->window);
 //                }
                 // MeowEngine::Log("Render Thread", "Waiting for other threads to finish processing");
-
                 // wait for all threads to sync up for frame ending
                 ProcessThreadBarrier.get()->Wait();
 
                 // MeowEngine::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
                 // wait until buffers are synced on main thread
                 SwapBufferThreadBarrier.get()->Wait();
+
+
+//                RenderThreadFrameRate.End();
             }
 
             // exit
@@ -278,6 +297,8 @@ namespace MeowEngine {
         }
 
         std::thread PhysicsThread;
+        std::shared_ptr<MeowEngine::simulator::Physics> Physics;
+        std::unique_ptr<FrameRateCounter> PhysicsThreadFrameRate;
 
         void PhysicsThreadLoop() {
             MeowEngine::Log("Physics Thread", "Started");
@@ -289,11 +310,13 @@ namespace MeowEngine {
 
             while(IsApplicationRunning)
             {
-                PT_PROFILE_SCOPE;
+                PhysicsThreadFrameRate->Calculate();
 
-                FixedUpdate(1);
-                std::this_thread::sleep_for(std::chrono::milliseconds(20));
-//                ProcessThreadBarrier.get()->Wait();
+                PT_PROFILE_SCOPE;
+                FixedUpdate(PhysicsThreadFrameRate->DeltaTime);
+
+                PhysicsThreadFrameRate->LockFrameRate();
+//                std::this_thread::sleep_for(std::chrono::milliseconds(20));
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -380,7 +403,7 @@ namespace MeowEngine {
 
         void Update(const float& deltaTime) {
             PT_PROFILE_SCOPE;
-            Scene->Update(10);
+            Scene->Update(deltaTime);
         };
 
         // render ----------------
@@ -394,9 +417,10 @@ namespace MeowEngine {
         // but render thread will access this all the time
         std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
 
+
         void Render() {
 
-            Uint64 currentTime = SDL_GetPerformanceCounter();
+
 
             PT_PROFILE_SCOPE_N("setting current");
             // We let opengl know that any after this will be drawn into custom frame buffer
@@ -420,7 +444,8 @@ namespace MeowEngine {
 
             {
                 PT_PROFILE_SCOPE_N("UI render");
-                Scene->RenderUI(*Renderer, FrameBuffer->GetFrameTexture(), 1);
+//                MeowEngine::Log("Frame Rate: ", static_cast<int>(RenderThreadFrameRate.GetFrameRate()));
+                Scene->RenderUI(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
             }
 
 //                {
@@ -460,19 +485,16 @@ namespace MeowEngine {
         };
 
         // physics thread ----------------
-        std::shared_ptr<MeowEngine::simulator::Physics> Physics;
 
         void FixedUpdate(const float& inFixedDeltaTime) {
             Scene->CreatePhysics(Physics.get());
             Physics->Update(inFixedDeltaTime);
 
             if(SyncPhysicMutex.try_lock()) {
-                Scene->FixedUpdate(1);
+                Scene->FixedUpdate(inFixedDeltaTime);
                 SyncPhysicMutex.unlock();
             }
         };
-
-        static FpsCounter FpsCounter;
     };
 }
 

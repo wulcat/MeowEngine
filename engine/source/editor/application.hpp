@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <fps_counter.hpp>
+#include <frame_rate_counter.hpp>
 #include "internal_ptr.hpp"
 #include "emscripten_wrapper.hpp"
 
@@ -72,7 +72,7 @@ namespace MeowEngine {
         // for now only 0 to 1 for rendering & main thread
 //        static int mainThreadBufferIndex;
 
-        static FpsCounter FpsCounter;
+        static FrameRateCounter FpsCounter;
 
     private:
         struct Internal;

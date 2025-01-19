@@ -16,7 +16,7 @@
 #include "input_manager.hpp"
 #include "main_scene.hpp"
 #include "physx_physics.hpp"
-#include <fps_counter.hpp>
+#include <frame_rate_counter.hpp>
 #include <string>
 
 using MeowEngine::OpenGLApplication;
@@ -276,7 +276,8 @@ struct OpenGLApplication::Internal {
 
                 previousTime = frameEndTime;
             }
-                {FpsCounter.frameEnd();
+                {
+//                    FpsCounter.End();
                     PT_PROFILE_SCOPE_N("swap");
                     SDL_GL_SwapWindow(Window);
 

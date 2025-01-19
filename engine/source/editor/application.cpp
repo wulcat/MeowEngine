@@ -423,7 +423,7 @@ bool MeowEngine::Application::LoopApplication() {
     PT_PROFILE_SCOPE_N("Main Thread");
 
     float deltaTime = InternalPointer->TimeStep();
-    FpsCounter.frameStart();
+//    FpsCounter.Start();
     // If Input() returns false - close the application
     if(!Input(deltaTime)) {
         return false;
@@ -448,4 +448,4 @@ Application::Application()
     , IsApplicationRunning(false) {}
 
 //MeowEngine::Application::mainThreadBufferIndex = 0;
-FpsCounter MeowEngine::Application::FpsCounter = {};
+FrameRateCounter MeowEngine::Application::FpsCounter = {1};
