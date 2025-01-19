@@ -17,22 +17,65 @@ namespace MeowEngine {
 
         virtual void OnWindowResized(const MeowEngine::WindowSize& size) = 0;
 
-        virtual void Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) = 0;
-        virtual void Create() = 0; // Load assets
-        virtual void CreatePhysics(MeowEngine::simulator::Physics* inPhysics) = 0;
-        virtual void Input(const float& deltaTime, const MeowEngine::input::InputManager& inputManager) = 0;
-        virtual void FixedUpdate(const float& inFixedDeltaTime) = 0;
-        virtual void Update(const float& deltaTime) = 0;
-        virtual void Render(MeowEngine::Renderer& renderer) = 0;
-        virtual void RenderUI(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) = 0;
-        virtual void SwapBuffer() = 0;
-        virtual void CalculateDeltaData() = 0;
-        virtual void SyncPhysicsThreadData() = 0;
-        virtual void SyncThreadData() = 0;
+        // -----------------------------------------------------------------------
 
-        // Currently returns delta time
-        // TODO: This will be converted into time manager which can contain more data.
-        virtual const float& GetDeltaTime() = 0;
+        virtual void LoadOnRenderThread(std::shared_ptr<MeowEngine::AssetManager> assetManager) = 0;
+
+        /**
+         * Creates scenes, adds entity / components
+         * (essentially later this might be a done dynamically by reading a saved scene data)
+         */
+        virtual void CreateSceneOnMainThread() = 0;
+
+        /**
+         * When a entity is created on main thread, out buffer queues the entity to be created on physics thread
+         * and adds to staging(physics) buffer
+         * @param inPhysics
+         */
+        virtual void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) = 0;
+
+        // -----------------------------
+
+        virtual void Input(const float& deltaTime, const MeowEngine::input::InputManager& inputManager) = 0;
+
+        // -----------------------------
+
+        virtual void Update(const float& deltaTime) = 0;
+
+        // -----------------------------
+
+        virtual void RenderGameView(MeowEngine::Renderer& renderer) = 0;
+        virtual void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) = 0;
+
+        // -----------------------------
+
+        /**
+         * Simply swap the entt registry current(main) and final(render)
+         */
+        virtual void SwapMainAndRenderBufferOnMainThread() = 0;
+
+        // -----------------------------
+
+        /**
+         * Based on availability of staging(physics) buffer  we either
+         * cache or sync data from main & render to physics & vice versa
+         * i.e. we take the updates from physics thread and push the updates from main thread w.r.t render thread
+         * @param inIsPhysicsThreadWorking
+         */
+        virtual void SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) = 0;
+
+        /**
+         * Sync UI updates and push main thread updates on final(render) buffer
+         * and create queue for physics thread for UI updates
+         */
+        virtual void SyncRenderBufferOnMainThread() = 0;
+
+        /**
+         * Push rigidbody updates to transform & apply UI inputs to staging(physics) buffer
+         */
+        virtual void SyncPhysicsBufferOnPhysicsThread() = 0;
+
+        // -----------------------------
     };
 }
 

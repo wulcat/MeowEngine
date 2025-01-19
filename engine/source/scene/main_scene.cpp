@@ -49,9 +49,6 @@ struct MainScene::Internal {
     std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
     moodycamel::ConcurrentQueue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
 
-
-    float Time;
-
     // User Input Events
     const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
 
@@ -59,7 +56,6 @@ struct MainScene::Internal {
         : Camera(::CreateCamera(size))
         , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
         , KeyboardState(SDL_GetKeyboardState(nullptr))
-        , Time(0)
         , RegistryBuffer()
     {}
 
@@ -67,7 +63,7 @@ struct MainScene::Internal {
         Camera = ::CreateCamera(size);
     }
 
-    void Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
+    void LoadOnRenderThread(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
         assetManager->LoadShaderPipelines({
                                                   assets::ShaderPipelineType::Grid,
                                                   assets::ShaderPipelineType::Default,
@@ -101,12 +97,12 @@ struct MainScene::Internal {
         REGISTER_ENTT_COMPONENT(MeshRenderComponent);
     }
 
-    void CreatePhysics(MeowEngine::simulator::Physics* inPhysics) {
+    void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) {
         RegistryBuffer.CreateInStaging();
         RegistryBuffer.AddInStaging(inPhysics);
     }
 
-    void Create() {
+    void CreateSceneOnMainThread() {
         auto entity = RegistryBuffer.Create();
         RegistryBuffer.AddComponent<entity::LifeObjectComponent>(entity, "torus");
         RegistryBuffer.AddComponent<entity::Transform3DComponent>(
@@ -264,33 +260,8 @@ struct MainScene::Internal {
 //        }
     }
 
-    void FixedUpdate(const float& inFixedDeltaTime) {
-//        inPhysics.Update(inFixedDeltaTime);
-
-//        // Apply update physics transform to entities
-        auto view = RegistryBuffer.GetStaging().view<entity::Transform3DComponent, entity::RigidbodyComponent>();
-        for(auto entity: view)
-        {
-            auto& transform = view.get<entity::Transform3DComponent>(entity);
-            auto& rigidbody = view.get<entity::RigidbodyComponent>(entity);
-
-            rigidbody.UpdateTransform(transform);
-        }
-
-        std::shared_ptr<MeowEngine::ReflectionPropertyChange> change;
-        while(PhysicsUiInputPropertyChangesQueue.try_dequeue(change)) {
-            if(view.contains(static_cast<entt::entity>(change->EntityId))) {
-                MeowEngine::Reflection.ApplyPropertyChange(*change, RegistryBuffer.GetStaging());
-                auto [transform, rigidbody] = view.get<entity::Transform3DComponent, entity::RigidbodyComponent>(static_cast<entt::entity>(change->EntityId));
-                rigidbody.OverrideTransform(transform);
-            }
-        }
-    }
-
     // We can perform -> culling, input detection
     void Update(const float& deltaTime) {
-        Time = deltaTime;
-        
         Camera.Configure(CameraController.GetPosition(), CameraController.GetUp(), CameraController.GetDirection());
 
         const glm::mat4 cameraMatrix {Camera.GetProjectionMatrix() * Camera.GetViewMatrix()};
@@ -343,7 +314,7 @@ struct MainScene::Internal {
 //        }
     }
 
-    void Render(MeowEngine::Renderer& renderer) {
+    void RenderGameView(MeowEngine::Renderer& renderer) {
         // This is important for now - we can come to this later for optimization
         // Current goal is to have full control on render as individual objects
         // as we will have elements like UI, Static Meshes, Post Processing, Camera Culling, Editor Tools
@@ -353,48 +324,46 @@ struct MainScene::Internal {
         renderer.Render(&Camera, RegistryBuffer.GetFinal());
     }
 
-    void RenderUI(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) {
+    void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) {
         renderer.RenderUI(RegistryBuffer.GetFinal(), UiInputPropertyChangesQueue , frameBufferId, fps);
     }
 
-    void SwapBuffer() {
+    void SwapMainAndRenderBufferOnMainThread() {
         RegistryBuffer.Swap();
     }
 
-    void CalculateDeltaData() {
-
+    void SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) {
         auto currentView = RegistryBuffer.GetCurrent().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
         auto stagingView = RegistryBuffer.GetStaging().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
         auto finalView = RegistryBuffer.GetFinal().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
 
-        for(entt::entity entity : stagingView) {
+        if(inIsPhysicsThreadWorking) {
+            // since physics is working on its buffer (staging) we cache the main thread updates
+            for(entt::entity entity : stagingView) {
 
-            auto& staging = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
-            auto final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
-            auto current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
+                auto& staging = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
+                auto final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
+                auto current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
 
-            staging.CacheDelta(current.Position - final.Position);
+                staging.CacheDelta(current.Position - final.Position);
+            }
+        }
+        else {
+            // since physics is not working, we can update rigidbody in physics thread
+            for (entt::entity entity: stagingView) {
+                auto staging = stagingView.get<MeowEngine::entity::Transform3DComponent>(entity);
+                auto &rigidbody = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
+                auto &final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
+
+                auto &current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
+
+                rigidbody.AddDelta(current.Position - final.Position);
+                current.Position = staging.Position;
+            }
         }
     }
 
-    void SyncPhysicsThreadData() {
-        auto currentView = RegistryBuffer.GetCurrent().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
-        auto stagingView = RegistryBuffer.GetStaging().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
-        auto finalView = RegistryBuffer.GetFinal().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
-
-        for(entt::entity entity : stagingView) {
-            auto staging = stagingView.get<MeowEngine::entity::Transform3DComponent>(entity);
-            auto& rigidbody = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
-            auto& final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
-
-            auto& current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
-
-            rigidbody.AddDelta(current.Position - final.Position);
-            current.Position = staging.Position;
-        }
-    }
-
-    void SyncThreadData() {
+    void SyncRenderBufferOnMainThread() {
         // Add a template method to apply changes
         // Each component will have a apply data method
         // We will have data and component methods
@@ -411,12 +380,8 @@ struct MainScene::Internal {
             final.Position = current.Position;
         }
 
-        // create a template method
-        // pass the component
-        // every component needs to have a sync method
-
-        // Apply UI Inputs
-        // can go to our extended entt buffer class
+        // Apply UI inputs to render and main buffers
+        // Push UI inputs for physics buffer (which gets processed in physics thread)
         while(!UiInputPropertyChangesQueue.empty()) {
             std::shared_ptr<MeowEngine::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
 
@@ -425,6 +390,28 @@ struct MainScene::Internal {
 
             PhysicsUiInputPropertyChangesQueue.enqueue(change);
             UiInputPropertyChangesQueue.pop();
+        }
+    }
+
+    void SyncPhysicsBufferOnPhysicsThread() {
+        // Apply update physics transform to entities
+        auto view = RegistryBuffer.GetStaging().view<entity::Transform3DComponent, entity::RigidbodyComponent>();
+        for(auto entity: view)
+        {
+            auto& transform = view.get<entity::Transform3DComponent>(entity);
+            auto& rigidbody = view.get<entity::RigidbodyComponent>(entity);
+
+            rigidbody.UpdateTransform(transform);
+        }
+
+        // Apply UI inputs to physics components
+        std::shared_ptr<MeowEngine::ReflectionPropertyChange> change;
+        while(PhysicsUiInputPropertyChangesQueue.try_dequeue(change)) {
+            if(view.contains(static_cast<entt::entity>(change->EntityId))) {
+                MeowEngine::Reflection.ApplyPropertyChange(*change, RegistryBuffer.GetStaging());
+                auto [transform, rigidbody] = view.get<entity::Transform3DComponent, entity::RigidbodyComponent>(static_cast<entt::entity>(change->EntityId));
+                rigidbody.OverrideTransform(transform);
+            }
         }
     }
 };
@@ -436,55 +423,48 @@ void MainScene::OnWindowResized(const MeowEngine::WindowSize &size) {
     InternalPointer->OnWindowResized(size);
 }
 
-void MainScene::Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
-    InternalPointer->Load(assetManager);
+void MainScene::LoadOnRenderThread(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
+    InternalPointer->LoadOnRenderThread(assetManager);
 }
-void MainScene::Create() {
-    InternalPointer->Create();
+void MainScene::CreateSceneOnMainThread() {
+    InternalPointer->CreateSceneOnMainThread();
 }
 
-void MainScene::CreatePhysics(MeowEngine::simulator::Physics* inPhysics) {
-    InternalPointer->CreatePhysics(inPhysics);
+void MainScene::AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) {
+    InternalPointer->AddEntitiesOnPhysicsThread(inPhysics);
 }
 
 void MainScene::Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) {
     InternalPointer->Input(deltaTime, inputManager);
 }
 
-void MainScene::FixedUpdate(const float& inFixedDeltaTime) {
-    InternalPointer->FixedUpdate(inFixedDeltaTime);
-}
-
 void MainScene::Update(const float &deltaTime) {
     InternalPointer->Update(deltaTime);
 }
 
-void MainScene::Render(MeowEngine::Renderer &renderer) {
-    InternalPointer->Render(renderer);
+void MainScene::RenderGameView(MeowEngine::Renderer &renderer) {
+    InternalPointer->RenderGameView(renderer);
 }
 
-void MainScene::RenderUI(MeowEngine::Renderer &renderer, unsigned int frameBufferId, const double fps) {
-    InternalPointer->RenderUI(renderer, frameBufferId, fps);
+void MainScene::RenderUserInterface(MeowEngine::Renderer &renderer, unsigned int frameBufferId, const double fps) {
+    InternalPointer->RenderUserInterface(renderer, frameBufferId, fps);
 }
 
-const float& MainScene::GetDeltaTime() {
-    return InternalPointer->Time ;
+void MainScene::SwapMainAndRenderBufferOnMainThread() {
+    InternalPointer->SwapMainAndRenderBufferOnMainThread();
 }
 
-void MainScene::SwapBuffer() {
-    InternalPointer->SwapBuffer();
+void MainScene::SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) {
+    InternalPointer->SyncPhysicsBufferOnMainThread(inIsPhysicsThreadWorking);
 }
 
-void MainScene::CalculateDeltaData() {
-    InternalPointer->CalculateDeltaData();
-}
-void MainScene::SyncPhysicsThreadData() {
-    InternalPointer->SyncPhysicsThreadData();
-}
-void MainScene::SyncThreadData() {
-    InternalPointer->SyncThreadData();
+void MainScene::SyncRenderBufferOnMainThread() {
+    InternalPointer->SyncRenderBufferOnMainThread();
 }
 
+void MainScene::SyncPhysicsBufferOnPhysicsThread() {
+    InternalPointer->SyncPhysicsBufferOnPhysicsThread();
+}
 
 
 

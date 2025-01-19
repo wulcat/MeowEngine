@@ -120,7 +120,7 @@ namespace MeowEngine {
             PT_PROFILE_SCOPE;
             MeowEngine::Log("Main Thread", "Started");
 
-            Scene->Create();
+            Scene->CreateSceneOnMainThread();
 
 //            MeowEngine::Log("Main Thread", "waiting for creating all threads");
 //            std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
@@ -184,17 +184,17 @@ namespace MeowEngine {
 
                 // staging accesses final rigidbody takes the delta
                 if(SyncPhysicMutex.try_lock()) {
-                    Scene->SyncPhysicsThreadData();
+                    Scene->SyncPhysicsBufferOnMainThread(false);
                     SyncPhysicMutex.unlock();
                 }
                 else {
-                    Scene->CalculateDeltaData();
+                    Scene->SyncPhysicsBufferOnMainThread(true);
                 }
 
 
-                Scene->SyncThreadData();
+                Scene->SyncRenderBufferOnMainThread();
 
-                Scene->SwapBuffer();
+                Scene->SwapMainAndRenderBufferOnMainThread();
 
                 MainThreadFrameRate->LockFrameRate();
 
@@ -220,7 +220,7 @@ namespace MeowEngine {
             ThreadCount++;
 
             SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
-            Scene->Load(AssetManager);
+            Scene->LoadOnRenderThread(AssetManager);
 
             // loop
             while (IsApplicationRunning) {
@@ -433,7 +433,7 @@ namespace MeowEngine {
                     glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                    Scene->Render(*Renderer);
+                    Scene->RenderGameView(*Renderer);
 
                     FrameBuffer->Unbind();
                 }
@@ -445,7 +445,7 @@ namespace MeowEngine {
             {
                 PT_PROFILE_SCOPE_N("UI render");
 //                MeowEngine::Log("Frame Rate: ", static_cast<int>(RenderThreadFrameRate.GetFrameRate()));
-                Scene->RenderUI(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
+                Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
             }
 
 //                {
@@ -487,11 +487,11 @@ namespace MeowEngine {
         // physics thread ----------------
 
         void FixedUpdate(const float& inFixedDeltaTime) {
-            Scene->CreatePhysics(Physics.get());
+            Scene->AddEntitiesOnPhysicsThread(Physics.get());
             Physics->Update(inFixedDeltaTime);
 
             if(SyncPhysicMutex.try_lock()) {
-                Scene->FixedUpdate(inFixedDeltaTime);
+                Scene->SyncPhysicsBufferOnPhysicsThread();
                 SyncPhysicMutex.unlock();
             }
         };

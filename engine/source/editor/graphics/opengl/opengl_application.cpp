@@ -247,7 +247,7 @@ struct OpenGLApplication::Internal {
                     glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //
-                    GetScene().Render(Renderer);
+//                    GetScene().Render(Renderer);
 //
                     FrameBuffer.Unbind();
                 }

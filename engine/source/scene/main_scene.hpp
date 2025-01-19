@@ -15,20 +15,19 @@ namespace MeowEngine {
 
         void OnWindowResized(const MeowEngine::WindowSize& size) override;
 
-        virtual void Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) override;
-        void Create() override;
-        void CreatePhysics(MeowEngine::simulator::Physics* inPhysics) override;
+        virtual void LoadOnRenderThread(std::shared_ptr<MeowEngine::AssetManager> assetManager) override;
+        void CreateSceneOnMainThread() override;
+        void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) override;
         void Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) override;
-        void FixedUpdate(const float& inFixedDeltaTime) override;
-        void Update(const float& deltaTime) override;
-        void Render(MeowEngine::Renderer& renderer) override;
-        void RenderUI(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
-        void SwapBuffer() override;
-        void CalculateDeltaData() override;
-        void SyncPhysicsThreadData() override;
-        void SyncThreadData() override;
 
-        const float& GetDeltaTime() override;
+        void Update(const float& deltaTime) override;
+        void RenderGameView(MeowEngine::Renderer& renderer) override;
+        void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
+        void SwapMainAndRenderBufferOnMainThread() override;
+//        void CalculateDeltaData() override;
+        void SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) override;
+        void SyncRenderBufferOnMainThread() override;
+        void SyncPhysicsBufferOnPhysicsThread() override;
 
     private:
         struct Internal;
