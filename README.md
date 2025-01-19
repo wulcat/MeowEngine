@@ -1,6 +1,6 @@
 # Meow Engine
-## A journey to physics simulations!
-
+<b>A journey to physics simulations!</b>
+----
 > [!CAUTION]
 > #### Build Status (non-compilable)
 > Implementing multi-threading which involves `main, render and physics thread` to
