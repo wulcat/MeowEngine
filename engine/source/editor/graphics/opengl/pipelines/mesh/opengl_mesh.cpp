@@ -5,7 +5,7 @@
 #include "opengl_mesh.hpp"
 #include "glm_wrapper.hpp"
 
-using physicat::OpenGLMesh;
+using MeowEngine::OpenGLMesh;
 
 namespace {
     // Refer: https://registry.khronos.org/OpenGL-Refpages/es1.1/xhtml/glBindBuffer.xml for buffer types
@@ -16,7 +16,7 @@ namespace {
         return id;
     }
 
-    GLuint CreateVertexBuffer(const physicat::Mesh& mesh) {
+    GLuint CreateVertexBuffer(const MeowEngine::Mesh& mesh) {
         std::vector<float> bufferData;
 
         for(const auto& vertex: mesh.GetVertices()) {
@@ -43,7 +43,7 @@ namespace {
         return bufferId;
     }
 
-    GLuint CreateIndexBuffer(const physicat::Mesh& mesh) {
+    GLuint CreateIndexBuffer(const MeowEngine::Mesh& mesh) {
         GLuint bufferId;
 
         glGenBuffers(1, &bufferId); // create empty buffer
@@ -60,7 +60,7 @@ struct OpenGLMesh::Internal {
     const uint32_t IndicesCount;
     const GLuint VertexArrayID;
 
-    explicit Internal(const physicat::Mesh& mesh)
+    explicit Internal(const MeowEngine::Mesh& mesh)
         : BufferIdVertices(CreateVertexBuffer(mesh))
         , BufferIdIndices(CreateIndexBuffer(mesh))
         , IndicesCount(static_cast<uint32_t>(mesh.GetIndices().size()))
@@ -74,21 +74,21 @@ struct OpenGLMesh::Internal {
     }
 };
 
-physicat::OpenGLMesh::OpenGLMesh(const physicat::Mesh &mesh)
-: InternalPointer(physicat::make_internal_ptr<Internal>(mesh)) {}
+MeowEngine::OpenGLMesh::OpenGLMesh(const MeowEngine::Mesh &mesh)
+: InternalPointer(MeowEngine::make_internal_ptr<Internal>(mesh)) {}
 
-const GLuint &physicat::OpenGLMesh::GetVertexArrayId() const {
+const GLuint &MeowEngine::OpenGLMesh::GetVertexArrayId() const {
     return InternalPointer->VertexArrayID;
 }
 
-const GLuint &physicat::OpenGLMesh::GetVertexBufferId() const {
+const GLuint &MeowEngine::OpenGLMesh::GetVertexBufferId() const {
     return InternalPointer->BufferIdVertices;
 }
 
-const GLuint &physicat::OpenGLMesh::GetIndexBufferId() const {
+const GLuint &MeowEngine::OpenGLMesh::GetIndexBufferId() const {
     return InternalPointer->BufferIdIndices;
 }
 
-const uint32_t &physicat::OpenGLMesh::GetNumIndices() const {
+const uint32_t &MeowEngine::OpenGLMesh::GetNumIndices() const {
     return InternalPointer->IndicesCount;
 }

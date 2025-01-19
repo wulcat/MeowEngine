@@ -7,19 +7,19 @@
 #include <utility>
 #include "log.hpp"
 
-physicat::ReflectionPropertyChange::ReflectionPropertyChange(const std::string& inPropertyChangeName, void* inChangeData, std::function<void(void*)> inDataDeleter)
+MeowEngine::ReflectionPropertyChange::ReflectionPropertyChange(const std::string& inPropertyChangeName, void* inChangeData, std::function<void(void*)> inDataDeleter)
         : PropertyName(inPropertyChangeName)
         , ClassProperties()
         , Data(inChangeData)
         , DataDeleter(std::move(inDataDeleter)){
-    physicat::Log("physicat::ReflectionPropertyChange", "Constructed");
+    MeowEngine::Log("MeowEngine::ReflectionPropertyChange", "Constructed");
 }
 
-physicat::ReflectionPropertyChange::~ReflectionPropertyChange() {
-    physicat::Log("physicat::ReflectionPropertyChange", "Destructed");
+MeowEngine::ReflectionPropertyChange::~ReflectionPropertyChange() {
+    MeowEngine::Log("MeowEngine::ReflectionPropertyChange", "Destructed");
 
-//    physicat::Log("Before Des", *static_cast<int*>(Data));
+//    MeowEngine::Log("Before Des", *static_cast<int*>(Data));
     DataDeleter(Data);
 //    delete static_cast<int*>(Data);
-//    physicat::Log("After Des", *static_cast<int*>(Data));
+//    MeowEngine::Log("After Des", *static_cast<int*>(Data));
 }

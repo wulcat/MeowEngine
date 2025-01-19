@@ -11,10 +11,10 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     struct ReflectionProperty {
         std::string Name; // name of property
-        physicat::PropertyType Type; // type of class
+        MeowEngine::PropertyType Type; // type of class
         const type_info& TypeId; // type id of class
         std::string TypeName; // name of class
         std::function<void(void *, const void *)> Set;

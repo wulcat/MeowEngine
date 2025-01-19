@@ -5,14 +5,14 @@
 #include "pstring.hpp"
 #include "log.hpp"
 
-void physicat::PString::Reflect() {
-    physicat::Log("Reflected", "PString");
+void MeowEngine::PString::Reflect() {
+    MeowEngine::Log("Reflected", "PString");
 }
 
-physicat::PString::PString() {
+MeowEngine::PString::PString() {
 
 }
 
-physicat::PString::PString(std::string inString) {
+MeowEngine::PString::PString(std::string inString) {
     this->assign(inString);
 }

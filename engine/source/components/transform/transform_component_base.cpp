@@ -4,6 +4,6 @@
 
 #include "transform_component_base.hpp"
 
-using physicat::entity::TransformComponentBase;
+using MeowEngine::entity::TransformComponentBase;
 
 TransformComponentBase::TransformComponentBase() {}

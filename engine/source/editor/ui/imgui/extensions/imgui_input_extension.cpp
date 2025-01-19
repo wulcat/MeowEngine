@@ -9,30 +9,30 @@
 #include "pstring.hpp"
 #include "vector3.hpp"
 
-physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowProperty(const std::string& inClassName, void* inObject) {
-    std::vector<physicat::ReflectionProperty> properties = physicat::Reflection.GetProperties(inClassName);
-    physicat::ReflectionPropertyChange* change = nullptr;
+MeowEngine::ReflectionPropertyChange* MeowEngine::ImGuiInputExtension::ShowProperty(const std::string& inClassName, void* inObject) {
+    std::vector<MeowEngine::ReflectionProperty> properties = MeowEngine::Reflection.GetProperties(inClassName);
+    MeowEngine::ReflectionPropertyChange* change = nullptr;
 
     // Display Component Properties
     for (const auto &property: properties) {
         switch (property.Type) {
-            case physicat::NOT_DEFINED:
+            case MeowEngine::NOT_DEFINED:
                 break;
-            case physicat::PRIMITIVE: {
+            case MeowEngine::PRIMITIVE: {
                 ImGui::Indent();
-                physicat::ReflectionPropertyChange::Assign(change, ImGuiInputExtension::ShowPrimitive(property, inObject));
+                MeowEngine::ReflectionPropertyChange::Assign(change, ImGuiInputExtension::ShowPrimitive(property, inObject));
                 ImGui::Unindent();
                 break;
             }
-            case physicat::ARRAY:
+            case MeowEngine::ARRAY:
                 break;
-            case physicat::POINTER:
+            case MeowEngine::POINTER:
                 break;
-            case physicat::ENUM:
+            case MeowEngine::ENUM:
                 break;
-            case physicat::CLASS_OR_STRUCT: {
+            case MeowEngine::CLASS_OR_STRUCT: {
                 ImGui::Indent();
-                physicat::ReflectionPropertyChange::Assign(change, ImGuiInputExtension::ShowClassOrStruct(property, inObject));
+                MeowEngine::ReflectionPropertyChange::Assign(change, ImGuiInputExtension::ShowClassOrStruct(property, inObject));
                 ImGui::Unindent();
                 break;
             }
@@ -42,15 +42,15 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowProperty(
     return change;
 }
 
-physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowPrimitive(const physicat::ReflectionProperty& inProperty, void* inObject) {
-    physicat::ReflectionPropertyChange* change = nullptr;
+MeowEngine::ReflectionPropertyChange* MeowEngine::ImGuiInputExtension::ShowPrimitive(const MeowEngine::ReflectionProperty& inProperty, void* inObject) {
+    MeowEngine::ReflectionPropertyChange* change = nullptr;
 
     if(inProperty.TypeId == typeid(int)) {
         void* value = inProperty.Get(inObject);
         int changeHolder = *static_cast<int*>(value);
         auto uniqueId = reinterpret_cast<uintptr_t>(value);
 
-        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
+        std::string labelName = MeowEngine::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
@@ -58,7 +58,7 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowPrimitive
         ImGui::SetCursorPosX(200);
 
         if(ImGui::InputScalar(labelName.c_str(), ImGuiDataType_U32, &changeHolder, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
-            change = new physicat::ReflectionPropertyChange(inProperty.Name, new int(changeHolder), [](void* inPointer){ delete static_cast<int*>(inPointer); });
+            change = new MeowEngine::ReflectionPropertyChange(inProperty.Name, new int(changeHolder), [](void* inPointer){ delete static_cast<int*>(inPointer); });
         }
     }
     else if(inProperty.TypeId == typeid(float)) {
@@ -66,7 +66,7 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowPrimitive
         float changeHolder = *static_cast<float*>(value);
         auto uniqueId = reinterpret_cast<uintptr_t>(value);
 
-        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
+        std::string labelName = MeowEngine::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
@@ -74,22 +74,22 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowPrimitive
         ImGui::SetCursorPosX(200);
 
         if(ImGui::InputScalar(labelName.c_str(), ImGuiDataType_Float, &changeHolder, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
-            change = new physicat::ReflectionPropertyChange(inProperty.Name, new float(changeHolder), [](void* inPointer){ delete static_cast<float*>(inPointer); });
+            change = new MeowEngine::ReflectionPropertyChange(inProperty.Name, new float(changeHolder), [](void* inPointer){ delete static_cast<float*>(inPointer); });
         }
     }
 
     return change;
 }
 
-physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowClassOrStruct(const physicat::ReflectionProperty& inProperty, void* inObject) {
-    physicat::ReflectionPropertyChange* change = nullptr;
+MeowEngine::ReflectionPropertyChange* MeowEngine::ImGuiInputExtension::ShowClassOrStruct(const MeowEngine::ReflectionProperty& inProperty, void* inObject) {
+    MeowEngine::ReflectionPropertyChange* change = nullptr;
 
-    if(inProperty.TypeId == typeid(physicat::PString)) {
+    if(inProperty.TypeId == typeid(MeowEngine::PString)) {
         void* value = inProperty.Get(inObject);
-        physicat::PString changeHolder = *static_cast<physicat::PString*>(value);
+        MeowEngine::PString changeHolder = *static_cast<MeowEngine::PString*>(value);
         auto uniqueId = reinterpret_cast<uintptr_t>(value);
 
-        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
+        std::string labelName = MeowEngine::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
@@ -97,15 +97,15 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowClassOrSt
         ImGui::SetCursorPosX(200);
 
         if(ImGui::InputText(labelName.c_str(), changeHolder.data(), 32, ImGuiInputTextFlags_EnterReturnsTrue)) {
-            change = new physicat::ReflectionPropertyChange(inProperty.Name, new physicat::PString(changeHolder), [](void* inPointer){ delete static_cast<physicat::PString*>(inPointer); });
+            change = new MeowEngine::ReflectionPropertyChange(inProperty.Name, new MeowEngine::PString(changeHolder), [](void* inPointer){ delete static_cast<MeowEngine::PString*>(inPointer); });
         }
     }
-    else if(inProperty.TypeId == typeid(physicat::math::Vector3)) {
+    else if(inProperty.TypeId == typeid(MeowEngine::math::Vector3)) {
         void* value = inProperty.Get(inObject);
-        physicat::math::Vector3 changeHolder = *static_cast<physicat::math::Vector3*>(value);
+        MeowEngine::math::Vector3 changeHolder = *static_cast<MeowEngine::math::Vector3*>(value);
         auto uniqueId = reinterpret_cast<uintptr_t>(value);
 
-        std::string labelName = physicat::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
+        std::string labelName = MeowEngine::PString::Format("##%s", inProperty.Name.c_str(), std::to_string(uniqueId).c_str());
 
         ImGui::AlignTextToFramePadding();
         ImGui::Text("%s", inProperty.Name.c_str());
@@ -113,14 +113,14 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowClassOrSt
         ImGui::SetCursorPosX(200);
 
         if(ImGui::InputFloat3(labelName.c_str(), &changeHolder[0], nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
-            change = new physicat::ReflectionPropertyChange(inProperty.Name, new physicat::math::Vector3(changeHolder), [](void* inPointer){ delete static_cast<physicat::math::Vector3*>(inPointer); });
+            change = new MeowEngine::ReflectionPropertyChange(inProperty.Name, new MeowEngine::math::Vector3(changeHolder), [](void* inPointer){ delete static_cast<MeowEngine::math::Vector3*>(inPointer); });
         }
     }
     else {
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 
         if(ImGui::TreeNode(inProperty.Name.c_str())) {
-            physicat::ReflectionPropertyChange::Assign(change, ShowProperty(inProperty.TypeName, inProperty.Get(inObject)));
+            MeowEngine::ReflectionPropertyChange::Assign(change, ShowProperty(inProperty.TypeName, inProperty.Get(inObject)));
 
             if(change != nullptr) {
                 change->ClassProperties.push_back(inProperty);
@@ -133,7 +133,7 @@ physicat::ReflectionPropertyChange* physicat::ImGuiInputExtension::ShowClassOrSt
     return change;
 }
 
-void physicat::ImGuiInputExtension::ShowTabExample() {
+void MeowEngine::ImGuiInputExtension::ShowTabExample() {
     if (ImGui::BeginTable("LayoutTable", 2, ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_NoPadInnerX)) {
         ImGui::TableSetupColumn("LabelColumn", ImGuiTableColumnFlags_WidthFixed,
                                 100.0f); // Label column width
@@ -150,7 +150,7 @@ void physicat::ImGuiInputExtension::ShowTabExample() {
     }
 }
 
-void physicat::ImGuiInputExtension::ShowPushItemWidthExample() {
+void MeowEngine::ImGuiInputExtension::ShowPushItemWidthExample() {
     if (ImGui::Begin("PushItemWidth Example")) {
         char buffer1[128] = "Default Text";
         char buffer2[128] = "Default Text";
@@ -169,12 +169,12 @@ void physicat::ImGuiInputExtension::ShowPushItemWidthExample() {
     ImGui::End();
 }
 
-void physicat::ImGuiInputExtension::TextInputWithLimitedText(const char* label, float textPercentage, char* inputBuffer, size_t bufferSize) {
+void MeowEngine::ImGuiInputExtension::TextInputWithLimitedText(const char* label, float textPercentage, char* inputBuffer, size_t bufferSize) {
     float totalWidth = ImGui::GetContentRegionAvail().x; // Available panel width
     float textWidth = totalWidth * textPercentage;      // Width for the text
     float inputWidth = totalWidth - textWidth;          // Remaining width for the input
 
-    physicat::Log("Test", totalWidth);
+    MeowEngine::Log("Test", totalWidth);
     // Render the text constrained to the specified width
     ImGui::PushItemWidth(100);
     ImGui::TextUnformatted(label);
@@ -187,7 +187,7 @@ void physicat::ImGuiInputExtension::TextInputWithLimitedText(const char* label, 
     ImGui::PopItemWidth();
 }
 
-void physicat::ImGuiInputExtension::TextInputWithLimitedTextWrap(const char* label, float textPercentage, char* inputBuffer, size_t bufferSize) {
+void MeowEngine::ImGuiInputExtension::TextInputWithLimitedTextWrap(const char* label, float textPercentage, char* inputBuffer, size_t bufferSize) {
     float totalWidth = ImGui::GetContentRegionAvail().x; // Available width in the current layout
     float textWidth = totalWidth * textPercentage;      // Calculate text width
     float inputWidth = totalWidth - textWidth;          // Calculate input field width
@@ -205,7 +205,7 @@ void physicat::ImGuiInputExtension::TextInputWithLimitedTextWrap(const char* lab
     ImGui::PopItemWidth();
 }
 
-void physicat::ImGuiInputExtension::SeparatorTest() {
+void MeowEngine::ImGuiInputExtension::SeparatorTest() {
 //            ImGui::SeparatorText("");
 //            ImGui::AlignTextToFramePadding();
     ImGui::Spacing();

@@ -6,27 +6,27 @@
 
 #include <utility>
 
-using physicat::Mesh;
+using MeowEngine::Mesh;
 
 struct Mesh::Internal {
-    const std::vector<physicat::Vertex> Vertices;
+    const std::vector<MeowEngine::Vertex> Vertices;
     const std::vector<uint32_t> Indices;
 
-    Internal(std::vector<physicat::Vertex> vertices, std::vector<uint32_t> indices) :
+    Internal(std::vector<MeowEngine::Vertex> vertices, std::vector<uint32_t> indices) :
         Vertices(std::move(vertices)),
         Indices(std::move(indices))
     {}
 };
 
-physicat::Mesh::Mesh(const std::vector<physicat::Vertex> &vertices, const std::vector<uint32_t> &indices)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(vertices, indices)) {
+MeowEngine::Mesh::Mesh(const std::vector<MeowEngine::Vertex> &vertices, const std::vector<uint32_t> &indices)
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>(vertices, indices)) {
 }
 
-const std::vector<physicat::Vertex> &physicat::Mesh::GetVertices() const {
+const std::vector<MeowEngine::Vertex> &MeowEngine::Mesh::GetVertices() const {
     return InternalPointer->Vertices;
 }
 
-const std::vector<uint32_t> & physicat::Mesh::GetIndices() const {
+const std::vector<uint32_t> & MeowEngine::Mesh::GetIndices() const {
     return InternalPointer->Indices;
 }
 

@@ -16,13 +16,13 @@
 #include "entt_wrapper.hpp"
 #include "queue"
 
-namespace physicat::graphics {
+namespace MeowEngine::graphics {
     struct ImGuiRenderer {
         ImGuiRenderer(SDL_Window* window, SDL_GLContext& context);
         ~ImGuiRenderer();
 
         void Input(const SDL_Event& event);
-        void Render(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps);
+        void Render(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps);
 
         // Closes any child processes like tracy
         void ClosePIDs();
@@ -34,7 +34,7 @@ namespace physicat::graphics {
         void OpenTracyProfiler();
 
         void CreateNewFrame();
-        void DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps);
+        void DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps);
         void RenderFrame();
 
         void CreateDockingSpace();
@@ -43,7 +43,7 @@ namespace physicat::graphics {
 //        bool isSceneViewportFocused; // soon come up with good naming conventions
 //        WindowSize SceneViewportSize;
 
-//        void CreateLifeObjectSelectorPanel(physicat::Scene& scene);
+//        void CreateLifeObjectSelectorPanel(MeowEngine::Scene& scene);
 //        void CreateSelectableItem(bool isEnd);
 //        const ImGuiTreeNodeFlags SelectableFlags;
 
@@ -52,10 +52,10 @@ namespace physicat::graphics {
 //        void CreateLogPanel();
 
         bool IsRendering;
-        physicat::graphics::ui::ImGuiStructurePanel StructurePanel;
-        physicat::graphics::ui::ImGuiEditPanel EditPanel;
-        physicat::editor::ImGuiWorldRenderPanel WorldRenderPanel;
-        physicat::editor::ImGuiLogPanel LogPanel;
+        MeowEngine::graphics::ui::ImGuiStructurePanel StructurePanel;
+        MeowEngine::graphics::ui::ImGuiEditPanel EditPanel;
+        MeowEngine::editor::ImGuiWorldRenderPanel WorldRenderPanel;
+        MeowEngine::editor::ImGuiLogPanel LogPanel;
     };
 }
 

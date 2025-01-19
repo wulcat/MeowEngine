@@ -11,23 +11,23 @@
 namespace // wth is this ._. ?
 {
     bool shouldDisplayFullScreen(){
-        switch (physicat::GetCurrentPlatform()) {
-            case physicat::Platform::ios:
+        switch (MeowEngine::GetCurrentPlatform()) {
+            case MeowEngine::Platform::ios:
                 return true;
-            case physicat::Platform::android:
+            case MeowEngine::Platform::android:
                 return true;
-            case physicat::Platform::windows:
+            case MeowEngine::Platform::windows:
                 return false;
-            case physicat::Platform::mac:
+            case MeowEngine::Platform::mac:
                 return false;
-            case physicat::Platform::emscripten:
+            case MeowEngine::Platform::emscripten:
                 return false;
         }
     }
 } // namespace
 
 #ifdef __EMSCRIPTEN__
-    physicat::WindowSize GetEmscriptenCanvasSize() {
+    MeowEngine::WindowSize GetEmscriptenCanvasSize() {
         // For Emscripten targets we will invoke some Javascript
         // to find out the dimensions of the canvas in the HTML
         // document. Note that the 'width' and 'height' attributes
@@ -42,30 +42,30 @@ namespace // wth is this ._. ?
             return document.getElementById('canvas').height;
         }))};
 
-        return physicat::WindowSize{width, height};
+        return MeowEngine::WindowSize{width, height};
     };
 #endif
 
-physicat::WindowSize physicat::sdl::GetInitialWindowSize() {
+MeowEngine::WindowSize MeowEngine::sdl::GetInitialWindowSize() {
 #ifdef __EMSCRIPTEN__
     return ::GetEmscriptenCanvasSize();
 #else
-    const physicat::Platform platform{physicat::GetCurrentPlatform()};
+    const MeowEngine::Platform platform{MeowEngine::GetCurrentPlatform()};
 
-    if (platform == physicat::Platform::ios || platform == physicat::Platform::android)
+    if (platform == MeowEngine::Platform::ios || platform == MeowEngine::Platform::android)
     {
         // For mobile platforms we will fetch the full screen size.
         SDL_DisplayMode displayMode;
         SDL_GetDesktopDisplayMode(0, &displayMode);
-        return physicat::WindowSize{static_cast<uint32_t>(displayMode.w), static_cast<uint32_t>(displayMode.h)};
+        return MeowEngine::WindowSize{static_cast<uint32_t>(displayMode.w), static_cast<uint32_t>(displayMode.h)};
     }
 
     // For other platforms we'll just show a fixed size window.
-    return physicat::WindowSize{1000, 500};
+    return MeowEngine::WindowSize{1000, 500};
 #endif
 }
 
-physicat::WindowSize physicat::sdl::GetWindowSize(SDL_Window* window) {
+MeowEngine::WindowSize MeowEngine::sdl::GetWindowSize(SDL_Window* window) {
     uint32_t displayWidth{0};
     uint32_t displayHeight{0};
 
@@ -76,16 +76,16 @@ physicat::WindowSize physicat::sdl::GetWindowSize(SDL_Window* window) {
         int height {0};
 
         SDL_GetWindowSize(window, &width, &height);
-        return physicat::WindowSize{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
+        return MeowEngine::WindowSize{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
 
     #endif
 }
 
-SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
+SDL_Window* MeowEngine::sdl::CreateWindow(const uint32_t &windowFlags) {
     // Enable double buffering (this is usually the default)
     // 1: Enable VSync || 0: Disable VSync
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    physicat::WindowSize windowSize{physicat::sdl::GetInitialWindowSize()};
+    MeowEngine::WindowSize windowSize{MeowEngine::sdl::GetInitialWindowSize()};
 
 
 #ifdef __EMSCRIPTEN__
@@ -111,7 +111,7 @@ SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
 //    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 
     SDL_Window* window{SDL_CreateWindow(
-        "Physicat",
+        "MeowEngine",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         windowSize.Width,
@@ -126,8 +126,8 @@ SDL_Window* physicat::sdl::CreateWindow(const uint32_t &windowFlags) {
     return window;
 }
 
-SDL_GLContext physicat::sdl::CreateContext(SDL_Window* window) {
-    static const std::string logTag("physicat::OpenGLApplication::CreateContext");
+SDL_GLContext MeowEngine::sdl::CreateContext(SDL_Window* window) {
+    static const std::string logTag("MeowEngine::OpenGLApplication::CreateContext");
 
     SDL_GLContext context {SDL_GL_CreateContext(window)};
     SDL_GL_SetSwapInterval(1);// wth si this lol? from 100-450 to 1700 fps?
@@ -159,11 +159,11 @@ SDL_GLContext physicat::sdl::CreateContext(SDL_Window* window) {
 //        glAlphaFunc(GL_GREATER, 0.1f);
 
 //        ::UpdateViewport(window);
-    physicat::Log(logTag, "Context Created");
+    MeowEngine::Log(logTag, "Context Created");
 
     // Check WebGL version
     const char* version = (const char*)glGetString(GL_VERSION);
-    physicat::Log("physicat::graphics::OpenGLFrameBuffer: WEBGL Version", version);
+    MeowEngine::Log("MeowEngine::graphics::OpenGLFrameBuffer: WEBGL Version", version);
 
     return context;
 }

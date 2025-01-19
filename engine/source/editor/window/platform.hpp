@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace physicat
+namespace MeowEngine
 {
     enum class Platform
     {
@@ -18,5 +18,5 @@ namespace physicat
     };
 
     Platform GetCurrentPlatform();
-} // namespace physicat
+} // namespace MeowEngine
 

@@ -9,23 +9,23 @@
 //#include "glm_wrapper.hpp"
 #include "internal_ptr.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     // In-future try ECS for this for optimization
     struct StaticMeshInstance {
         StaticMeshInstance(
-            const physicat::assets::StaticMeshType& staticMeshType,
-            const physicat::assets::TextureType& textureType
+            const MeowEngine::assets::StaticMeshType& staticMeshType,
+            const MeowEngine::assets::TextureType& textureType
         );
 
 //        void Update(const glm::mat4& projectionViewMatrix);
 //        void RotateBy(const float& degrees);
-        physicat::assets::StaticMeshType GetMesh() const;
-        physicat::assets::TextureType GetTexture() const;
+        MeowEngine::assets::StaticMeshType GetMesh() const;
+        MeowEngine::assets::TextureType GetTexture() const;
 //        glm::mat4 GetTransformMatrix() const;
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
 }
 

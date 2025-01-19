@@ -8,8 +8,8 @@
 #include "component_base.hpp"
 #include "glm_wrapper.hpp"
 
-namespace physicat::entity {
-class TransformComponentBase : public physicat::entity::ComponentBase {
+namespace MeowEngine::entity {
+class TransformComponentBase : public MeowEngine::entity::ComponentBase {
 
     public:
         TransformComponentBase();

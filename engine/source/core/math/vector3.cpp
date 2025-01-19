@@ -5,9 +5,9 @@
 #include "vector3.hpp"
 #include "entt_reflection_wrapper.hpp"
 
-void physicat::math::Vector3::Reflect() {
-//    auto test = GET_PROPERTY_TYPE(physicat::math::Vector3);
-    REGISTER_PROPERTY(physicat::math::Vector3, X, float);
-    REGISTER_PROPERTY(physicat::math::Vector3, Y, float);
-    REGISTER_PROPERTY(physicat::math::Vector3, Z, float);
+void MeowEngine::math::Vector3::Reflect() {
+//    auto test = GET_PROPERTY_TYPE(MeowEngine::math::Vector3);
+    REGISTER_PROPERTY(MeowEngine::math::Vector3, X, float);
+    REGISTER_PROPERTY(MeowEngine::math::Vector3, Y, float);
+    REGISTER_PROPERTY(MeowEngine::math::Vector3, Z, float);
 }

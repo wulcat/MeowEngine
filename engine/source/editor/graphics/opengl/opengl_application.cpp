@@ -19,23 +19,23 @@
 #include <fps_counter.hpp>
 #include <string>
 
-using physicat::OpenGLApplication;
+using MeowEngine::OpenGLApplication;
 
 namespace {
 //    void UpdateViewport(SDL_Window* window) {
-//        static const std::string logTag("physicat::OpenGLApplication::UpdateViewport");
+//        static const std::string logTag("MeowEngine::OpenGLApplication::UpdateViewport");
 //
 //        int viewportWidth;
 //        int viewportHeight;
 //
 //        SDL_GL_GetDrawableSize(window, &viewportWidth, &viewportHeight);
-//        physicat::Log(logTag, "Created OpenGL context with viewport size: "+ std::to_string(viewportWidth) + " x " + std::to_string(viewportHeight));
+//        MeowEngine::Log(logTag, "Created OpenGL context with viewport size: "+ std::to_string(viewportWidth) + " x " + std::to_string(viewportHeight));
 //
 //        glViewport(0,0, viewportWidth,viewportHeight);
 //    }
 
     SDL_GLContext CreateContext(SDL_Window* window) {
-        static const std::string logTag("physicat::OpenGLApplication::CreateContext");
+        static const std::string logTag("MeowEngine::OpenGLApplication::CreateContext");
 
         SDL_GLContext context {SDL_GL_CreateContext(window)};
         SDL_GL_SetSwapInterval(1);// wth si this lol? from 100-450 to 1700 fps?
@@ -67,43 +67,43 @@ namespace {
 //        glAlphaFunc(GL_GREATER, 0.1f);
 
 //        ::UpdateViewport(window);
-        physicat::Log(logTag, "Context Created");
+        MeowEngine::Log(logTag, "Context Created");
 
         // Check WebGL version
         const char* version = (const char*)glGetString(GL_VERSION);
-        physicat::Log("physicat::graphics::OpenGLFrameBuffer: WEBGL Version", version);
+        MeowEngine::Log("MeowEngine::graphics::OpenGLFrameBuffer: WEBGL Version", version);
 
         return context;
     }
 
-    physicat::graphics::OpenGLFrameBuffer CreateFrameBuffer() {
+    MeowEngine::graphics::OpenGLFrameBuffer CreateFrameBuffer() {
         // NOTE: we launch this needs to be init properly
-        return physicat::graphics::OpenGLFrameBuffer(1000,500);
+        return MeowEngine::graphics::OpenGLFrameBuffer(1000,500);
     }
 
-    std::shared_ptr<physicat::OpenGLAssetManager> CreateAssetManager() {
-        return std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
+    std::shared_ptr<MeowEngine::OpenGLAssetManager> CreateAssetManager() {
+        return std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
     }
 
-    physicat::OpenGLRenderer CreateRenderer(std::shared_ptr<physicat::OpenGLAssetManager> assetManager) {
+    MeowEngine::OpenGLRenderer CreateRenderer(std::shared_ptr<MeowEngine::OpenGLAssetManager> assetManager) {
         SDL_GLContext test;
-        std::shared_ptr<physicat::graphics::ImGuiRenderer> test1;
-        test1 = make_shared<physicat::graphics::ImGuiRenderer>(nullptr, test);
-        return physicat::OpenGLRenderer(assetManager, test1);
+        std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> test1;
+        test1 = make_shared<MeowEngine::graphics::ImGuiRenderer>(nullptr, test);
+        return MeowEngine::OpenGLRenderer(assetManager, test1);
     }
 
-    physicat::graphics::ImGuiRenderer CreateUI(SDL_Window* window, SDL_GLContext& context) {
-        return physicat::graphics::ImGuiRenderer(window, context);
+    MeowEngine::graphics::ImGuiRenderer CreateUI(SDL_Window* window, SDL_GLContext& context) {
+        return MeowEngine::graphics::ImGuiRenderer(window, context);
     }
 
-    std::shared_ptr<physicat::simulator::Physics> CreatePhysics() {
-        return std::make_shared<physicat::simulator::PhysXPhysics>();
+    std::shared_ptr<MeowEngine::simulator::Physics> CreatePhysics() {
+        return std::make_shared<MeowEngine::simulator::PhysXPhysics>();
     }
 
-    std::unique_ptr<physicat::Scene> CreateMainScene(SDL_Window* window, physicat::OpenGLAssetManager& assetManager, physicat::simulator::Physics& inPhysics) {
-        std::unique_ptr<physicat::MainScene> mainScene {
-            std::make_unique<physicat::MainScene>(
-                physicat::sdl::GetWindowSize(window)
+    std::unique_ptr<MeowEngine::Scene> CreateMainScene(SDL_Window* window, MeowEngine::OpenGLAssetManager& assetManager, MeowEngine::simulator::Physics& inPhysics) {
+        std::unique_ptr<MeowEngine::MainScene> mainScene {
+            std::make_unique<MeowEngine::MainScene>(
+                MeowEngine::sdl::GetWindowSize(window)
             )
         };
 
@@ -117,16 +117,16 @@ namespace {
 struct OpenGLApplication::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
-    physicat::graphics::ImGuiRenderer UI;
-    physicat::graphics::OpenGLFrameBuffer FrameBuffer;
-    physicat::input::InputManager InputManager;
+    MeowEngine::graphics::ImGuiRenderer UI;
+    MeowEngine::graphics::OpenGLFrameBuffer FrameBuffer;
+    MeowEngine::input::InputManager InputManager;
 
-    const std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
-    physicat::OpenGLRenderer Renderer;
-    std::unique_ptr<physicat::Scene> Scene;
-    std::shared_ptr<physicat::simulator::Physics> Physics;
+    const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
+    MeowEngine::OpenGLRenderer Renderer;
+    std::unique_ptr<MeowEngine::Scene> Scene;
+    std::shared_ptr<MeowEngine::simulator::Physics> Physics;
 
-    Internal() : Window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
+    Internal() : Window(MeowEngine::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
                  Context(CreateContext(Window)),
                  AssetManager(::CreateAssetManager()),
                  Renderer(::CreateRenderer(AssetManager)),
@@ -142,8 +142,8 @@ struct OpenGLApplication::Internal {
     }
 
 //    void OnWindowResized() {
-//        physicat::Log("opengl_application::", "OnWindowResized");
-//        GetScene().OnWindowResized(physicat::sdl::GetWindowSize(Window));
+//        MeowEngine::Log("opengl_application::", "OnWindowResized");
+//        GetScene().OnWindowResized(MeowEngine::sdl::GetWindowSize(Window));
 //        ::UpdateViewport(Window);
 //    }
 
@@ -153,7 +153,7 @@ struct OpenGLApplication::Internal {
         FrameBuffer.RescaleFrameBuffer(size.Width, size.Height);
     }
 
-    physicat::Scene& GetScene() {
+    MeowEngine::Scene& GetScene() {
         if(!Scene) {
             Scene = ::CreateMainScene(Window, *AssetManager, *Physics);
         }
@@ -302,10 +302,10 @@ struct OpenGLApplication::Internal {
 };
 
 OpenGLApplication::OpenGLApplication() :
-        InternalPointer(physicat::make_internal_ptr<Internal>())
+        InternalPointer(MeowEngine::make_internal_ptr<Internal>())
 {
 //    IsRunning = true; IsApplicationRunning
-    physicat::Log(" physicat::Application::OpenGLApplication", "OpenGL application created");
+    MeowEngine::Log(" MeowEngine::Application::OpenGLApplication", "OpenGL application created");
 }
 
 //void OpenGLApplication::OnWindowResized() {

@@ -7,7 +7,7 @@
 
 #include "string"
 
-namespace physicat {
+namespace MeowEngine {
     class PString : public std::string {
 
     public:

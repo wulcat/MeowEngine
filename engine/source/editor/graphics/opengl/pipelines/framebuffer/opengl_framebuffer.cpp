@@ -7,7 +7,7 @@
 #include "graphics_wrapper.hpp"
 #include "log.hpp"
 
-using physicat::graphics::OpenGLFrameBuffer;
+using MeowEngine::graphics::OpenGLFrameBuffer;
 
 OpenGLFrameBuffer::OpenGLFrameBuffer(const float &width, const float &height)
     : frameBufferId(0)
@@ -30,7 +30,7 @@ OpenGLFrameBuffer::OpenGLFrameBuffer(const float &width, const float &height)
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderBufferId);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        physicat::Log("ERROR::FRAMEBUFFER::", "Framebuffer is not complete!");
+        MeowEngine::Log("ERROR::FRAMEBUFFER::", "Framebuffer is not complete!");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

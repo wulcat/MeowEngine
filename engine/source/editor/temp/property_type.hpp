@@ -10,7 +10,7 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     enum PropertyType {
         NOT_DEFINED,
         PRIMITIVE,

@@ -5,15 +5,15 @@
 #include "line_render_component.hpp"
 #include <log.hpp>
 
-using physicat::entity::LineRenderComponent;
+using MeowEngine::entity::LineRenderComponent;
 
-void physicat::entity::LineRenderComponent::Reflect() {
-//    REGISTER_PROPERTY(Transform3DComponent, Position, physicat::math::Vector3);
+void MeowEngine::entity::LineRenderComponent::Reflect() {
+//    REGISTER_PROPERTY(Transform3DComponent, Position, MeowEngine::math::Vector3);
 
-    physicat::Log("Reflected", "LineRenderComponent");
+    MeowEngine::Log("Reflected", "LineRenderComponent");
 }
 
-LineRenderComponent::LineRenderComponent(physicat::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end) {
+LineRenderComponent::LineRenderComponent(MeowEngine::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end) {
     Shader = shader;
     StartPoint = start;
     EndPoint = end;

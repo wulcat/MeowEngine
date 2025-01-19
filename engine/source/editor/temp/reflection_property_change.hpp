@@ -8,7 +8,7 @@
 #include "entt_wrapper.hpp"
 #include "reflection_property.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     class ReflectionPropertyChange {
     private:
         ReflectionPropertyChange() {}
@@ -25,7 +25,7 @@ namespace physicat {
         int EntityId;
         entt::id_type ComponentType;
         std::string PropertyName;
-        std::vector <physicat::ReflectionProperty> ClassProperties;
+        std::vector <MeowEngine::ReflectionProperty> ClassProperties;
         void* Data;
         std::function<void(void*)> DataDeleter;
     };

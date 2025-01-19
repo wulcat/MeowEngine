@@ -14,15 +14,15 @@
 #include "log.hpp"
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     class EnttReflection {
 
     public:
         EnttReflection() {
-            physicat::Log("Reflection", "Constructed");
+            MeowEngine::Log("Reflection", "Constructed");
         }
         ~EnttReflection() {
-            physicat::Log("Reflection", "Destructed");
+            MeowEngine::Log("Reflection", "Destructed");
         }
 
         bool HasComponent(entt::id_type inId);
@@ -36,12 +36,12 @@ namespace physicat {
         void RegisterComponent(entt::id_type inId,  std::string inName);
         void RegisterProperty(std::string inClassName, ReflectionProperty inProperty);
 
-        void ApplyPropertyChange(physicat::ReflectionPropertyChange& inPropertyChange, entt::registry& inRegistry);
+        void ApplyPropertyChange(MeowEngine::ReflectionPropertyChange& inPropertyChange, entt::registry& inRegistry);
 
-        void ApplyPropertyChangeData(std::string& inClassName, physicat::ReflectionPropertyChange& inPropertyChange, void* inClassObject) {
-            std::vector<physicat::ReflectionProperty> properties = GetProperties(inClassName);
+        void ApplyPropertyChangeData(std::string& inClassName, MeowEngine::ReflectionPropertyChange& inPropertyChange, void* inClassObject) {
+            std::vector<MeowEngine::ReflectionProperty> properties = GetProperties(inClassName);
 
-            for(const physicat::ReflectionProperty &property : properties) {
+            for(const MeowEngine::ReflectionProperty &property : properties) {
                 if(property.Name == inPropertyChange.PropertyName) {
                     property.Set(inClassObject, inPropertyChange.Data);
                 }

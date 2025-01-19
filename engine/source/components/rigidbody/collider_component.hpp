@@ -11,7 +11,7 @@
 
 #include <box_collider_data.hpp>
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     class ColliderComponent : public entity::ComponentBase {
 
     public:

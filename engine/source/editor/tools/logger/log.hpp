@@ -10,7 +10,7 @@
 #include <string>
 #include "tracy_wrapper.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     // Things we need
     // Basic logger while building
     // Logger to track for performance (merging with tracy profiler)
@@ -21,7 +21,7 @@ namespace physicat {
     void Log(const std::string& tag, const float& message);
 
     void Log(const std::string& tag, const std::string& message, const std::exception& error);
-} // namespace physicat
+} // namespace MeowEngine
 
 
 #endif //VULKAN_ENGINE_LOG_HPP

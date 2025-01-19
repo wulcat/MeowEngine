@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_VECTOR3_HPP
 #define PHYSICAT_VECTOR3_HPP
 
-namespace physicat::math {
+namespace MeowEngine::math {
     struct Vector3 {
         static void Reflect();
 

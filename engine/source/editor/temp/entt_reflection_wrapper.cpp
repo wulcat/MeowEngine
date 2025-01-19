@@ -4,4 +4,4 @@
 
 #include "entt_reflection_wrapper.hpp"
 
-physicat::EnttReflection physicat::Reflection;
+MeowEngine::EnttReflection MeowEngine::Reflection;

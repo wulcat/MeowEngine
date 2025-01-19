@@ -9,10 +9,10 @@
 #include <string>
 #include "bitmap.hpp"
 
-namespace physicat::assets {
+namespace MeowEngine::assets {
     std::string LoadTextFile(const std::string& path);
-    physicat::Mesh LoadObjFile(const std::string& path);
-    physicat::Bitmap LoadBitmap(const std::string& path);
-} // namespace physicat::assets;
+    MeowEngine::Mesh LoadObjFile(const std::string& path);
+    MeowEngine::Bitmap LoadBitmap(const std::string& path);
+} // namespace MeowEngine::assets;
 
 #endif //PHYSICAT_ASSETS_HPP

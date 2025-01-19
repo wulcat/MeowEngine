@@ -4,8 +4,8 @@
 
 #include "vertex.hpp"
 
-using physicat::Vertex;
+using MeowEngine::Vertex;
 
-bool Vertex::operator==(const physicat::Vertex &other) const {
+bool Vertex::operator==(const MeowEngine::Vertex &other) const {
     return Position == other.Position && TextureCoord == other.TextureCoord;
 }

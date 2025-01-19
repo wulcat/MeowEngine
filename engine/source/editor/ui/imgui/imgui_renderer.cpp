@@ -16,7 +16,7 @@
 //#include "entt_wrapper.hpp"
 //#include <filesystem>
 
-using physicat::graphics::ImGuiRenderer;
+using MeowEngine::graphics::ImGuiRenderer;
 
 namespace {
     pid_t tracy_profiler_pid = -1;
@@ -36,7 +36,7 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
     , WorldRenderPanel()
     , LogPanel() {
 
-    physicat::Log("ImGuiRenderer","Creating...");
+    MeowEngine::Log("ImGuiRenderer","Creating...");
 
     #ifdef __EMSCRIPTEN__
         const char* glsl_version = "#version 300 es";
@@ -71,7 +71,7 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
 }
 
 ImGuiRenderer::~ImGuiRenderer() {
-    physicat::Log("ImGuiRenderer","Destroying...");
+    MeowEngine::Log("ImGuiRenderer","Destroying...");
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -107,7 +107,7 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void physicat::graphics::ImGuiRenderer::Render(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+void MeowEngine::graphics::ImGuiRenderer::Render(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     CreateNewFrame();
     DrawFrame(registry, inUIInputQueue, frameBufferId, fps);
     RenderFrame();
@@ -117,11 +117,11 @@ void ImGuiRenderer::ClosePIDs() {
     ::HandleTracyProfilerSignal(SIGQUIT);
 }
 
-//bool physicat::graphics::ImGuiRenderer::IsSceneViewportFocused() const {
+//bool MeowEngine::graphics::ImGuiRenderer::IsSceneViewportFocused() const {
 //    return isSceneViewportFocused;
 //}
 //
-//const physicat::WindowSize& physicat::graphics::ImGuiRenderer::GetSceneViewportSize() const {
+//const MeowEngine::WindowSize& MeowEngine::graphics::ImGuiRenderer::GetSceneViewportSize() const {
 //    return SceneViewportSize;
 //}
 
@@ -148,13 +148,13 @@ void ImGuiRenderer::OpenTracyProfiler() {
     }
 }
 
-void physicat::graphics::ImGuiRenderer::CreateNewFrame() {
+void MeowEngine::graphics::ImGuiRenderer::CreateNewFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 }
 
-void physicat::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
+void MeowEngine::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
     CreateDockingSpace();
 
 //    CreateRender3DPanel(frameBufferId);

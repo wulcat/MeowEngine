@@ -8,7 +8,7 @@
 
 #include <cstdint>
 
-namespace physicat {
+namespace MeowEngine {
     struct WindowSize {
         uint32_t Width {0};
         uint32_t Height {0};

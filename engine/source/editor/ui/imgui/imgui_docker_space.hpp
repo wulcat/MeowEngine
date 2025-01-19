@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_IMGUI_DOCKER_SPACE_HPP
 #define PHYSICAT_IMGUI_DOCKER_SPACE_HPP
 
-namespace physicat::editor {
+namespace MeowEngine::editor {
     struct ImGuiDockerSpace {
         ImGuiDockerSpace();
 

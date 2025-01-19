@@ -8,7 +8,7 @@
 #include "render_component_base.hpp"
 #include "static_mesh_instance.hpp"
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     class DummyClass {
     public:
         static void Reflect();
@@ -17,26 +17,26 @@ namespace physicat::entity {
         float Size;
     };
 
-    class MeshRenderComponent : public physicat::entity::RenderComponentBase { ;
+    class MeshRenderComponent : public MeowEngine::entity::RenderComponentBase { ;
 
     public:
         static void Reflect();
 
-        explicit MeshRenderComponent(physicat::assets::ShaderPipelineType shader, physicat::StaticMeshInstance* meshInstance);
+        explicit MeshRenderComponent(MeowEngine::assets::ShaderPipelineType shader, MeowEngine::StaticMeshInstance* meshInstance);
 
 //        void Update(const glm::mat4 &projectionViewMatrix) override {
 //            MeshInstance->Update(projectionViewMatrix);
 //            MeshInstance->RotateBy(0.1f);
 //        }
 
-        const physicat::StaticMeshInstance& GetMeshInstance() const {
+        const MeowEngine::StaticMeshInstance& GetMeshInstance() const {
             return *MeshInstance;
         }
 
         DummyClass Data;
 
     private:
-        physicat::StaticMeshInstance* MeshInstance;
+        MeowEngine::StaticMeshInstance* MeshInstance;
     };
 }
 

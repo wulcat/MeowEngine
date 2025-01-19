@@ -5,10 +5,10 @@
 #include "opengl_texture.hpp"
 #include "graphics_wrapper.hpp"
 
-using physicat::OpenGLTexture;
+using MeowEngine::OpenGLTexture;
 
 namespace {
-    GLuint CreateTexture(const physicat::Bitmap& bitmap) {
+    GLuint CreateTexture(const MeowEngine::Bitmap& bitmap) {
         GLuint TextureID;
 
         glGenTextures(1, &TextureID);
@@ -34,7 +34,7 @@ namespace {
 struct OpenGLTexture::Internal {
     const GLuint TextureID;
 
-    Internal(const physicat::Bitmap& bitmap)
+    Internal(const MeowEngine::Bitmap& bitmap)
         : TextureID(::CreateTexture(bitmap)) {}
 
     ~Internal() {
@@ -42,8 +42,8 @@ struct OpenGLTexture::Internal {
     }
 };
 
-OpenGLTexture::OpenGLTexture(const physicat::Bitmap &bitmap)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(bitmap)){}
+OpenGLTexture::OpenGLTexture(const MeowEngine::Bitmap &bitmap)
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>(bitmap)){}
 
 void OpenGLTexture::Bind() const {
     glBindTexture(GL_TEXTURE_2D, InternalPointer->TextureID);

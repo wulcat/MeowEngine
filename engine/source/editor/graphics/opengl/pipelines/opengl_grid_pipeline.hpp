@@ -16,17 +16,17 @@
 using namespace std;
 using namespace glm;
 
-namespace physicat::pipeline {
-    struct OpenGLGridPipeline : public physicat::pipeline::OpenGLPipelineBase {
+namespace MeowEngine::pipeline {
+    struct OpenGLGridPipeline : public MeowEngine::pipeline::OpenGLPipelineBase {
         OpenGLGridPipeline(const GLuint& shaderProgramID);
         ~OpenGLGridPipeline() override;
 
     public:
         void Render(
-            const physicat::OpenGLAssetManager& assetManager,
-            const physicat::entity::RenderComponentBase* renderComponent,
-            const physicat::entity::Transform3DComponent* transform3DComponent,
-            const physicat::PerspectiveCamera* camera
+            const MeowEngine::OpenGLAssetManager& assetManager,
+            const MeowEngine::entity::RenderComponentBase* renderComponent,
+            const MeowEngine::entity::Transform3DComponent* transform3DComponent,
+            const MeowEngine::PerspectiveCamera* camera
         ) const;
 
     private:

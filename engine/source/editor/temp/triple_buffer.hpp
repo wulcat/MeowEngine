@@ -9,7 +9,7 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     template <typename T>
     struct TripleBuffer {
 

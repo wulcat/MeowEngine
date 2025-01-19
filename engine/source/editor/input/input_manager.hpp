@@ -7,7 +7,7 @@
 
 #include <cstdint>
 
-namespace physicat::input {
+namespace MeowEngine::input {
     struct InputManager {
     public:
         void ProcessInput();

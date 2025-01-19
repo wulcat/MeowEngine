@@ -6,19 +6,19 @@
 #include <log.hpp>
 #include "entt_reflection_wrapper.hpp"
 
-void physicat::entity::LifeObjectComponent::Reflect() {
-    REGISTER_PROPERTY(LifeObjectComponent, Name, physicat::PString);
+void MeowEngine::entity::LifeObjectComponent::Reflect() {
+    REGISTER_PROPERTY(LifeObjectComponent, Name, MeowEngine::PString);
 
-    physicat::Log("Reflected", "LifeObjectComponent");
+    MeowEngine::Log("Reflected", "LifeObjectComponent");
 }
 
-physicat::entity::LifeObjectComponent::LifeObjectComponent(std::string name)
+MeowEngine::entity::LifeObjectComponent::LifeObjectComponent(std::string name)
 : Name(name)
-//, Id(physicat::entity::LifeObjectComponent::s_GetNewId())
+//, Id(MeowEngine::entity::LifeObjectComponent::s_GetNewId())
 {}
 
-//int physicat::entity::LifeObjectComponent::s_GetNewId() {
+//int MeowEngine::entity::LifeObjectComponent::s_GetNewId() {
 //    return s_IdCounter++;
 //}
 
-//int physicat::entity::LifeObjectComponent::s_IdCounter = 0;
+//int MeowEngine::entity::LifeObjectComponent::s_IdCounter = 0;

@@ -10,7 +10,7 @@
 #include "assets.hpp"
 #include <string>
 
-namespace physicat::assets {
+namespace MeowEngine::assets {
     enum class ShaderPipelineType {
         Default,
         Line,
@@ -31,9 +31,9 @@ namespace physicat::assets {
         Pattern
     };
 
-    std::string ResolveShaderPipelinePath(const physicat::assets::ShaderPipelineType& shaderPipeline);
-    std::string ResolveStaticMeshPath(const physicat::assets::StaticMeshType& staticMesh);
-    std::string ResolveTexturePath(const physicat::assets::TextureType& texture);
+    std::string ResolveShaderPipelinePath(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
+    std::string ResolveStaticMeshPath(const MeowEngine::assets::StaticMeshType& staticMesh);
+    std::string ResolveTexturePath(const MeowEngine::assets::TextureType& texture);
 }
 
 

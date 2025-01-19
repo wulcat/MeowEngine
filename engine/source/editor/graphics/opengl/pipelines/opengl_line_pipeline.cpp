@@ -4,7 +4,7 @@
 
 #include "opengl_line_pipeline.hpp"
 
-using physicat::pipeline::OpenGLLinePipeline;
+using MeowEngine::pipeline::OpenGLLinePipeline;
 
 OpenGLLinePipeline::OpenGLLinePipeline(const GLuint &shaderProgramID)
     : ShaderProgramID(shaderProgramID) {
@@ -23,10 +23,10 @@ OpenGLLinePipeline::~OpenGLLinePipeline() {
 }
 
 void OpenGLLinePipeline::Render(
-    const physicat::OpenGLAssetManager &assetManager,
-    const physicat::entity::LineRenderComponent *lineRenderComponent,
-    const physicat::entity::Transform3DComponent* transform3DComponent,
-    const physicat::PerspectiveCamera* camera) const {
+    const MeowEngine::OpenGLAssetManager &assetManager,
+    const MeowEngine::entity::LineRenderComponent *lineRenderComponent,
+    const MeowEngine::entity::Transform3DComponent* transform3DComponent,
+    const MeowEngine::PerspectiveCamera* camera) const {
 
     glUseProgram(ShaderProgramID);
 

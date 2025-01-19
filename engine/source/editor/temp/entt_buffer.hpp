@@ -19,7 +19,7 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     struct EnttBuffer : public DoubleBuffer<entt::registry> {
     public:
         EnttBuffer();
@@ -43,9 +43,9 @@ namespace physicat {
 //                StagingCreation.pop();
             }
         }
-        void AddInStaging(physicat::simulator::Physics* inPhysics) {
+        void AddInStaging(MeowEngine::simulator::Physics* inPhysics) {
 //            do {
-                std::function<void(physicat::simulator::Physics*)> method;
+                std::function<void(MeowEngine::simulator::Physics*)> method;
                 while(Test.try_dequeue(method)) {
                     method(inPhysics);
 
@@ -65,16 +65,16 @@ namespace physicat {
 
     private:
         moodycamel::ConcurrentQueue<entt::entity> StagingCreation;
-        moodycamel::ConcurrentQueue<std::function<void(physicat::simulator::Physics*)>> Test;
+        moodycamel::ConcurrentQueue<std::function<void(MeowEngine::simulator::Physics*)>> Test;
 //        std::queue<std::function<void()>> TestM;
     };
 
     template<typename Type, typename... Args>
-    void physicat::EnttBuffer::AddComponent(entt::entity &inEntity, Args &&... inArgs) {
+    void MeowEngine::EnttBuffer::AddComponent(entt::entity &inEntity, Args &&... inArgs) {
         Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 
-        Test.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](physicat::simulator::Physics* inPhysics) {
+        Test.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
                 Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
@@ -97,12 +97,12 @@ namespace physicat {
     }
 
     template<typename Type, typename... Args>
-    void physicat::EnttBuffer::AddComponent(const entt::entity &inEntity, Args &&... inArgs) {
+    void MeowEngine::EnttBuffer::AddComponent(const entt::entity &inEntity, Args &&... inArgs) {
         Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 //        Staging.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 
-        Test.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](physicat::simulator::Physics* inPhysics) {
+        Test.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
                 Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);

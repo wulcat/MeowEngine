@@ -8,11 +8,11 @@
 #include "asset_inventory.hpp"
 #include "vector"
 
-namespace physicat {
+namespace MeowEngine {
     struct AssetManager {
-        virtual void LoadShaderPipelines(const std::vector<physicat::assets::ShaderPipelineType>& shaderPipelines) = 0;
-        virtual void LoadStaticMeshes(const std::vector<physicat::assets::StaticMeshType>& staticMeshes) = 0;
-        virtual void LoadTextures(const std::vector<physicat::assets::TextureType>& textures) = 0;
+        virtual void LoadShaderPipelines(const std::vector<MeowEngine::assets::ShaderPipelineType>& shaderPipelines) = 0;
+        virtual void LoadStaticMeshes(const std::vector<MeowEngine::assets::StaticMeshType>& staticMeshes) = 0;
+        virtual void LoadTextures(const std::vector<MeowEngine::assets::TextureType>& textures) = 0;
     };
 }
 

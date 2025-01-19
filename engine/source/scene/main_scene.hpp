@@ -9,20 +9,20 @@
 #include "scene.hpp"
 #include "window_size.hpp"
 
-namespace physicat {
-    struct MainScene : public physicat::Scene {
-        MainScene(const physicat::WindowSize& frameSize);
+namespace MeowEngine {
+    struct MainScene : public MeowEngine::Scene {
+        MainScene(const MeowEngine::WindowSize& frameSize);
 
-        void OnWindowResized(const physicat::WindowSize& size) override;
+        void OnWindowResized(const MeowEngine::WindowSize& size) override;
 
-        virtual void Load(std::shared_ptr<physicat::AssetManager> assetManager) override;
+        virtual void Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) override;
         void Create() override;
-        void CreatePhysics(physicat::simulator::Physics* inPhysics) override;
-        void Input(const float &deltaTime, const physicat::input::InputManager& inputManager) override;
+        void CreatePhysics(MeowEngine::simulator::Physics* inPhysics) override;
+        void Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) override;
         void FixedUpdate(const float& inFixedDeltaTime) override;
         void Update(const float& deltaTime) override;
-        void Render(physicat::Renderer& renderer) override;
-        void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
+        void Render(MeowEngine::Renderer& renderer) override;
+        void RenderUI(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
         void SwapBuffer() override;
         void CalculateDeltaData() override;
         void SyncPhysicsThreadData() override;
@@ -32,7 +32,7 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
 }
 

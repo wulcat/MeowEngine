@@ -4,7 +4,7 @@
 
 #include "perspective_camera.hpp"
 #include "log.hpp"
-using physicat::PerspectiveCamera;
+using MeowEngine::PerspectiveCamera;
 
 namespace {
     glm::mat4 CreateProjectionMatrix(const float& width, const float& height) {
@@ -52,7 +52,7 @@ struct PerspectiveCamera::Internal {
     }
 };
 
-physicat::PerspectiveCamera::PerspectiveCamera(const float &width, const float &height)
+MeowEngine::PerspectiveCamera::PerspectiveCamera(const float &width, const float &height)
     :  InternalPointer(make_internal_ptr<Internal>(width, height)) {}
 
 void PerspectiveCamera::Configure(const glm::vec3& position, const glm::vec3& up, const glm::vec3& direction) {
@@ -61,14 +61,14 @@ void PerspectiveCamera::Configure(const glm::vec3& position, const glm::vec3& up
     InternalPointer->LookAtTarget = position - direction;
 }
 
-const glm::mat4 physicat::PerspectiveCamera::GetProjectionMatrix() const {
+const glm::mat4 MeowEngine::PerspectiveCamera::GetProjectionMatrix() const {
     return InternalPointer->ProjectionMatrix;
 }
 
-const glm::mat4 physicat::PerspectiveCamera::GetViewMatrix() const {
+const glm::mat4 MeowEngine::PerspectiveCamera::GetViewMatrix() const {
     return ::CreateViewMatrix(InternalPointer->Position, InternalPointer->LookAtTarget, InternalPointer->Up);
 }
 
-const glm::vec3 physicat::PerspectiveCamera::GetPosition() const {
+const glm::vec3 MeowEngine::PerspectiveCamera::GetPosition() const {
     return InternalPointer->Position;
 }

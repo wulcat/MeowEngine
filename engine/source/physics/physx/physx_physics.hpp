@@ -11,8 +11,8 @@
 #include "PxPhysicsAPI.h"
 
 
-namespace physicat::simulator {
-    struct PhysXPhysics : physicat::simulator::Physics {
+namespace MeowEngine::simulator {
+    struct PhysXPhysics : MeowEngine::simulator::Physics {
         PhysXPhysics();
         ~PhysXPhysics();
 

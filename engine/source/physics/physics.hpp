@@ -9,9 +9,9 @@
 #include <rigidbody_component.hpp>
 #include <collider_component.hpp>
 
-using namespace physicat::entity;
+using namespace MeowEngine::entity;
 
-namespace physicat::simulator {
+namespace MeowEngine::simulator {
     struct Physics {
         virtual void Create() = 0;
         virtual void Update(float inFixedDeltaTime) = 0;

@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_COLLIDER_TYPE_HPP
 #define PHYSICAT_COLLIDER_TYPE_HPP
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     enum ColliderType {
         BOX,
         SPHERE,

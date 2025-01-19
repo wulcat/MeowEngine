@@ -4,14 +4,14 @@
 
 #include "entt_buffer.hpp"
 
-physicat::EnttBuffer::EnttBuffer()
+MeowEngine::EnttBuffer::EnttBuffer()
  : Staging() {}
 
-entt::registry& physicat::EnttBuffer::GetStaging() {
+entt::registry& MeowEngine::EnttBuffer::GetStaging() {
     return Staging;
 }
 
-entt::entity physicat::EnttBuffer::Create() {
+entt::entity MeowEngine::EnttBuffer::Create() {
     entt::entity entity = Current.create();
     Final.create(entity);
 

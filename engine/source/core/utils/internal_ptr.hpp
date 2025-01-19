@@ -8,7 +8,7 @@
 #include "memory"
 
 // Using Pimpl Pattern to reduce build times
-namespace physicat {
+namespace MeowEngine {
     namespace internal_ptr_deleter {
         // 1. Custom deleter
         template <class T>
@@ -28,6 +28,6 @@ namespace physicat {
         return internal_ptr<T>(new T(std::forward<Args>(args)...), &internal_ptr_deleter::deleter<T>);
     }
 
-} // namespace physicat
+} // namespace MeowEngine
 
 #endif //VULKAN_ENGINE_INTERNAL_PTR_HPP

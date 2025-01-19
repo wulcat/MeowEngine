@@ -7,7 +7,7 @@
 
 #include "pstring.hpp"
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     struct LifeObjectComponent {
     public:
         static void Reflect();
@@ -15,7 +15,7 @@ namespace physicat::entity {
         LifeObjectComponent(std::string name);
 
 //        int Id;
-        physicat::PString Name;
+        MeowEngine::PString Name;
 
         const int GetChildCount() {
             return 0;

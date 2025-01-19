@@ -5,12 +5,12 @@
 #include "collider_component.hpp"
 #include <log.hpp>
 
-using namespace physicat::entity;
+using namespace MeowEngine::entity;
 
-void physicat::entity::ColliderComponent::Reflect(){
-//    REGISTER_PROPERTY(RigidbodyComponent, Position, physicat::math::Vector3);
+void MeowEngine::entity::ColliderComponent::Reflect(){
+//    REGISTER_PROPERTY(RigidbodyComponent, Position, MeowEngine::math::Vector3);
 
-    physicat::Log("Reflected", "ColliderComponent");
+    MeowEngine::Log("Reflected", "ColliderComponent");
 }
 
 ColliderComponent::ColliderComponent(entity::ColliderType inType, entity::BoxColliderData* inData) {

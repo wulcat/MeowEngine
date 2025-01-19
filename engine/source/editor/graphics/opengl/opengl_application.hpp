@@ -8,8 +8,8 @@
 #include "internal_ptr.hpp"
 #include "application.hpp"
 
-namespace physicat {
-    struct OpenGLApplication : public physicat::Application {
+namespace MeowEngine {
+    struct OpenGLApplication : public MeowEngine::Application {
         OpenGLApplication();
 
 //        void OnWindowResized() override;
@@ -21,8 +21,8 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer; // checkout pimpl pattern
+        MeowEngine::internal_ptr<Internal> InternalPointer; // checkout pimpl pattern
     };
-} // namespace physicat
+} // namespace MeowEngine
 
 #endif //PHYSICAT_OPENGL_APPLICATION_HPP

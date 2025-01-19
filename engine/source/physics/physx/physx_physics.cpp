@@ -5,7 +5,7 @@
 #include <log.hpp>
 #include "physx_physics.hpp"
 
-physicat::simulator::PhysXPhysics::PhysXPhysics() {
+MeowEngine::simulator::PhysXPhysics::PhysXPhysics() {
     gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
     gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, physx::PxTolerancesScale(), true, nullptr);
 
@@ -17,18 +17,18 @@ physicat::simulator::PhysXPhysics::PhysXPhysics() {
 
     gScene = gPhysics->createScene(sceneDesc);
 
-    physicat::Log("Physics", "Constructed");
+    MeowEngine::Log("Physics", "Constructed");
 }
 
-physicat::simulator::PhysXPhysics::~PhysXPhysics() {
+MeowEngine::simulator::PhysXPhysics::~PhysXPhysics() {
     gScene->release();
     gPhysics->release();
     gFoundation->release();
 
-    physicat::Log("Physics", "Destructed");
+    MeowEngine::Log("Physics", "Destructed");
 }
 
-void physicat::simulator::PhysXPhysics::Create() {
+void MeowEngine::simulator::PhysXPhysics::Create() {
 
 
     physx::PxRigidStatic* groundPlane = physx::PxCreatePlane(*gPhysics, physx::PxPlane(0,1,0,0), *gPhysics->createMaterial(0.0f, 0.0f, 0.6f));
@@ -49,17 +49,17 @@ void physicat::simulator::PhysXPhysics::Create() {
 //    gScene->removeActor(*body);
 }
 
-void physicat::simulator::PhysXPhysics::Update(float inFixedDeltaTime) {
+void MeowEngine::simulator::PhysXPhysics::Update(float inFixedDeltaTime) {
   //  for(int i = 0 ;i < 1000; ++i)
   //  {
 
-  // physicat::Log("", std::to_string(body->getGlobalPose().p.y));
+  // MeowEngine::Log("", std::to_string(body->getGlobalPose().p.y));
         gScene->simulate(0.02f);
         gScene->fetchResults(true);
   //  }
 }
 
-void physicat::simulator::PhysXPhysics::AddRigidbody(entity::Transform3DComponent &transform,
+void MeowEngine::simulator::PhysXPhysics::AddRigidbody(entity::Transform3DComponent &transform,
                                                      entity::ColliderComponent &collider,
                                                      entity::RigidbodyComponent &rigidbody) {
 

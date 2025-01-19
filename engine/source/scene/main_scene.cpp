@@ -26,15 +26,15 @@
 
 #include "physx_physics.hpp"
 
-using physicat::MainScene;
+using MeowEngine::MainScene;
 
 
-using namespace physicat::assets;
-using namespace physicat::entity;
+using namespace MeowEngine::assets;
+using namespace MeowEngine::entity;
 
 namespace {
-    physicat::PerspectiveCamera CreateCamera(const physicat::WindowSize& size) {
-        return physicat::PerspectiveCamera(static_cast<float>(size.Width), static_cast<float>(size.Height));
+    MeowEngine::PerspectiveCamera CreateCamera(const MeowEngine::WindowSize& size) {
+        return MeowEngine::PerspectiveCamera(static_cast<float>(size.Width), static_cast<float>(size.Height));
     }
 }
 
@@ -42,12 +42,12 @@ namespace {
 // component -> property -> property
 
 struct MainScene::Internal {
-    physicat::PerspectiveCamera Camera;
-    physicat::CameraController CameraController;
+    MeowEngine::PerspectiveCamera Camera;
+    MeowEngine::CameraController CameraController;
 
     EnttBuffer RegistryBuffer;
-    std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
-    moodycamel::ConcurrentQueue<std::shared_ptr<physicat::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
+    std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
+    moodycamel::ConcurrentQueue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
 
 
     float Time;
@@ -55,7 +55,7 @@ struct MainScene::Internal {
     // User Input Events
     const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
 
-    Internal(const physicat::WindowSize& size)
+    Internal(const MeowEngine::WindowSize& size)
         : Camera(::CreateCamera(size))
         , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
         , KeyboardState(SDL_GetKeyboardState(nullptr))
@@ -63,11 +63,11 @@ struct MainScene::Internal {
         , RegistryBuffer()
     {}
 
-    void OnWindowResized(const physicat::WindowSize& size) {
+    void OnWindowResized(const MeowEngine::WindowSize& size) {
         Camera = ::CreateCamera(size);
     }
 
-    void Load(std::shared_ptr<physicat::AssetManager> assetManager) {
+    void Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
         assetManager->LoadShaderPipelines({
                                                   assets::ShaderPipelineType::Grid,
                                                   assets::ShaderPipelineType::Default,
@@ -101,7 +101,7 @@ struct MainScene::Internal {
         REGISTER_ENTT_COMPONENT(MeshRenderComponent);
     }
 
-    void CreatePhysics(physicat::simulator::Physics* inPhysics) {
+    void CreatePhysics(MeowEngine::simulator::Physics* inPhysics) {
         RegistryBuffer.CreateInStaging();
         RegistryBuffer.AddInStaging(inPhysics);
     }
@@ -120,7 +120,7 @@ struct MainScene::Internal {
         RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
                 entity,
                 assets::ShaderPipelineType::Default,
-                new physicat::StaticMeshInstance{
+                new MeowEngine::StaticMeshInstance{
                         assets::StaticMeshType::Torus,
                         assets::TextureType::Pattern
                 }
@@ -139,7 +139,7 @@ struct MainScene::Internal {
         RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
                 cubeEntity,
                 assets::ShaderPipelineType::Default,
-                new physicat::StaticMeshInstance{
+                new MeowEngine::StaticMeshInstance{
                         assets::StaticMeshType::Cube,
                         assets::TextureType::Pattern
                 }
@@ -166,7 +166,7 @@ struct MainScene::Internal {
         RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
                 cubeEntity1,
                 assets::ShaderPipelineType::Default,
-                new physicat::StaticMeshInstance{
+                new MeowEngine::StaticMeshInstance{
                         assets::StaticMeshType::Cube,
                         assets::TextureType::Pattern
                 }
@@ -198,10 +198,10 @@ struct MainScene::Internal {
             assets::ShaderPipelineType::Grid
         );
 
-        physicat::Log("Creating", "Created");
+        MeowEngine::Log("Creating", "Created");
     }
 
-    void Input(const float& delta, const physicat::input::InputManager& inputManager) {
+    void Input(const float& delta, const MeowEngine::input::InputManager& inputManager) {
         if(!inputManager.isActive) {
             return;
         }
@@ -224,7 +224,7 @@ struct MainScene::Internal {
             RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
                     cubeEntity,
                     assets::ShaderPipelineType::Default,
-                    new physicat::StaticMeshInstance{
+                    new MeowEngine::StaticMeshInstance{
                             assets::StaticMeshType::Cube,
                             assets::TextureType::Pattern
                     }
@@ -277,10 +277,10 @@ struct MainScene::Internal {
             rigidbody.UpdateTransform(transform);
         }
 
-        std::shared_ptr<physicat::ReflectionPropertyChange> change;
+        std::shared_ptr<MeowEngine::ReflectionPropertyChange> change;
         while(PhysicsUiInputPropertyChangesQueue.try_dequeue(change)) {
             if(view.contains(static_cast<entt::entity>(change->EntityId))) {
-                physicat::Reflection.ApplyPropertyChange(*change, RegistryBuffer.GetStaging());
+                MeowEngine::Reflection.ApplyPropertyChange(*change, RegistryBuffer.GetStaging());
                 auto [transform, rigidbody] = view.get<entity::Transform3DComponent, entity::RigidbodyComponent>(static_cast<entt::entity>(change->EntityId));
                 rigidbody.OverrideTransform(transform);
             }
@@ -299,7 +299,7 @@ struct MainScene::Internal {
 //            lifeObject.TransformComponent->Update(cameraMatrix);
 //        }
 
-//        physicat::Log("Camera", std::to_string(Camera.GetPosition().z));
+//        MeowEngine::Log("Camera", std::to_string(Camera.GetPosition().z));
 
         auto view = RegistryBuffer.GetCurrent().view<entity::Transform3DComponent>();
         for(auto entity: view) {
@@ -308,19 +308,19 @@ struct MainScene::Internal {
             transform.CalculateTransformMatrix(cameraMatrix);
         }
 
-        //        auto view = registry.view<physicat::core::component::Transform3DComponent>();
+        //        auto view = registry.view<MeowEngine::core::component::Transform3DComponent>();
 //        for(auto entity: view)
 //        {
-//            auto transform = view.get<physicat::core::component::Transform3DComponent>(entity);
+//            auto transform = view.get<MeowEngine::core::component::Transform3DComponent>(entity);
 //
 //        }
 
 //        auto view = registry.view<entity::Transform3dComponent>();
-//        registry.view<physicat::entity::Transform3dComponent>().each([](auto entity, auto &physicat::entity::Transform3dComponent) {
+//        registry.view<MeowEngine::entity::Transform3dComponent>().each([](auto entity, auto &MeowEngine::entity::Transform3dComponent) {
 //            // ...
 //        });
 //
-//        for(auto &&[entt::entity, physicat::entity::Transform3dComponent]: registry.view<entity::Transform3dComponent>().each()) {
+//        for(auto &&[entt::entity, MeowEngine::entity::Transform3dComponent]: registry.view<entity::Transform3dComponent>().each()) {
 //            // ...
 //        }
 //        for(auto &&[entity,renderComponent, transform]: registry.view<entity::MeshRenderComponent, entity::Transform3DComponent>().each())
@@ -343,7 +343,7 @@ struct MainScene::Internal {
 //        }
     }
 
-    void Render(physicat::Renderer& renderer) {
+    void Render(MeowEngine::Renderer& renderer) {
         // This is important for now - we can come to this later for optimization
         // Current goal is to have full control on render as individual objects
         // as we will have elements like UI, Static Meshes, Post Processing, Camera Culling, Editor Tools
@@ -353,7 +353,7 @@ struct MainScene::Internal {
         renderer.Render(&Camera, RegistryBuffer.GetFinal());
     }
 
-    void RenderUI(physicat::Renderer& renderer, unsigned int frameBufferId, const double fps) {
+    void RenderUI(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) {
         renderer.RenderUI(RegistryBuffer.GetFinal(), UiInputPropertyChangesQueue , frameBufferId, fps);
     }
 
@@ -363,31 +363,31 @@ struct MainScene::Internal {
 
     void CalculateDeltaData() {
 
-        auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
-        auto stagingView = RegistryBuffer.GetStaging().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
-        auto finalView = RegistryBuffer.GetFinal().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+        auto currentView = RegistryBuffer.GetCurrent().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
+        auto stagingView = RegistryBuffer.GetStaging().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
+        auto finalView = RegistryBuffer.GetFinal().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
 
         for(entt::entity entity : stagingView) {
 
-            auto& staging = stagingView.get<physicat::entity::RigidbodyComponent>(entity);
-            auto final = finalView.get<physicat::entity::Transform3DComponent>(entity);
-            auto current = currentView.get<physicat::entity::Transform3DComponent>(entity);
+            auto& staging = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
+            auto final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
+            auto current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
 
             staging.CacheDelta(current.Position - final.Position);
         }
     }
 
     void SyncPhysicsThreadData() {
-        auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
-        auto stagingView = RegistryBuffer.GetStaging().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
-        auto finalView = RegistryBuffer.GetFinal().view<physicat::entity::Transform3DComponent, physicat::entity::RigidbodyComponent>();
+        auto currentView = RegistryBuffer.GetCurrent().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
+        auto stagingView = RegistryBuffer.GetStaging().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
+        auto finalView = RegistryBuffer.GetFinal().view<MeowEngine::entity::Transform3DComponent, MeowEngine::entity::RigidbodyComponent>();
 
         for(entt::entity entity : stagingView) {
-            auto staging = stagingView.get<physicat::entity::Transform3DComponent>(entity);
-            auto& rigidbody = stagingView.get<physicat::entity::RigidbodyComponent>(entity);
-            auto& final = finalView.get<physicat::entity::Transform3DComponent>(entity);
+            auto staging = stagingView.get<MeowEngine::entity::Transform3DComponent>(entity);
+            auto& rigidbody = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
+            auto& final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
 
-            auto& current = currentView.get<physicat::entity::Transform3DComponent>(entity);
+            auto& current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
 
             rigidbody.AddDelta(current.Position - final.Position);
             current.Position = staging.Position;
@@ -401,12 +401,12 @@ struct MainScene::Internal {
         // Data will always my permanant with no apply data method
         // Components will always have apply method
         // Sync Transform Component
-        auto currentView = RegistryBuffer.GetCurrent().view<physicat::entity::Transform3DComponent>();
-        auto finalView = RegistryBuffer.GetFinal().view<physicat::entity::Transform3DComponent>();
+        auto currentView = RegistryBuffer.GetCurrent().view<MeowEngine::entity::Transform3DComponent>();
+        auto finalView = RegistryBuffer.GetFinal().view<MeowEngine::entity::Transform3DComponent>();
 
         for(entt::entity entity : currentView) {
-            auto current = currentView.get<physicat::entity::Transform3DComponent>(entity);
-            auto& final = finalView.get<physicat::entity::Transform3DComponent>(entity);
+            auto current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
+            auto& final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
 
             final.Position = current.Position;
         }
@@ -418,10 +418,10 @@ struct MainScene::Internal {
         // Apply UI Inputs
         // can go to our extended entt buffer class
         while(!UiInputPropertyChangesQueue.empty()) {
-            std::shared_ptr<physicat::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
+            std::shared_ptr<MeowEngine::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
 
-            physicat::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetCurrent());
-            physicat::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetFinal());
+            MeowEngine::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetCurrent());
+            MeowEngine::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetFinal());
 
             PhysicsUiInputPropertyChangesQueue.enqueue(change);
             UiInputPropertyChangesQueue.pop();
@@ -429,25 +429,25 @@ struct MainScene::Internal {
     }
 };
 
-MainScene::MainScene(const physicat::WindowSize& size)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(size)){}
+MainScene::MainScene(const MeowEngine::WindowSize& size)
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>(size)){}
 
-void MainScene::OnWindowResized(const physicat::WindowSize &size) {
+void MainScene::OnWindowResized(const MeowEngine::WindowSize &size) {
     InternalPointer->OnWindowResized(size);
 }
 
-void MainScene::Load(std::shared_ptr<physicat::AssetManager> assetManager) {
+void MainScene::Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
     InternalPointer->Load(assetManager);
 }
 void MainScene::Create() {
     InternalPointer->Create();
 }
 
-void MainScene::CreatePhysics(physicat::simulator::Physics* inPhysics) {
+void MainScene::CreatePhysics(MeowEngine::simulator::Physics* inPhysics) {
     InternalPointer->CreatePhysics(inPhysics);
 }
 
-void MainScene::Input(const float &deltaTime, const physicat::input::InputManager& inputManager) {
+void MainScene::Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) {
     InternalPointer->Input(deltaTime, inputManager);
 }
 
@@ -459,11 +459,11 @@ void MainScene::Update(const float &deltaTime) {
     InternalPointer->Update(deltaTime);
 }
 
-void MainScene::Render(physicat::Renderer &renderer) {
+void MainScene::Render(MeowEngine::Renderer &renderer) {
     InternalPointer->Render(renderer);
 }
 
-void MainScene::RenderUI(physicat::Renderer &renderer, unsigned int frameBufferId, const double fps) {
+void MainScene::RenderUI(MeowEngine::Renderer &renderer, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUI(renderer, frameBufferId, fps);
 }
 

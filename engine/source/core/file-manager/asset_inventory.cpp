@@ -4,21 +4,21 @@
 
 #include "asset_inventory.hpp"
 
-using physicat::assets::StaticMeshType;
-using physicat::assets::TextureType;
+using MeowEngine::assets::StaticMeshType;
+using MeowEngine::assets::TextureType;
 
-std::string physicat::assets::ResolveShaderPipelinePath(const physicat::assets::ShaderPipelineType &shaderPipeline) {
+std::string MeowEngine::assets::ResolveShaderPipelinePath(const MeowEngine::assets::ShaderPipelineType &shaderPipeline) {
     switch(shaderPipeline) {
-        case physicat::assets::ShaderPipelineType::Default:
+        case MeowEngine::assets::ShaderPipelineType::Default:
             return "default";
-        case physicat::assets::ShaderPipelineType::Line:
+        case MeowEngine::assets::ShaderPipelineType::Line:
             return "line";
-        case physicat::assets::ShaderPipelineType::Grid:
+        case MeowEngine::assets::ShaderPipelineType::Grid:
             return "grid";
     }
 }
 
-std::string physicat::assets::ResolveStaticMeshPath(const physicat::assets::StaticMeshType &staticMesh) {
+std::string MeowEngine::assets::ResolveStaticMeshPath(const MeowEngine::assets::StaticMeshType &staticMesh) {
     switch(staticMesh) {
         case StaticMeshType::Plane:
             return "assets/models/plane.obj";
@@ -35,7 +35,7 @@ std::string physicat::assets::ResolveStaticMeshPath(const physicat::assets::Stat
     }
 }
 
-std::string physicat::assets::ResolveTexturePath(const physicat::assets::TextureType &texture) {
+std::string MeowEngine::assets::ResolveTexturePath(const MeowEngine::assets::TextureType &texture) {
     switch(texture) {
         case TextureType::Default:
             return "assets/textures/default.png";

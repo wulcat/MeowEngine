@@ -8,19 +8,19 @@
 #include "sdl_wrapper.hpp"
 #include "log.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct Window {
         SDL_Window* window;
         SDL_GLContext context;
 
         Window()
-        : window(physicat::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
-          context(physicat::sdl::CreateContext(window))
+        : window(MeowEngine::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
+          context(MeowEngine::sdl::CreateContext(window))
         {}
 
         ~Window()
         {
-            physicat::Log("Window", "Destroyed");
+            MeowEngine::Log("Window", "Destroyed");
             SDL_GL_DeleteContext(context);
             SDL_DestroyWindow(window);
         }

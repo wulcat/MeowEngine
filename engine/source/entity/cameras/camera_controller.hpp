@@ -8,7 +8,7 @@
 #include "glm_wrapper.hpp"
 #include "internal_ptr.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct CameraController {
     public:
         CameraController(const glm::vec3& position);
@@ -27,7 +27,7 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
 }
 

@@ -5,7 +5,7 @@
 #include <log.hpp>
 #include "camera_controller.hpp"
 
-using physicat::CameraController;
+using MeowEngine::CameraController;
 
 namespace {
     glm::mat4 ComputeOrientation(const glm::mat4& identity, const float& rotationDegrees, const glm::vec3& up) {
@@ -40,7 +40,7 @@ struct CameraController::Internal {
         , Position(position)
         , Orientation(::ComputeOrientation(Identity, HorizontalAngle, Up))
         , ForwardDirection(::ComputeForwardDirection(Orientation)) {
-        physicat::CameraController::Internal::LookAround(0,0);
+        MeowEngine::CameraController::Internal::LookAround(0,0);
     }
 
     void LookAround(const float& deltaX, const float& deltaY) {
@@ -59,7 +59,7 @@ struct CameraController::Internal {
 
         Up = Cross(ForwardDirection, aroundHorizontalAxis);
         Normalize(Up);
-//        physicat::Log("Logs:" , std::to_string(HorizontalAngle) + " || " + std::to_string(VerticalAngle));
+//        MeowEngine::Log("Logs:" , std::to_string(HorizontalAngle) + " || " + std::to_string(VerticalAngle));
     }
 
     void Normalize(glm::vec3& inVec) {
@@ -173,7 +173,7 @@ struct CameraController::Internal {
 };
 
 CameraController::CameraController(const glm::vec3 &position)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(position)) {}
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>(position)) {}
 
 void CameraController::MoveForward(const float& delta) {
     InternalPointer->MoveForward(delta);
@@ -207,10 +207,10 @@ glm::vec3 CameraController::GetDirection() const {
     return InternalPointer->ForwardDirection;
 }
 
-glm::vec3 physicat::CameraController::GetUp() const {
+glm::vec3 MeowEngine::CameraController::GetUp() const {
     return InternalPointer->Up;
 }
 
-void physicat::CameraController::LookAround(const float &deltaX, const float &deltaY) {
+void MeowEngine::CameraController::LookAround(const float &deltaX, const float &deltaY) {
     InternalPointer->LookAround(deltaX, deltaY);
 }

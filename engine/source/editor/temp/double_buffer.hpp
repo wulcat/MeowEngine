@@ -10,7 +10,7 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     template <typename T>
     class DoubleBuffer {
 

@@ -8,7 +8,7 @@
 #include "window_size.hpp"
 #include <SDL_events.h>
 
-using physicat::editor::ImGuiWorldRenderPanel;
+using MeowEngine::editor::ImGuiWorldRenderPanel;
 
 ImGuiWorldRenderPanel::ImGuiWorldRenderPanel()
     : WindowFlags(ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_UnsavedDocument)

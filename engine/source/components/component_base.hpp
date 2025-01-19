@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_COMPONENT_BASE_HPP
 #define PHYSICAT_COMPONENT_BASE_HPP
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     class ComponentBase {
         // component method's like init & update - virtual
     };

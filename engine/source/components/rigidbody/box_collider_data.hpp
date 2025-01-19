@@ -9,7 +9,7 @@
 #include "transform3d_component.hpp"
 #include "collider_data.hpp"
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     class BoxColliderData : public entity::ColliderData {
     public:
         explicit BoxColliderData();

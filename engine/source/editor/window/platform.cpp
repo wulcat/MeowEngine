@@ -4,19 +4,19 @@
 
 #include "platform.hpp"
 
-physicat::Platform physicat::GetCurrentPlatform() {
+MeowEngine::Platform MeowEngine::GetCurrentPlatform() {
     #if defined(__EMSCRIPTEN__)
-        return physicat::Platform::emscripten;
+        return MeowEngine::Platform::emscripten;
     #elif __APPLE__
         #include "TargetConditionals.h"
         #if TARGET_OS_IPHONE
-            return physicat::Platform::ios;
+            return MeowEngine::Platform::ios;
         #else
-            return physicat::Platform::mac;
+            return MeowEngine::Platform::mac;
         #endif
     #elif __ANDROID__
-        return physicat::Platform::android;
+        return MeowEngine::Platform::android;
     #elif WIN32
-        return physicat::Platform::windows;
+        return MeowEngine::Platform::windows;
     #endif
 }

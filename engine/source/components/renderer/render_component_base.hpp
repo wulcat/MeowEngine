@@ -9,23 +9,23 @@
 //#include <static_mesh_instance.hpp>
 #include "asset_inventory.hpp"
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     // This class is extended for mesh, debug & ui rendering
-    class RenderComponentBase : public physicat::entity::ComponentBase {
+    class RenderComponentBase : public MeowEngine::entity::ComponentBase {
 
     public:
         static void Reflect();
 
         RenderComponentBase();
-        RenderComponentBase(physicat::assets::ShaderPipelineType shaderPipelineType);
+        RenderComponentBase(MeowEngine::assets::ShaderPipelineType shaderPipelineType);
         virtual ~RenderComponentBase() = default;
 
 //        virtual void Update(const glm::mat4 &projectionViewMatrix) = 0;
 
-        physicat::assets::ShaderPipelineType& GetShaderPipelineType() { return Shader; }
+        MeowEngine::assets::ShaderPipelineType& GetShaderPipelineType() { return Shader; }
 
     protected:
-        physicat::assets::ShaderPipelineType Shader;
+        MeowEngine::assets::ShaderPipelineType Shader;
     };
 }
 

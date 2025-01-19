@@ -10,16 +10,16 @@
 #include "bitmap.hpp"
 #include "internal_ptr.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct OpenGLTexture {
-        OpenGLTexture(const physicat::Bitmap& bitmap);
+        OpenGLTexture(const MeowEngine::Bitmap& bitmap);
 
         // need to call whenever we want the texture to be applied to the object being rendered
         void Bind() const;
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
 }
 

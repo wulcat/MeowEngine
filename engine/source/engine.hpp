@@ -9,7 +9,7 @@
 
 #include "internal_ptr.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct Engine {
         Engine();
 
@@ -17,8 +17,8 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
-} // namespace physicat
+} // namespace MeowEngine
 
 #endif //PHYSICAT_ENGINE_HPP

@@ -7,7 +7,7 @@
 
 #include "PxPhysicsAPI.h"
 
-namespace physicat::entity {
+namespace MeowEngine::entity {
     class ColliderData {
     public:
         virtual physx::PxGeometry& GetGeometry() = 0;

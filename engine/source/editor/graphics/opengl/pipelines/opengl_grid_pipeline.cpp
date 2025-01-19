@@ -4,7 +4,7 @@
 
 #include "opengl_grid_pipeline.hpp"
 
-using physicat::pipeline::OpenGLGridPipeline;
+using MeowEngine::pipeline::OpenGLGridPipeline;
 
 OpenGLGridPipeline::OpenGLGridPipeline(const GLuint &shaderProgramID)
         : ShaderProgramID(shaderProgramID) {
@@ -17,10 +17,10 @@ OpenGLGridPipeline::~OpenGLGridPipeline() {
 }
 
 void OpenGLGridPipeline::Render(
-        const physicat::OpenGLAssetManager &assetManager,
-        const physicat::entity::RenderComponentBase *renderComponent,
-        const physicat::entity::Transform3DComponent* transform3DComponent,
-        const physicat::PerspectiveCamera* camera) const {
+        const MeowEngine::OpenGLAssetManager &assetManager,
+        const MeowEngine::entity::RenderComponentBase *renderComponent,
+        const MeowEngine::entity::Transform3DComponent* transform3DComponent,
+        const MeowEngine::PerspectiveCamera* camera) const {
 
     glUseProgram(ShaderProgramID);
 

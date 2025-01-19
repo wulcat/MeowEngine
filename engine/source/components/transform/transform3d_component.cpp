@@ -7,15 +7,15 @@
 
 #include "entt_reflection_wrapper.hpp"
 
-using physicat::entity::Transform3DComponent;
+using MeowEngine::entity::Transform3DComponent;
 
-void physicat::entity::Transform3DComponent::Reflect() {
-    REGISTER_PROPERTY(Transform3DComponent, Position, physicat::math::Vector3);
+void MeowEngine::entity::Transform3DComponent::Reflect() {
+    REGISTER_PROPERTY(Transform3DComponent, Position, MeowEngine::math::Vector3);
 //    REGISTER_PROPERTY(Transform3DComponent, Scale, glm::vec3);
 
     REGISTER_PROPERTY(Transform3DComponent, RotationDegrees, float);
 
-    physicat::Log("Reflected", "Transform3DComponent");
+    MeowEngine::Log("Reflected", "Transform3DComponent");
 }
 
 Transform3DComponent::Transform3DComponent(const glm::mat4& inProjectionMatrix)

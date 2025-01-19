@@ -10,22 +10,22 @@
 #include "opengl_grid_pipeline.hpp"
 
 
-using physicat::OpenGLRenderer;
+using MeowEngine::OpenGLRenderer;
 
-using namespace physicat::pipeline;
-using namespace physicat::entity;
-using physicat::assets::ShaderPipelineType;
+using namespace MeowEngine::pipeline;
+using namespace MeowEngine::entity;
+using MeowEngine::assets::ShaderPipelineType;
 
 struct OpenGLRenderer::Internal {
-    const std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
-    const std::shared_ptr<physicat::graphics::ImGuiRenderer> UI;
+    const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
+    const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
 
-    Internal(std::shared_ptr<physicat::OpenGLAssetManager> assetManager,
-             std::shared_ptr<physicat::graphics::ImGuiRenderer> inUIRenderer)
+    Internal(std::shared_ptr<MeowEngine::OpenGLAssetManager> assetManager,
+             std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> inUIRenderer)
     : AssetManager(assetManager)
     , UI(inUIRenderer){}
 
-//    void Render(physicat::PerspectiveCamera* cameraObject, physicat::core::LifeObject* lifeObject) {
+//    void Render(MeowEngine::PerspectiveCamera* cameraObject, MeowEngine::core::LifeObject* lifeObject) {
 //
 ////        AssetManager->GetShaderPipeline(shaderPipelineType).Render(
 ////                *AssetManager,
@@ -40,14 +40,14 @@ struct OpenGLRenderer::Internal {
 ////                AssetManager->GetShaderPipeline<OpenGLMeshPipeline>(ShaderPipelineType::Default)->Render(
 ////                    *AssetManager,
 ////                    dynamic_cast<MeshRenderComponent*>(renderComponent),
-////                    dynamic_cast<physicat::entity::Transform3dComponent*>(lifeObject->TransformComponent)
+////                    dynamic_cast<MeowEngine::entity::Transform3dComponent*>(lifeObject->TransformComponent)
 ////                );
 //                break;
 //            case ShaderPipelineType::Line:
 //                AssetManager->GetShaderPipeline<OpenGLLinePipeline>(ShaderPipelineType::Line)->Render(
 //                    *AssetManager,
 //                    dynamic_cast<LineRenderComponent*>(renderComponent),
-//                    dynamic_cast<physicat::core::component::Transform3DComponent*>(lifeObject->TransformComponent),
+//                    dynamic_cast<MeowEngine::core::component::Transform3DComponent*>(lifeObject->TransformComponent),
 //                    cameraObject
 //                );
 //                break;
@@ -55,28 +55,28 @@ struct OpenGLRenderer::Internal {
 //                AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
 //                        *AssetManager,
 //                        renderComponent,
-//                        dynamic_cast<physicat::core::component::Transform3DComponent*>(lifeObject->TransformComponent),
+//                        dynamic_cast<MeowEngine::core::component::Transform3DComponent*>(lifeObject->TransformComponent),
 //                        cameraObject
 //                );
 //                break;
 //        }
 //    }
 
-    void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry)
+    void Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry)
     {
-//        auto view = registry.view<physicat::core::component::Transform3DComponent>();
+//        auto view = registry.view<MeowEngine::core::component::Transform3DComponent>();
 //        for(auto entity: view)
 //        {
-//            auto transform = view.get<physicat::core::component::Transform3DComponent>(entity);
+//            auto transform = view.get<MeowEngine::core::component::Transform3DComponent>(entity);
 //
 //        }
 
 //        auto view = registry.view<entity::Transform3dComponent>();
-//        registry.view<physicat::entity::Transform3dComponent>().each([](auto entity, auto &physicat::entity::Transform3dComponent) {
+//        registry.view<MeowEngine::entity::Transform3dComponent>().each([](auto entity, auto &MeowEngine::entity::Transform3dComponent) {
 //            // ...
 //        });
 //
-//        for(auto &&[entt::entity, physicat::entity::Transform3dComponent]: registry.view<entity::Transform3dComponent>().each()) {
+//        for(auto &&[entt::entity, MeowEngine::entity::Transform3dComponent]: registry.view<entity::Transform3dComponent>().each()) {
 //            // ...
 //        }
         for(auto &&[entity,renderComponent, transform]: registry.view<entity::MeshRenderComponent, entity::Transform3DComponent>().each())
@@ -99,20 +99,20 @@ struct OpenGLRenderer::Internal {
         }
     }
 
-    void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+    void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
         UI.get()->Render(registry, inUIInputQueue, frameBufferId, fps);
     }
 };
 
-OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager,
-                               const std::shared_ptr<physicat::graphics::ImGuiRenderer>& uiRenderer)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(assetManager, uiRenderer)) {}
+OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
+                               const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer)
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>(assetManager, uiRenderer)) {}
 
 
-void OpenGLRenderer::Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) {
+void OpenGLRenderer::Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
     InternalPointer->Render(cameraObject, registry);
 }
 
-void OpenGLRenderer::RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+void OpenGLRenderer::RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUI(registry, inUIInputQueue, frameBufferId, fps);
 }

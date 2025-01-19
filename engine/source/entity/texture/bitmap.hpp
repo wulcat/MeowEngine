@@ -10,7 +10,7 @@
 #include "internal_ptr.hpp"
 #include "sdl_wrapper.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct Bitmap {
         Bitmap(SDL_Surface* surface);
 
@@ -23,7 +23,7 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
 }
 

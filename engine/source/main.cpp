@@ -5,7 +5,7 @@
 #include "engine.hpp"
 
 int main(int, char* []) {
-    physicat::Engine().Run();
+    MeowEngine::Engine().Run();
 
     return 0;
 }

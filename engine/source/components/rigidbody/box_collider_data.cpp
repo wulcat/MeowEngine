@@ -5,7 +5,7 @@
 #include "box_collider_data.hpp"
 
 
-using namespace physicat::entity;
+using namespace MeowEngine::entity;
 
 BoxColliderData::BoxColliderData()
 {

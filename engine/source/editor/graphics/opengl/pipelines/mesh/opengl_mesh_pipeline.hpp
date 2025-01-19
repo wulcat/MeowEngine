@@ -12,21 +12,21 @@
 #include "mesh_render_component.hpp"
 #include "transform3d_component.hpp"
 
-namespace physicat::pipeline {
-    struct OpenGLMeshPipeline : public physicat::pipeline::OpenGLPipelineBase {
+namespace MeowEngine::pipeline {
+    struct OpenGLMeshPipeline : public MeowEngine::pipeline::OpenGLPipelineBase {
         OpenGLMeshPipeline(const GLuint& shaderProgramID);
         ~OpenGLMeshPipeline() override;
 
     public:
         void Render(
-            const physicat::OpenGLAssetManager& assetManager,
-            const physicat::entity::MeshRenderComponent* meshRenderComponent,
-            const physicat::entity::Transform3DComponent* transform3DComponent
+            const MeowEngine::OpenGLAssetManager& assetManager,
+            const MeowEngine::entity::MeshRenderComponent* meshRenderComponent,
+            const MeowEngine::entity::Transform3DComponent* transform3DComponent
         ) const;
 //        void Render(
-//                const physicat::OpenGLAssetManager& assetManager,
-//                const physicat::entity::StaticMeshRenderComponent* meshRenderComponent,
-//                const physicat::entity::Transform3dComponent* transform3DComponent
+//                const MeowEngine::OpenGLAssetManager& assetManager,
+//                const MeowEngine::entity::StaticMeshRenderComponent* meshRenderComponent,
+//                const MeowEngine::entity::Transform3dComponent* transform3DComponent
 //        ) const;
 
     private:

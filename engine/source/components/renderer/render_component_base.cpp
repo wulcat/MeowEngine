@@ -5,16 +5,16 @@
 #include "render_component_base.hpp"
 #include <log.hpp>
 
-using physicat::entity::RenderComponentBase;
+using MeowEngine::entity::RenderComponentBase;
 
-void physicat::entity::RenderComponentBase::Reflect() {
-//    REGISTER_PROPERTY(Transform3DComponent, Position, physicat::math::Vector3);
+void MeowEngine::entity::RenderComponentBase::Reflect() {
+//    REGISTER_PROPERTY(Transform3DComponent, Position, MeowEngine::math::Vector3);
 
-    physicat::Log("Reflected", "RenderComponentBase");
+    MeowEngine::Log("Reflected", "RenderComponentBase");
 }
 
 RenderComponentBase::RenderComponentBase()
-    : Shader(physicat::assets::ShaderPipelineType::Default) {}
+    : Shader(MeowEngine::assets::ShaderPipelineType::Default) {}
 
-RenderComponentBase::RenderComponentBase(physicat::assets::ShaderPipelineType shaderPipelineType)
+RenderComponentBase::RenderComponentBase(MeowEngine::assets::ShaderPipelineType shaderPipelineType)
     : Shader(shaderPipelineType) {}

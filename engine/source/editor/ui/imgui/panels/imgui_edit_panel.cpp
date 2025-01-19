@@ -9,15 +9,15 @@
 #include "entt_reflection_wrapper.hpp"
 #include "imgui_input_extension.hpp"
 
-physicat::graphics::ui::ImGuiEditPanel::ImGuiEditPanel() {
+MeowEngine::graphics::ui::ImGuiEditPanel::ImGuiEditPanel() {
 
 }
 
-physicat::graphics::ui::ImGuiEditPanel::~ImGuiEditPanel() {
+MeowEngine::graphics::ui::ImGuiEditPanel::~ImGuiEditPanel() {
 
 }
 
-void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, entt::entity lifeObject) {
+void MeowEngine::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, entt::entity lifeObject) {
     ImGuiWindowFlags window_flags = 0;
     window_flags |= ImGuiWindowFlags_NoCollapse;
 
@@ -30,20 +30,20 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std:
             for(pair<unsigned int, entt::basic_sparse_set<>&> component : registry.storage()){
                 if(component.second.contains(lifeObject)) {
                     entt::id_type type = component.first;
-                    const std::string componentName = physicat::Reflection.GetComponentName(type);
+                    const std::string componentName = MeowEngine::Reflection.GetComponentName(type);
                     void* componentObject = component.second.value(lifeObject);
 
                     // Display Component Name
                     if(ImGui::CollapsingHeader(componentName.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
                         if(
-                            physicat::ReflectionPropertyChange* change = physicat::ImGuiInputExtension::ShowProperty(componentName, componentObject);
+                            MeowEngine::ReflectionPropertyChange* change = MeowEngine::ImGuiInputExtension::ShowProperty(componentName, componentObject);
                             change != nullptr
                         ){
                             change->EntityId = static_cast<int>(lifeObject);
                             change->ComponentType = type;
 
-//                            physicat::Log("Edit Panel", *static_cast<float*>(change->Data));
-                            inUIInputQueue.push(std::make_shared<physicat::ReflectionPropertyChange>(*change));
+//                            MeowEngine::Log("Edit Panel", *static_cast<float*>(change->Data));
+                            inUIInputQueue.push(std::make_shared<MeowEngine::ReflectionPropertyChange>(*change));
                         }
 
                         ImGui::Spacing();
@@ -51,7 +51,7 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std:
                 }
             }
 
-//            for(physicat::ReflectionProperty property : componentProperties) {
+//            for(MeowEngine::ReflectionProperty property : componentProperties) {
 //                if(property.Name == propertyName) {
 //                    // if last last propertyName
 ////                    property.Set(componentObject, propertyData);
@@ -62,8 +62,8 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std:
 
             // entt component id -> queue<property.name> -> value data pointer
 
-//            entity::Transform3DComponent& transform = registry.get<physicat::entity::Transform3DComponent>(lifeObject);
-//            entity::RigidbodyComponent* rigidbody = registry.try_get<physicat::entity::RigidbodyComponent>(lifeObject);
+//            entity::Transform3DComponent& transform = registry.get<MeowEngine::entity::Transform3DComponent>(lifeObject);
+//            entity::RigidbodyComponent* rigidbody = registry.try_get<MeowEngine::entity::RigidbodyComponent>(lifeObject);
 
 //            // If there's a rigidbody to avoid continuous transform update we add "enter" after edit's. Else it will auto update on edit.
 //            if(rigidbody) {
@@ -77,7 +77,7 @@ void physicat::graphics::ui::ImGuiEditPanel::Draw(entt::registry& registry, std:
         }
         else
         {
-            physicat::Log("Selected Entity: ", "Entity not valid");
+            MeowEngine::Log("Selected Entity: ", "Entity not valid");
         }
 
         ImGui::End();

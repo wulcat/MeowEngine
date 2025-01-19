@@ -7,14 +7,14 @@
 
 #include "glm_wrapper.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct Vertex {
         glm::vec3 Position;
         glm::vec2 TextureCoord;
 
-        bool operator==(const physicat::Vertex& other) const;
+        bool operator==(const MeowEngine::Vertex& other) const;
     };
-} // namespace physicat
+} // namespace MeowEngine
 
 namespace std {
     // takes hash of position and texture coordinate
@@ -22,8 +22,8 @@ namespace std {
     // what the heck is this lol... ufff
     // this gives a unique hash for our Vertex
     template <>
-    struct hash<physicat::Vertex> {
-        size_t operator()(const physicat::Vertex& vertex) const {
+    struct hash<MeowEngine::Vertex> {
+        size_t operator()(const MeowEngine::Vertex& vertex) const {
             return (
                     (hash<glm::vec3>()(vertex.Position) ^
                      (hash<glm::vec2>()(vertex.TextureCoord) << 1))

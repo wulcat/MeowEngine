@@ -8,12 +8,12 @@
 #include "imgui_wrapper.hpp"
 #include "log.hpp"
 
-using physicat::Application;
+using MeowEngine::Application;
 
 namespace {
     #ifdef EMSCRIPTEN
         // Free Function in an anonymous namespace private to this file
-        void EmscriptenLoop(physicat::Application* engine) {
+        void EmscriptenLoop(MeowEngine::Application* engine) {
             engine->LoopApplication();
         }
     #endif
@@ -61,9 +61,9 @@ struct Application::Internal {
     }
 };
 
-void physicat::Application::StartApplication() {
+void MeowEngine::Application::StartApplication() {
     PT_PROFILE_SCOPE;
-    physicat::Log("physicat::Application::StartApplication", "Starting Application");
+    MeowEngine::Log("MeowEngine::Application::StartApplication", "Starting Application");
 
     #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
@@ -79,7 +79,7 @@ void physicat::Application::StartApplication() {
 //        Sleep(targetFrameTime - frameDuration);
 //    }
 
-//        PhysicsThread = std::thread(&physicat::Application::PhysicsLoop, this);
+//        PhysicsThread = std::thread(&MeowEngine::Application::PhysicsLoop, this);
 
 
 //        while (LoopApplication()) {
@@ -88,11 +88,11 @@ void physicat::Application::StartApplication() {
 
         IsApplicationRunning = true;
 
-        RenderThread = std::thread(&physicat::Application::RenderLoop, this);
+        RenderThread = std::thread(&MeowEngine::Application::RenderLoop, this);
 
         while(IsApplicationRunning)
         {
-//            physicat::Log("Main Thread", "Running");
+//            MeowEngine::Log("Main Thread", "Running");
 //            float deltaTime = InternalPointer->TimeStep();
 //            FpsCounter.frameStart();
 //            // If Input() returns false - close the application
@@ -419,7 +419,7 @@ void physicat::Application::StartApplication() {
 //2 2 2
 
 
-bool physicat::Application::LoopApplication() {
+bool MeowEngine::Application::LoopApplication() {
     PT_PROFILE_SCOPE_N("Main Thread");
 
     float deltaTime = InternalPointer->TimeStep();
@@ -444,8 +444,8 @@ bool physicat::Application::LoopApplication() {
 }
 
 Application::Application()
-    : InternalPointer(physicat::make_internal_ptr<Internal>())
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>())
     , IsApplicationRunning(false) {}
 
-//physicat::Application::mainThreadBufferIndex = 0;
-FpsCounter physicat::Application::FpsCounter = {};
+//MeowEngine::Application::mainThreadBufferIndex = 0;
+FpsCounter MeowEngine::Application::FpsCounter = {};

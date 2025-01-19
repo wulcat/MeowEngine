@@ -8,12 +8,12 @@
 #include "render_component_base.hpp"
 
 // the grid will come in this
-namespace physicat::entity {
-    class LineRenderComponent : public physicat::entity::RenderComponentBase {
+namespace MeowEngine::entity {
+    class LineRenderComponent : public MeowEngine::entity::RenderComponentBase {
     public:
         static void Reflect();
 
-        explicit LineRenderComponent(physicat::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end);
+        explicit LineRenderComponent(MeowEngine::assets::ShaderPipelineType shader, glm::vec3 start, glm::vec3 end);
 
 //        void Update(const glm::mat4 &projectionViewMatrix) override {
 ////            MeshInstance->Update(projectionViewMatrix);

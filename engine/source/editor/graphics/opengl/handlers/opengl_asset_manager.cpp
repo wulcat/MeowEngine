@@ -10,14 +10,14 @@
 #include "opengl_grid_pipeline.hpp"
 
 
-using physicat::OpenGLAssetManager;
+using MeowEngine::OpenGLAssetManager;
 
-using namespace physicat::assets;
-using namespace physicat::pipeline;
+using namespace MeowEngine::assets;
+using namespace MeowEngine::pipeline;
 
 namespace {
     GLuint CompileShader(const GLenum& shaderType, const std::string& shaderSource) {
-        const std::string logTag {"physicat::OpenGLPipeline::CompileShader"};
+        const std::string logTag {"MeowEngine::OpenGLPipeline::CompileShader"};
         GLuint shaderId{glCreateShader(shaderType)};
 
         const char* shaderData{shaderSource.c_str()};
@@ -32,7 +32,7 @@ namespace {
             glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &errorMessageLength);
             std::vector<char> errorMessage(errorMessageLength + 1);
             glGetShaderInfoLog(shaderId, errorMessageLength, nullptr, &errorMessage[0]);
-            physicat::Log(logTag, &errorMessage[0]);
+            MeowEngine::Log(logTag, &errorMessage[0]);
 
             throw std::runtime_error(logTag + "Shader failed to compile");
         }
@@ -41,18 +41,18 @@ namespace {
     }
 
     GLuint CreateShaderProgram(const std::string& shaderName) {
-        const std::string logTag{"physicat::OpenGLAssetManager::CreateShaderProgram"};
-        physicat::Log(logTag, "Creating Pipeline for '" + shaderName + "'");
+        const std::string logTag{"MeowEngine::OpenGLAssetManager::CreateShaderProgram"};
+        MeowEngine::Log(logTag, "Creating Pipeline for '" + shaderName + "'");
 
         const std::string vertexShaderCode {
-                physicat::assets::LoadTextFile("assets/shaders/opengl/" + shaderName + ".vert")
+                MeowEngine::assets::LoadTextFile("assets/shaders/opengl/" + shaderName + ".vert")
         };
         const std::string fragmentShaderCode {
-                physicat::assets::LoadTextFile("assets/shaders/opengl/" + shaderName + ".frag")
+                MeowEngine::assets::LoadTextFile("assets/shaders/opengl/" + shaderName + ".frag")
         };
 
 #ifdef USING_GLES
-        physicat::Log(logTag, "#version 300 es") ;
+        MeowEngine::Log(logTag, "#version 300 es") ;
 //        std::string vertexShaderSource {"#version 100\n" + vertexShaderCode};
 //        std::string fragmentShaderSource{"#version 100\nprecision mediump float;\n" + fragmentShaderCode};
         std::string vertexShaderSource {"#version 300 es\nprecision mediump float;\n" + vertexShaderCode};
@@ -85,7 +85,7 @@ namespace {
             glGetProgramiv(shaderProgramId, GL_INFO_LOG_LENGTH, &errorMessageLength);
             std::vector<char> errorMessage(errorMessageLength + 1);
             glGetProgramInfoLog(shaderProgramId, errorMessageLength, nullptr, &errorMessage[0]);
-            physicat::Log(logTag, &errorMessage[0]);
+            MeowEngine::Log(logTag, &errorMessage[0]);
 
             throw std::runtime_error(logTag + "Shader Program failed to compile");
         }
@@ -101,8 +101,8 @@ namespace {
         return shaderProgramId;
     }
 
-    physicat::pipeline::OpenGLPipelineBase* CreatePipeline(const ShaderPipelineType& shaderPipelineType) {
-        const std::string shaderPath = physicat::assets::ResolveShaderPipelinePath(shaderPipelineType);
+    MeowEngine::pipeline::OpenGLPipelineBase* CreatePipeline(const ShaderPipelineType& shaderPipelineType) {
+        const std::string shaderPath = MeowEngine::assets::ResolveShaderPipelinePath(shaderPipelineType);
         GLuint shaderProgramID = CreateShaderProgram(shaderPath);
 
         switch (shaderPipelineType) {
@@ -121,13 +121,13 @@ namespace {
 
 struct OpenGLAssetManager::Internal {
     // cache and store using enums
-    std::unordered_map<physicat::assets::ShaderPipelineType, physicat::pipeline::OpenGLPipelineBase*> shaderPipelineCache;
-    std::unordered_map<physicat::assets::StaticMeshType, physicat::OpenGLMesh> staticMeshCache;
-    std::unordered_map<physicat::assets::TextureType, physicat::OpenGLTexture> textureCache;
+    std::unordered_map<MeowEngine::assets::ShaderPipelineType, MeowEngine::pipeline::OpenGLPipelineBase*> shaderPipelineCache;
+    std::unordered_map<MeowEngine::assets::StaticMeshType, MeowEngine::OpenGLMesh> staticMeshCache;
+    std::unordered_map<MeowEngine::assets::TextureType, MeowEngine::OpenGLTexture> textureCache;
 
     Internal() {}
 
-    void LoadShaderPipelines(const std::vector<physicat::assets::ShaderPipelineType>& shaderPipelines) {
+    void LoadShaderPipelines(const std::vector<MeowEngine::assets::ShaderPipelineType>& shaderPipelines) {
         for(const auto& shaderPipeline : shaderPipelines) {
             if(shaderPipelineCache.count(shaderPipeline) == 0) {
                 shaderPipelineCache.insert(
@@ -140,26 +140,26 @@ struct OpenGLAssetManager::Internal {
         }
     }
 
-    void LoadStaticMeshes(const std::vector<physicat::assets::StaticMeshType>& staticMeshes) {
+    void LoadStaticMeshes(const std::vector<MeowEngine::assets::StaticMeshType>& staticMeshes) {
         for(const auto& staticMesh : staticMeshes) {
             if(staticMeshCache.count(staticMesh) == 0) {
                 staticMeshCache.insert(
                     std::make_pair(
                         staticMesh,
-                        physicat::OpenGLMesh(physicat::assets::LoadObjFile(physicat::assets::ResolveStaticMeshPath(staticMesh)))
+                        MeowEngine::OpenGLMesh(MeowEngine::assets::LoadObjFile(MeowEngine::assets::ResolveStaticMeshPath(staticMesh)))
                     )
                 );
             }
         }
     }
 
-    void LoadTextures(const std::vector<physicat::assets::TextureType>& textures) {
+    void LoadTextures(const std::vector<MeowEngine::assets::TextureType>& textures) {
         for(const auto& texture : textures) {
             if(textureCache.count(texture) == 0) {
                 textureCache.insert(
                     std::make_pair(
                         texture,
-                        physicat::OpenGLTexture(physicat::assets::LoadBitmap(physicat::assets::ResolveTexturePath(texture)))
+                        MeowEngine::OpenGLTexture(MeowEngine::assets::LoadBitmap(MeowEngine::assets::ResolveTexturePath(texture)))
                     )
                 );
             }
@@ -168,40 +168,40 @@ struct OpenGLAssetManager::Internal {
 };
 
 OpenGLAssetManager::OpenGLAssetManager()
-    : InternalPointer(physicat::make_internal_ptr<Internal>()) {}
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>()) {}
 
-void OpenGLAssetManager::LoadShaderPipelines(const std::vector<physicat::assets::ShaderPipelineType> &shaderPipelines) {
+void OpenGLAssetManager::LoadShaderPipelines(const std::vector<MeowEngine::assets::ShaderPipelineType> &shaderPipelines) {
     InternalPointer->LoadShaderPipelines(shaderPipelines);
 }
 
-void OpenGLAssetManager::LoadStaticMeshes(const std::vector<physicat::assets::StaticMeshType> &staticMeshes) {
+void OpenGLAssetManager::LoadStaticMeshes(const std::vector<MeowEngine::assets::StaticMeshType> &staticMeshes) {
     InternalPointer->LoadStaticMeshes(staticMeshes);
 }
 
-void OpenGLAssetManager::LoadTextures(const std::vector<physicat::assets::TextureType> &textures) {
+void OpenGLAssetManager::LoadTextures(const std::vector<MeowEngine::assets::TextureType> &textures) {
     InternalPointer->LoadTextures(textures);
 }
 
-using physicat::pipeline::OpenGLMeshPipeline;
+using MeowEngine::pipeline::OpenGLMeshPipeline;
 
 // using template for having dynamic return of pipelines
 template<typename T>
-T* OpenGLAssetManager::GetShaderPipeline(const physicat::assets::ShaderPipelineType& shaderPipeline) {
+T* OpenGLAssetManager::GetShaderPipeline(const MeowEngine::assets::ShaderPipelineType& shaderPipeline) {
     auto test = InternalPointer->shaderPipelineCache.at(shaderPipeline);
 
     return static_cast<T*>(test);
 }
 
-template OpenGLMeshPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLMeshPipeline>(const physicat::assets::ShaderPipelineType& shaderPipeline);
-template OpenGLLinePipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLLinePipeline>(const physicat::assets::ShaderPipelineType& shaderPipeline);
-template OpenGLGridPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLGridPipeline>(const physicat::assets::ShaderPipelineType& shaderPipeline);
+template OpenGLMeshPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLMeshPipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
+template OpenGLLinePipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLLinePipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
+template OpenGLGridPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLGridPipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
 
 
-const physicat::OpenGLMesh& OpenGLAssetManager::GetStaticMesh(const physicat::assets::StaticMeshType& staticMesh) const {
+const MeowEngine::OpenGLMesh& OpenGLAssetManager::GetStaticMesh(const MeowEngine::assets::StaticMeshType& staticMesh) const {
     return InternalPointer->staticMeshCache.at(staticMesh);
 }
 
-const physicat::OpenGLTexture& OpenGLAssetManager::GetTexture(const physicat::assets::TextureType& texture) const {
+const MeowEngine::OpenGLTexture& OpenGLAssetManager::GetTexture(const MeowEngine::assets::TextureType& texture) const {
     return InternalPointer->textureCache.at(texture);
 }
 

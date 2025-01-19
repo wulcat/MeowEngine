@@ -9,10 +9,10 @@
 #include <transform3d_component.hpp>
 #include "PxPhysicsAPI.h"
 
-using namespace physicat::entity;
+using namespace MeowEngine::entity;
 
-namespace physicat::entity {
-    class RigidbodyComponent : public physicat::entity::ComponentBase {
+namespace MeowEngine::entity {
+    class RigidbodyComponent : public MeowEngine::entity::ComponentBase {
     public:
         static void Reflect();
         explicit RigidbodyComponent();
@@ -30,14 +30,14 @@ namespace physicat::entity {
          */
         void OverrideTransform(entity::Transform3DComponent& inTransform);
 
-        void AddDelta(physicat::math::Vector3 inDelta);
-        void CacheDelta(physicat::math::Vector3 inDelta);
+        void AddDelta(MeowEngine::math::Vector3 inDelta);
+        void CacheDelta(MeowEngine::math::Vector3 inDelta);
         void SetPhysicsBody(physx::PxRigidDynamic* inBody);
 
     private:
         physx::PxRigidDynamic* DynamicBody;
-        physicat::math::Vector3 Delta;
-        physicat::math::Vector3 CachedDelta;
+        MeowEngine::math::Vector3 Delta;
+        MeowEngine::math::Vector3 CachedDelta;
     };
 }
 

@@ -11,12 +11,12 @@
 #include "reflection_property_change.hpp"
 #include "queue"
 
-namespace physicat::graphics::ui {
+namespace MeowEngine::graphics::ui {
     struct ImGuiEditPanel {
         ImGuiEditPanel();
         ~ImGuiEditPanel();
 
-        void Draw(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, entt::entity lifeObject);
+        void Draw(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, entt::entity lifeObject);
 
     private:
         bool CanDrawPanel;

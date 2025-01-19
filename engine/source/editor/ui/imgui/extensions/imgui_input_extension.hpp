@@ -11,12 +11,12 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     class ImGuiInputExtension {
     public:
-        static physicat::ReflectionPropertyChange* ShowProperty(const std::string& inClassName, void* inObject);
-        static physicat::ReflectionPropertyChange* ShowPrimitive(const physicat::ReflectionProperty& inProperty, void* inObject);
-        static physicat::ReflectionPropertyChange* ShowClassOrStruct(const physicat::ReflectionProperty& inProperty, void* inObject);
+        static MeowEngine::ReflectionPropertyChange* ShowProperty(const std::string& inClassName, void* inObject);
+        static MeowEngine::ReflectionPropertyChange* ShowPrimitive(const MeowEngine::ReflectionProperty& inProperty, void* inObject);
+        static MeowEngine::ReflectionPropertyChange* ShowClassOrStruct(const MeowEngine::ReflectionProperty& inProperty, void* inObject);
 
         static void ShowTabExample();
         static void ShowPushItemWidthExample();

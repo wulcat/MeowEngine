@@ -31,8 +31,8 @@
 
 using namespace std;
 
-namespace physicat {
-//    extern physicat::EnttReflection ReflectionTest;
+namespace MeowEngine {
+//    extern MeowEngine::EnttReflection ReflectionTest;
 
     struct ApplicationTest {
     public:
@@ -47,7 +47,7 @@ namespace physicat {
             emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);
 #else
 
-            physicat::Log("Main Thread", "SDL2 Initialized");
+            MeowEngine::Log("Main Thread", "SDL2 Initialized");
             if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
                 throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
             }
@@ -59,24 +59,24 @@ namespace physicat {
             ProcessThreadBarrier = std::make_shared<ThreadBarrier>(2);
             SwapBufferThreadBarrier = std::make_shared<ThreadBarrier>(2);
 
-            WindowContext = std::make_unique<physicat::Window>();
-            AssetManager = std::make_shared<physicat::OpenGLAssetManager>(physicat::OpenGLAssetManager());
-            UI = std::make_shared<physicat::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
-            Renderer = std::make_unique<physicat::OpenGLRenderer>(AssetManager, UI);
+            WindowContext = std::make_unique<MeowEngine::Window>();
+            AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
+            UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
+            Renderer = std::make_unique<MeowEngine::OpenGLRenderer>(AssetManager, UI);
 
-            FrameBuffer = std::make_unique<physicat::graphics::OpenGLFrameBuffer>(1000,500);
-            InputManager = std::make_unique<physicat::input::InputManager>();
-            Physics = std::make_shared<physicat::simulator::PhysXPhysics>();
+            FrameBuffer = std::make_unique<MeowEngine::graphics::OpenGLFrameBuffer>(1000,500);
+            InputManager = std::make_unique<MeowEngine::input::InputManager>();
+            Physics = std::make_shared<MeowEngine::simulator::PhysXPhysics>();
 
-            Scene = std::make_shared<physicat::MainScene>(physicat::sdl::GetWindowSize(WindowContext->window));
+            Scene = std::make_shared<MeowEngine::MainScene>(MeowEngine::sdl::GetWindowSize(WindowContext->window));
 
             // NOTE: Clearing context in main thread before using for render thread fixes a crash
             // which occurs while drag window
             SDL_GL_MakeCurrent(WindowContext->window, nullptr);
 
             // create threads and start keep infinite thread
-            RenderThread = std::thread(&physicat::ApplicationTest::RenderThreadLoop, this);
-            PhysicsThread = std::thread(&physicat::ApplicationTest::PhysicsThreadLoop, this);
+            RenderThread = std::thread(&MeowEngine::ApplicationTest::RenderThreadLoop, this);
+            PhysicsThread = std::thread(&MeowEngine::ApplicationTest::PhysicsThreadLoop, this);
             MainThreadLoop();
 
             // stop threads
@@ -93,7 +93,7 @@ namespace physicat {
             Renderer.reset();
             WindowContext.reset();
 
-            physicat::Log("Application", "Ended");
+            MeowEngine::Log("Application", "Ended");
 #endif
         }
 
@@ -108,20 +108,20 @@ namespace physicat {
         std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
         std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
 
-        physicat::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = physicat::DoubleBuffer<std::queue<SDL_Event>>();
+        MeowEngine::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = MeowEngine::DoubleBuffer<std::queue<SDL_Event>>();
 
         void MainThreadLoop() {
             // init
             PT_PROFILE_SCOPE;
-            physicat::Log("Main Thread", "Started");
+            MeowEngine::Log("Main Thread", "Started");
 
             Scene->Create();
 
-//            physicat::Log("Main Thread", "waiting for creating all threads");
+//            MeowEngine::Log("Main Thread", "waiting for creating all threads");
 //            std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
 //            WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0;});
 //
-//            physicat::Log("Main Thread", "Created");
+//            MeowEngine::Log("Main Thread", "Created");
 
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
@@ -133,7 +133,7 @@ namespace physicat {
 
                 // update thread count++
 
-//                physicat::Log("Main Thread", "Running");
+//                MeowEngine::Log("Main Thread", "Running");
 
                 Update(0);
 
@@ -145,12 +145,12 @@ namespace physicat {
                     // if threads are waiting for thread sync we unpause them
                     ProcessThreadBarrier->End();
                     SwapBufferThreadBarrier->End();
-                    physicat::Log("Main Thread", "Ending");
+                    MeowEngine::Log("Main Thread", "Ending");
                     break;
                 }
 
 //                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-//                physicat::Log("Main Thread", "waiting process");
+//                MeowEngine::Log("Main Thread", "waiting process");
 
                 // - frames updating (processing / rendering)
                 //      - wait for all threads to finish processing the frame
@@ -196,18 +196,18 @@ namespace physicat {
                 SwapBufferThreadBarrier.get()->Wait();
             }
 
-            physicat::Log("Main Thread", "Waiting for other threads to end");
+            MeowEngine::Log("Main Thread", "Waiting for other threads to end");
 
             std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
             WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0;});
 
-            physicat::Log("Main Thread", "Ended");
+            MeowEngine::Log("Main Thread", "Ended");
         }
 
         void RenderThreadLoop() {
 
             // init
-            physicat::Log("Render Thread", "Started");
+            MeowEngine::Log("Render Thread", "Started");
             ThreadCount++;
 
             SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
@@ -232,7 +232,7 @@ namespace physicat {
 
                                     glViewport(0, 0, size.Width, size.Height);
                                     FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
-                                    physicat::Log("Render Thread", "rescale userevent");
+                                    MeowEngine::Log("Render Thread", "rescale userevent");
                                     break;
                                 }
                             }
@@ -259,12 +259,12 @@ namespace physicat {
 //                    // Swap buffers
 //                    SDL_GL_SwapWindow(WindowContext->window);
 //                }
-                // physicat::Log("Render Thread", "Waiting for other threads to finish processing");
+                // MeowEngine::Log("Render Thread", "Waiting for other threads to finish processing");
 
                 // wait for all threads to sync up for frame ending
                 ProcessThreadBarrier.get()->Wait();
 
-                // physicat::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
+                // MeowEngine::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
                 // wait until buffers are synced on main thread
                 SwapBufferThreadBarrier.get()->Wait();
             }
@@ -273,14 +273,14 @@ namespace physicat {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             ThreadCount--;
 
-            physicat::Log("Render Thread", "Ended");
+            MeowEngine::Log("Render Thread", "Ended");
             WaitForThreadEndCondition.notify_all();
         }
 
         std::thread PhysicsThread;
 
         void PhysicsThreadLoop() {
-            physicat::Log("Physics Thread", "Started");
+            MeowEngine::Log("Physics Thread", "Started");
 
 
             ThreadCount++;
@@ -299,14 +299,14 @@ namespace physicat {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
             ThreadCount--;
 
-            physicat::Log("Physics Thread", "Ended");
+            MeowEngine::Log("Physics Thread", "Ended");
             WaitForThreadEndCondition.notify_all();
         }
 
         // main thread ----------------
 
-        std::unique_ptr<physicat::input::InputManager> InputManager;
-        std::shared_ptr<physicat::Scene> Scene;
+        std::unique_ptr<MeowEngine::input::InputManager> InputManager;
+        std::shared_ptr<MeowEngine::Scene> Scene;
 
         bool Input(const float& deltaTime) {
             PT_PROFILE_SCOPE;
@@ -318,7 +318,7 @@ namespace physicat {
 //                InputBuffer.GetCurrent().pop();
 //
 //                // perform the task
-//                physicat::Log("InputBuffer", "Event");
+//                MeowEngine::Log("InputBuffer", "Event");
 //            }
 
             // Each loop we will process any events that are waiting for us.
@@ -353,7 +353,7 @@ namespace physicat {
                     case SDL_USEREVENT:
                         switch (event.user.code) {
                             case 2: {
-                                physicat::Log("Main Thread", "Rescaled Window");
+                                MeowEngine::Log("Main Thread", "Rescaled Window");
 
                                 const WindowSize size = *(WindowSize *) event.user.data1;
                                 Scene->OnWindowResized(size);
@@ -386,13 +386,13 @@ namespace physicat {
         // render ----------------
         std::thread RenderThread;
         // we decouple window / context into a class
-        std::unique_ptr<physicat::Window> WindowContext;
-        std::shared_ptr<physicat::graphics::ImGuiRenderer> UI;
-        std::unique_ptr<physicat::OpenGLRenderer> Renderer;
-        std::unique_ptr<physicat::graphics::OpenGLFrameBuffer> FrameBuffer;
+        std::unique_ptr<MeowEngine::Window> WindowContext;
+        std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
+        std::unique_ptr<MeowEngine::OpenGLRenderer> Renderer;
+        std::unique_ptr<MeowEngine::graphics::OpenGLFrameBuffer> FrameBuffer;
         // this is shared because even main thread will access asset manager and sometimes physics
         // but render thread will access this all the time
-        std::shared_ptr<physicat::OpenGLAssetManager> AssetManager;
+        std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
 
         void Render() {
 
@@ -460,7 +460,7 @@ namespace physicat {
         };
 
         // physics thread ----------------
-        std::shared_ptr<physicat::simulator::Physics> Physics;
+        std::shared_ptr<MeowEngine::simulator::Physics> Physics;
 
         void FixedUpdate(const float& inFixedDeltaTime) {
             Scene->CreatePhysics(Physics.get());

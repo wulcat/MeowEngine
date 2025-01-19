@@ -4,7 +4,7 @@
 
 #include "bitmap.hpp"
 
-using physicat::Bitmap;
+using MeowEngine::Bitmap;
 
 struct Bitmap::Internal {
     SDL_Surface* surface;
@@ -16,7 +16,7 @@ struct Bitmap::Internal {
     }
 };
 
-Bitmap::Bitmap(SDL_Surface *surface) : InternalPointer(physicat::make_internal_ptr<Internal>(surface)) {}
+Bitmap::Bitmap(SDL_Surface *surface) : InternalPointer(MeowEngine::make_internal_ptr<Internal>(surface)) {}
 
 uint16_t Bitmap::GetWidth() const {
     return static_cast<uint16_t>(InternalPointer->surface->w);

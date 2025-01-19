@@ -9,9 +9,9 @@
 #include "mesh.hpp"
 #include "internal_ptr.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct OpenGLMesh {
-        explicit OpenGLMesh(const physicat::Mesh& mesh);
+        explicit OpenGLMesh(const MeowEngine::Mesh& mesh);
 
         const GLuint & GetVertexArrayId() const;
         const GLuint& GetVertexBufferId() const;
@@ -21,9 +21,9 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
-} // namespace physicat
+} // namespace MeowEngine
 
 
 #endif //PHYSICAT_OPENGL_MESH_HPP

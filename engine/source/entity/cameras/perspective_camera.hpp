@@ -8,7 +8,7 @@
 #include "../wrappers/glm_wrapper.hpp"
 #include "internal_ptr.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct PerspectiveCamera {
         PerspectiveCamera(const float& width, const float& height);
 
@@ -21,9 +21,9 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
-} // namespace physicat
+} // namespace MeowEngine
 
 
 #endif //PHYSICAT_PERSPECTIVE_CAMERA_HPP

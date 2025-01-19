@@ -16,7 +16,7 @@
 #include <SDL_image.h>
 
 
-std::string physicat::assets::LoadTextFile(const std::string &path) {
+std::string MeowEngine::assets::LoadTextFile(const std::string &path) {
     // Creates an abstract structure for I/O, we only care
     // for result and so treat it as a pointer
     // 'r' stands for Read mode
@@ -43,8 +43,8 @@ std::string physicat::assets::LoadTextFile(const std::string &path) {
     return result;
 }
 
-physicat::Mesh physicat::assets::LoadObjFile(const std::string &path) {
-    std::istringstream sourceStream(physicat::assets::LoadTextFile(path));
+MeowEngine::Mesh MeowEngine::assets::LoadObjFile(const std::string &path) {
+    std::istringstream sourceStream(MeowEngine::assets::LoadTextFile(path));
 
     tinyobj::attrib_t attributes;
     std::vector<tinyobj::shape_t> shapes;
@@ -59,12 +59,12 @@ physicat::Mesh physicat::assets::LoadObjFile(const std::string &path) {
             &error,
             &sourceStream
     )) {
-        throw std::runtime_error("physicat::assets::LoadObjFile: Error: "+error);
+        throw std::runtime_error("MeowEngine::assets::LoadObjFile: Error: "+error);
     }
 
-    std::vector<physicat::Vertex> vertices;
+    std::vector<MeowEngine::Vertex> vertices;
     std::vector<uint32_t> indices;
-    std::unordered_map<physicat::Vertex, uint32_t> uniqueVertices;
+    std::unordered_map<MeowEngine::Vertex, uint32_t> uniqueVertices;
 
     for(const auto& shape : shapes) {
         for(const auto& index : shape.mesh.indices) {
@@ -82,7 +82,7 @@ physicat::Mesh physicat::assets::LoadObjFile(const std::string &path) {
             };
 
             // create vertex
-            physicat::Vertex vertex {
+            MeowEngine::Vertex vertex {
                 position,
                 textureCoord
             };
@@ -104,7 +104,7 @@ physicat::Mesh physicat::assets::LoadObjFile(const std::string &path) {
     return { vertices, indices };
 }
 
-physicat::Bitmap physicat::assets::LoadBitmap(const std::string &path) {
+MeowEngine::Bitmap MeowEngine::assets::LoadBitmap(const std::string &path) {
     SDL_RWops* file {SDL_RWFromFile(path.c_str(), "rb")}; // rb denotes to load binary data
     SDL_Surface* source {IMG_Load_RW(file, 1)};
     SDL_Rect imageFrame {0, 0, source->w, source->h};
@@ -141,5 +141,5 @@ physicat::Bitmap physicat::assets::LoadBitmap(const std::string &path) {
     SDL_BlitSurface(source, &imageFrame, target, &imageFrame);
     SDL_FreeSurface(source);
 
-    return physicat::Bitmap(target);
+    return MeowEngine::Bitmap(target);
 }

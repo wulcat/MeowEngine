@@ -17,7 +17,7 @@
 
 using namespace std;
 
-namespace physicat {
+namespace MeowEngine {
     struct Application {
         Application();
         virtual ~Application() = default;
@@ -76,9 +76,9 @@ namespace physicat {
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
-} // namespace physicat
+} // namespace MeowEngine
 
 
 #endif //VULKAN_ENGINE_ENGINE_HPP

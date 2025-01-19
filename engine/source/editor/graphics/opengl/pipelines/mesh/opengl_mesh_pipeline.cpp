@@ -10,7 +10,7 @@
 #include <stdexcept>
 //#include <vector>
 
-using physicat::pipeline::OpenGLMeshPipeline;
+using MeowEngine::pipeline::OpenGLMeshPipeline;
 
 
 OpenGLMeshPipeline::OpenGLMeshPipeline(const GLuint& shaderProgramID)
@@ -28,12 +28,12 @@ OpenGLMeshPipeline::~OpenGLMeshPipeline() {
 }
 
 //void OpenGLMeshPipeline::Render(
-//        const physicat::OpenGLAssetManager &assetManager,
-//        const physicat::entity::StaticMeshRenderComponent* meshRenderComponent,
-//        const physicat::entity::Transform3dComponent* transform3DComponent) const {
+//        const MeowEngine::OpenGLAssetManager &assetManager,
+//        const MeowEngine::entity::StaticMeshRenderComponent* meshRenderComponent,
+//        const MeowEngine::entity::Transform3dComponent* transform3DComponent) const {
 //
-//    const physicat::StaticMeshInstance& staticMeshInstance = meshRenderComponent->GetMeshInstance();
-//    const physicat::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
+//    const MeowEngine::StaticMeshInstance& staticMeshInstance = meshRenderComponent->GetMeshInstance();
+//    const MeowEngine::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
 //
 //    glUseProgram(ShaderProgramID);
 //    glBindVertexArray(mesh.GetVertexArrayId());
@@ -95,12 +95,12 @@ OpenGLMeshPipeline::~OpenGLMeshPipeline() {
 //}
 
 void OpenGLMeshPipeline::Render(
-        const physicat::OpenGLAssetManager &assetManager,
-        const physicat::entity::MeshRenderComponent* meshRenderComponent,
-        const physicat::entity::Transform3DComponent* transform3DComponent) const {
+        const MeowEngine::OpenGLAssetManager &assetManager,
+        const MeowEngine::entity::MeshRenderComponent* meshRenderComponent,
+        const MeowEngine::entity::Transform3DComponent* transform3DComponent) const {
 
-    const physicat::StaticMeshInstance& staticMeshInstance = meshRenderComponent->GetMeshInstance();
-    const physicat::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
+    const MeowEngine::StaticMeshInstance& staticMeshInstance = meshRenderComponent->GetMeshInstance();
+    const MeowEngine::OpenGLMesh& mesh = assetManager.GetStaticMesh(staticMeshInstance.GetMesh());
 
     glUseProgram(ShaderProgramID);
     glBindVertexArray(mesh.GetVertexArrayId());

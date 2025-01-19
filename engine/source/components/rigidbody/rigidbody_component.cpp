@@ -5,17 +5,17 @@
 #include "rigidbody_component.hpp"
 #include "log.hpp"
 
-void physicat::entity::RigidbodyComponent::Reflect(){
-//    REGISTER_PROPERTY(RigidbodyComponent, Position, physicat::math::Vector3);
+void MeowEngine::entity::RigidbodyComponent::Reflect(){
+//    REGISTER_PROPERTY(RigidbodyComponent, Position, MeowEngine::math::Vector3);
 
-    physicat::Log("Reflected", "RigidbodyComponent");
+    MeowEngine::Log("Reflected", "RigidbodyComponent");
 }
 
-physicat::entity::RigidbodyComponent::RigidbodyComponent() {
+MeowEngine::entity::RigidbodyComponent::RigidbodyComponent() {
 
 }
 
-void physicat::entity::RigidbodyComponent::SetPhysicsBody(physx::PxRigidDynamic *inBody) {
+void MeowEngine::entity::RigidbodyComponent::SetPhysicsBody(physx::PxRigidDynamic *inBody) {
     DynamicBody = inBody;
 }
 
@@ -36,13 +36,13 @@ void RigidbodyComponent::OverrideTransform(Transform3DComponent &inTransform) {
     DynamicBody->setGlobalPose(physx::PxTransform(inTransform.Position.X,inTransform.Position.Y,inTransform.Position.Z));
 }
 
-void physicat::entity::RigidbodyComponent::CacheDelta(physicat::math::Vector3 inDelta) {
+void MeowEngine::entity::RigidbodyComponent::CacheDelta(MeowEngine::math::Vector3 inDelta) {
     CachedDelta.X += inDelta.X;
     CachedDelta.Y += inDelta.Y;
     CachedDelta.Z += inDelta.Z;
 }
 
-void physicat::entity::RigidbodyComponent::AddDelta(physicat::math::Vector3 inDelta) {
+void MeowEngine::entity::RigidbodyComponent::AddDelta(MeowEngine::math::Vector3 inDelta) {
     Delta.X += inDelta.X + CachedDelta.X;
     Delta.Y += inDelta.Y + CachedDelta.Y;
     Delta.Z += inDelta.Z + CachedDelta.Z;
@@ -51,6 +51,6 @@ void physicat::entity::RigidbodyComponent::AddDelta(physicat::math::Vector3 inDe
     CachedDelta.Y = 0;
     CachedDelta.Z = 0;
 
-//    physicat::Log("Main Thread Delta Sync Write", TestDelta);
+//    MeowEngine::Log("Main Thread Delta Sync Write", TestDelta);
 }
 

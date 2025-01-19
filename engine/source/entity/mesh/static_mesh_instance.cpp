@@ -4,11 +4,11 @@
 
 #include "static_mesh_instance.hpp"
 
-using physicat::StaticMeshInstance;
+using MeowEngine::StaticMeshInstance;
 
 struct StaticMeshInstance::Internal {
-    const physicat::assets::StaticMeshType MeshType;
-    const physicat::assets::TextureType TextureType;
+    const MeowEngine::assets::StaticMeshType MeshType;
+    const MeowEngine::assets::TextureType TextureType;
 //    const glm::mat4 Identity;
 //
 //    glm::vec3 Position;
@@ -18,8 +18,8 @@ struct StaticMeshInstance::Internal {
 //    glm::mat4 TransformMatrix;
 
     Internal(
-        const physicat::assets::StaticMeshType& meshType,
-        const physicat::assets::TextureType& textureType
+        const MeowEngine::assets::StaticMeshType& meshType,
+        const MeowEngine::assets::TextureType& textureType
     )
     : MeshType(meshType)
     , TextureType(textureType) {}
@@ -45,13 +45,13 @@ struct StaticMeshInstance::Internal {
 };
 
 StaticMeshInstance::StaticMeshInstance(
-    const physicat::assets::StaticMeshType& staticMeshType,
-    const physicat::assets::TextureType& textureType)
+    const MeowEngine::assets::StaticMeshType& staticMeshType,
+    const MeowEngine::assets::TextureType& textureType)
 //    const glm::vec3& position,
 //    const glm::vec3& scale,
 //    const glm::vec3& rotationAxis,
 //    const float &rotationDegrees)
-    : InternalPointer(physicat::make_internal_ptr<Internal>(
+    : InternalPointer(MeowEngine::make_internal_ptr<Internal>(
         staticMeshType,
         textureType
     )) {}
@@ -64,11 +64,11 @@ StaticMeshInstance::StaticMeshInstance(
 //    InternalPointer->RotateBy(degrees);
 //}
 
-physicat::assets::StaticMeshType StaticMeshInstance::GetMesh() const {
+MeowEngine::assets::StaticMeshType StaticMeshInstance::GetMesh() const {
     return InternalPointer->MeshType;
 }
 
-physicat::assets::TextureType StaticMeshInstance::GetTexture() const {
+MeowEngine::assets::TextureType StaticMeshInstance::GetTexture() const {
     return InternalPointer->TextureType;
 }
 

@@ -7,7 +7,7 @@
 
 #include "imgui_wrapper.hpp"
 
-namespace physicat::editor {
+namespace MeowEngine::editor {
     struct ImGuiLogPanel {
         ImGuiLogPanel();
         ~ImGuiLogPanel();

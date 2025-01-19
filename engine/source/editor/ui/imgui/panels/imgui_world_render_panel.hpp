@@ -8,7 +8,7 @@
 #include "imgui_wrapper.hpp"
 #include "window_size.hpp"
 
-namespace physicat::editor {
+namespace MeowEngine::editor {
 
     struct ImGuiWorldRenderPanel {
         ImGuiWorldRenderPanel();

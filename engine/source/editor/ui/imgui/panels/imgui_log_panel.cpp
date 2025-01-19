@@ -5,7 +5,7 @@
 #include "imgui_log_panel.hpp"
 #include "log.hpp"
 
-using physicat::editor::ImGuiLogPanel;
+using MeowEngine::editor::ImGuiLogPanel;
 
 ImGuiLogPanel::ImGuiLogPanel()
     : WindowFlags(ImGuiWindowFlags_NoCollapse)

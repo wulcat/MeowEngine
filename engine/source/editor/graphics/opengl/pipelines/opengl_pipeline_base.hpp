@@ -7,7 +7,7 @@
 
 #include "log.hpp"
 
-namespace physicat {
+namespace MeowEngine {
     struct OpenGLAssetManager;
 
     namespace pipeline {

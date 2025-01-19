@@ -8,15 +8,15 @@
 
 #include "entt_reflection.hpp"
 
-namespace physicat {
-    extern physicat::EnttReflection Reflection;
+namespace MeowEngine {
+    extern MeowEngine::EnttReflection Reflection;
 
     // SPINAE principle :- substitution failure is not a error
-    #define REFLECT(Type) physicat::Reflection.Reflect<Type>()
+    #define REFLECT(Type) MeowEngine::Reflection.Reflect<Type>()
 
     #define REGISTER_ENTT_COMPONENT(Component) \
         \
-        physicat::Reflection.RegisterComponent(\
+        MeowEngine::Reflection.RegisterComponent(\
             entt::type_hash<Component>().value(), \
             #Component\
         );\
@@ -24,7 +24,7 @@ namespace physicat {
         REFLECT(Component);
 
     #define REGISTER_PROPERTY(Class, Property, Type)\
-        physicat::Reflection.RegisterProperty(\
+        MeowEngine::Reflection.RegisterProperty(\
             #Class,\
             {\
                 #Property,                          \

@@ -8,8 +8,8 @@
 
 #include "transform_component_base.hpp"
 
-namespace physicat::entity {
-    class Transform2DComponent : public physicat::entity::TransformComponentBase{
+namespace MeowEngine::entity {
+    class Transform2DComponent : public MeowEngine::entity::TransformComponentBase{
     public:
         static void Reflect();
     };

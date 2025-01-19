@@ -8,8 +8,8 @@
 #include "transform_component_base.hpp"
 #include "math_wrapper.hpp"
 
-namespace physicat::entity {
-    class Transform3DComponent : public physicat::entity::TransformComponentBase {
+namespace MeowEngine::entity {
+    class Transform3DComponent : public MeowEngine::entity::TransformComponentBase {
     public:
         static void Reflect();
 
@@ -22,7 +22,7 @@ namespace physicat::entity {
         void Update(const float& deltaTime) override;
         void RotateBy(const float& degrees);
 
-        physicat::math::Vector3 Position;
+        MeowEngine::math::Vector3 Position;
         glm::vec3 Scale;
 
         // find proper way to handle rotations

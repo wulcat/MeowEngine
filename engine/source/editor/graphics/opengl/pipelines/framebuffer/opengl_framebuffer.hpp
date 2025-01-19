@@ -5,7 +5,7 @@
 #ifndef PHYSICAT_OPENGL_FRAMEBUFFER_HPP
 #define PHYSICAT_OPENGL_FRAMEBUFFER_HPP
 
-namespace physicat::graphics {
+namespace MeowEngine::graphics {
     struct OpenGLFrameBuffer {
         OpenGLFrameBuffer(const float& width, const float& height);
         ~OpenGLFrameBuffer();

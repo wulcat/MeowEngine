@@ -13,17 +13,17 @@
 
 #include <memory>
 
-namespace physicat {
-    struct OpenGLRenderer : public physicat::Renderer {
-        OpenGLRenderer(const std::shared_ptr<physicat::OpenGLAssetManager>& assetManager,
-                       const std::shared_ptr<physicat::graphics::ImGuiRenderer>& uiRenderer);
+namespace MeowEngine {
+    struct OpenGLRenderer : public MeowEngine::Renderer {
+        OpenGLRenderer(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
+                       const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer);
 
-        void Render(physicat::PerspectiveCamera* cameraObject, entt::registry& registry) override;
-        void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<physicat::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
+        void Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) override;
+        void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
 
     private:
         struct Internal;
-        physicat::internal_ptr<Internal> InternalPointer;
+        MeowEngine::internal_ptr<Internal> InternalPointer;
     };
 }
 
