@@ -20,9 +20,7 @@ using MeowEngine::Engine;
 struct Engine::Internal {
     const std::string classLogTag;
 
-    Internal() :
-        classLogTag("MeowEngine::Engine::") {
-    }
+    Internal() : classLogTag("MeowEngine::Engine::") {}
 
     void Run() {
         PT_PROFILE_SCOPE;
