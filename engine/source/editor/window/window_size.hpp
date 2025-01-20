@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 05/07/24.
 //
 
-#ifndef PHYSICAT_WINDOW_SIZE_HPP
-#define PHYSICAT_WINDOW_SIZE_HPP
+#ifndef MEOWENGINE_WINDOW_SIZE_HPP
+#define MEOWENGINE_WINDOW_SIZE_HPP
 
 
 #include <cstdint>
@@ -16,4 +16,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_WINDOW_SIZE_HPP
+#endif //MEOWENGINE_WINDOW_SIZE_HPP

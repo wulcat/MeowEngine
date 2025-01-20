@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 30/08/24.
 //
 
-#ifndef PHYSICAT_BOX_COLLIDER_DATA_HPP
-#define PHYSICAT_BOX_COLLIDER_DATA_HPP
+#ifndef MEOWENGINE_BOX_COLLIDER_DATA_HPP
+#define MEOWENGINE_BOX_COLLIDER_DATA_HPP
 
 
 #include "transform3d_component.hpp"
@@ -22,4 +22,4 @@ namespace MeowEngine::entity {
 }
 
 
-#endif //PHYSICAT_BOX_COLLIDER_DATA_HPP
+#endif //MEOWENGINE_BOX_COLLIDER_DATA_HPP

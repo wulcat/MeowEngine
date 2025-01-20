@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/07/24.
 //
 
-#ifndef PHYSICAT_TRACY_WRAPPER_HPP
-#define PHYSICAT_TRACY_WRAPPER_HPP
+#ifndef MEOWENGINE_TRACY_WRAPPER_HPP
+#define MEOWENGINE_TRACY_WRAPPER_HPP
 
 //#include <TracyOpenGL.hpp>
 //#include <Tracy.hpp>
@@ -39,4 +39,5 @@
 //        TracyMessageL("Starting the application");
 //        TracyMessageL("Set jobs");
 
-#endif //PHYSICAT_TRACY_WRAPPER_HPP
+
+#endif //MEOWENGINE_TRACY_WRAPPER_HPP

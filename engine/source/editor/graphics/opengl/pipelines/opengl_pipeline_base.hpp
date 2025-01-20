@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 23/06/24.
 //
 
-#ifndef PHYSICAT_OPENGL_PIPELINE_BASE_HPP
-#define PHYSICAT_OPENGL_PIPELINE_BASE_HPP
+#ifndef MEOWENGINE_OPENGL_PIPELINE_BASE_HPP
+#define MEOWENGINE_OPENGL_PIPELINE_BASE_HPP
 
 #include "log.hpp"
 
@@ -18,4 +18,4 @@ namespace MeowEngine {
     }
 }
 
-#endif //PHYSICAT_OPENGL_PIPELINE_BASE_HPP
+#endif //MEOWENGINE_OPENGL_PIPELINE_BASE_HPP

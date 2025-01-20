@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_RENDERER_HPP
-#define PHYSICAT_RENDERER_HPP
+#ifndef MEOWENGINE_RENDERER_HPP
+#define MEOWENGINE_RENDERER_HPP
 
 #pragma once
 
@@ -20,4 +20,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_RENDERER_HPP
+#endif //MEOWENGINE_RENDERER_HPP

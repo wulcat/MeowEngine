@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 23/06/24.
 //
 
-#ifndef PHYSICAT_OPENGL_MESH_PIPELINE_HPP
-#define PHYSICAT_OPENGL_MESH_PIPELINE_HPP
+#ifndef MEOWENGINE_OPENGL_MESH_PIPELINE_HPP
+#define MEOWENGINE_OPENGL_MESH_PIPELINE_HPP
 
 #include "glm_wrapper.hpp"
 #include "graphics_wrapper.hpp"
@@ -41,4 +41,4 @@ namespace MeowEngine::pipeline {
 }
 
 
-#endif //PHYSICAT_OPENGL_MESH_PIPELINE_HPP
+#endif //MEOWENGINE_OPENGL_MESH_PIPELINE_HPP

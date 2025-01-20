@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 09/01/25.
 //
 
-#ifndef PHYSICAT_PROPERTY_TYPE_HPP
-#define PHYSICAT_PROPERTY_TYPE_HPP
+#ifndef MEOWENGINE_PROPERTY_TYPE_HPP
+#define MEOWENGINE_PROPERTY_TYPE_HPP
 
 #include "type_traits"
 #include "typeinfo"
@@ -43,4 +43,4 @@ namespace MeowEngine {
 
 }
 
-#endif //PHYSICAT_PROPERTY_TYPE_HPP
+#endif //MEOWENGINE_PROPERTY_TYPE_HPP

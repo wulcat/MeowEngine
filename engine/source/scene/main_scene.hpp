@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_MAIN_SCENE_HPP
-#define PHYSICAT_MAIN_SCENE_HPP
+#ifndef MEOWENGINE_MAIN_SCENE_HPP
+#define MEOWENGINE_MAIN_SCENE_HPP
 
 #include "internal_ptr.hpp"
 #include "scene.hpp"
@@ -36,4 +36,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_MAIN_SCENE_HPP
+#endif //MEOWENGINE_MAIN_SCENE_HPP

@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 22/06/24.
 //
 
-#ifndef PHYSICAT_OPENGL_GRID_PIPELINE_HPP
-#define PHYSICAT_OPENGL_GRID_PIPELINE_HPP
+#ifndef MEOWENGINE_OPENGL_GRID_PIPELINE_HPP
+#define MEOWENGINE_OPENGL_GRID_PIPELINE_HPP
 
 #include "glm_wrapper.hpp"
 #include "graphics_wrapper.hpp"
@@ -35,4 +35,4 @@ namespace MeowEngine::pipeline {
     };
 }
 
-#endif //PHYSICAT_OPENGL_GRID_PIPELINE_HPP
+#endif //MEOWENGINE_OPENGL_GRID_PIPELINE_HPP

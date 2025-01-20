@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 05/01/25.
 //
 
-#ifndef PHYSICAT_TRIPLE_BUFFER_HPP
-#define PHYSICAT_TRIPLE_BUFFER_HPP
+#ifndef MEOWENGINE_TRIPLE_BUFFER_HPP
+#define MEOWENGINE_TRIPLE_BUFFER_HPP
 
 #include "utility"
 
@@ -41,4 +41,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_TRIPLE_BUFFER_HPP
+#endif //MEOWENGINE_TRIPLE_BUFFER_HPP

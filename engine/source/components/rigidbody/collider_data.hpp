@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 01/09/24.
 //
 
-#ifndef PHYSICAT_COLLIDER_DATA_HPP
-#define PHYSICAT_COLLIDER_DATA_HPP
+#ifndef MEOWENGINE_COLLIDER_DATA_HPP
+#define MEOWENGINE_COLLIDER_DATA_HPP
 
 #include "PxPhysicsAPI.h"
 
@@ -15,4 +15,4 @@ namespace MeowEngine::entity {
 }
 
 
-#endif //PHYSICAT_COLLIDER_DATA_HPP
+#endif //MEOWENGINE_COLLIDER_DATA_HPP

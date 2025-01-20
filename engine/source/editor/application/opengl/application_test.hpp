@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 19/10/24.
 //
 
-#ifndef PHYSICAT_APPLICATION_TEST_HPP
-#define PHYSICAT_APPLICATION_TEST_HPP
+#ifndef MEOWENGINE_APPLICATION_TEST_HPP
+#define MEOWENGINE_APPLICATION_TEST_HPP
 
 #include "thread"
 #include <string>
@@ -499,4 +499,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_APPLICATION_TEST_HPP
+#endif //MEOWENGINE_APPLICATION_TEST_HPP

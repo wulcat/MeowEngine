@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 22/10/24.
 //
 
-#ifndef PHYSICAT_WINDOW_HPP
-#define PHYSICAT_WINDOW_HPP
+#ifndef MEOWENGINE_WINDOW_HPP
+#define MEOWENGINE_WINDOW_HPP
 
 #include "sdl_wrapper.hpp"
 #include "log.hpp"
@@ -28,4 +28,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_WINDOW_HPP
+#endif //MEOWENGINE_WINDOW_HPP

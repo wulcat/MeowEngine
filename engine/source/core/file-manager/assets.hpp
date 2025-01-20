@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 11/09/22.
 //
 
-#ifndef PHYSICAT_ASSETS_HPP
-#define PHYSICAT_ASSETS_HPP
+#ifndef MEOWENGINE_ASSETS_HPP
+#define MEOWENGINE_ASSETS_HPP
 
 #include "mesh.hpp"
 #include <string>
@@ -15,4 +15,4 @@ namespace MeowEngine::assets {
     MeowEngine::Bitmap LoadBitmap(const std::string& path);
 } // namespace MeowEngine::assets;
 
-#endif //PHYSICAT_ASSETS_HPP
+#endif //MEOWENGINE_ASSETS_HPP

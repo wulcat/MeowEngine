@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 12/09/22.
 //
 
-#ifndef PHYSICAT_OPENGL_MESH_HPP
-#define PHYSICAT_OPENGL_MESH_HPP
+#ifndef MEOWENGINE_OPENGL_MESH_HPP
+#define MEOWENGINE_OPENGL_MESH_HPP
 
 #include "graphics_wrapper.hpp"
 #include "mesh.hpp"
@@ -26,4 +26,4 @@ namespace MeowEngine {
 } // namespace MeowEngine
 
 
-#endif //PHYSICAT_OPENGL_MESH_HPP
+#endif //MEOWENGINE_OPENGL_MESH_HPP

@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 14/07/24.
 //
 
-#ifndef PHYSICAT_IMGUI_DOCKER_SPACE_HPP
-#define PHYSICAT_IMGUI_DOCKER_SPACE_HPP
+#ifndef MEOWENGINE_IMGUI_DOCKER_SPACE_HPP
+#define MEOWENGINE_IMGUI_DOCKER_SPACE_HPP
 
 namespace MeowEngine::editor {
     struct ImGuiDockerSpace {
@@ -17,4 +17,4 @@ namespace MeowEngine::editor {
 }
 
 
-#endif //PHYSICAT_IMGUI_DOCKER_SPACE_HPP
+#endif //MEOWENGINE_IMGUI_DOCKER_SPACE_HPP

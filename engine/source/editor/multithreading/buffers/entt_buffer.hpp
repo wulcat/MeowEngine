@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 05/01/25.
 //
 
-#ifndef PHYSICAT_ENTT_BUFFER_HPP
-#define PHYSICAT_ENTT_BUFFER_HPP
+#ifndef MEOWENGINE_ENTT_BUFFER_HPP
+#define MEOWENGINE_ENTT_BUFFER_HPP
 
 #include "entt_wrapper.hpp"
 #include "double_buffer.hpp"
@@ -127,4 +127,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_ENTT_BUFFER_HPP
+#endif //MEOWENGINE_ENTT_BUFFER_HPP

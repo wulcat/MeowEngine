@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_ASSET_INVENTORY_HPP
-#define PHYSICAT_ASSET_INVENTORY_HPP
+#ifndef MEOWENGINE_ASSET_INVENTORY_HPP
+#define MEOWENGINE_ASSET_INVENTORY_HPP
 
 #pragma once
 
@@ -37,4 +37,4 @@ namespace MeowEngine::assets {
 }
 
 
-#endif //PHYSICAT_ASSET_INVENTORY_HPP
+#endif //MEOWENGINE_ASSET_INVENTORY_HPP

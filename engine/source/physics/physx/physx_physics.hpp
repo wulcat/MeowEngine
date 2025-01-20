@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 12/08/24.
 //
 
-#ifndef PHYSICAT_PHYSX_PHYSICS_HPP
-#define PHYSICAT_PHYSX_PHYSICS_HPP
+#ifndef MEOWENGINE_PHYSX_PHYSICS_HPP
+#define MEOWENGINE_PHYSX_PHYSICS_HPP
 
 
 
@@ -35,4 +35,4 @@ namespace MeowEngine::simulator {
     };
 }
 
-#endif //PHYSICAT_PHYSX_PHYSICS_HPP
+#endif //MEOWENGINE_PHYSX_PHYSICS_HPP

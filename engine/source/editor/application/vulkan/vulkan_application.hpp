@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#ifndef PHYSICAT_VULKAN_APPLICATION_HPP
-#define PHYSICAT_VULKAN_APPLICATION_HPP
+#ifndef MEOWENGINE_VULKAN_APPLICATION_HPP
+#define MEOWENGINE_VULKAN_APPLICATION_HPP
 
 
 class vulkan_application {
@@ -11,4 +11,4 @@ class vulkan_application {
 };
 
 
-#endif //PHYSICAT_VULKAN_APPLICATION_HPP
+#endif //MEOWENGINE_VULKAN_APPLICATION_HPP

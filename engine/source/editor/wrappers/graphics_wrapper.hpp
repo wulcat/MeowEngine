@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#ifndef PHYSICAT_GRAPHICS_WRAPPER_HPP
-#define PHYSICAT_GRAPHICS_WRAPPER_HPP
+#ifndef MEOWENGINE_GRAPHICS_WRAPPER_HPP
+#define MEOWENGINE_GRAPHICS_WRAPPER_HPP
 
 #pragma once
 
@@ -36,4 +36,4 @@ class graphics_wrapper {
 };
 
 
-#endif //PHYSICAT_GRAPHICS_WRAPPER_HPP
+#endif //MEOWENGINE_GRAPHICS_WRAPPER_HPP

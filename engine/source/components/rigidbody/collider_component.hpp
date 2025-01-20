@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 30/08/24.
 //
 
-#ifndef PHYSICAT_COLLIDER_COMPONENT_HPP
-#define PHYSICAT_COLLIDER_COMPONENT_HPP
+#ifndef MEOWENGINE_COLLIDER_COMPONENT_HPP
+#define MEOWENGINE_COLLIDER_COMPONENT_HPP
 
 #include <component_base.hpp>
 #include <transform3d_component.hpp>
@@ -29,4 +29,4 @@ namespace MeowEngine::entity {
 }
 
 
-#endif //PHYSICAT_COLLIDER_COMPONENT_HPP
+#endif //MEOWENGINE_COLLIDER_COMPONENT_HPP

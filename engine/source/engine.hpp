@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#ifndef PHYSICAT_ENGINE_HPP
-#define PHYSICAT_ENGINE_HPP
+#ifndef MEOWENGINE_ENGINE_HPP
+#define MEOWENGINE_ENGINE_HPP
 
 #pragma once
 
@@ -21,4 +21,4 @@ namespace MeowEngine {
     };
 } // namespace MeowEngine
 
-#endif //PHYSICAT_ENGINE_HPP
+#endif //MEOWENGINE_ENGINE_HPP

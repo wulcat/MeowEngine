@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 10/01/25.
 //
 
-#ifndef PHYSICAT_IMGUI_INPUT_EXTENSION_HPP
-#define PHYSICAT_IMGUI_INPUT_EXTENSION_HPP
+#ifndef MEOWENGINE_IMGUI_INPUT_EXTENSION_HPP
+#define MEOWENGINE_IMGUI_INPUT_EXTENSION_HPP
 
 #include "string"
 #include "reflection_property.hpp"
@@ -26,4 +26,4 @@ namespace MeowEngine {
     };
 }
 
-#endif //PHYSICAT_IMGUI_INPUT_EXTENSION_HPP
+#endif //MEOWENGINE_IMGUI_INPUT_EXTENSION_HPP

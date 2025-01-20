@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_SCENE_HPP
-#define PHYSICAT_SCENE_HPP
+#ifndef MEOWENGINE_SCENE_HPP
+#define MEOWENGINE_SCENE_HPP
 
 #include "asset_manager.hpp"
 #include "input_manager.hpp"
@@ -80,4 +80,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_SCENE_HPP
+#endif //MEOWENGINE_SCENE_HPP

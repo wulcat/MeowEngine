@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 03/07/24.
 //
 
-#ifndef PHYSICAT_TRANSFORM_COMPONENT_BASE_HPP
-#define PHYSICAT_TRANSFORM_COMPONENT_BASE_HPP
+#ifndef MEOWENGINE_TRANSFORM_COMPONENT_BASE_HPP
+#define MEOWENGINE_TRANSFORM_COMPONENT_BASE_HPP
 
 #include "component_base.hpp"
 #include "glm_wrapper.hpp"
@@ -20,4 +20,4 @@ class TransformComponentBase : public MeowEngine::entity::ComponentBase {
 }
 
 
-#endif //PHYSICAT_TRANSFORM_COMPONENT_BASE_HPP
+#endif //MEOWENGINE_TRANSFORM_COMPONENT_BASE_HPP

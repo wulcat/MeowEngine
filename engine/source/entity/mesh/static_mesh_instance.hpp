@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_STATIC_MESH_INSTANCE_HPP
-#define PHYSICAT_STATIC_MESH_INSTANCE_HPP
+#ifndef MEOWENGINE_STATIC_MESH_INSTANCE_HPP
+#define MEOWENGINE_STATIC_MESH_INSTANCE_HPP
 
 #include "asset_inventory.hpp"
 //#include "glm_wrapper.hpp"
@@ -29,4 +29,4 @@ namespace MeowEngine {
     };
 }
 
-#endif //PHYSICAT_STATIC_MESH_INSTANCE_HPP
+#endif //MEOWENGINE_STATIC_MESH_INSTANCE_HPP

@@ -2,9 +2,9 @@
 // Created by Akira Mujawar on 31/07/24.
 //
 
-#ifndef PHYSICAT_ENTT_WRAPPER_HPP
-#define PHYSICAT_ENTT_WRAPPER_HPP
+#ifndef MEOWENGINE_ENTT_WRAPPER_HPP
+#define MEOWENGINE_ENTT_WRAPPER_HPP
 
 #include <entt/entt.hpp>
 
-#endif //PHYSICAT_ENTT_WRAPPER_HPP
+#endif //MEOWENGINE_ENTT_WRAPPER_HPP

@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#ifndef PHYSICAT_OPENGL_APPLICATION_HPP
-#define PHYSICAT_OPENGL_APPLICATION_HPP
+#ifndef MEOWENGINE_OPENGL_APPLICATION_HPP
+#define MEOWENGINE_OPENGL_APPLICATION_HPP
 
 #include "internal_ptr.hpp"
 #include "application.hpp"
@@ -25,4 +25,4 @@ namespace MeowEngine {
     };
 } // namespace MeowEngine
 
-#endif //PHYSICAT_OPENGL_APPLICATION_HPP
+#endif //MEOWENGINE_OPENGL_APPLICATION_HPP

@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 10/07/24.
 //
 
-#ifndef PHYSICAT_OPENGL_FRAMEBUFFER_HPP
-#define PHYSICAT_OPENGL_FRAMEBUFFER_HPP
+#ifndef MEOWENGINE_OPENGL_FRAMEBUFFER_HPP
+#define MEOWENGINE_OPENGL_FRAMEBUFFER_HPP
 
 namespace MeowEngine::graphics {
     struct OpenGLFrameBuffer {
@@ -23,4 +23,4 @@ namespace MeowEngine::graphics {
 }
 
 
-#endif //PHYSICAT_OPENGL_FRAMEBUFFER_HPP
+#endif //MEOWENGINE_OPENGL_FRAMEBUFFER_HPP

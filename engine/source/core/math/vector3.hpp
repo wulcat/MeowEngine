@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 13/07/24.
 //
 
-#ifndef PHYSICAT_VECTOR3_HPP
-#define PHYSICAT_VECTOR3_HPP
+#ifndef MEOWENGINE_VECTOR3_HPP
+#define MEOWENGINE_VECTOR3_HPP
 
 namespace MeowEngine::math {
     struct Vector3 {
@@ -54,4 +54,4 @@ namespace MeowEngine::math {
 }
 
 
-#endif //PHYSICAT_VECTOR3_HPP
+#endif //MEOWENGINE_VECTOR3_HPP

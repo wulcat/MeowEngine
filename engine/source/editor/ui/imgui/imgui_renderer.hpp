@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/07/24.
 //
 
-#ifndef PHYSICAT_IMGUI_RENDERER_HPP
-#define PHYSICAT_IMGUI_RENDERER_HPP
+#ifndef MEOWENGINE_IMGUI_RENDERER_HPP
+#define MEOWENGINE_IMGUI_RENDERER_HPP
 
 //#include <scene.hpp>
 #include "opengl_framebuffer.hpp"
@@ -60,4 +60,4 @@ namespace MeowEngine::graphics {
 }
 
 
-#endif //PHYSICAT_IMGUI_RENDERER_HPP
+#endif //MEOWENGINE_IMGUI_RENDERER_HPP

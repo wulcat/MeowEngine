@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 23/06/24.
 //
 
-#ifndef PHYSICAT_LINE_RENDER_COMPONENT_HPP
-#define PHYSICAT_LINE_RENDER_COMPONENT_HPP
+#ifndef MEOWENGINE_LINE_RENDER_COMPONENT_HPP
+#define MEOWENGINE_LINE_RENDER_COMPONENT_HPP
 
 #include "render_component_base.hpp"
 
@@ -31,4 +31,4 @@ namespace MeowEngine::entity {
 }
 
 
-#endif //PHYSICAT_LINE_RENDER_COMPONENT_HPP
+#endif //MEOWENGINE_LINE_RENDER_COMPONENT_HPP

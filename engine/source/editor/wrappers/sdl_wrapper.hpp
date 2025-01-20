@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/22.
 //
 
-#ifndef PHYSICAT_SDL_WRAPPER_HPP
-#define PHYSICAT_SDL_WRAPPER_HPP
+#ifndef MEOWENGINE_SDL_WRAPPER_HPP
+#define MEOWENGINE_SDL_WRAPPER_HPP
 
 #pragma once
 
@@ -19,4 +19,4 @@ namespace MeowEngine::sdl {
     SDL_GLContext CreateContext(SDL_Window* window);
 }
 
-#endif //PHYSICAT_SDL_WRAPPER_HPP
+#endif //MEOWENGINE_SDL_WRAPPER_HPP

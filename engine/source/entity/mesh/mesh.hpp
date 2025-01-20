@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/09/22.
 //
 
-#ifndef PHYSICAT_MESH_HPP
-#define PHYSICAT_MESH_HPP
+#ifndef MEOWENGINE_MESH_HPP
+#define MEOWENGINE_MESH_HPP
 
 #include "internal_ptr.hpp"
 #include "vertex.hpp"
@@ -23,4 +23,4 @@ namespace MeowEngine {
 } // namespace MeowEngine
 
 
-#endif //PHYSICAT_MESH_HPP
+#endif //MEOWENGINE_MESH_HPP

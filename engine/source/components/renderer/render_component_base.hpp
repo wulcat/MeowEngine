@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 23/06/24.
 //
 
-#ifndef PHYSICAT_RENDER_COMPONENT_BASE_HPP
-#define PHYSICAT_RENDER_COMPONENT_BASE_HPP
+#ifndef MEOWENGINE_RENDER_COMPONENT_BASE_HPP
+#define MEOWENGINE_RENDER_COMPONENT_BASE_HPP
 
 #include "component_base.hpp"
 //#include <static_mesh_instance.hpp>
@@ -29,4 +29,4 @@ namespace MeowEngine::entity {
     };
 }
 
-#endif //PHYSICAT_RENDER_COMPONENT_BASE_HPP
+#endif //MEOWENGINE_RENDER_COMPONENT_BASE_HPP

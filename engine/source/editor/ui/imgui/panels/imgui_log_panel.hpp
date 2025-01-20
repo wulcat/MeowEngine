@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 14/07/24.
 //
 
-#ifndef PHYSICAT_IMGUI_LOG_PANEL_HPP
-#define PHYSICAT_IMGUI_LOG_PANEL_HPP
+#ifndef MEOWENGINE_IMGUI_LOG_PANEL_HPP
+#define MEOWENGINE_IMGUI_LOG_PANEL_HPP
 
 #include "imgui_wrapper.hpp"
 
@@ -21,4 +21,4 @@ namespace MeowEngine::editor {
 }
 
 
-#endif //PHYSICAT_IMGUI_LOG_PANEL_HPP
+#endif //MEOWENGINE_IMGUI_LOG_PANEL_HPP

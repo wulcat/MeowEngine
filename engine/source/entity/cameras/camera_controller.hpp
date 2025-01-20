@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 06/07/24.
 //
 
-#ifndef PHYSICAT_CAMERA_CONTROLLER_HPP
-#define PHYSICAT_CAMERA_CONTROLLER_HPP
+#ifndef MEOWENGINE_CAMERA_CONTROLLER_HPP
+#define MEOWENGINE_CAMERA_CONTROLLER_HPP
 
 #include "glm_wrapper.hpp"
 #include "internal_ptr.hpp"
@@ -32,4 +32,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_CAMERA_CONTROLLER_HPP
+#endif //MEOWENGINE_CAMERA_CONTROLLER_HPP

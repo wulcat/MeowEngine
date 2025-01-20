@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 01/08/24.
 //
 
-#ifndef PHYSICAT_LIFE_OBJECT_COMPONENT_HPP
-#define PHYSICAT_LIFE_OBJECT_COMPONENT_HPP
+#ifndef MEOWENGINE_LIFE_OBJECT_COMPONENT_HPP
+#define MEOWENGINE_LIFE_OBJECT_COMPONENT_HPP
 
 #include "pstring.hpp"
 
@@ -27,4 +27,4 @@ namespace MeowEngine::entity {
 }
 
 
-#endif //PHYSICAT_LIFE_OBJECT_COMPONENT_HPP
+#endif //MEOWENGINE_LIFE_OBJECT_COMPONENT_HPP

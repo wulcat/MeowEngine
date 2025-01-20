@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_ASSET_MANAGER_HPP
-#define PHYSICAT_ASSET_MANAGER_HPP
+#ifndef MEOWENGINE_ASSET_MANAGER_HPP
+#define MEOWENGINE_ASSET_MANAGER_HPP
 
 #include "asset_inventory.hpp"
 #include "vector"
@@ -17,4 +17,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_ASSET_MANAGER_HPP
+#endif //MEOWENGINE_ASSET_MANAGER_HPP

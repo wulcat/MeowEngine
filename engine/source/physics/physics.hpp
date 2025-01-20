@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 12/08/24.
 //
 
-#ifndef PHYSICAT_PHYSICS_HPP
-#define PHYSICAT_PHYSICS_HPP
+#ifndef MEOWENGINE_PHYSICS_HPP
+#define MEOWENGINE_PHYSICS_HPP
 
 #include <transform3d_component.hpp>
 #include <rigidbody_component.hpp>
@@ -21,4 +21,4 @@ namespace MeowEngine::simulator {
 }
 
 
-#endif //PHYSICAT_PHYSICS_HPP
+#endif //MEOWENGINE_PHYSICS_HPP

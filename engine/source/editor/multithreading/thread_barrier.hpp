@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 27/10/24.
 //
 
-#ifndef PHYSICAT_THREAD_BARRIER_HPP
-#define PHYSICAT_THREAD_BARRIER_HPP
+#ifndef MEOWENGINE_THREAD_BARRIER_HPP
+#define MEOWENGINE_THREAD_BARRIER_HPP
 
 #include "mutex"
 #include "thread"
@@ -73,4 +73,4 @@ private:
 };
 
 
-#endif //PHYSICAT_THREAD_BARRIER_HPP
+#endif //MEOWENGINE_THREAD_BARRIER_HPP

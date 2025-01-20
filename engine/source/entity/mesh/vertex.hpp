@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/09/22.
 //
 
-#ifndef PHYSICAT_VERTEX_HPP
-#define PHYSICAT_VERTEX_HPP
+#ifndef MEOWENGINE_VERTEX_HPP
+#define MEOWENGINE_VERTEX_HPP
 
 #include "glm_wrapper.hpp"
 
@@ -33,4 +33,4 @@ namespace std {
     };
 }
 
-#endif //PHYSICAT_VERTEX_HPP
+#endif //MEOWENGINE_VERTEX_HPP

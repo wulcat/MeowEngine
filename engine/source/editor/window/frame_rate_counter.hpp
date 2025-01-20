@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 18/08/24.
 //
 
-#ifndef PHYSICAT_FPS_COUNTER_HPP
-#define PHYSICAT_FPS_COUNTER_HPP
+#ifndef MEOWENGINE_FPS_COUNTER_HPP
+#define MEOWENGINE_FPS_COUNTER_HPP
 
 #include "vector"
 #include "sdl_wrapper.hpp"
@@ -75,4 +75,4 @@ private:
 };
 
 
-#endif //PHYSICAT_FPS_COUNTER_HPP
+#endif //MEOWENGINE_FPS_COUNTER_HPP

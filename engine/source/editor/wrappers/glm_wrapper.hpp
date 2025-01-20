@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/09/22.
 //
 
-#ifndef PHYSICAT_GLM_WRAPPER_HPP
-#define PHYSICAT_GLM_WRAPPER_HPP
+#ifndef MEOWENGINE_GLM_WRAPPER_HPP
+#define MEOWENGINE_GLM_WRAPPER_HPP
 
 #pragma once
 
@@ -16,4 +16,4 @@
 #include <glm/gtx/hash.hpp>
 
 
-#endif //PHYSICAT_GLM_WRAPPER_HPP
+#endif //MEOWENGINE_GLM_WRAPPER_HPP

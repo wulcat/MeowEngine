@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 20/06/24.
 //
 
-#ifndef PHYSICAT_OPENGL_TEXTURE_HPP
-#define PHYSICAT_OPENGL_TEXTURE_HPP
+#ifndef MEOWENGINE_OPENGL_TEXTURE_HPP
+#define MEOWENGINE_OPENGL_TEXTURE_HPP
 
 #pragma once
 
@@ -23,4 +23,4 @@ namespace MeowEngine {
     };
 }
 
-#endif //PHYSICAT_OPENGL_TEXTURE_HPP
+#endif //MEOWENGINE_OPENGL_TEXTURE_HPP

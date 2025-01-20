@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_OPENGL_RENDERER_HPP
-#define PHYSICAT_OPENGL_RENDERER_HPP
+#ifndef MEOWENGINE_OPENGL_RENDERER_HPP
+#define MEOWENGINE_OPENGL_RENDERER_HPP
 
 #include "internal_ptr.hpp"
 #include "renderer.hpp"
@@ -28,4 +28,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_OPENGL_RENDERER_HPP
+#endif //MEOWENGINE_OPENGL_RENDERER_HPP

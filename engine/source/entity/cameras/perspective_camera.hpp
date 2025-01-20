@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 12/09/22.
 //
 
-#ifndef PHYSICAT_PERSPECTIVE_CAMERA_HPP
-#define PHYSICAT_PERSPECTIVE_CAMERA_HPP
+#ifndef MEOWENGINE_PERSPECTIVE_CAMERA_HPP
+#define MEOWENGINE_PERSPECTIVE_CAMERA_HPP
 
 #include "../wrappers/glm_wrapper.hpp"
 #include "internal_ptr.hpp"
@@ -26,4 +26,4 @@ namespace MeowEngine {
 } // namespace MeowEngine
 
 
-#endif //PHYSICAT_PERSPECTIVE_CAMERA_HPP
+#endif //MEOWENGINE_PERSPECTIVE_CAMERA_HPP

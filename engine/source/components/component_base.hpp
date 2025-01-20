@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 23/06/24.
 //
 
-#ifndef PHYSICAT_COMPONENT_BASE_HPP
-#define PHYSICAT_COMPONENT_BASE_HPP
+#ifndef MEOWENGINE_COMPONENT_BASE_HPP
+#define MEOWENGINE_COMPONENT_BASE_HPP
 
 namespace MeowEngine::entity {
     class ComponentBase {
@@ -12,4 +12,4 @@ namespace MeowEngine::entity {
 }
 
 
-#endif //PHYSICAT_COMPONENT_BASE_HPP
+#endif //MEOWENGINE_COMPONENT_BASE_HPP

@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 13/07/24.
 //
 
-#ifndef PHYSICAT_IMGUI_EDIT_PANEL_HPP
-#define PHYSICAT_IMGUI_EDIT_PANEL_HPP
+#ifndef MEOWENGINE_IMGUI_EDIT_PANEL_HPP
+#define MEOWENGINE_IMGUI_EDIT_PANEL_HPP
 
 #include "math_wrapper.hpp"
 //#include "scene.hpp"
@@ -24,4 +24,4 @@ namespace MeowEngine::graphics::ui {
 }
 
 
-#endif //PHYSICAT_IMGUI_EDIT_PANEL_HPP
+#endif //MEOWENGINE_IMGUI_EDIT_PANEL_HPP

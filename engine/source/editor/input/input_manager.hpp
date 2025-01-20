@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 10/07/24.
 //
 
-#ifndef PHYSICAT_INPUT_MANAGER_HPP
-#define PHYSICAT_INPUT_MANAGER_HPP
+#ifndef MEOWENGINE_INPUT_MANAGER_HPP
+#define MEOWENGINE_INPUT_MANAGER_HPP
 
 #include <cstdint>
 
@@ -22,4 +22,4 @@ namespace MeowEngine::input {
 }
 
 
-#endif //PHYSICAT_INPUT_MANAGER_HPP
+#endif //MEOWENGINE_INPUT_MANAGER_HPP

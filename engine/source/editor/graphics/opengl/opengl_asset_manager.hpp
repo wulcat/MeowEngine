@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#ifndef PHYSICAT_OPENGL_ASSET_MANAGER_HPP
-#define PHYSICAT_OPENGL_ASSET_MANAGER_HPP
+#ifndef MEOWENGINE_OPENGL_ASSET_MANAGER_HPP
+#define MEOWENGINE_OPENGL_ASSET_MANAGER_HPP
 
 #include "asset_manager.hpp"
 #include "internal_ptr.hpp"
@@ -35,4 +35,4 @@ namespace MeowEngine {
     };
 }
 
-#endif //PHYSICAT_OPENGL_ASSET_MANAGER_HPP
+#endif //MEOWENGINE_OPENGL_ASSET_MANAGER_HPP

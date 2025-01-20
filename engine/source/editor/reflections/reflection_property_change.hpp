@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 11/01/25.
 //
 
-#ifndef PHYSICAT_REFLECTION_PROPERTY_CHANGE_HPP
-#define PHYSICAT_REFLECTION_PROPERTY_CHANGE_HPP
+#ifndef MEOWENGINE_REFLECTION_PROPERTY_CHANGE_HPP
+#define MEOWENGINE_REFLECTION_PROPERTY_CHANGE_HPP
 
 #include "entt_wrapper.hpp"
 #include "reflection_property.hpp"
@@ -31,4 +31,4 @@ namespace MeowEngine {
     };
 }
 
-#endif //PHYSICAT_REFLECTION_PROPERTY_CHANGE_HPP
+#endif //MEOWENGINE_REFLECTION_PROPERTY_CHANGE_HPP

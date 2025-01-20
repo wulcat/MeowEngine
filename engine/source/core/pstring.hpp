@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 09/01/25.
 //
 
-#ifndef PHYSICAT_PSTRING_HPP
-#define PHYSICAT_PSTRING_HPP
+#ifndef MEOWENGINE_PSTRING_HPP
+#define MEOWENGINE_PSTRING_HPP
 
 #include "string"
 
@@ -29,4 +29,4 @@ namespace MeowEngine {
     };
 }
 
-#endif //PHYSICAT_PSTRING_HPP
+#endif //MEOWENGINE_PSTRING_HPP

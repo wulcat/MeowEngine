@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/01/25.
 //
 
-#ifndef PHYSICAT_ENTT_REFLECTION_HPP
-#define PHYSICAT_ENTT_REFLECTION_HPP
+#ifndef MEOWENGINE_ENTT_REFLECTION_HPP
+#define MEOWENGINE_ENTT_REFLECTION_HPP
 
 #include "unordered_map"
 #include "entt_wrapper.hpp"
@@ -71,4 +71,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_ENTT_REFLECTION_HPP
+#endif //MEOWENGINE_ENTT_REFLECTION_HPP

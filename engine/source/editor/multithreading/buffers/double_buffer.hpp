@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 29/10/24.
 //
 
-#ifndef PHYSICAT_BUFFER_HPP
-#define PHYSICAT_BUFFER_HPP
+#ifndef MEOWENGINE_BUFFER_HPP
+#define MEOWENGINE_BUFFER_HPP
 
 #include "utility"
 #include "tracy_wrapper.hpp"
@@ -37,4 +37,4 @@ namespace MeowEngine {
 }
 
 
-#endif //PHYSICAT_BUFFER_HPP
+#endif //MEOWENGINE_BUFFER_HPP
