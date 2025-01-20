@@ -46,8 +46,6 @@ struct MainScene::Internal {
     MeowEngine::CameraController CameraController;
 
     EnttBuffer RegistryBuffer;
-    std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
-    moodycamel::ConcurrentQueue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
 
     // User Input Events
     const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
@@ -98,12 +96,11 @@ struct MainScene::Internal {
     }
 
     void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) {
-        RegistryBuffer.CreateInStaging();
-        RegistryBuffer.AddInStaging(inPhysics);
+        RegistryBuffer.ApplyAddRemoveOnStaging(inPhysics);
     }
 
     void CreateSceneOnMainThread() {
-        auto entity = RegistryBuffer.Create();
+        auto entity = RegistryBuffer.AddEntity();
         RegistryBuffer.AddComponent<entity::LifeObjectComponent>(entity, "torus");
         RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                 entity,
@@ -122,7 +119,7 @@ struct MainScene::Internal {
                 }
         );
 
-        const auto cubeEntity = RegistryBuffer.Create();
+        const auto cubeEntity = RegistryBuffer.AddEntity();
         RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity, "cube");
         RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                 cubeEntity,
@@ -149,7 +146,7 @@ struct MainScene::Internal {
             cubeEntity
         );
 
-        const auto cubeEntity1 = RegistryBuffer.Create();
+        const auto cubeEntity1 = RegistryBuffer.AddEntity();
         RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity1, "cube1");
         RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                 cubeEntity1,
@@ -179,7 +176,7 @@ struct MainScene::Internal {
         // setup object
         // later query for all rigidbody, get the physx, get the collider and construct for physics
 
-        const auto gridEntity = RegistryBuffer.Create();
+        const auto gridEntity = RegistryBuffer.AddEntity();
         RegistryBuffer.AddComponent<entity::LifeObjectComponent>(gridEntity, "grid");
         RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                 gridEntity,
@@ -207,7 +204,7 @@ struct MainScene::Internal {
         }
 
         if(inputManager.isMouseDown && (inputManager.mouseState & SDL_BUTTON_RMASK)) {
-            const auto cubeEntity = RegistryBuffer.Create();
+            const auto cubeEntity = RegistryBuffer.AddEntity();
             RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeEntity, "cube");
             RegistryBuffer.AddComponent<entity::Transform3DComponent>(
                     cubeEntity,
@@ -325,7 +322,7 @@ struct MainScene::Internal {
     }
 
     void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) {
-        renderer.RenderUI(RegistryBuffer.GetFinal(), UiInputPropertyChangesQueue , frameBufferId, fps);
+        renderer.RenderUI(RegistryBuffer.GetFinal(), RegistryBuffer.GetPropertyChangeQueue() , frameBufferId, fps);
     }
 
     void SwapMainAndRenderBufferOnMainThread() {
@@ -382,15 +379,7 @@ struct MainScene::Internal {
 
         // Apply UI inputs to render and main buffers
         // Push UI inputs for physics buffer (which gets processed in physics thread)
-        while(!UiInputPropertyChangesQueue.empty()) {
-            std::shared_ptr<MeowEngine::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
-
-            MeowEngine::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetCurrent());
-            MeowEngine::Reflection.ApplyPropertyChange(*change.get(), RegistryBuffer.GetFinal());
-
-            PhysicsUiInputPropertyChangesQueue.enqueue(change);
-            UiInputPropertyChangesQueue.pop();
-        }
+        RegistryBuffer.ApplyPropertyChange();
     }
 
     void SyncPhysicsBufferOnPhysicsThread() {
@@ -405,14 +394,7 @@ struct MainScene::Internal {
         }
 
         // Apply UI inputs to physics components
-        std::shared_ptr<MeowEngine::ReflectionPropertyChange> change;
-        while(PhysicsUiInputPropertyChangesQueue.try_dequeue(change)) {
-            if(view.contains(static_cast<entt::entity>(change->EntityId))) {
-                MeowEngine::Reflection.ApplyPropertyChange(*change, RegistryBuffer.GetStaging());
-                auto [transform, rigidbody] = view.get<entity::Transform3DComponent, entity::RigidbodyComponent>(static_cast<entt::entity>(change->EntityId));
-                rigidbody.OverrideTransform(transform);
-            }
-        }
+        RegistryBuffer.ApplyPropertyChangeOnStaging();
     }
 };
 

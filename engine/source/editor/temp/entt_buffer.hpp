@@ -14,7 +14,7 @@
 #include <transform3d_component.hpp>
 #include <rigidbody_component.hpp>
 #include <collider_component.hpp>
-
+#include "reflection_property_change.hpp"
 #include "physics.hpp"
 
 using namespace std;
@@ -24,9 +24,10 @@ namespace MeowEngine {
     public:
         EnttBuffer();
 
-        entt::entity Create();
-
         entt::registry& GetStaging();
+        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& GetPropertyChangeQueue();
+
+        entt::entity AddEntity();
 
         template<typename ComponentType, typename... Args>
         void AddComponent(entt::entity& inEntity, Args &&...inArgs);
@@ -34,39 +35,58 @@ namespace MeowEngine {
         template<typename ComponentType, typename... Args>
         void AddComponent(const entt::entity& inEntity, Args &&...inArgs);
 
-        void CreateInStaging() {
-            entt::entity entity;
-            while(StagingCreation.try_dequeue(entity)) {
-//                entt::entity entity = StagingCreation.front();
-                Staging.create(entity);
+        /**
+         * Add / Remove entities & components on staging buffer which are queued from main thread
+         * @param inPhysics
+         */
+        void ApplyAddRemoveOnStaging(MeowEngine::simulator::Physics* inPhysics);
 
-//                StagingCreation.pop();
-            }
-        }
-        void AddInStaging(MeowEngine::simulator::Physics* inPhysics) {
-//            do {
-                std::function<void(MeowEngine::simulator::Physics*)> method;
-                while(Test.try_dequeue(method)) {
-                    method(inPhysics);
+        /**
+         * Any queued property value changes are applied to current(main) & final(render) buffers.
+         * Further we queue them for staging(physics)
+         */
+        void ApplyPropertyChange();
 
-
-                }
-//            } while(true);
-
-
-//            while(!Test.empty()) {
-//                Test.front()();
-//                Test.pop();
-//            }
-        }
+        /**
+         * Any queued property value changes are applied to staging(physics) buffers.
+         */
+        void ApplyPropertyChangeOnStaging();
 
     protected:
+        /**
+         * Add / Remove entities from staging (physics) buffer
+         */
+        void AddEntitiesOnStaging();
+
+        /**
+         * Add / Remove components from staging (physics) buffer
+         * @param inPhysics
+         */
+        void AddComponentsOnStaging(MeowEngine::simulator::Physics* inPhysics);
+
         entt::registry Staging;
 
+        /**
+         * When a property value is changed on Render (ui) we queue in this list
+         */
+        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
+
     private:
-        moodycamel::ConcurrentQueue<entt::entity> StagingCreation;
-        moodycamel::ConcurrentQueue<std::function<void(MeowEngine::simulator::Physics*)>> Test;
-//        std::queue<std::function<void()>> TestM;
+        /**
+         * When a entity is added on main thread, we queue it and add it async on physics thread
+         */
+        moodycamel::ConcurrentQueue<entt::entity> EntityToAddOnStagingQueue;
+
+        /**
+         * When a component is added from main thread, we queue it as a method with args
+         * and add it async on physics thread
+         */
+        moodycamel::ConcurrentQueue<std::function<void(MeowEngine::simulator::Physics*)>> ComponentToAddOnStagingQueue;
+
+        /**
+         * Any queued property value changes are applied to staging(physics) buffer
+         */
+        moodycamel::ConcurrentQueue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
     };
 
     template<typename Type, typename... Args>
@@ -74,40 +94,30 @@ namespace MeowEngine {
         Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 
-        Test.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
+        ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
                 Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
-
-//                auto [transform, collider, rigidbody] =  Staging.get<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity);
-//                if(transform != nullptr)
-
             }, inArgTuple);
 
             if(Staging.all_of<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity)) {
                 auto [transform, collider, rigidbody] =  Staging.get<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity);
                 inPhysics->AddRigidbody(transform, collider, rigidbody);
             }
-//            Staging.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         });
-//        TestM.push([=]() {
-////            auto testddd = std::forward<Args>(inArgs)...;
-//            Staging.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
-//        });
+
     }
 
     template<typename Type, typename... Args>
     void MeowEngine::EnttBuffer::AddComponent(const entt::entity &inEntity, Args &&... inArgs) {
         Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
-//        Staging.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 
-        Test.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
+        ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
                 Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
             }, inArgTuple);
-//            Staging.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
             if(Staging.all_of<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity)) {
                 auto [transform, collider, rigidbody] =  Staging.get<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity);
                 inPhysics->AddRigidbody(transform, collider, rigidbody);
