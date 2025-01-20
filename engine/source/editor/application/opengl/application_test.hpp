@@ -21,7 +21,7 @@
 #include "main_scene.hpp"
 #include "physx_physics.hpp"
 #include <frame_rate_counter.hpp>
-#include "window.hpp"
+#include "sdl_window.hpp"
 #include "SDL_image.h"
 #include "thread_barrier.hpp"
 #include "queue"
@@ -59,7 +59,7 @@ namespace MeowEngine {
             ProcessThreadBarrier = std::make_shared<ThreadBarrier>(2);
             SwapBufferThreadBarrier = std::make_shared<ThreadBarrier>(2);
 
-            WindowContext = std::make_unique<MeowEngine::Window>();
+            WindowContext = std::make_unique<MeowEngine::SDLWindow>();
             AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
             UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
             Renderer = std::make_unique<MeowEngine::OpenGLRenderer>(AssetManager, UI);
@@ -409,7 +409,7 @@ namespace MeowEngine {
         // render ----------------
         std::thread RenderThread;
         // we decouple window / context into a class
-        std::unique_ptr<MeowEngine::Window> WindowContext;
+        std::unique_ptr<MeowEngine::SDLWindow> WindowContext;
         std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
         std::unique_ptr<MeowEngine::OpenGLRenderer> Renderer;
         std::unique_ptr<MeowEngine::graphics::OpenGLFrameBuffer> FrameBuffer;

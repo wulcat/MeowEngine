@@ -9,16 +9,16 @@
 #include "log.hpp"
 
 namespace MeowEngine {
-    struct Window {
+    struct SDLWindow {
         SDL_Window* window;
         SDL_GLContext context;
 
-        Window()
+        SDLWindow()
         : window(MeowEngine::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)),
           context(MeowEngine::sdl::CreateContext(window))
         {}
 
-        ~Window()
+        ~SDLWindow()
         {
             MeowEngine::Log("Window", "Destroyed");
             SDL_GL_DeleteContext(context);
