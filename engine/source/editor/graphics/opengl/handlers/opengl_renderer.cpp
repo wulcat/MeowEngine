@@ -62,7 +62,7 @@ struct OpenGLRenderer::Internal {
 //        }
 //    }
 
-    void Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry)
+    void RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry)
     {
 //        auto view = registry.view<MeowEngine::core::component::Transform3DComponent>();
 //        for(auto entity: view)
@@ -99,7 +99,7 @@ struct OpenGLRenderer::Internal {
         }
     }
 
-    void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+    void RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
         UI.get()->Render(registry, inUIInputQueue, frameBufferId, fps);
     }
 };
@@ -109,10 +109,10 @@ OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<MeowEngine::OpenGLAssetMana
     : InternalPointer(MeowEngine::make_internal_ptr<Internal>(assetManager, uiRenderer)) {}
 
 
-void OpenGLRenderer::Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
-    InternalPointer->Render(cameraObject, registry);
+void OpenGLRenderer::RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
+    InternalPointer->RenderGameView(cameraObject, registry);
 }
 
-void OpenGLRenderer::RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
-    InternalPointer->RenderUI(registry, inUIInputQueue, frameBufferId, fps);
+void OpenGLRenderer::RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+    InternalPointer->RenderUserInterface(registry, inUIInputQueue, frameBufferId, fps);
 }

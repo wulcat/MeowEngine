@@ -318,11 +318,11 @@ struct MainScene::Internal {
 //        for(auto& lifeObject : LifeObjects) {
 //            renderer.Render(&Camera, &lifeObject);
 //        }
-        renderer.Render(&Camera, RegistryBuffer.GetFinal());
+        renderer.RenderGameView(&Camera, RegistryBuffer.GetFinal());
     }
 
     void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) {
-        renderer.RenderUI(RegistryBuffer.GetFinal(), RegistryBuffer.GetPropertyChangeQueue() , frameBufferId, fps);
+        renderer.RenderUserInterface(RegistryBuffer.GetFinal(), RegistryBuffer.GetPropertyChangeQueue() , frameBufferId, fps);
     }
 
     void SwapMainAndRenderBufferOnMainThread() {

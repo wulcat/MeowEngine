@@ -14,8 +14,8 @@
 
 namespace MeowEngine {
     struct Renderer {
-        virtual void Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) = 0;
-        virtual void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) = 0;
+        virtual void RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) = 0;
+        virtual void RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) = 0;
     };
 }
 

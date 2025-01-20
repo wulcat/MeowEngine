@@ -18,8 +18,8 @@ namespace MeowEngine {
         OpenGLRenderer(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
                        const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer);
 
-        void Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) override;
-        void RenderUI(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
+        void RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) override;
+        void RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
 
     private:
         struct Internal;
