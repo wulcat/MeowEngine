@@ -24,7 +24,7 @@
 #include "entt_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
 
-#include "physx_physics.hpp"
+#include "physx_physics_system.hpp"
 
 using MeowEngine::MainScene;
 

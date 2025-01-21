@@ -7,8 +7,8 @@
 
 #include "asset_manager.hpp"
 #include "input_manager.hpp"
-#include "renderer.hpp"
-#include "physics.hpp"
+#include "render_system.hpp"
+#include "physics_system.hpp"
 
 namespace MeowEngine {
     struct Scene {
