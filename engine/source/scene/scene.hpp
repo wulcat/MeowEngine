@@ -44,8 +44,8 @@ namespace MeowEngine {
 
         // -----------------------------
 
-        virtual void RenderGameView(MeowEngine::Renderer& renderer) = 0;
-        virtual void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) = 0;
+        virtual void RenderGameView(MeowEngine::RenderSystem& renderer) = 0;
+        virtual void RenderUserInterface(MeowEngine::RenderSystem& renderer, unsigned int frameBufferId, const double fps) = 0;
 
         // -----------------------------
 

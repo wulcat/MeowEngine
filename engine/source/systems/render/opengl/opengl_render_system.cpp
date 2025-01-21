@@ -10,13 +10,13 @@
 #include "opengl_grid_pipeline.hpp"
 
 
-using MeowEngine::OpenGLRenderer;
+using MeowEngine::OpenGLRenderSystem;
 
 using namespace MeowEngine::pipeline;
 using namespace MeowEngine::entity;
 using MeowEngine::assets::ShaderPipelineType;
 
-struct OpenGLRenderer::Internal {
+struct OpenGLRenderSystem::Internal {
     const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
     const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
 
@@ -104,15 +104,15 @@ struct OpenGLRenderer::Internal {
     }
 };
 
-OpenGLRenderer::OpenGLRenderer(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
-                               const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer)
+OpenGLRenderSystem::OpenGLRenderSystem(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
+                                       const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer)
     : InternalPointer(MeowEngine::make_internal_ptr<Internal>(assetManager, uiRenderer)) {}
 
 
-void OpenGLRenderer::RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
+void OpenGLRenderSystem::RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
     InternalPointer->RenderGameView(cameraObject, registry);
 }
 
-void OpenGLRenderer::RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+void OpenGLRenderSystem::RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUserInterface(registry, inUIInputQueue, frameBufferId, fps);
 }

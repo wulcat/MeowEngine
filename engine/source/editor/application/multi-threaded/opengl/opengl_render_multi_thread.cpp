@@ -11,7 +11,7 @@ namespace MeowEngine {
         WindowContext = std::make_unique<MeowEngine::SDLWindow>();
         AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
         UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
-        Renderer = std::make_unique<MeowEngine::OpenGLRenderer>(AssetManager, UI);
+        Renderer = std::make_unique<MeowEngine::OpenGLRenderSystem>(AssetManager, UI);
         FrameBuffer = std::make_unique<MeowEngine::graphics::OpenGLFrameBuffer>(1000,500);
         RenderThreadFrameRate = std::make_unique<FrameRateCounter>(60, 100);
     }

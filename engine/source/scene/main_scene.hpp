@@ -21,8 +21,8 @@ namespace MeowEngine {
         void Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) override;
 
         void Update(const float& deltaTime) override;
-        void RenderGameView(MeowEngine::Renderer& renderer) override;
-        void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) override;
+        void RenderGameView(MeowEngine::RenderSystem& renderer) override;
+        void RenderUserInterface(MeowEngine::RenderSystem& renderer, unsigned int frameBufferId, const double fps) override;
         void SwapMainAndRenderBufferOnMainThread() override;
 //        void CalculateDeltaData() override;
         void SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) override;

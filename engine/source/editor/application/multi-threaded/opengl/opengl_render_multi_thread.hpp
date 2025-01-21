@@ -35,7 +35,7 @@ namespace MeowEngine {
         // we decouple window / context into a class
         std::unique_ptr<MeowEngine::SDLWindow> WindowContext;
         std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
-        std::unique_ptr<MeowEngine::OpenGLRenderer> Renderer;
+        std::unique_ptr<MeowEngine::OpenGLRenderSystem> Renderer;
         std::unique_ptr<MeowEngine::graphics::OpenGLFrameBuffer> FrameBuffer;
         // this is shared because even main thread will access asset manager and sometimes physics
         // but render thread will access this all the time

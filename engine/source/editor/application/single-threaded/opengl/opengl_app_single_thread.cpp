@@ -85,11 +85,11 @@ namespace {
         return std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
     }
 
-    MeowEngine::OpenGLRenderer CreateRenderer(std::shared_ptr<MeowEngine::OpenGLAssetManager> assetManager) {
+    MeowEngine::OpenGLRenderSystem CreateRenderer(std::shared_ptr<MeowEngine::OpenGLAssetManager> assetManager) {
         SDL_GLContext test;
         std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> test1;
         test1 = make_shared<MeowEngine::graphics::ImGuiRenderer>(nullptr, test);
-        return MeowEngine::OpenGLRenderer(assetManager, test1);
+        return MeowEngine::OpenGLRenderSystem(assetManager, test1);
     }
 
     MeowEngine::graphics::ImGuiRenderer CreateUI(SDL_Window* window, SDL_GLContext& context) {
@@ -122,7 +122,7 @@ struct OpenGLApplication::Internal {
     MeowEngine::input::InputManager InputManager;
 
     const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
-    MeowEngine::OpenGLRenderer Renderer;
+    MeowEngine::OpenGLRenderSystem Renderer;
     std::unique_ptr<MeowEngine::Scene> Scene;
     std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
 

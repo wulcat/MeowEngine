@@ -313,7 +313,7 @@ struct MainScene::Internal {
 //        }
     }
 
-    void RenderGameView(MeowEngine::Renderer& renderer) {
+    void RenderGameView(MeowEngine::RenderSystem& renderer) {
         // This is important for now - we can come to this later for optimization
         // Current goal is to have full control on render as individual objects
         // as we will have elements like UI, Static Meshes, Post Processing, Camera Culling, Editor Tools
@@ -323,7 +323,7 @@ struct MainScene::Internal {
         renderer.RenderGameView(&Camera, RegistryBuffer.GetFinal());
     }
 
-    void RenderUserInterface(MeowEngine::Renderer& renderer, unsigned int frameBufferId, const double fps) {
+    void RenderUserInterface(MeowEngine::RenderSystem& renderer, unsigned int frameBufferId, const double fps) {
         renderer.RenderUserInterface(RegistryBuffer.GetFinal(), RegistryBuffer.GetPropertyChangeQueue() , frameBufferId, fps);
     }
 
@@ -426,11 +426,11 @@ void MainScene::Update(const float &deltaTime) {
     InternalPointer->Update(deltaTime);
 }
 
-void MainScene::RenderGameView(MeowEngine::Renderer &renderer) {
+void MainScene::RenderGameView(MeowEngine::RenderSystem &renderer) {
     InternalPointer->RenderGameView(renderer);
 }
 
-void MainScene::RenderUserInterface(MeowEngine::Renderer &renderer, unsigned int frameBufferId, const double fps) {
+void MainScene::RenderUserInterface(MeowEngine::RenderSystem &renderer, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUserInterface(renderer, frameBufferId, fps);
 }
 
