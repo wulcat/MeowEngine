@@ -9,8 +9,8 @@
 #include "application.hpp"
 
 namespace MeowEngine {
-    struct OpenGLApplication : public MeowEngine::Application {
-        OpenGLApplication();
+    struct OpenGLAppSingleThread : public MeowEngine::Application {
+        OpenGLAppSingleThread();
 
 //        void OnWindowResized() override;
 

@@ -19,7 +19,7 @@
 #include <frame_rate_counter.hpp>
 #include <string>
 
-using MeowEngine::OpenGLApplication;
+using MeowEngine::OpenGLAppSingleThread;
 
 namespace {
 //    void UpdateViewport(SDL_Window* window) {
@@ -114,7 +114,7 @@ namespace {
 
 } // namespace
 
-struct OpenGLApplication::Internal {
+struct OpenGLAppSingleThread::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
     MeowEngine::graphics::ImGuiRenderer UI;
@@ -302,7 +302,7 @@ struct OpenGLApplication::Internal {
     }
 };
 
-OpenGLApplication::OpenGLApplication() :
+OpenGLAppSingleThread::OpenGLAppSingleThread() :
         InternalPointer(MeowEngine::make_internal_ptr<Internal>())
 {
 //    IsRunning = true; IsApplicationRunning
@@ -313,19 +313,19 @@ OpenGLApplication::OpenGLApplication() :
 //    InternalPointer->OnWindowResized();
 //}
 
-bool OpenGLApplication::Input(const float& deltaTime) {
+bool OpenGLAppSingleThread::Input(const float& deltaTime) {
     return InternalPointer->Input(deltaTime);
 }
 
-void OpenGLApplication::FixedUpdate(const float& inFixedDeltaTime) {
+void OpenGLAppSingleThread::FixedUpdate(const float& inFixedDeltaTime) {
     InternalPointer->FixedUpdate(inFixedDeltaTime);
 }
 
-void OpenGLApplication::Update(const float &deltaTime) {
+void OpenGLAppSingleThread::Update(const float &deltaTime) {
     InternalPointer->Update(deltaTime);
 }
 
-void OpenGLApplication::Render() {
+void OpenGLAppSingleThread::Render() {
     InternalPointer->Render();
 }
 
