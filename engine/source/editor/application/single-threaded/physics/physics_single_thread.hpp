@@ -7,7 +7,7 @@
 
 namespace MeowEngine {
 
-    class physx_physics {
+    class PhysicsSingleThread {
 
     };
 

@@ -3,11 +3,10 @@
 //
 
 #include "opengl_render_multi_thread.hpp"
-#include "opengl_application.hpp"
-#include "application_test.hpp"
+#include "opengl_app_multi_thread.hpp"
 
 namespace MeowEngine {
-    OpenGLRenderThread::OpenGLRenderThread() {
+    OpenGLRenderMultiThread::OpenGLRenderMultiThread() {
         MeowEngine::Log("Render", "Creating Object");
         WindowContext = std::make_unique<MeowEngine::SDLWindow>();
         AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
@@ -17,7 +16,7 @@ namespace MeowEngine {
         RenderThreadFrameRate = std::make_unique<FrameRateCounter>(60, 100);
     }
 
-    OpenGLRenderThread::~OpenGLRenderThread() {
+    OpenGLRenderMultiThread::~OpenGLRenderMultiThread() {
         AssetManager.reset();
         FrameBuffer.reset();
         UI.reset();
@@ -25,15 +24,15 @@ namespace MeowEngine {
         WindowContext.reset();
     }
 
-    void OpenGLRenderThread::StartThread(MeowEngine::ApplicationTest& inApplication) {
+    void OpenGLRenderMultiThread::StartThread(MeowEngine::OpenGLAppMultiThread& inApplication) {
         MeowEngine::Log("Render", "Starting Thread");
-        RenderThread = std::thread(&MeowEngine::OpenGLRenderThread::RenderThreadLoop, this, std::ref(inApplication));
+        RenderThread = std::thread(&MeowEngine::OpenGLRenderMultiThread::RenderThreadLoop, this, std::ref(inApplication));
     }
-    void OpenGLRenderThread::EndThread() {
+    void OpenGLRenderMultiThread::EndThread() {
         RenderThread.join();
     }
 
-    void OpenGLRenderThread::RenderThreadLoop(ApplicationTest& inApplication) {
+    void OpenGLRenderMultiThread::RenderThreadLoop(OpenGLAppMultiThread& inApplication) {
 
         // init
         MeowEngine::Log("Render Thread", "Started");
@@ -116,7 +115,7 @@ namespace MeowEngine {
         inApplication.WaitForThreadEndCondition.notify_all();
     }
 
-    void OpenGLRenderThread::Render(ApplicationTest& inApplication) {
+    void OpenGLRenderMultiThread::Render(OpenGLAppMultiThread& inApplication) {
         PT_PROFILE_SCOPE_N("setting current");
         // We let opengl know that any after this will be drawn into custom frame buffer
         {

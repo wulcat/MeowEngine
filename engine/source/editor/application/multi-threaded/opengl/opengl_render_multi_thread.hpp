@@ -17,18 +17,18 @@
 using namespace std;
 
 namespace MeowEngine {
-    class ApplicationTest;
+    class OpenGLAppMultiThread;
 
-    class OpenGLRenderThread {
+    class OpenGLRenderMultiThread {
     public:
-        OpenGLRenderThread();
-        ~OpenGLRenderThread();
+        OpenGLRenderMultiThread();
+        ~OpenGLRenderMultiThread();
 
-        void StartThread(MeowEngine::ApplicationTest& inApplication);
+        void StartThread(MeowEngine::OpenGLAppMultiThread& inApplication);
         void EndThread();
 
-        void RenderThreadLoop(ApplicationTest& inApplication);
-        void Render(ApplicationTest& inApplication);
+        void RenderThreadLoop(OpenGLAppMultiThread& inApplication);
+        void Render(OpenGLAppMultiThread& inApplication);
 
         std::unique_ptr<FrameRateCounter> RenderThreadFrameRate;
         std::thread RenderThread;

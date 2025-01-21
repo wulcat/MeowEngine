@@ -3,21 +3,21 @@
 //
 
 #include "physics_multi_thread.hpp"
-#include "application_test.hpp"
+#include "opengl_app_multi_thread.hpp"
 
 using namespace std;
 
 namespace MeowEngine {
 
-    void OpenGLPhysicsThread::StartThread(MeowEngine::ApplicationTest& inApplication) {
+    void PhysicsMultiThread::StartThread(MeowEngine::OpenGLAppMultiThread& inApplication) {
 
-        PhysicsThread = std::thread(&MeowEngine::OpenGLPhysicsThread::PhysicsThreadLoop, this, std::ref(inApplication));
+        PhysicsThread = std::thread(&MeowEngine::PhysicsMultiThread::PhysicsThreadLoop, this, std::ref(inApplication));
     }
-    void OpenGLPhysicsThread::EndThread() {
+    void PhysicsMultiThread::EndThread() {
         PhysicsThread.join();
     }
 
-    void OpenGLPhysicsThread::PhysicsThreadLoop(MeowEngine::ApplicationTest& inApplication) {
+    void PhysicsMultiThread::PhysicsThreadLoop(MeowEngine::OpenGLAppMultiThread& inApplication) {
         MeowEngine::Log("Physics Thread", "Started");
 
 

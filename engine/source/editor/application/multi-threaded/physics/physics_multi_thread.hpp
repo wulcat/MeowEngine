@@ -13,15 +13,16 @@
 //#include "application_test.hpp"
 
 namespace MeowEngine {
-    class ApplicationTest;
-    class OpenGLPhysicsThread {
+    class OpenGLAppMultiThread;
+
+    class PhysicsMultiThread {
     public:
-        OpenGLPhysicsThread() {
+        PhysicsMultiThread() {
             Physics = std::make_shared<MeowEngine::simulator::PhysXPhysics>();
             PhysicsThreadFrameRate = std::make_unique<FrameRateCounter>(50, 1); // per 0.02 sec
         }
 
-        ~OpenGLPhysicsThread() {
+        ~PhysicsMultiThread() {
             Physics.reset();
             PhysicsThreadFrameRate.reset();
         }
@@ -30,10 +31,10 @@ namespace MeowEngine {
         std::shared_ptr<MeowEngine::simulator::Physics> Physics;
         std::unique_ptr<FrameRateCounter> PhysicsThreadFrameRate;
 
-        void StartThread(MeowEngine::ApplicationTest& inApplication);
+        void StartThread(MeowEngine::OpenGLAppMultiThread& inApplication);
         void EndThread();
 
-        void PhysicsThreadLoop(MeowEngine::ApplicationTest& inApplication);
+        void PhysicsThreadLoop(MeowEngine::OpenGLAppMultiThread& inApplication);
 //        void FixedUpdate(const float& inFixedDeltaTime) {
 //            Scene->AddEntitiesOnPhysicsThread(Physics.get());
 //            Physics->Update(inFixedDeltaTime);
