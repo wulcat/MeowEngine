@@ -18,10 +18,14 @@ with modern technologies and architectural concepts.
 <img src="screenshots/engine_v3.gif" width="700">
 
 ## Compatibility 
-- [x] Unix Console on Mac
-- [x] Mac (x84) (Rosetta)
-- [ ] Windows
-- [x] Web
+
+| System            | Support |
+|-------------------|---------|
+| Unix              | Yes     |
+| Mac (x84) Rosetta | Yes     |
+| Web               | On Hold |
+| Window            | No      |
+
 
 > [!NOTE]
 > Currently `PhysX` is non-compilable for web. `Web builds` are on halt.
