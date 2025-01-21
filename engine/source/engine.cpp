@@ -4,9 +4,7 @@
 
 #include "engine.hpp"
 
-//#include "application.hpp"
-//#include "opengl_application.hpp"
-#include "application_test.hpp"
+#include "opengl_app_multi_thread.hpp"
 
 #include "log.hpp"
 #include "sdl_wrapper.hpp"
@@ -42,14 +40,13 @@ struct Engine::Internal {
     }
 
     // we are using unique_ptr smart pointer as a return value so it will self destruct upon leaving its containing scope
-    std::unique_ptr<MeowEngine::ApplicationTest> ResolveApplication() {
+    std::unique_ptr<MeowEngine::OpenGLAppMultiThread> ResolveApplication() {
         PT_PROFILE_SCOPE;
         static const std::string logTag{classLogTag + "resolving Application"};
 
         try {
-            MeowEngine::Log(logTag, "Creating OpenGL Application...");
-//            return std::make_unique<MeowEngine::OpenGLApplication>();
-            return std::make_unique<MeowEngine::ApplicationTest>();
+            MeowEngine::Log(logTag, "Creating OpenGL Multi Threaded Application...");
+            return std::make_unique<MeowEngine::OpenGLAppMultiThread>();
         }
         catch (const std::exception& error) {
             MeowEngine::Log(logTag, "OpenGL Application failed to initialized.", error);
