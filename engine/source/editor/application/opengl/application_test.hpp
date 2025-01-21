@@ -19,7 +19,7 @@
 #include "opengl_asset_manager.hpp"
 #include "input_manager.hpp"
 #include "main_scene.hpp"
-#include "physx_physics.hpp"
+
 #include <frame_rate_counter.hpp>
 #include "sdl_window.hpp"
 #include "SDL_image.h"
@@ -27,14 +27,17 @@
 #include "queue"
 #include "double_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
-//#include "entt_reflection.hpp"
+
+
+#include "opengl_physics_thread.hpp"
+#include "opengl_render_thread.hpp"
+
 
 using namespace std;
 
 namespace MeowEngine {
-//    extern MeowEngine::EnttReflection ReflectionTest;
 
-    struct ApplicationTest {
+    class ApplicationTest {
     public:
         ApplicationTest() {}
         virtual ~ApplicationTest() {}
@@ -59,43 +62,28 @@ namespace MeowEngine {
             ProcessThreadBarrier = std::make_shared<ThreadBarrier>(2);
             SwapBufferThreadBarrier = std::make_shared<ThreadBarrier>(2);
 
-            WindowContext = std::make_unique<MeowEngine::SDLWindow>();
-            AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
-            UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
-            Renderer = std::make_unique<MeowEngine::OpenGLRenderer>(AssetManager, UI);
+            RenderThread = std::make_unique<MeowEngine::OpenGLRenderThread>();
+            PhysicThread = std::make_unique<MeowEngine::OpenGLPhysicsThread>();
 
-            FrameBuffer = std::make_unique<MeowEngine::graphics::OpenGLFrameBuffer>(1000,500);
             InputManager = std::make_unique<MeowEngine::input::InputManager>();
-            Physics = std::make_shared<MeowEngine::simulator::PhysXPhysics>();
 
-            Scene = std::make_shared<MeowEngine::MainScene>(MeowEngine::sdl::GetWindowSize(WindowContext->window));
+            Scene = std::make_shared<MeowEngine::MainScene>(MeowEngine::sdl::GetWindowSize(RenderThread->WindowContext->window));
 
             // NOTE: Clearing context in main thread before using for render thread fixes a crash
             // which occurs while drag window
-            SDL_GL_MakeCurrent(WindowContext->window, nullptr);
+            SDL_GL_MakeCurrent(RenderThread->WindowContext->window, nullptr);
 
             MainThreadFrameRate = std::make_unique<FrameRateCounter>(60, 1); // 60 frames per second
-            RenderThreadFrameRate = std::make_unique<FrameRateCounter>(60, 100);
-            PhysicsThreadFrameRate = std::make_unique<FrameRateCounter>(50, 1); // per 0.02 sec
 
-            // create threads and start keep infinite thread
-            RenderThread = std::thread(&MeowEngine::ApplicationTest::RenderThreadLoop, this);
-            PhysicsThread = std::thread(&MeowEngine::ApplicationTest::PhysicsThreadLoop, this);
+            RenderThread->StartThread(*this);
+            PhysicThread->StartThread(*this);
+
             MainThreadLoop();
 
-            // stop threads
-            RenderThread.join();
-            PhysicsThread.join();
+            RenderThread->EndThread();
+            PhysicThread->EndThread();
 
-            Physics.reset();
             InputManager.reset();
-
-            AssetManager.reset();
-
-            FrameBuffer.reset();
-            UI.reset();
-            Renderer.reset();
-            WindowContext.reset();
 
             MeowEngine::Log("Application", "Ended");
 #endif
@@ -114,6 +102,10 @@ namespace MeowEngine {
         std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
 
         MeowEngine::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = MeowEngine::DoubleBuffer<std::queue<SDL_Event>>();
+
+        std::unique_ptr<MeowEngine::OpenGLPhysicsThread> PhysicThread;
+        std::unique_ptr<MeowEngine::OpenGLRenderThread> RenderThread;
+
 
         void MainThreadLoop() {
             // init
@@ -211,121 +203,6 @@ namespace MeowEngine {
             MeowEngine::Log("Main Thread", "Ended");
         }
 
-        std::unique_ptr<FrameRateCounter> RenderThreadFrameRate;
-
-        void RenderThreadLoop() {
-
-            // init
-            MeowEngine::Log("Render Thread", "Started");
-            ThreadCount++;
-
-            SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
-            Scene->LoadOnRenderThread(AssetManager);
-
-            // loop
-            while (IsApplicationRunning) {
-//                Uint64 currentTime = SDL_GetPerformanceCounter();
-                RenderThreadFrameRate->Calculate();
-
-                PT_PROFILE_SCOPE;
-                // Synchronize with the main thread
-                // input
-                while(!InputBuffer.GetFinal().empty()) {
-                    SDL_Event event = InputBuffer.GetFinal().front();
-                    InputBuffer.GetFinal().pop();
-
-                    UI->Input(event);
-
-                    switch (event.type) {
-                        case SDL_USEREVENT:
-                            switch (event.user.code) {
-                                case 2: {
-                                    const WindowSize size = *(WindowSize *) event.user.data1;
-
-                                    glViewport(0, 0, size.Width, size.Height);
-                                    FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
-                                    MeowEngine::Log("Render Thread", "rescale userevent");
-                                    break;
-                                }
-                            }
-                    }
-                }
-
-                // Clear frame
-                //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                // Issue OpenGL draw calls
-
-                Render();
-
-                {
-                    PT_PROFILE_SCOPE_N("Swapping GL Buffer");
-                    // Swap buffers
-                    SDL_GL_SwapWindow(WindowContext->window);
-                }
-// Frame timing logic
-
-//                RenderThreadFrameRate->LockFrameRate();
-//                MeowEngine::Log("Frequency", ((int)SDL_GetPerformanceFrequency()) * 0.001f);
-
-                // renderring & swapping buffer again gives consistent frames - look into it more for stability
-//                Render();
-//
-//                {
-//                    PT_PROFILE_SCOPE_N("Swapping GL Buffer");
-//                    // Swap buffers
-//                    SDL_GL_SwapWindow(WindowContext->window);
-//                }
-                // MeowEngine::Log("Render Thread", "Waiting for other threads to finish processing");
-                // wait for all threads to sync up for frame ending
-                ProcessThreadBarrier.get()->Wait();
-
-                // MeowEngine::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
-                // wait until buffers are synced on main thread
-                SwapBufferThreadBarrier.get()->Wait();
-
-
-//                RenderThreadFrameRate.End();
-            }
-
-            // exit
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            ThreadCount--;
-
-            MeowEngine::Log("Render Thread", "Ended");
-            WaitForThreadEndCondition.notify_all();
-        }
-
-        std::thread PhysicsThread;
-        std::shared_ptr<MeowEngine::simulator::Physics> Physics;
-        std::unique_ptr<FrameRateCounter> PhysicsThreadFrameRate;
-
-        void PhysicsThreadLoop() {
-            MeowEngine::Log("Physics Thread", "Started");
-
-
-            ThreadCount++;
-            Physics->Create();
-
-
-            while(IsApplicationRunning)
-            {
-                PhysicsThreadFrameRate->Calculate();
-
-                PT_PROFILE_SCOPE;
-                FixedUpdate(PhysicsThreadFrameRate->DeltaTime);
-
-                PhysicsThreadFrameRate->LockFrameRate();
-//                std::this_thread::sleep_for(std::chrono::milliseconds(20));
-            }
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            ThreadCount--;
-
-            MeowEngine::Log("Physics Thread", "Ended");
-            WaitForThreadEndCondition.notify_all();
-        }
-
         // main thread ----------------
 
         std::unique_ptr<MeowEngine::input::InputManager> InputManager;
@@ -362,13 +239,13 @@ namespace MeowEngine {
 
                         // If we get a quit signal, we will return that we don't want to keep looping.
                     case SDL_QUIT:
-                        UI->ClosePIDs();
+                        RenderThread->UI->ClosePIDs();
                         return false;
 
                     case SDL_KEYDOWN:
                         // If we get a key down event for the ESC key, we also don't want to keep looping.
                         if (event.key.keysym.sym == SDLK_ESCAPE) {
-                            UI->ClosePIDs();
+                            RenderThread->UI->ClosePIDs();
                             return false;
                         }
                         break;
@@ -406,95 +283,6 @@ namespace MeowEngine {
             Scene->Update(deltaTime);
         };
 
-        // render ----------------
-        std::thread RenderThread;
-        // we decouple window / context into a class
-        std::unique_ptr<MeowEngine::SDLWindow> WindowContext;
-        std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
-        std::unique_ptr<MeowEngine::OpenGLRenderer> Renderer;
-        std::unique_ptr<MeowEngine::graphics::OpenGLFrameBuffer> FrameBuffer;
-        // this is shared because even main thread will access asset manager and sometimes physics
-        // but render thread will access this all the time
-        std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
-
-
-        void Render() {
-
-
-
-            PT_PROFILE_SCOPE_N("setting current");
-            // We let opengl know that any after this will be drawn into custom frame buffer
-            {
-                PT_PROFILE_SCOPE_N("framebuffer");
-                FrameBuffer->Bind();
-
-                {
-                    PT_PROFILE_SCOPE_N("scene render");
-                    glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
-                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                    Scene->RenderGameView(*Renderer);
-
-                    FrameBuffer->Unbind();
-                }
-            }
-
-            glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            {
-                PT_PROFILE_SCOPE_N("UI render");
-//                MeowEngine::Log("Frame Rate: ", static_cast<int>(RenderThreadFrameRate.GetFrameRate()));
-                Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
-            }
-
-//                {
-//                    PT_PROFILE_SCOPE_N("waiting");
-
-//                    // Frame timing logic
-//                    Uint64 frameEndTime = SDL_GetPerformanceCounter();
-//                    double frameDuration = (double) (frameEndTime - currentTime) / frequency;
-//
-//                    while (frameDuration < targetFrameTime) {
-//                        frameEndTime = SDL_GetPerformanceCounter();
-//                        frameDuration = (double) (frameEndTime - currentTime) / frequency;
-//                    }
-//
-//                    previousTime = frameEndTime;
-//                }
-//                {
-//                    FpsCounter.frameEnd();
-//                    PT_PROFILE_SCOPE_N("swap");
-//                    SDL_GL_SwapWindow(Window);
-
-//                // Manual Frame Synchronization --
-//                // Insert a fence sync object at the end of the previous frame's commands
-//                GLsync sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-//                // Wait until the fence is signaled, meaning the previous frame is done
-//                GLenum result = glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GLuint64(1e9)); // Timeout in nanoseconds
-//
-//                // Optionally handle the result to check if it timed out or was successful
-//                if (result == GL_WAIT_FAILED) {
-//                    // Handle the error
-//                }
-//
-//                // Clean up the sync object after use
-//                glDeleteSync(sync);
-//                 -- end
-//                }
-        };
-
-        // physics thread ----------------
-
-        void FixedUpdate(const float& inFixedDeltaTime) {
-            Scene->AddEntitiesOnPhysicsThread(Physics.get());
-            Physics->Update(inFixedDeltaTime);
-
-            if(SyncPhysicMutex.try_lock()) {
-                Scene->SyncPhysicsBufferOnPhysicsThread();
-                SyncPhysicMutex.unlock();
-            }
-        };
     };
 }
 

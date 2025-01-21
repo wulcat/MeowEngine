@@ -55,7 +55,9 @@ struct MainScene::Internal {
         , CameraController({glm::vec3(0.0f, 2.0f , -10.0f)})
         , KeyboardState(SDL_GetKeyboardState(nullptr))
         , RegistryBuffer()
-    {}
+    {
+        MeowEngine::Log("MainScene", "Scene Created");
+    }
 
     void OnWindowResized(const MeowEngine::WindowSize& size) {
         Camera = ::CreateCamera(size);
