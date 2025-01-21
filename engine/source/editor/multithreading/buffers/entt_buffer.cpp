@@ -25,7 +25,7 @@ entt::entity MeowEngine::EnttBuffer::AddEntity() {
     return entity;
 }
 
-void MeowEngine::EnttBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::Physics* inPhysics) {
+void MeowEngine::EnttBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     AddEntitiesOnStaging();
     AddComponentsOnStaging(inPhysics);
 }
@@ -38,9 +38,9 @@ void MeowEngine::EnttBuffer::AddEntitiesOnStaging() {
     }
 }
 
-void MeowEngine::EnttBuffer::AddComponentsOnStaging(MeowEngine::simulator::Physics* inPhysics) {
+void MeowEngine::EnttBuffer::AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     // Adds components with dynamic data parameter passed down from main thread
-    std::function<void(MeowEngine::simulator::Physics*)> method;
+    std::function<void(MeowEngine::simulator::PhysicsSystem*)> method;
     while(ComponentToAddOnStagingQueue.try_dequeue(method)) {
         method(inPhysics);
     }

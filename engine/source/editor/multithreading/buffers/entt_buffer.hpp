@@ -15,7 +15,7 @@
 #include <rigidbody_component.hpp>
 #include <collider_component.hpp>
 #include "reflection_property_change.hpp"
-#include "physics.hpp"
+#include "physics_system.hpp"
 
 using namespace std;
 
@@ -39,7 +39,7 @@ namespace MeowEngine {
          * Add / Remove entities & components on staging buffer which are queued from main thread
          * @param inPhysics
          */
-        void ApplyAddRemoveOnStaging(MeowEngine::simulator::Physics* inPhysics);
+        void ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics);
 
         /**
          * Any queued property value changes are applied to current(main) & final(render) buffers.
@@ -62,7 +62,7 @@ namespace MeowEngine {
          * Add / Remove components from staging (physics) buffer
          * @param inPhysics
          */
-        void AddComponentsOnStaging(MeowEngine::simulator::Physics* inPhysics);
+        void AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics);
 
         entt::registry Staging;
 
@@ -81,7 +81,7 @@ namespace MeowEngine {
          * When a component is added from main thread, we queue it as a method with args
          * and add it async on physics thread
          */
-        moodycamel::ConcurrentQueue<std::function<void(MeowEngine::simulator::Physics*)>> ComponentToAddOnStagingQueue;
+        moodycamel::ConcurrentQueue<std::function<void(MeowEngine::simulator::PhysicsSystem*)>> ComponentToAddOnStagingQueue;
 
         /**
          * Any queued property value changes are applied to staging(physics) buffer
@@ -94,7 +94,7 @@ namespace MeowEngine {
         Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 
-        ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
+        ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::PhysicsSystem* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
                 Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
@@ -113,7 +113,7 @@ namespace MeowEngine {
         Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
         Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
 
-        ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::Physics* inPhysics) {
+        ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::PhysicsSystem* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
                 Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);

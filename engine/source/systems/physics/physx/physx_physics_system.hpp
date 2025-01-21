@@ -12,9 +12,9 @@
 
 
 namespace MeowEngine::simulator {
-    struct PhysXPhysics : MeowEngine::simulator::Physics {
-        PhysXPhysics();
-        ~PhysXPhysics();
+    struct PhysXPhysicsSystem : MeowEngine::simulator::PhysicsSystem {
+        PhysXPhysicsSystem();
+        ~PhysXPhysicsSystem();
 
         void Create() override;
         void Update(float inFixedDeltaTime) override;

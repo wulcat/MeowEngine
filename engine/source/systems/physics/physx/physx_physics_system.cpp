@@ -5,7 +5,7 @@
 #include <log.hpp>
 #include "physx_physics_system.hpp"
 
-MeowEngine::simulator::PhysXPhysics::PhysXPhysics() {
+MeowEngine::simulator::PhysXPhysicsSystem::PhysXPhysicsSystem() {
     gFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gAllocator, gErrorCallback);
     gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, physx::PxTolerancesScale(), true, nullptr);
 
@@ -20,7 +20,7 @@ MeowEngine::simulator::PhysXPhysics::PhysXPhysics() {
     MeowEngine::Log("Physics", "Constructed");
 }
 
-MeowEngine::simulator::PhysXPhysics::~PhysXPhysics() {
+MeowEngine::simulator::PhysXPhysicsSystem::~PhysXPhysicsSystem() {
     gScene->release();
     gPhysics->release();
     gFoundation->release();
@@ -28,7 +28,7 @@ MeowEngine::simulator::PhysXPhysics::~PhysXPhysics() {
     MeowEngine::Log("Physics", "Destructed");
 }
 
-void MeowEngine::simulator::PhysXPhysics::Create() {
+void MeowEngine::simulator::PhysXPhysicsSystem::Create() {
 
 
     physx::PxRigidStatic* groundPlane = physx::PxCreatePlane(*gPhysics, physx::PxPlane(0,1,0,0), *gPhysics->createMaterial(0.0f, 0.0f, 0.6f));
@@ -49,7 +49,7 @@ void MeowEngine::simulator::PhysXPhysics::Create() {
 //    gScene->removeActor(*body);
 }
 
-void MeowEngine::simulator::PhysXPhysics::Update(float inFixedDeltaTime) {
+void MeowEngine::simulator::PhysXPhysicsSystem::Update(float inFixedDeltaTime) {
   //  for(int i = 0 ;i < 1000; ++i)
   //  {
 
@@ -59,9 +59,9 @@ void MeowEngine::simulator::PhysXPhysics::Update(float inFixedDeltaTime) {
   //  }
 }
 
-void MeowEngine::simulator::PhysXPhysics::AddRigidbody(entity::Transform3DComponent &transform,
-                                                     entity::ColliderComponent &collider,
-                                                     entity::RigidbodyComponent &rigidbody) {
+void MeowEngine::simulator::PhysXPhysicsSystem::AddRigidbody(entity::Transform3DComponent &transform,
+                                                             entity::ColliderComponent &collider,
+                                                             entity::RigidbodyComponent &rigidbody) {
 
     physx::PxTransform physicsTransform(physx::PxVec3(transform.Position.X,transform.Position.Y,transform.Position.Z));
     physx::PxReal density = 1.0f;

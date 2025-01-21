@@ -97,7 +97,7 @@ struct MainScene::Internal {
         REGISTER_ENTT_COMPONENT(MeshRenderComponent);
     }
 
-    void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) {
+    void AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
         RegistryBuffer.ApplyAddRemoveOnStaging(inPhysics);
     }
 
@@ -414,7 +414,7 @@ void MainScene::CreateSceneOnMainThread() {
     InternalPointer->CreateSceneOnMainThread();
 }
 
-void MainScene::AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) {
+void MainScene::AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     InternalPointer->AddEntitiesOnPhysicsThread(inPhysics);
 }
 

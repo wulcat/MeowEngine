@@ -32,7 +32,7 @@ namespace MeowEngine {
          * and adds to staging(physics) buffer
          * @param inPhysics
          */
-        virtual void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) = 0;
+        virtual void AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) = 0;
 
         // -----------------------------
 

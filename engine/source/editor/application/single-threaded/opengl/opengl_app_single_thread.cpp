@@ -96,11 +96,11 @@ namespace {
         return MeowEngine::graphics::ImGuiRenderer(window, context);
     }
 
-    std::shared_ptr<MeowEngine::simulator::Physics> CreatePhysics() {
-        return std::make_shared<MeowEngine::simulator::PhysXPhysics>();
+    std::shared_ptr<MeowEngine::simulator::PhysicsSystem> CreatePhysics() {
+        return std::make_shared<MeowEngine::simulator::PhysXPhysicsSystem>();
     }
 
-    std::unique_ptr<MeowEngine::Scene> CreateMainScene(SDL_Window* window, MeowEngine::OpenGLAssetManager& assetManager, MeowEngine::simulator::Physics& inPhysics) {
+    std::unique_ptr<MeowEngine::Scene> CreateMainScene(SDL_Window* window, MeowEngine::OpenGLAssetManager& assetManager, MeowEngine::simulator::PhysicsSystem& inPhysics) {
         std::unique_ptr<MeowEngine::MainScene> mainScene {
             std::make_unique<MeowEngine::MainScene>(
                 MeowEngine::sdl::GetWindowSize(window)
@@ -124,7 +124,7 @@ struct OpenGLApplication::Internal {
     const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
     MeowEngine::OpenGLRenderer Renderer;
     std::unique_ptr<MeowEngine::Scene> Scene;
-    std::shared_ptr<MeowEngine::simulator::Physics> Physics;
+    std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
 
     Internal() : Window(MeowEngine::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
                  Context(CreateContext(Window)),

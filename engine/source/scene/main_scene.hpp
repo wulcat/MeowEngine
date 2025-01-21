@@ -17,7 +17,7 @@ namespace MeowEngine {
 
         virtual void LoadOnRenderThread(std::shared_ptr<MeowEngine::AssetManager> assetManager) override;
         void CreateSceneOnMainThread() override;
-        void AddEntitiesOnPhysicsThread(MeowEngine::simulator::Physics* inPhysics) override;
+        void AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) override;
         void Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) override;
 
         void Update(const float& deltaTime) override;

@@ -18,7 +18,7 @@ namespace MeowEngine {
     class PhysicsMultiThread {
     public:
         PhysicsMultiThread() {
-            Physics = std::make_shared<MeowEngine::simulator::PhysXPhysics>();
+            Physics = std::make_shared<MeowEngine::simulator::PhysXPhysicsSystem>();
             PhysicsThreadFrameRate = std::make_unique<FrameRateCounter>(50, 1); // per 0.02 sec
         }
 
@@ -28,7 +28,7 @@ namespace MeowEngine {
         }
 
         std::thread PhysicsThread;
-        std::shared_ptr<MeowEngine::simulator::Physics> Physics;
+        std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
         std::unique_ptr<FrameRateCounter> PhysicsThreadFrameRate;
 
         void StartThread(MeowEngine::OpenGLAppMultiThread& inApplication);

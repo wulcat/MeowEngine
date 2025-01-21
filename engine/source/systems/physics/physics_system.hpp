@@ -12,7 +12,7 @@
 using namespace MeowEngine::entity;
 
 namespace MeowEngine::simulator {
-    struct Physics {
+    struct PhysicsSystem {
         virtual void Create() = 0;
         virtual void Update(float inFixedDeltaTime) = 0;
 

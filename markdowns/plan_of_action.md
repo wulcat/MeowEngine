@@ -18,7 +18,7 @@
 - [x] Add FPS Counter
 - [x] Implementing PhysX (left handed or right handed)
 - [x] Multithreading for rendering and update loop
-- [x] Thread for Physics
+- [x] Thread for PhysicsSystem
 - [x] Adding reflections for dynamic UI
 - [x] Adding property changes to track UI updates
 - [x] Creating objects in runtime (on start/end of main thread)
