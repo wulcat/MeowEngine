@@ -19,12 +19,12 @@ with modern technologies and architectural concepts.
 
 ## Compatibility 
 
-| System            | Support |
-|-------------------|---------|
-| Unix              | Yes     |
-| Mac (x84) Rosetta | Yes     |
-| Web               | On Hold |
-| Window            | No      |
+| System            | Support            |
+|-------------------|--------------------|
+| Unix              | :white_check_mark: |
+| Mac (x84) Rosetta | :construction:     |
+| Web               | :construction:     |
+| Window            | :soon:             |
 
 
 > [!NOTE]
