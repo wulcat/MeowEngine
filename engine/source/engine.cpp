@@ -36,7 +36,7 @@ struct Engine::Internal {
 
 //        MeowEngine::Log(logTag, "SDL2_image initialized (supports png)");
 
-        ResolveApplication()->StartApplication();
+        ResolveApplication()->CreateApplication();
     }
 
     // we are using unique_ptr smart pointer as a return value so it will self destruct upon leaving its containing scope

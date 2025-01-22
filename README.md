@@ -7,6 +7,7 @@
   - Profiling tools for debugging and performance tracking.
   - Editor tools
   - Physics simulations
+  - Multi-platform builds
   - [Next plan of action...](markdowns/plan_of_action.md)
 
 The ultimate goal of Meow Engine is to delve deep into the 
@@ -19,7 +20,7 @@ with modern technologies and architectural concepts.
 
 ## Compatibility 
 
-| System            | Support            |
+| Platform          | Support            |
 |-------------------|--------------------|
 | Unix              | :white_check_mark: |
 | Mac (x84) Rosetta | :construction:     |
