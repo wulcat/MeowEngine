@@ -41,13 +41,13 @@ namespace MeowEngine {
 
         // init
         MeowEngine::Log("Render Thread", "Started");
-        SharedState.ThreadCount++;
+        SharedState.ActiveWaitThread.GetAtomic()++;
 
         SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
         Scene->LoadOnRenderThread(AssetManager);
 
         // loop
-        while (SharedState.IsApplicationRunning) {
+        while (SharedState.IsAppRunning) {
 //                Uint64 currentTime = SDL_GetPerformanceCounter();
             RenderThreadFrameRate->Calculate();
 
@@ -114,10 +114,11 @@ namespace MeowEngine {
 
         // exit
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        SharedState.ThreadCount--;
+
+        SharedState.ActiveWaitThread.GetAtomicAndNotify().Get()--;
 
         MeowEngine::Log("Render Thread", "Ended");
-        SharedState.WaitForThreadEndCondition.notify_all();
+
     }
 
     void OpenGLRenderMultiThread::Render() {

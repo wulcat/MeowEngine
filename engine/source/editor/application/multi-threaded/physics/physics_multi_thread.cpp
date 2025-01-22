@@ -23,12 +23,11 @@ namespace MeowEngine {
     void PhysicsMultiThread::PhysicsThreadLoop() {
         MeowEngine::Log("Physics Thread", "Started");
 
-
-        SharedState.ThreadCount++;
+        SharedState.ActiveWaitThread.GetAtomic()++;
         Physics->Create();
 
 
-        while(SharedState.IsApplicationRunning) {
+        while(SharedState.IsAppRunning) {
             PT_PROFILE_SCOPE;
 
             PhysicsThreadFrameRate->Calculate();
@@ -45,10 +44,10 @@ namespace MeowEngine {
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        SharedState.ThreadCount--;
+
+        SharedState.ActiveWaitThread.GetAtomicAndNotify().Get()--;
 
         MeowEngine::Log("Physics Thread", "Ended");
-        SharedState.WaitForThreadEndCondition.notify_all();
     }
 
 

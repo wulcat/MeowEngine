@@ -17,7 +17,7 @@ namespace MeowEngine {
     void OpenGLAppMultiThread::CreateApplication() {
 
 //        State = new MeowEngine::OpenGLSharedState();
-        SharedState.IsApplicationRunning = true;
+        SharedState.IsAppRunning = true;
 
 #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
@@ -85,7 +85,7 @@ namespace MeowEngine {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
         // loop
-        while (SharedState.IsApplicationRunning) {
+        while (SharedState.IsAppRunning) {
             MainThreadFrameRate->Calculate();
 
             PT_PROFILE_SCOPE;
@@ -100,7 +100,7 @@ namespace MeowEngine {
 
             if (!Input(MainThreadFrameRate->DeltaTime)) {
                 PT_PROFILE_SCOPE_N("Main Thread Ending");
-                SharedState.IsApplicationRunning = false;
+                SharedState.IsAppRunning = false;
 
                 // if threads are waiting for thread sync we unpause them
                 SharedState.ProcessThreadBarrier->End();
@@ -157,8 +157,9 @@ namespace MeowEngine {
 
         MeowEngine::Log("Main Thread", "Waiting for other threads to end");
 
-        std::unique_lock<std::mutex> lock(SharedState.WaitForThreadEndMutex);
-        SharedState.WaitForThreadEndCondition.wait(lock, [this] { return SharedState.ThreadCount == 0; });
+        SharedState.ActiveWaitThread.Wait([&](int inActiveThreads){
+            return inActiveThreads == 0;
+        });
 
         MeowEngine::Log("Main Thread", "Ended");
     }

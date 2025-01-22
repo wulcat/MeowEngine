@@ -11,8 +11,10 @@
 #include "double_buffer.hpp"
 #include "queue"
 #include "thread_barrier.hpp"
+#include "thread_wait.hpp"
 
 #include "sdl_wrapper.hpp"
+
 
 namespace MeowEngine {
 
@@ -20,13 +22,9 @@ namespace MeowEngine {
         SharedThreadState();
         ~SharedThreadState();
 
-        std::atomic<bool> IsApplicationRunning;
-        std::atomic<int> ThreadCount; //
-
-        std::condition_variable WaitForThreadEndCondition; //
-
-        std::mutex WaitForThreadEndMutex;
-
+        std::atomic<bool> IsAppRunning;
+        MeowEngine::ThreadWait<int> ActiveWaitThread;
+        
         std::mutex SyncPhysicMutex; //
 
         MeowEngine::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = MeowEngine::DoubleBuffer<std::queue<SDL_Event>>(); //
