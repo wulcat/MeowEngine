@@ -35,9 +35,9 @@ namespace MeowEngine {
             Scene->AddEntitiesOnPhysicsThread(Physics.get());
             Physics->Update(PhysicsThreadFrameRate->DeltaTime);
 
-            if(SharedState.SyncPhysicMutex.try_lock()) {
+            if(SharedState.SyncPointPhysicMutex.try_lock()) {
                 Scene->SyncPhysicsBufferOnPhysicsThread();
-                SharedState.SyncPhysicMutex.unlock();
+                SharedState.SyncPointPhysicMutex.unlock();
             }
 
             PhysicsThreadFrameRate->LockFrameRate();

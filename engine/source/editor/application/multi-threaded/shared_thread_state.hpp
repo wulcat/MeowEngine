@@ -5,34 +5,28 @@
 #ifndef MEOWENGINE_SHARED_THREAD_STATE_HPP
 #define MEOWENGINE_SHARED_THREAD_STATE_HPP
 
-#include "atomic"
-#include "condition_variable"
-#include "mutex"
-#include "double_buffer.hpp"
 #include "queue"
+#include "atomic"
+#include "mutex"
+
+#include "double_buffer.hpp"
 #include "thread_barrier.hpp"
 #include "thread_wait.hpp"
 
 #include "sdl_wrapper.hpp"
 
-
 namespace MeowEngine {
-
     struct SharedThreadState {
         SharedThreadState();
         ~SharedThreadState();
 
         std::atomic<bool> IsAppRunning;
+        std::shared_ptr<ThreadBarrier> SyncPointStartRenderBarrier;
+        std::shared_ptr<ThreadBarrier> SyncPointEndRenderBarrier;
+        std::mutex SyncPointPhysicMutex;
+
         MeowEngine::ThreadWait<int> ActiveWaitThread;
-        
-        std::mutex SyncPhysicMutex; //
-
-        MeowEngine::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = MeowEngine::DoubleBuffer<std::queue<SDL_Event>>(); //
-
-        // main thread ----------------
-
-        std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
-        std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
+        MeowEngine::DoubleBuffer<std::queue<SDL_Event>> SDLEventBuffer = MeowEngine::DoubleBuffer<std::queue<SDL_Event>>(); //
     };
 
 } // MeowEngine

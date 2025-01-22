@@ -4,11 +4,25 @@
 
 #include "opengl_render_multi_thread.hpp"
 #include "shared_thread_state.hpp"
+#include "sdl_wrapper.hpp"
 
 namespace MeowEngine {
     OpenGLRenderMultiThread::OpenGLRenderMultiThread(MeowEngine::SharedThreadState& inState)
     : SharedState(inState) {
         MeowEngine::Log("Render", "Creating Object");
+
+
+
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
+            throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
+        }
+
+        if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+            throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
+        }
+
+        MeowEngine::Log("Main Thread", "SDL2 Initialized");
+
         WindowContext = std::make_unique<MeowEngine::SDLWindow>();
         AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
         UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
@@ -31,6 +45,11 @@ namespace MeowEngine {
 
     void OpenGLRenderMultiThread::StartThread() {
         MeowEngine::Log("Render", "Starting Thread");
+
+        // NOTE: Clearing context in main thread before using for render thread fixes a crash
+        // which occurs while drag window
+        SDL_GL_MakeCurrent(WindowContext->window, nullptr);
+
         RenderThread = std::thread(&MeowEngine::OpenGLRenderMultiThread::RenderThreadLoop, this);
     }
     void OpenGLRenderMultiThread::EndThread() {
@@ -54,9 +73,9 @@ namespace MeowEngine {
             PT_PROFILE_SCOPE;
             // Synchronize with the main thread
             // input
-            while(!SharedState.InputBuffer.GetFinal().empty()) {
-                SDL_Event event = SharedState.InputBuffer.GetFinal().front();
-                SharedState.InputBuffer.GetFinal().pop();
+            while(!SharedState.SDLEventBuffer.GetFinal().empty()) {
+                SDL_Event event = SharedState.SDLEventBuffer.GetFinal().front();
+                SharedState.SDLEventBuffer.GetFinal().pop();
 
                 UI->Input(event);
 
@@ -102,11 +121,11 @@ namespace MeowEngine {
 //                }
             // MeowEngine::Log("Render Thread", "Waiting for other threads to finish processing");
             // wait for all threads to sync up for frame ending
-            SharedState.ProcessThreadBarrier.get()->Wait();
+            SharedState.SyncPointStartRenderBarrier.get()->Wait();
 
             // MeowEngine::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
             // wait until buffers are synced on main thread
-            SharedState.SwapBufferThreadBarrier.get()->Wait();
+            SharedState.SyncPointEndRenderBarrier.get()->Wait();
 
 
 //                RenderThreadFrameRate.End();

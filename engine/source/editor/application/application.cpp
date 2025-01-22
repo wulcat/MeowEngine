@@ -448,4 +448,4 @@ Application::Application()
     , IsApplicationRunning(false) {}
 
 //MeowEngine::Application::mainThreadBufferIndex = 0;
-FrameRateCounter MeowEngine::Application::FpsCounter = {1};
+MeowEngine::FrameRateCounter MeowEngine::Application::FpsCounter = {1};
