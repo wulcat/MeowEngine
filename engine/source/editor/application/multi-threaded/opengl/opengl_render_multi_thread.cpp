@@ -3,10 +3,11 @@
 //
 
 #include "opengl_render_multi_thread.hpp"
-#include "opengl_app_multi_thread.hpp"
+#include "shared_thread_state.hpp"
 
 namespace MeowEngine {
-    OpenGLRenderMultiThread::OpenGLRenderMultiThread() {
+    OpenGLRenderMultiThread::OpenGLRenderMultiThread(MeowEngine::SharedThreadState& inState)
+    : SharedState(inState) {
         MeowEngine::Log("Render", "Creating Object");
         WindowContext = std::make_unique<MeowEngine::SDLWindow>();
         AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
@@ -24,34 +25,38 @@ namespace MeowEngine {
         WindowContext.reset();
     }
 
-    void OpenGLRenderMultiThread::StartThread(MeowEngine::OpenGLAppMultiThread& inApplication) {
+    void OpenGLRenderMultiThread::SetScene(std::shared_ptr<MeowEngine::Scene> inScene) {
+        Scene = inScene;
+    }
+
+    void OpenGLRenderMultiThread::StartThread() {
         MeowEngine::Log("Render", "Starting Thread");
-        RenderThread = std::thread(&MeowEngine::OpenGLRenderMultiThread::RenderThreadLoop, this, std::ref(inApplication));
+        RenderThread = std::thread(&MeowEngine::OpenGLRenderMultiThread::RenderThreadLoop, this);
     }
     void OpenGLRenderMultiThread::EndThread() {
         RenderThread.join();
     }
 
-    void OpenGLRenderMultiThread::RenderThreadLoop(OpenGLAppMultiThread& inApplication) {
+    void OpenGLRenderMultiThread::RenderThreadLoop() {
 
         // init
         MeowEngine::Log("Render Thread", "Started");
-        inApplication.ThreadCount++;
+        SharedState.ThreadCount++;
 
         SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
-        inApplication.Scene->LoadOnRenderThread(AssetManager);
+        Scene->LoadOnRenderThread(AssetManager);
 
         // loop
-        while (inApplication.IsApplicationRunning) {
+        while (SharedState.IsApplicationRunning) {
 //                Uint64 currentTime = SDL_GetPerformanceCounter();
             RenderThreadFrameRate->Calculate();
 
             PT_PROFILE_SCOPE;
             // Synchronize with the main thread
             // input
-            while(!inApplication.InputBuffer.GetFinal().empty()) {
-                SDL_Event event = inApplication.InputBuffer.GetFinal().front();
-                inApplication.InputBuffer.GetFinal().pop();
+            while(!SharedState.InputBuffer.GetFinal().empty()) {
+                SDL_Event event = SharedState.InputBuffer.GetFinal().front();
+                SharedState.InputBuffer.GetFinal().pop();
 
                 UI->Input(event);
 
@@ -75,7 +80,7 @@ namespace MeowEngine {
 
             // Issue OpenGL draw calls
 
-            Render(inApplication);
+            Render();
 
             {
                 PT_PROFILE_SCOPE_N("Swapping GL Buffer");
@@ -97,11 +102,11 @@ namespace MeowEngine {
 //                }
             // MeowEngine::Log("Render Thread", "Waiting for other threads to finish processing");
             // wait for all threads to sync up for frame ending
-            inApplication.ProcessThreadBarrier.get()->Wait();
+            SharedState.ProcessThreadBarrier.get()->Wait();
 
             // MeowEngine::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
             // wait until buffers are synced on main thread
-            inApplication.SwapBufferThreadBarrier.get()->Wait();
+            SharedState.SwapBufferThreadBarrier.get()->Wait();
 
 
 //                RenderThreadFrameRate.End();
@@ -109,13 +114,13 @@ namespace MeowEngine {
 
         // exit
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        inApplication.ThreadCount--;
+        SharedState.ThreadCount--;
 
         MeowEngine::Log("Render Thread", "Ended");
-        inApplication.WaitForThreadEndCondition.notify_all();
+        SharedState.WaitForThreadEndCondition.notify_all();
     }
 
-    void OpenGLRenderMultiThread::Render(OpenGLAppMultiThread& inApplication) {
+    void OpenGLRenderMultiThread::Render() {
         PT_PROFILE_SCOPE_N("setting current");
         // We let opengl know that any after this will be drawn into custom frame buffer
         {
@@ -127,7 +132,7 @@ namespace MeowEngine {
                 glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                inApplication.Scene->RenderGameView(*Renderer);
+                Scene->RenderGameView(*Renderer);
 
                 FrameBuffer->Unbind();
             }
@@ -139,7 +144,7 @@ namespace MeowEngine {
         {
             PT_PROFILE_SCOPE_N("UI render");
 //                MeowEngine::Log("Frame Rate: ", static_cast<int>(RenderThreadFrameRate.GetFrameRate()));
-            inApplication.Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
+            Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
         }
 
 //                {

@@ -5,6 +5,7 @@
 #ifndef MEOWENGINE_PHYSICS_MULTI_THREAD_HPP
 #define MEOWENGINE_PHYSICS_MULTI_THREAD_HPP
 
+#include <scene.hpp>
 #include "thread"
 #include "frame_rate_counter.hpp"
 #include "physx_physics_system.hpp"
@@ -13,11 +14,13 @@
 //#include "application_test.hpp"
 
 namespace MeowEngine {
-    class OpenGLAppMultiThread;
+
+    class SharedThreadState;
 
     class PhysicsMultiThread {
     public:
-        PhysicsMultiThread() {
+        PhysicsMultiThread(MeowEngine::SharedThreadState& inState)
+        : SharedState(inState) {
             Physics = std::make_shared<MeowEngine::simulator::PhysXPhysicsSystem>();
             PhysicsThreadFrameRate = std::make_unique<FrameRateCounter>(50, 1); // per 0.02 sec
         }
@@ -31,19 +34,15 @@ namespace MeowEngine {
         std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
         std::unique_ptr<FrameRateCounter> PhysicsThreadFrameRate;
 
-        void StartThread(MeowEngine::OpenGLAppMultiThread& inApplication);
+        MeowEngine::SharedThreadState& SharedState;
+        std::shared_ptr<MeowEngine::Scene> Scene;
+
+        void SetScene(std::shared_ptr<MeowEngine::Scene> inScene);
+        void StartThread();
         void EndThread();
 
-        void PhysicsThreadLoop(MeowEngine::OpenGLAppMultiThread& inApplication);
-//        void FixedUpdate(const float& inFixedDeltaTime) {
-//            Scene->AddEntitiesOnPhysicsThread(Physics.get());
-//            Physics->Update(inFixedDeltaTime);
-//
-//            if(SyncPhysicMutex.try_lock()) {
-//                Scene->SyncPhysicsBufferOnPhysicsThread();
-//                SyncPhysicMutex.unlock();
-//            }
-//        };
+    private:
+        void PhysicsThreadLoop();
     };
 
 } // MeowEngine

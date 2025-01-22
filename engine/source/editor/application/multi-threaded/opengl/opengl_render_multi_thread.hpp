@@ -13,22 +13,24 @@
 #include "sdl_window.hpp"
 #include "asset_manager.hpp"
 #include "opengl_render_system.hpp"
+#include "scene.hpp"
 
 using namespace std;
 
 namespace MeowEngine {
-    class OpenGLAppMultiThread;
+    class SharedThreadState;
 
     class OpenGLRenderMultiThread {
     public:
-        OpenGLRenderMultiThread();
+        OpenGLRenderMultiThread(MeowEngine::SharedThreadState& inState);
         ~OpenGLRenderMultiThread();
 
-        void StartThread(MeowEngine::OpenGLAppMultiThread& inApplication);
+        void SetScene(std::shared_ptr<MeowEngine::Scene> inScene);
+        void StartThread();
         void EndThread();
 
-        void RenderThreadLoop(OpenGLAppMultiThread& inApplication);
-        void Render(OpenGLAppMultiThread& inApplication);
+        void RenderThreadLoop();
+        void Render();
 
         std::unique_ptr<FrameRateCounter> RenderThreadFrameRate;
         std::thread RenderThread;
@@ -40,6 +42,9 @@ namespace MeowEngine {
         // this is shared because even main thread will access asset manager and sometimes physics
         // but render thread will access this all the time
         std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
+
+        MeowEngine::SharedThreadState& SharedState;
+        std::shared_ptr<MeowEngine::Scene> Scene;
     };
 
 } // MeowEngine

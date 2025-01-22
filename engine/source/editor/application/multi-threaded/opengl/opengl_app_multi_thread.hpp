@@ -28,7 +28,7 @@
 #include "double_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
 
-
+#include "shared_thread_state.hpp"
 #include "physics_multi_thread.hpp"
 #include "opengl_render_multi_thread.hpp"
 
@@ -36,16 +36,10 @@
 using namespace std;
 
 namespace MeowEngine {
-    struct OpenGLSharedState {
-        // multithreading
-        std::atomic<bool> IsApplicationRunning; //
-
-    };
-
     class OpenGLAppMultiThread {
     public:
         OpenGLAppMultiThread();
-        virtual ~OpenGLAppMultiThread();
+//        ~OpenGLAppMultiThread();
 
         void CreateApplication();
 
@@ -56,29 +50,15 @@ namespace MeowEngine {
         std::unique_ptr<FrameRateCounter> MainThreadFrameRate;
         std::unique_ptr<MeowEngine::input::InputManager> InputManager; //
 
-        MeowEngine::OpenGLSharedState State;
-//        std::shared_ptr<MeowEngine::Scene> Scene;
+        MeowEngine::SharedThreadState SharedState;
+        std::shared_ptr<MeowEngine::Scene> Scene;
 
         std::unique_ptr<MeowEngine::PhysicsMultiThread> PhysicThread;
         std::unique_ptr<MeowEngine::OpenGLRenderMultiThread> RenderThread;
 
-    public:
-        std::shared_ptr<MeowEngine::Scene> Scene;
 
-        std::atomic<int> ThreadCount; //
 
-        std::condition_variable WaitForThreadEndCondition; //
 
-        std::mutex WaitForThreadEndMutex;
-
-        std::mutex SyncPhysicMutex; //
-
-        MeowEngine::DoubleBuffer<std::queue<SDL_Event>> InputBuffer = MeowEngine::DoubleBuffer<std::queue<SDL_Event>>(); //
-
-        // main thread ----------------
-
-        std::shared_ptr<ThreadBarrier> ProcessThreadBarrier;
-        std::shared_ptr<ThreadBarrier> SwapBufferThreadBarrier;
     };
 }
 

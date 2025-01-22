@@ -5,11 +5,19 @@
 #include "opengl_app_multi_thread.hpp"
 
 namespace MeowEngine {
-    OpenGLAppMultiThread::OpenGLAppMultiThread() {}
-    OpenGLRenderMultiThread::~OpenGLRenderMultiThread() {}
+    OpenGLAppMultiThread::OpenGLAppMultiThread()
+        : SharedState() {
+        MeowEngine::Log("OpenGL", "App Created");
+    }
+
+//    OpenGLRenderMultiThread::~OpenGLRenderMultiThread() {
+//        MeowEngine::Log("OpenGL", "App Destroyed");
+//    }
 
     void OpenGLAppMultiThread::CreateApplication() {
-        IsApplicationRunning = true;
+
+//        State = new MeowEngine::OpenGLSharedState();
+        SharedState.IsApplicationRunning = true;
 
 #ifdef __EMSCRIPTEN__
         //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
@@ -25,16 +33,21 @@ namespace MeowEngine {
             throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
         }
 
-        ProcessThreadBarrier = std::make_shared<ThreadBarrier>(2);
-        SwapBufferThreadBarrier = std::make_shared<ThreadBarrier>(2);
+        SharedState.ProcessThreadBarrier = std::make_shared<ThreadBarrier>(2);
+        SharedState.SwapBufferThreadBarrier = std::make_shared<ThreadBarrier>(2);
 
-        RenderThread = std::make_unique<MeowEngine::OpenGLRenderMultiThread>();
-        PhysicThread = std::make_unique<MeowEngine::PhysicsMultiThread>();
+        RenderThread = std::make_unique<MeowEngine::OpenGLRenderMultiThread>(SharedState);
+        PhysicThread = std::make_unique<MeowEngine::PhysicsMultiThread>(SharedState);
 
         InputManager = std::make_unique<MeowEngine::input::InputManager>();
 
         Scene = std::make_shared<MeowEngine::MainScene>(
-                MeowEngine::sdl::GetWindowSize(RenderThread->WindowContext->window));
+                    MeowEngine::sdl::GetWindowSize(RenderThread->WindowContext->window)
+                );
+
+        RenderThread->SetScene(Scene);
+        PhysicThread->SetScene(Scene);
+
 
         // NOTE: Clearing context in main thread before using for render thread fixes a crash
         // which occurs while drag window
@@ -42,8 +55,8 @@ namespace MeowEngine {
 
         MainThreadFrameRate = std::make_unique<FrameRateCounter>(60, 1); // 60 frames per second
 
-        RenderThread->StartThread(*this);
-        PhysicThread->StartThread(*this);
+        RenderThread->StartThread();
+        PhysicThread->StartThread();
 
         Loop();
 
@@ -72,7 +85,7 @@ namespace MeowEngine {
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
         // loop
-        while (IsApplicationRunning) {
+        while (SharedState.IsApplicationRunning) {
             MainThreadFrameRate->Calculate();
 
             PT_PROFILE_SCOPE;
@@ -87,11 +100,11 @@ namespace MeowEngine {
 
             if (!Input(MainThreadFrameRate->DeltaTime)) {
                 PT_PROFILE_SCOPE_N("Main Thread Ending");
-                IsApplicationRunning = false;
+                SharedState.IsApplicationRunning = false;
 
                 // if threads are waiting for thread sync we unpause them
-                ProcessThreadBarrier->End();
-                SwapBufferThreadBarrier->End();
+                SharedState.ProcessThreadBarrier->End();
+                SharedState.SwapBufferThreadBarrier->End();
                 MeowEngine::Log("Main Thread", "Ending");
                 break;
             }
@@ -108,13 +121,13 @@ namespace MeowEngine {
 
             // wait for all threads to sync up for frame ending
 
-            ProcessThreadBarrier.get()->Wait();
+            SharedState.ProcessThreadBarrier.get()->Wait();
 
 
 //                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
             // swap buffers
-            InputBuffer.Swap();
+            SharedState.InputBuffer.Swap();
 
             // swap
             // delta add to final rigidbody all frames after main thread calculations
@@ -123,9 +136,9 @@ namespace MeowEngine {
             // read from render thread on this
 
             // staging accesses final rigidbody takes the delta
-            if (SyncPhysicMutex.try_lock()) {
+            if (SharedState.SyncPhysicMutex.try_lock()) {
                 Scene->SyncPhysicsBufferOnMainThread(false);
-                SyncPhysicMutex.unlock();
+                SharedState.SyncPhysicMutex.unlock();
             } else {
                 Scene->SyncPhysicsBufferOnMainThread(true);
             }
@@ -139,13 +152,13 @@ namespace MeowEngine {
 
             // wait until buffers are synced
             // ideally since other threads are waiting this should release all of them automatically
-            SwapBufferThreadBarrier.get()->Wait();
+            SharedState.SwapBufferThreadBarrier.get()->Wait();
         }
 
         MeowEngine::Log("Main Thread", "Waiting for other threads to end");
 
-        std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
-        WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0; });
+        std::unique_lock<std::mutex> lock(SharedState.WaitForThreadEndMutex);
+        SharedState.WaitForThreadEndCondition.wait(lock, [this] { return SharedState.ThreadCount == 0; });
 
         MeowEngine::Log("Main Thread", "Ended");
     }
@@ -165,7 +178,7 @@ namespace MeowEngine {
 
         // Each loop we will process any events that are waiting for us.
         while (SDL_PollEvent(&event)) {
-            InputBuffer.GetCurrent().push(event);
+            SharedState.InputBuffer.GetCurrent().push(event);
 
             switch (event.type) {
                 case SDL_MOUSEBUTTONDOWN:

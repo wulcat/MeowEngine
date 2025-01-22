@@ -3,49 +3,52 @@
 //
 
 #include "physics_multi_thread.hpp"
-#include "opengl_app_multi_thread.hpp"
+#include "shared_thread_state.hpp"
 
 using namespace std;
 
 namespace MeowEngine {
 
-    void PhysicsMultiThread::StartThread(MeowEngine::OpenGLAppMultiThread& inApplication) {
+    void PhysicsMultiThread::SetScene(std::shared_ptr<MeowEngine::Scene> inScene) {
+        Scene = inScene;
+    }
 
-        PhysicsThread = std::thread(&MeowEngine::PhysicsMultiThread::PhysicsThreadLoop, this, std::ref(inApplication));
+    void PhysicsMultiThread::StartThread() {
+        PhysicsThread = std::thread(&MeowEngine::PhysicsMultiThread::PhysicsThreadLoop, this);
     }
     void PhysicsMultiThread::EndThread() {
         PhysicsThread.join();
     }
 
-    void PhysicsMultiThread::PhysicsThreadLoop(MeowEngine::OpenGLAppMultiThread& inApplication) {
+    void PhysicsMultiThread::PhysicsThreadLoop() {
         MeowEngine::Log("Physics Thread", "Started");
 
 
-        inApplication.ThreadCount++;
+        SharedState.ThreadCount++;
         Physics->Create();
 
 
-        while(inApplication.IsApplicationRunning) {
+        while(SharedState.IsApplicationRunning) {
             PT_PROFILE_SCOPE;
 
             PhysicsThreadFrameRate->Calculate();
 
-            inApplication.Scene->AddEntitiesOnPhysicsThread(Physics.get());
+            Scene->AddEntitiesOnPhysicsThread(Physics.get());
             Physics->Update(PhysicsThreadFrameRate->DeltaTime);
 
-            if(inApplication.SyncPhysicMutex.try_lock()) {
-                inApplication.Scene->SyncPhysicsBufferOnPhysicsThread();
-                inApplication.SyncPhysicMutex.unlock();
+            if(SharedState.SyncPhysicMutex.try_lock()) {
+                Scene->SyncPhysicsBufferOnPhysicsThread();
+                SharedState.SyncPhysicMutex.unlock();
             }
 
             PhysicsThreadFrameRate->LockFrameRate();
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        inApplication.ThreadCount--;
+        SharedState.ThreadCount--;
 
         MeowEngine::Log("Physics Thread", "Ended");
-        inApplication.WaitForThreadEndCondition.notify_all();
+        SharedState.WaitForThreadEndCondition.notify_all();
     }
 
 
