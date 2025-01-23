@@ -32,7 +32,7 @@ namespace MeowEngine {
         void RenderThreadLoop();
         void Render();
 
-        std::unique_ptr<MeowEngine::FrameRateCounter> RenderThreadFrameRate;
+        std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
         std::thread RenderThread;
         // we decouple window / context into a class
         std::unique_ptr<MeowEngine::SDLWindow> WindowContext;

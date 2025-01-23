@@ -22,17 +22,17 @@ namespace MeowEngine {
         PhysicsMultiThread(MeowEngine::SharedThreadState& inState)
         : SharedState(inState) {
             Physics = std::make_shared<MeowEngine::simulator::PhysXPhysicsSystem>();
-            PhysicsThreadFrameRate = std::make_unique<FrameRateCounter>(50, 1); // per 0.02 sec
+            FrameRateCounter = std::make_unique<MeowEngine::FrameRateCounter>(50, 1); // per 0.02 sec
         }
 
         ~PhysicsMultiThread() {
             Physics.reset();
-            PhysicsThreadFrameRate.reset();
+            FrameRateCounter.reset();
         }
 
         std::thread PhysicsThread;
         std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
-        std::unique_ptr<MeowEngine::FrameRateCounter> PhysicsThreadFrameRate;
+        std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
 
         MeowEngine::SharedThreadState& SharedState;
         std::shared_ptr<MeowEngine::Scene> Scene;

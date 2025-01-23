@@ -63,93 +63,49 @@ namespace MeowEngine {
     }
 
     void OpenGLAppMultiThread::EngineLoop() {
-        // init
         PT_PROFILE_SCOPE;
         MeowEngine::Log("Main Thread", "Started");
 
+        // TODO: We do this in later days, when we want to load scene dynamically
+        // load resources
+        // create scene on main thread
+        // create physics objects
+        // then start
+
+        // Create scene objects like cubes, grid and etc...
         Scene->CreateSceneOnMainThread();
 
-//            MeowEngine::Log("Main Thread", "waiting for creating all threads");
-//            std::unique_lock<std::mutex> lock(WaitForThreadEndMutex);
-//            WaitForThreadEndCondition.wait(lock, [this] { return ThreadCount == 0;});
-//
-//            MeowEngine::Log("Main Thread", "Created");
-
+        // Purposefully waiting so the render thread loads required shaders & objs
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-        // loop
+        // Simulating Scene
         while (SharedState.IsAppRunning) {
+            // Calculate Delta Time
             FrameRateCounter->Calculate();
 
-            PT_PROFILE_SCOPE;
-            // if thread count == 0 on main notify
-
-            // update thread count++
-
-//                MeowEngine::Log("Main Thread", "Running");
-//                MeowEngine::Log("Frame Rate: ", static_cast<float>(MainThreadFrameRate->DeltaTime));
-
+            // Update Scene
             Scene->Update(FrameRateCounter->DeltaTime);
 
-            if (!Input(FrameRateCounter->DeltaTime)) {
-                PT_PROFILE_SCOPE_N("Main Thread Ending");
-                SharedState.IsAppRunning = false;
+            // Check for device inputs
+            if (!ProcessDeviceEvents(FrameRateCounter->DeltaTime)) {
+                InitiateAppClose();
 
-                // if threads are waiting for thread sync we unpause them
-                SharedState.SyncPointStartRenderBarrier->End();
-                SharedState.SyncPointEndRenderBarrier->End();
-                MeowEngine::Log("Main Thread", "Ending");
                 break;
             }
 
-//                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-//                MeowEngine::Log("Main Thread", "waiting process");
+            SyncThreads();
 
-            // - frames updating (processing / rendering)
-            //      - wait for all threads to finish processing the frame
-            // - swap buffers
-            // - merge data
-            //      - wait for swapping and merging to finish
-            // - continue for new frame
-
-            // wait for all threads to sync up for frame ending
-
-            SharedState.SyncPointStartRenderBarrier.get()->Wait();
-
-
-//                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-            // swap buffers
-            SharedState.SDLEventBuffer.Swap();
-
-            // swap
-            // delta add to final rigidbody all frames after main thread calculations
-            // delta is buffered 3 ways
-            // write from main thread on this
-            // read from render thread on this
-
-            // staging accesses final rigidbody takes the delta
-            if (SharedState.SyncPointPhysicMutex.try_lock()) {
-                Scene->SyncPhysicsBufferOnMainThread(false);
-                SharedState.SyncPointPhysicMutex.unlock();
-            } else {
-                Scene->SyncPhysicsBufferOnMainThread(true);
-            }
-
-
-            Scene->SyncRenderBufferOnMainThread();
-
-            Scene->SwapMainAndRenderBufferOnMainThread();
-
+            // Halt Main thread to lock a frame rate
             FrameRateCounter->LockFrameRate();
 
-            // wait until buffers are synced
-            // ideally since other threads are waiting this should release all of them automatically
-            SharedState.SyncPointEndRenderBarrier.get()->Wait();
+            // Wait until buffers are synced
+            // Ideally since other threads are waiting this should release all of them automatically
+            SharedState.SyncPointEndRenderBarrier->Wait();
         }
 
         MeowEngine::Log("Main Thread", "Waiting for other threads to end");
 
+        // Wait till all threads are closed
         SharedState.ActiveWaitThread.Wait([&](int inActiveThreads){
             return inActiveThreads == 0;
         });
@@ -157,9 +113,8 @@ namespace MeowEngine {
         MeowEngine::Log("Main Thread", "Ended");
     }
 
-    bool OpenGLAppMultiThread::Input(const float &deltaTime) {
+    bool OpenGLAppMultiThread::ProcessDeviceEvents(const float &deltaTime) {
         PT_PROFILE_SCOPE;
-        SDL_Event event;
 
 //            while(!InputBuffer.GetCurrent().empty())
 //            {
@@ -171,6 +126,7 @@ namespace MeowEngine {
 //            }
 
         // Each loop we will process any events that are waiting for us.
+        SDL_Event event;
         while (SDL_PollEvent(&event)) {
             SharedState.SDLEventBuffer.GetCurrent().push(event);
 
@@ -178,14 +134,9 @@ namespace MeowEngine {
                 case SDL_MOUSEBUTTONDOWN:
                     InputManager->SetMouseDown();
                     break;
-                case SDL_WINDOWEVENT:
-//                    if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
-//                        OnWindowResized();
-//                    }
-                    break;
 
-                    // If we get a quit signal, we will return that we don't want to keep looping.
                 case SDL_QUIT:
+                    // If we get a quit signal, we will return that we don't want to keep looping.
                     RenderThread->UI->ClosePIDs();
                     return false;
 
@@ -193,6 +144,8 @@ namespace MeowEngine {
                     // If we get a key down event for the ESC key, we also don't want to keep looping.
                     if (event.key.keysym.sym == SDLK_ESCAPE) {
                         RenderThread->UI->ClosePIDs();
+
+                        // App should close
                         return false;
                     }
                     break;
@@ -217,12 +170,48 @@ namespace MeowEngine {
             }
         }
 
+        // TODO: Build a input system
         // Track keyboard and mouse clicks/hold/drag/position
         InputManager->ProcessInput();
-
-        Scene->Input(deltaTime, *InputManager.get());
+        Scene->Input(deltaTime, *InputManager);
         InputManager->isMouseDown = false;
+
+        // should app continue?
         return true;
+    }
+
+    void OpenGLAppMultiThread::SyncThreads() {
+        // Make render thread wait, until syncing is complete
+        SharedState.SyncPointStartRenderBarrier->Wait();
+
+        // Swap Device Events
+        SharedState.SDLEventBuffer.Swap();
+
+        // Sync current(main) buffer rigid bodies
+        // & update staging(physics) buffer with current buffer updates
+        if (SharedState.SyncPointPhysicMutex.try_lock()) {
+            // Sync staging buffer and apply current buffer updates
+            Scene->SyncPhysicsBufferOnMainThread(false);
+            SharedState.SyncPointPhysicMutex.unlock();
+        } else {
+            // Cache current buffer updates
+            // (which are applied when staging buffer is free)
+            Scene->SyncPhysicsBufferOnMainThread(true);
+        }
+
+
+        Scene->SyncRenderBufferOnMainThread();
+        Scene->SwapMainAndRenderBufferOnMainThread();
+    }
+
+    void OpenGLAppMultiThread::InitiateAppClose() {
+        // Initiate closing engine
+        SharedState.IsAppRunning = false;
+
+        // if threads are waiting for thread sync we unpause them
+        SharedState.SyncPointStartRenderBarrier->End();
+        SharedState.SyncPointEndRenderBarrier->End();
+        MeowEngine::Log("Main Thread", "Ending");
     }
 
 }

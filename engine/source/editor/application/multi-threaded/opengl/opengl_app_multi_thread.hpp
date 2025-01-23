@@ -25,7 +25,18 @@ namespace MeowEngine {
 
     private:
         void EngineLoop();
-        bool Input(const float &deltaTime);
+
+        bool ProcessDeviceEvents(const float &deltaTime);
+
+        /**
+         * Sync Buffers from different threads
+         */
+        void SyncThreads();
+
+        /**
+         * We tell others threads to end so we can close the engine
+         */
+        void InitiateAppClose();
 
         /**
          * Shared states between threads to manage syncing and engine life cycle

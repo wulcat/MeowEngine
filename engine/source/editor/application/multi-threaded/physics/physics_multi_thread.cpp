@@ -23,24 +23,27 @@ namespace MeowEngine {
     void PhysicsMultiThread::PhysicsThreadLoop() {
         MeowEngine::Log("Physics Thread", "Started");
 
+        // Count active threads so we can close engine properly
         SharedState.ActiveWaitThread.GetAtomic()++;
+
+        // Create Objects from scene (temp)
         Physics->Create();
 
-
+        // Simulating Physics
         while(SharedState.IsAppRunning) {
             PT_PROFILE_SCOPE;
 
-            PhysicsThreadFrameRate->Calculate();
+            FrameRateCounter->Calculate();
 
             Scene->AddEntitiesOnPhysicsThread(Physics.get());
-            Physics->Update(PhysicsThreadFrameRate->DeltaTime);
+            Physics->Update(FrameRateCounter->DeltaTime);
 
             if(SharedState.SyncPointPhysicMutex.try_lock()) {
                 Scene->SyncPhysicsBufferOnPhysicsThread();
                 SharedState.SyncPointPhysicMutex.unlock();
             }
 
-            PhysicsThreadFrameRate->LockFrameRate();
+            FrameRateCounter->LockFrameRate();
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));

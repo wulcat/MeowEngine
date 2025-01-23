@@ -28,7 +28,7 @@ namespace MeowEngine {
         UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
         Renderer = std::make_unique<MeowEngine::OpenGLRenderSystem>(AssetManager, UI);
         FrameBuffer = std::make_unique<MeowEngine::graphics::OpenGLFrameBuffer>(1000,500);
-        RenderThreadFrameRate = std::make_unique<FrameRateCounter>(60, 100);
+        FrameRateCounter = std::make_unique<MeowEngine::FrameRateCounter>(60, 100);
     }
 
     OpenGLRenderMultiThread::~OpenGLRenderMultiThread() {
@@ -44,7 +44,7 @@ namespace MeowEngine {
     }
 
     void OpenGLRenderMultiThread::StartThread() {
-        MeowEngine::Log("Render", "Starting Thread");
+        MeowEngine::Log("Render", "Starting");
 
         // NOTE: Clearing context in main thread before using for render thread fixes a crash
         // which occurs while drag window
@@ -57,18 +57,21 @@ namespace MeowEngine {
     }
 
     void OpenGLRenderMultiThread::RenderThreadLoop() {
-
-        // init
         MeowEngine::Log("Render Thread", "Started");
+
+        // Count active threads so we can close engine properly
         SharedState.ActiveWaitThread.GetAtomic()++;
 
+        // Switch SDL to use render thread
         SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
+
+        // Load Scene Resources like shaders and meshes
         Scene->LoadOnRenderThread(AssetManager);
 
-        // loop
+        // Render Graphics
         while (SharedState.IsAppRunning) {
 //                Uint64 currentTime = SDL_GetPerformanceCounter();
-            RenderThreadFrameRate->Calculate();
+            FrameRateCounter->Calculate();
 
             PT_PROFILE_SCOPE;
             // Synchronize with the main thread
@@ -164,7 +167,7 @@ namespace MeowEngine {
         {
             PT_PROFILE_SCOPE_N("UI render");
 //                MeowEngine::Log("Frame Rate: ", static_cast<int>(RenderThreadFrameRate.GetFrameRate()));
-            Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), RenderThreadFrameRate->GetFrameRate());
+            Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), FrameRateCounter->GetFrameRate());
         }
 
 //                {
