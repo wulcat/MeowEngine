@@ -48,6 +48,7 @@ namespace MeowEngine {
 
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
+        // Notify main thread, that thread count has changed
         SharedState.ActiveWaitThread.GetAtomicAndNotify().Get()--;
 
         MeowEngine::Log("Physics Thread", "Ended");

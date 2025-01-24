@@ -11,12 +11,12 @@
 
 #include <log.hpp>
 #include "imgui_wrapper.hpp"
-#include "imgui_renderer.hpp"
+#include "imgui_userinterface_system.hpp"
 #include "bridge_wrapper.hpp"
 //#include "entt_wrapper.hpp"
 //#include <filesystem>
 
-using MeowEngine::graphics::ImGuiRenderer;
+using MeowEngine::graphics::ImGuiUserInterfaceSystem;
 
 namespace {
     pid_t tracy_profiler_pid = -1;
@@ -29,7 +29,7 @@ namespace {
 //        exit(0); // Exit the parent process // shouldn't do this or the application destruction won't happen
     }
 }
-ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
+ImGuiUserInterfaceSystem::ImGuiUserInterfaceSystem(SDL_Window* window, SDL_GLContext& context)
 //    : isSceneViewportFocused(false)
 //    , SceneViewportSize({0,0})
     : StructurePanel()
@@ -70,7 +70,7 @@ ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_GLContext& context)
 #endif
 }
 
-ImGuiRenderer::~ImGuiRenderer() {
+ImGuiUserInterfaceSystem::~ImGuiUserInterfaceSystem() {
     MeowEngine::Log("ImGuiRenderer","Destroying...");
 
     ImGui_ImplOpenGL3_Shutdown();
@@ -78,7 +78,7 @@ ImGuiRenderer::~ImGuiRenderer() {
     ImGui::DestroyContext();
 }
 
-void ImGuiRenderer::Input(const SDL_Event& event) {
+void ImGuiUserInterfaceSystem::Input(const SDL_Event& event) {
     PT_PROFILE_SCOPE_N("UI Input");;
 
     ImGui_ImplSDL2_ProcessEvent(&event);
@@ -107,13 +107,13 @@ void ImGuiRenderer::Input(const SDL_Event& event) {
 #endif
 }
 
-void MeowEngine::graphics::ImGuiRenderer::Render(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
+void MeowEngine::graphics::ImGuiUserInterfaceSystem::Render(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     CreateNewFrame();
     DrawFrame(registry, inUIInputQueue, frameBufferId, fps);
     RenderFrame();
 }
 
-void ImGuiRenderer::ClosePIDs() {
+void ImGuiUserInterfaceSystem::ClosePIDs() {
     ::HandleTracyProfilerSignal(SIGQUIT);
 }
 
@@ -125,7 +125,7 @@ void ImGuiRenderer::ClosePIDs() {
 //    return SceneViewportSize;
 //}
 
-void ImGuiRenderer::OpenTracyProfiler() {
+void ImGuiUserInterfaceSystem::OpenTracyProfiler() {
     // Register signal handlers to clean up child process on exit
     signal(SIGINT, &::HandleTracyProfilerSignal);  // Handle Ctrl+C
     signal(SIGTERM, &::HandleTracyProfilerSignal); // Handle termination signals
@@ -148,13 +148,13 @@ void ImGuiRenderer::OpenTracyProfiler() {
     }
 }
 
-void MeowEngine::graphics::ImGuiRenderer::CreateNewFrame() {
+void MeowEngine::graphics::ImGuiUserInterfaceSystem::CreateNewFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 }
 
-void MeowEngine::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
+void MeowEngine::graphics::ImGuiUserInterfaceSystem::DrawFrame(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, uint32_t frameBufferId, const double fps) {
     CreateDockingSpace();
 
 //    CreateRender3DPanel(frameBufferId);
@@ -172,12 +172,12 @@ void MeowEngine::graphics::ImGuiRenderer::DrawFrame(entt::registry& registry, st
    // ImGui::ShowDemoWindow(&IsRendering);
 }
 
-void ImGuiRenderer::RenderFrame() {
+void ImGuiUserInterfaceSystem::RenderFrame() {
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImGuiRenderer::CreateDockingSpace() {
+void ImGuiUserInterfaceSystem::CreateDockingSpace() {
     ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 

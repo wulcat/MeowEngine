@@ -30,19 +30,20 @@ namespace MeowEngine {
             FrameRateCounter.reset();
         }
 
-        std::thread PhysicsThread;
-        std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
-        std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
-
-        MeowEngine::SharedThreadState& SharedState;
-        std::shared_ptr<MeowEngine::Scene> Scene;
-
         void SetScene(std::shared_ptr<MeowEngine::Scene> inScene);
         void StartThread();
         void EndThread();
 
     private:
         void PhysicsThreadLoop();
+
+        std::thread PhysicsThread;
+
+        std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
+        std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
+
+        MeowEngine::SharedThreadState& SharedState;
+        std::shared_ptr<MeowEngine::Scene> Scene;
     };
 
 } // MeowEngine

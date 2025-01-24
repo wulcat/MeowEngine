@@ -9,14 +9,14 @@
 #include "render_system.hpp"
 
 #include "opengl_asset_manager.hpp"
-#include "imgui_renderer.hpp"
+#include "imgui_userinterface_system.hpp"
 
 #include <memory>
 
 namespace MeowEngine {
     struct OpenGLRenderSystem : public MeowEngine::RenderSystem {
         OpenGLRenderSystem(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
-                           const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer);
+                           const std::shared_ptr<MeowEngine::graphics::ImGuiUserInterfaceSystem>& uiRenderer);
 
         void RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) override;
         void RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;

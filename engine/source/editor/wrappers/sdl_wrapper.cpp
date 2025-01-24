@@ -82,6 +82,16 @@ MeowEngine::WindowSize MeowEngine::sdl::GetWindowSize(SDL_Window* window) {
 }
 
 SDL_Window* MeowEngine::sdl::CreateWindow(const uint32_t &windowFlags) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
+        throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
+    }
+
+    if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+        throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
+    }
+
+    MeowEngine::Log("Main Thread", "SDL2 Initialized");
+
     // Enable double buffering (this is usually the default)
     // 1: Enable VSync || 0: Disable VSync
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);

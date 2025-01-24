@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/07/24.
 //
 
-#ifndef MEOWENGINE_IMGUI_RENDERER_HPP
-#define MEOWENGINE_IMGUI_RENDERER_HPP
+#ifndef MEOWENGINE_IMGUI_USERINTERFACE_SYSTEM_HPP
+#define MEOWENGINE_IMGUI_USERINTERFACE_SYSTEM_HPP
 
 //#include <scene.hpp>
 #include "opengl_framebuffer.hpp"
@@ -17,9 +17,9 @@
 #include "queue"
 
 namespace MeowEngine::graphics {
-    struct ImGuiRenderer {
-        ImGuiRenderer(SDL_Window* window, SDL_GLContext& context);
-        ~ImGuiRenderer();
+    struct ImGuiUserInterfaceSystem {
+        ImGuiUserInterfaceSystem(SDL_Window* window, SDL_GLContext& context);
+        ~ImGuiUserInterfaceSystem();
 
         void Input(const SDL_Event& event);
         void Render(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps);
@@ -60,4 +60,4 @@ namespace MeowEngine::graphics {
 }
 
 
-#endif //MEOWENGINE_IMGUI_RENDERER_HPP
+#endif //MEOWENGINE_IMGUI_USERINTERFACE_SYSTEM_HPP

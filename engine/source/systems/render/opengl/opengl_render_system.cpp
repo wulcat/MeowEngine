@@ -18,10 +18,10 @@ using MeowEngine::assets::ShaderPipelineType;
 
 struct OpenGLRenderSystem::Internal {
     const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
-    const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
+    const std::shared_ptr<MeowEngine::graphics::ImGuiUserInterfaceSystem> UI;
 
     Internal(std::shared_ptr<MeowEngine::OpenGLAssetManager> assetManager,
-             std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> inUIRenderer)
+             std::shared_ptr<MeowEngine::graphics::ImGuiUserInterfaceSystem> inUIRenderer)
     : AssetManager(assetManager)
     , UI(inUIRenderer){}
 
@@ -105,7 +105,7 @@ struct OpenGLRenderSystem::Internal {
 };
 
 OpenGLRenderSystem::OpenGLRenderSystem(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
-                                       const std::shared_ptr<MeowEngine::graphics::ImGuiRenderer>& uiRenderer)
+                                       const std::shared_ptr<MeowEngine::graphics::ImGuiUserInterfaceSystem>& uiRenderer)
     : InternalPointer(MeowEngine::make_internal_ptr<Internal>(assetManager, uiRenderer)) {}
 
 

@@ -5,14 +5,14 @@
 #ifndef MEOWENGINE_OPENGL_RENDER_MULTI_THREAD_HPP
 #define MEOWENGINE_OPENGL_RENDER_MULTI_THREAD_HPP
 
-#include "frame_rate_counter.hpp"
 #include "thread"
-//#include "tracy_wrapper.hpp"
+
+#include "frame_rate_counter.hpp"
 #include "graphics_wrapper.hpp"
-//#include "sdl_wrapper.hpp"
 #include "sdl_window.hpp"
 #include "asset_manager.hpp"
 #include "opengl_render_system.hpp"
+
 #include "scene.hpp"
 
 using namespace std;
@@ -29,18 +29,37 @@ namespace MeowEngine {
         void StartThread();
         void EndThread();
 
-        void RenderThreadLoop();
-        void Render();
-
-        std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
-        std::thread RenderThread;
+        // TODO: When we plan to handle multi-scene we look into this, make this private
         // we decouple window / context into a class
         std::unique_ptr<MeowEngine::SDLWindow> WindowContext;
-        std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> UI;
-        std::unique_ptr<MeowEngine::OpenGLRenderSystem> Renderer;
+        std::shared_ptr<MeowEngine::graphics::ImGuiUserInterfaceSystem> UserInterface;
+
+    private:
+        void RenderThreadLoop();
+
+        /**
+         * Process events from previous window events (final buffer)
+         * current = main & current-1 = final buffer = render thread
+         * @param inEvents
+         */
+        void ProcessDeviceEvents(std::queue<SDL_Event>& inEvents);
+        void RenderGameView();
+        void RenderUserInterface();
+
+        std::thread RenderThread;
+
+        std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
+        std::unique_ptr<MeowEngine::OpenGLRenderSystem> GameView;
+
+        /**
+         * Draws our game view onto a ui panel (which is a framebuffer)
+         */
         std::unique_ptr<MeowEngine::graphics::OpenGLFrameBuffer> FrameBuffer;
-        // this is shared because even main thread will access asset manager and sometimes physics
-        // but render thread will access this all the time
+
+        /**
+         * this is shared because even main thread will access asset manager and sometimes physics
+         * but render thread will access this all the time
+         */
         std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
 
         MeowEngine::SharedThreadState& SharedState;

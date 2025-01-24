@@ -3,39 +3,28 @@
 //
 
 #include "opengl_render_multi_thread.hpp"
+
 #include "shared_thread_state.hpp"
-#include "sdl_wrapper.hpp"
 
 namespace MeowEngine {
     OpenGLRenderMultiThread::OpenGLRenderMultiThread(MeowEngine::SharedThreadState& inState)
     : SharedState(inState) {
         MeowEngine::Log("Render", "Creating Object");
 
-
-
-        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
-            throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
-        }
-
-        if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
-            throw std::runtime_error("Main Thread:: Could not initialize SDL2_image");
-        }
-
-        MeowEngine::Log("Main Thread", "SDL2 Initialized");
-
         WindowContext = std::make_unique<MeowEngine::SDLWindow>();
         AssetManager = std::make_shared<MeowEngine::OpenGLAssetManager>(MeowEngine::OpenGLAssetManager());
-        UI = std::make_shared<MeowEngine::graphics::ImGuiRenderer>(WindowContext->window, WindowContext->context);
-        Renderer = std::make_unique<MeowEngine::OpenGLRenderSystem>(AssetManager, UI);
+        UserInterface = std::make_shared<MeowEngine::graphics::ImGuiUserInterfaceSystem>(WindowContext->window, WindowContext->context);
+        GameView = std::make_unique<MeowEngine::OpenGLRenderSystem>(AssetManager, UserInterface);
         FrameBuffer = std::make_unique<MeowEngine::graphics::OpenGLFrameBuffer>(1000,500);
         FrameRateCounter = std::make_unique<MeowEngine::FrameRateCounter>(60, 100);
     }
 
     OpenGLRenderMultiThread::~OpenGLRenderMultiThread() {
+        FrameRateCounter.reset();
         AssetManager.reset();
         FrameBuffer.reset();
-        UI.reset();
-        Renderer.reset();
+        UserInterface.reset();
+        GameView.reset();
         WindowContext.reset();
     }
 
@@ -52,6 +41,7 @@ namespace MeowEngine {
 
         RenderThread = std::thread(&MeowEngine::OpenGLRenderMultiThread::RenderThreadLoop, this);
     }
+
     void OpenGLRenderMultiThread::EndThread() {
         RenderThread.join();
     }
@@ -70,124 +60,90 @@ namespace MeowEngine {
 
         // Render Graphics
         while (SharedState.IsAppRunning) {
-//                Uint64 currentTime = SDL_GetPerformanceCounter();
+            PT_PROFILE_SCOPE;
+
+            // Calculate render frame rate
             FrameRateCounter->Calculate();
 
-            PT_PROFILE_SCOPE;
-            // Synchronize with the main thread
-            // input
-            while(!SharedState.SDLEventBuffer.GetFinal().empty()) {
-                SDL_Event event = SharedState.SDLEventBuffer.GetFinal().front();
-                SharedState.SDLEventBuffer.GetFinal().pop();
+            // Process any device events like resize
+            ProcessDeviceEvents(SharedState.SDLEventBuffer.GetFinal());
 
-                UI->Input(event);
+            // Render our game view
+            RenderGameView();
+            RenderUserInterface();
 
-                switch (event.type) {
-                    case SDL_USEREVENT:
-                        switch (event.user.code) {
-                            case 2: {
-                                const WindowSize size = *(WindowSize *) event.user.data1;
+            WindowContext->SwapWindow();
 
-                                glViewport(0, 0, size.Width, size.Height);
-                                FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
-                                MeowEngine::Log("Render Thread", "rescale userevent");
-                                break;
-                            }
-                        }
-                }
-            }
-
-            // Clear frame
-            //  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // Issue OpenGL draw calls
-
-            Render();
-
-            {
-                PT_PROFILE_SCOPE_N("Swapping GL Buffer");
-                // Swap buffers
-                SDL_GL_SwapWindow(WindowContext->window);
-            }
-// Frame timing logic
-
-//                RenderThreadFrameRate->LockFrameRate();
-//                MeowEngine::Log("Frequency", ((int)SDL_GetPerformanceFrequency()) * 0.001f);
-
-            // renderring & swapping buffer again gives consistent frames - look into it more for stability
-//                Render();
-//
-//                {
-//                    PT_PROFILE_SCOPE_N("Swapping GL Buffer");
-//                    // Swap buffers
-//                    SDL_GL_SwapWindow(WindowContext->window);
-//                }
             // MeowEngine::Log("Render Thread", "Waiting for other threads to finish processing");
             // wait for all threads to sync up for frame ending
-            SharedState.SyncPointStartRenderBarrier.get()->Wait();
+            SharedState.SyncPointStartRenderBarrier->Wait();
 
             // MeowEngine::Log("Render Thread", "Waiting for main thread to finish swapping buffers");
             // wait until buffers are synced on main thread
-            SharedState.SyncPointEndRenderBarrier.get()->Wait();
-
-
-//                RenderThreadFrameRate.End();
+            SharedState.SyncPointEndRenderBarrier->Wait();
         }
 
-        // exit
+        // Just in case extra delay before closing
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
+        // Notify main thread, that thread count has changed
         SharedState.ActiveWaitThread.GetAtomicAndNotify().Get()--;
 
         MeowEngine::Log("Render Thread", "Ended");
-
     }
 
-    void OpenGLRenderMultiThread::Render() {
-        PT_PROFILE_SCOPE_N("setting current");
-        // We let opengl know that any after this will be drawn into custom frame buffer
-        {
-            PT_PROFILE_SCOPE_N("framebuffer");
-            FrameBuffer->Bind();
+    void OpenGLRenderMultiThread::ProcessDeviceEvents(std::queue<SDL_Event>& inEvents) {
+        PT_PROFILE_SCOPE;
 
-            {
-                PT_PROFILE_SCOPE_N("scene render");
-                glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        while(!inEvents.empty()) {
+            SDL_Event event = inEvents.front();
+            inEvents.pop();
 
-                Scene->RenderGameView(*Renderer);
+            UserInterface->Input(event);
 
-                FrameBuffer->Unbind();
+            switch (event.type) {
+                case SDL_USEREVENT:
+                    switch (event.user.code) {
+                        case 2: {
+                            const WindowSize size = *(WindowSize *) event.user.data1;
+
+                            glViewport(0, 0, size.Width, size.Height);
+                            FrameBuffer->RescaleFrameBuffer(size.Width, size.Height);
+                            MeowEngine::Log("Render Thread", "Rescaled");
+                            break;
+                        }
+                    }
             }
         }
+    }
+
+    void OpenGLRenderMultiThread::RenderGameView() {
+        PT_PROFILE_SCOPE;
+
+        // We let opengl know that any after this will be drawn into custom frame buffer
+        FrameBuffer->Bind();
 
         glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        {
-            PT_PROFILE_SCOPE_N("UI render");
-//                MeowEngine::Log("Frame Rate: ", static_cast<int>(RenderThreadFrameRate.GetFrameRate()));
-            Scene->RenderUserInterface(*Renderer, FrameBuffer->GetFrameTexture(), FrameRateCounter->GetFrameRate());
-        }
+        Scene->RenderGameView(*GameView);
 
-//                {
-//                    PT_PROFILE_SCOPE_N("waiting");
+        // Let opengl know again, that we don't have to draw on custom frame buffer
+        FrameBuffer->Unbind();
+    }
 
-//                    // Frame timing logic
-//                    Uint64 frameEndTime = SDL_GetPerformanceCounter();
-//                    double frameDuration = (double) (frameEndTime - currentTime) / frequency;
-//
-//                    while (frameDuration < targetFrameTime) {
-//                        frameEndTime = SDL_GetPerformanceCounter();
-//                        frameDuration = (double) (frameEndTime - currentTime) / frequency;
-//                    }
-//
-//                    previousTime = frameEndTime;
-//                }
-//                {
-//                    FpsCounter.frameEnd();
-//                    PT_PROFILE_SCOPE_N("swap");
-//                    SDL_GL_SwapWindow(Window);
+    void OpenGLRenderMultiThread::RenderUserInterface() {
+        PT_PROFILE_SCOPE;
+
+        glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        Scene->RenderUserInterface(*GameView, FrameBuffer->GetFrameTexture(), FrameRateCounter->GetFrameRate());
+    }
+
+} // MeowEngine
+
+
 
 //                // Manual Frame Synchronization --
 //                // Insert a fence sync object at the end of the previous frame's commands
@@ -204,7 +160,3 @@ namespace MeowEngine {
 //                glDeleteSync(sync);
 //                 -- end
 //                }
-    }
-
-
-} // MeowEngine

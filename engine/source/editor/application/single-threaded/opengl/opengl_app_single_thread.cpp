@@ -9,7 +9,7 @@
 #include "log.hpp"
 
 #include "opengl_render_system.hpp"
-#include "imgui_renderer.hpp"
+#include "imgui_userinterface_system.hpp"
 
 #include "opengl_framebuffer.hpp"
 #include "opengl_asset_manager.hpp"
@@ -87,13 +87,13 @@ namespace {
 
     MeowEngine::OpenGLRenderSystem CreateRenderer(std::shared_ptr<MeowEngine::OpenGLAssetManager> assetManager) {
         SDL_GLContext test;
-        std::shared_ptr<MeowEngine::graphics::ImGuiRenderer> test1;
-        test1 = make_shared<MeowEngine::graphics::ImGuiRenderer>(nullptr, test);
+        std::shared_ptr<MeowEngine::graphics::ImGuiUserInterfaceSystem> test1;
+        test1 = make_shared<MeowEngine::graphics::ImGuiUserInterfaceSystem>(nullptr, test);
         return MeowEngine::OpenGLRenderSystem(assetManager, test1);
     }
 
-    MeowEngine::graphics::ImGuiRenderer CreateUI(SDL_Window* window, SDL_GLContext& context) {
-        return MeowEngine::graphics::ImGuiRenderer(window, context);
+    MeowEngine::graphics::ImGuiUserInterfaceSystem CreateUI(SDL_Window* window, SDL_GLContext& context) {
+        return MeowEngine::graphics::ImGuiUserInterfaceSystem(window, context);
     }
 
     std::shared_ptr<MeowEngine::simulator::PhysicsSystem> CreatePhysics() {
@@ -117,7 +117,7 @@ namespace {
 struct OpenGLAppSingleThread::Internal {
     SDL_Window* Window;
     SDL_GLContext Context;
-    MeowEngine::graphics::ImGuiRenderer UI;
+    MeowEngine::graphics::ImGuiUserInterfaceSystem UI;
     MeowEngine::graphics::OpenGLFrameBuffer FrameBuffer;
     MeowEngine::input::InputManager InputManager;
 
