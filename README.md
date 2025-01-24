@@ -16,7 +16,7 @@ providing a unique opportunity to learn and experiment
 with modern technologies and architectural concepts.
 
 ## Demo [(web v0.3 build)](http://wulcat.com/physicat/index.html)
-<img src="screenshots/engine_v3.gif" width="700">
+<img src="screenshots/engine_v0.4.gif" width="700">
 
 ## Compatibility 
 
