@@ -54,18 +54,19 @@ void main() {
 
     if(t > 0.0) {
         float linearDepth = computeLinearDepth(fragPos3D, 45.0);
-        float fading = max(0.0, (0.5 - linearDepth));
+        float fading = max(0.0, (1.0 - linearDepth));
 
-        v_fragColor = (grid(fragPos3D, 1.5, true) + grid(fragPos3D, 0.25, true)) ;//* float(t > 0);
-        v_fragColor.a *= fading;
+        //v_fragColor = (grid(fragPos3D, 1.5, true) + grid(fragPos3D, 0.25, true)) ;//* float(t > 0);
+        v_fragColor = vec4(18.0/255.0, 18.0/255.0, 18.0/255.0 , 1.0);
+        v_fragColor.a *= 1 - fading;
     }
     else {
-        // just little blue for adding light to scene
+       //  just little blue for adding light to scene
         float linearDepth = computeLinearDepth(fragPos3D, 60.0);
         float fading = max(0.0, (0.0 - linearDepth));
 
-        //v_fragColor = vec4(147.0/255.0, 209.0/255.0, 255.0/255.0 , 1.0);
-        v_fragColor.a *= 1.0 - fading;
+        v_fragColor = vec4(18.0/255.0, 18.0/255.0, 18.0/255.0 , 1.0);
+        //v_fragColor.a *= 1.0 - fading;
     }
 }
 

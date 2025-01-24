@@ -14,7 +14,8 @@ namespace MeowEngine::assets {
     enum class ShaderPipelineType {
         Default,
         Line,
-        Grid
+        Grid,
+        Sky
     };
 
     enum class StaticMeshType {

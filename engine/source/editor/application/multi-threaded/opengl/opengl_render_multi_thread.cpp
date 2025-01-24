@@ -123,7 +123,7 @@ namespace MeowEngine {
         // We let opengl know that any after this will be drawn into custom frame buffer
         FrameBuffer->Bind();
 
-        glClearColor(50 / 255.0f, 50 / 255.0f, 50 / 255.0f, 1.0f);
+        glClearColor(38 / 255.0f, 38 / 255.0f, 38 / 255.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Scene->RenderGameView(*GameView);

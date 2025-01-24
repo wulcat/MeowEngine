@@ -67,7 +67,8 @@ struct MainScene::Internal {
         assetManager->LoadShaderPipelines({
                                                   assets::ShaderPipelineType::Grid,
                                                   assets::ShaderPipelineType::Default,
-                                                  assets::ShaderPipelineType::Line
+                                                  assets::ShaderPipelineType::Line,
+                                                  assets::ShaderPipelineType::Sky
                                           });
 
         assetManager->LoadStaticMeshes({
@@ -175,6 +176,35 @@ struct MainScene::Internal {
                 cubeEntity1
         );
 
+        for(int i = 0 ; i < 2500; i++){
+            const auto cubeTest = RegistryBuffer.AddEntity();
+            RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeTest, "cube");
+            RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+                    cubeTest,
+                    Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                    glm::vec3{0.0f, 20.0f + i, 2},
+                    glm::vec3{0.5f, 0.5f,0.5f},
+                    glm::vec3{0.0f, 1.0f, 0.0f},
+                    0
+            );
+            RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
+                    cubeTest,
+                    assets::ShaderPipelineType::Default,
+                    new MeowEngine::StaticMeshInstance{
+                            assets::StaticMeshType::Cube,
+                            assets::TextureType::Pattern
+                    }
+            );
+            RegistryBuffer.AddComponent<entity::ColliderComponent>(
+                    cubeTest,
+                    entity::ColliderType::BOX,
+                    new entity::BoxColliderData()
+            );
+            RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
+                    cubeTest
+            );
+        }
+
         // setup object
         // later query for all rigidbody, get the physx, get the collider and construct for physics
 
@@ -191,6 +221,21 @@ struct MainScene::Internal {
         RegistryBuffer.AddComponent<entity::RenderComponentBase>(
             gridEntity,
             assets::ShaderPipelineType::Grid
+        );
+
+        const auto skyEntity = RegistryBuffer.AddEntity();
+        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(skyEntity, "sky");
+        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+                skyEntity,
+                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                glm::vec3{0, 0, 0},
+                glm::vec3{1.0, 1.0f, 1.0f},
+                glm::vec3{0.0f, 1.0f, 0.0f},
+                0.0f
+        );
+        RegistryBuffer.AddComponent<entity::RenderComponentBase>(
+                skyEntity,
+                assets::ShaderPipelineType::Sky
         );
 
         MeowEngine::Log("Creating", "Created");

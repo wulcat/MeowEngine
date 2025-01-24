@@ -90,12 +90,22 @@ struct OpenGLRenderSystem::Internal {
 
         for(auto &&[entity,renderComponent, transform]: registry.view<entity::RenderComponentBase, entity::Transform3DComponent>().each())
         {
-            AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
-                    *AssetManager,
-                    &renderComponent,
-                    &transform,
-                    cameraObject
-            );
+            if(renderComponent.GetShaderPipelineType() == ShaderPipelineType::Sky) {
+                AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Sky)->Render(
+                        *AssetManager,
+                        &renderComponent,
+                        &transform,
+                        cameraObject
+                );
+            }
+            else {
+                AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
+                        *AssetManager,
+                        &renderComponent,
+                        &transform,
+                        cameraObject
+                );
+            }
         }
     }
 

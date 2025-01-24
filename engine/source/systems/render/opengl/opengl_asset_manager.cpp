@@ -112,6 +112,8 @@ namespace {
                 return new OpenGLLinePipeline(shaderProgramID);
             case ShaderPipelineType::Grid:
                 return new OpenGLGridPipeline(shaderProgramID);
+            case ShaderPipelineType::Sky:
+                return new OpenGLGridPipeline(shaderProgramID);
             default:
                 return {};
         }
