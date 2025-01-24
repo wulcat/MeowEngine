@@ -22,12 +22,12 @@
 - [x] Adding reflections for dynamic UI
 - [x] Adding property changes to track UI updates
 - [x] Creating objects in runtime (on start/end of main thread)
-- [ ] Bringing back VSync & Delta Time Calculations
+- [x] Bringing back VSync & Delta Time Calculations
 - [ ] Creating library for performing maths functions
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
 - [ ] Basic simulation tests
-- [ ] Able to see physics colliders
+- [ ] Able to see physics colliders (or at least primitives)
 - [ ] Break....... Rejuvenating
 - [ ] Updating bash files for supporting physx on mac and web builds
 - [ ] Creating vehicle using PhysX
