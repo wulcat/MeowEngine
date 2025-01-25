@@ -240,11 +240,35 @@ fetch_third_party_lib_physx()
 
   # linux-aarch64 | linux
   pushd libs/third-party/physx/physx || exit
-    ./generate_projects.sh linux
+    ./generate_projects.sh linux-clang
 
-    pushd compiler/linux-release || exit
+    pushd compiler/linux-clang-release || exit
         make clean
         make -j4
+    popd || exit
+  popd || exit
+}
+
+fetch_third_party_lib_physx_web()
+{
+  verify_third_party_folder_exists
+
+  # shellcheck disable=SC2164
+  pushd libs/third-party
+    if [ ! -d "physx" ] ; then
+      echo "Fetching PhysX 5.0"
+      git clone https://github.com/wulcat/PhysX.git physx
+    fi
+  # shellcheck disable=SC2164
+  popd
+
+  # linux-aarch64 | linux
+  pushd libs/third-party/physx/physx || exit
+    ./generate_projects.sh emscripten
+
+    pushd compiler/emscripten-release || exit
+        make clean
+        make -j8
     popd || exit
   popd || exit
 }

@@ -41,6 +41,14 @@ pushd libs/third-party
     fi
 popd
 
+pushd libs/third-party/emscripten
+    echo "Configuring Emscripten environment variables"
+    source ./emsdk_env.sh
+popd
+
+fetch_third_party_lib_physx_web
+
+
 #Next steps:
 #- To conveniently access emsdk tools from the command line,
 #  consider adding the following directories to your PATH:
