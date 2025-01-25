@@ -54,7 +54,7 @@ void main() {
 
     if(t > 0.0) {
         float linearDepth = computeLinearDepth(fragPos3D, 45.0);
-        float fading = max(0.0, (0.5 - linearDepth));
+        float fading = max(0.0, (0.4 - linearDepth));
 
         v_fragColor = (grid(fragPos3D, 1.5, true) + grid(fragPos3D, 0.25, true)) ;//* float(t > 0);
         v_fragColor.a *= fading;

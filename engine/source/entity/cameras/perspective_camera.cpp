@@ -8,7 +8,7 @@ using MeowEngine::PerspectiveCamera;
 
 namespace {
     glm::mat4 CreateProjectionMatrix(const float& width, const float& height) {
-        return glm::perspective(glm::radians(45.0f), width / height, 0.01f, 100.0f);
+        return glm::perspective(glm::radians(45.0f), width / height, 0.01f, 3000.0f);
     }
 
     glm::mat4 CreateViewMatrix(glm::vec3 position, glm::vec3 lookAtTarget, glm::vec3 up) {

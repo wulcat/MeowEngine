@@ -8,7 +8,7 @@
 #include "opengl_mesh_pipeline.hpp"
 #include "opengl_line_pipeline.hpp"
 #include "opengl_grid_pipeline.hpp"
-
+#include "opengl_sky_box_pipeline.hpp"
 
 using MeowEngine::OpenGLRenderSystem;
 
@@ -90,22 +90,27 @@ struct OpenGLRenderSystem::Internal {
 
         for(auto &&[entity,renderComponent, transform]: registry.view<entity::RenderComponentBase, entity::Transform3DComponent>().each())
         {
-            if(renderComponent.GetShaderPipelineType() == ShaderPipelineType::Sky) {
-                AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Sky)->Render(
-                        *AssetManager,
-                        &renderComponent,
-                        &transform,
-                        cameraObject
-                );
-            }
-            else {
+
                 AssetManager->GetShaderPipeline<OpenGLGridPipeline>(ShaderPipelineType::Grid)->Render(
                         *AssetManager,
                         &renderComponent,
                         &transform,
                         cameraObject
                 );
-            }
+
+        }
+
+        for(auto &&[entity,renderComponent, transform]: registry.view<entity::SkyBoxComponent, entity::Transform3DComponent>().each())
+        {
+
+                AssetManager->GetShaderPipeline<OpenGLSkyBoxPipeline>(ShaderPipelineType::Sky)->Render(
+                        *AssetManager,
+                        &renderComponent,
+                        &transform,
+                        cameraObject
+                );
+
+
         }
     }
 

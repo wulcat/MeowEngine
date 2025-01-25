@@ -17,7 +17,7 @@ namespace MeowEngine::entity {
         float Size;
     };
 
-    class MeshRenderComponent : public MeowEngine::entity::RenderComponentBase { ;
+    class MeshRenderComponent : public MeowEngine::entity::RenderComponentBase {
 
     public:
         static void Reflect();

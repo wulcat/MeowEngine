@@ -20,6 +20,8 @@
 #include "box_collider_data.hpp"
 #include "collider_component.hpp"
 
+#include "sky_box_component.hpp"
+
 #include "rigidbody_component.hpp"
 #include "entt_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
@@ -96,6 +98,7 @@ struct MainScene::Internal {
         REGISTER_ENTT_COMPONENT(RenderComponentBase);
         REGISTER_ENTT_COMPONENT(LineRenderComponent);
         REGISTER_ENTT_COMPONENT(MeshRenderComponent);
+        REGISTER_ENTT_COMPONENT(SkyBoxComponent);
     }
 
     void AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
@@ -233,7 +236,7 @@ struct MainScene::Internal {
                 glm::vec3{0.0f, 1.0f, 0.0f},
                 0.0f
         );
-        RegistryBuffer.AddComponent<entity::RenderComponentBase>(
+        RegistryBuffer.AddComponent<entity::SkyBoxComponent>(
                 skyEntity,
                 assets::ShaderPipelineType::Sky
         );

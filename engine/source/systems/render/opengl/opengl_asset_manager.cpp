@@ -8,6 +8,7 @@
 #include "opengl_mesh_pipeline.hpp"
 #include "opengl_line_pipeline.hpp"
 #include "opengl_grid_pipeline.hpp"
+#include "opengl_sky_box_pipeline.hpp"
 
 
 using MeowEngine::OpenGLAssetManager;
@@ -197,6 +198,7 @@ T* OpenGLAssetManager::GetShaderPipeline(const MeowEngine::assets::ShaderPipelin
 template OpenGLMeshPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLMeshPipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
 template OpenGLLinePipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLLinePipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
 template OpenGLGridPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLGridPipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
+template OpenGLSkyBoxPipeline* OpenGLAssetManager::GetShaderPipeline<OpenGLSkyBoxPipeline>(const MeowEngine::assets::ShaderPipelineType& shaderPipeline);
 
 
 const MeowEngine::OpenGLMesh& OpenGLAssetManager::GetStaticMesh(const MeowEngine::assets::StaticMeshType& staticMesh) const {
