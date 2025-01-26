@@ -98,10 +98,10 @@ target_link_libraries(MeowEngine PUBLIC
 )
 
 # BUG: some weird issue here. PHYSX_LIB is somehow already set to a physic common lib path.
-find_library(PHYSX_LIBRARY NAMES libPhysX_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
-find_library(PHYSX_COMMON_LIB NAMES libPhysXCommon_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
-find_library(PHYSX_FOUNDATION_LIB NAMES libPhysXFoundation_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
-find_library(PHYSX_EXTENSIONS_LIB NAMES libPhysXExtensions_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.clang/release)
+find_library(PHYSX_LIBRARY NAMES libPhysX_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.x86_64/release)
+find_library(PHYSX_COMMON_LIB NAMES libPhysXCommon_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.x86_64/release)
+find_library(PHYSX_FOUNDATION_LIB NAMES libPhysXFoundation_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.x86_64/release)
+find_library(PHYSX_EXTENSIONS_LIB NAMES libPhysXExtensions_static_64.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/linux.x86_64/release)
 
 target_link_libraries(MeowEngine PUBLIC
      ${PHYSX_LIBRARY}
