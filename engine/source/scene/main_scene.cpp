@@ -23,7 +23,7 @@
 #include "sky_box_component.hpp"
 
 #include "rigidbody_component.hpp"
-#include "entt_buffer.hpp"
+#include "entt_triple_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
 
 #include "physx_physics_system.hpp"
@@ -47,7 +47,7 @@ struct MainScene::Internal {
     MeowEngine::PerspectiveCamera Camera;
     MeowEngine::CameraController CameraController;
 
-    EnttBuffer RegistryBuffer;
+    EnttTripleBuffer RegistryBuffer;
 
     // User Input Events
     const uint8_t* KeyboardState; // SDL owns the object & will manage the lifecycle. We just keep a pointer.
@@ -376,7 +376,7 @@ struct MainScene::Internal {
     }
 
     void SwapMainAndRenderBufferOnMainThread() {
-        RegistryBuffer.Swap();
+        RegistryBuffer.SwapBuffer();
     }
 
     void SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) {
