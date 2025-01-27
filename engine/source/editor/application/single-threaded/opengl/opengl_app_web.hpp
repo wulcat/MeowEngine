@@ -9,12 +9,11 @@
 
 #include "frame_rate_counter.hpp"
 #include "input_manager.hpp"
-#include "scene.hpp"
+#include "scene_single_thread.hpp"
 #include "sdl_window.hpp"
 #include "imgui_userinterface_system.hpp"
 #include "opengl_render_system.hpp"
 #include "physx_physics_system.hpp"
-
 
 #include "emscripten_wrapper.hpp"
 
@@ -22,32 +21,31 @@ using namespace std;
 
 namespace MeowEngine {
 
-    class OpenGLAppWeb {
+    struct OpenGLAppWeb {
     public:
-//        OpenGLAppWeb();
-
+        OpenGLAppWeb() {
+            MeowEngine::Log("Application", "Created");
+        }
+        ~OpenGLAppWeb() {
+            MeowEngine::Log("Application", "Destroyed");
+        }
         // main
         void CreateApplication();
 
-        void EngineLoop() {
-            FrameRateCounter->Calculate();
-            ProcessDeviceEvents(FrameRateCounter->DeltaTime);
-            RenderGameView();
-            RenderUserInterface();
-        }
-
-        bool ProcessDeviceEvents(const float& inDeltaTime) {}
+        void CreateScene();
+        void EngineLoop();
+        bool ProcessDeviceEvents(const float& inDeltaTime);
 
         // render
-        void RenderGameView() {}
-        void RenderUserInterface() {}
+        void RenderGameView();
+        void RenderUserInterface();
 
         // main
         std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
         std::unique_ptr<MeowEngine::input::InputManager> InputManager;
 
         // shared
-        std::shared_ptr<MeowEngine::Scene> Scene;
+        std::shared_ptr<MeowEngine::SceneSingleThread> Scene;
 
         // render
         std::unique_ptr<MeowEngine::SDLWindow> WindowContext;
