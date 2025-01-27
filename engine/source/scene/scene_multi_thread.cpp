@@ -2,7 +2,7 @@
 // Created by Akira Mujawar on 21/06/24.
 //
 
-#include "main_scene.hpp"
+#include "scene_multi_thread.hpp"
 
 #include "camera_controller.hpp"
 #include "perspective_camera.hpp"

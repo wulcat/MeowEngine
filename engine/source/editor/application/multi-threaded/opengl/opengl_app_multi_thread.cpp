@@ -4,7 +4,7 @@
 
 #include "opengl_app_multi_thread.hpp"
 
-#include "main_scene.hpp"
+#include "scene_multi_thread.hpp"
 
 namespace MeowEngine {
     OpenGLAppMultiThread::OpenGLAppMultiThread()

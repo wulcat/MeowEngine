@@ -36,4 +36,4 @@ namespace MeowEngine {
 }
 
 
-#endif //MEOWENGINE_MAIN_SCENE_HPP
+#endif //MEOWENGINE_SCENE_MULTI_THREAD_HPP
