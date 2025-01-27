@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 05/01/25.
 //
 
-#ifndef MEOWENGINE_ENTT_BUFFER_HPP
-#define MEOWENGINE_ENTT_BUFFER_HPP
+#ifndef MEOWENGINE_ENTT_TRIPLE_BUFFER_HPP
+#define MEOWENGINE_ENTT_TRIPLE_BUFFER_HPP
 
 #include "entt_wrapper.hpp"
 #include "double_buffer.hpp"
@@ -17,17 +17,44 @@
 #include "reflection_property_change.hpp"
 #include "physics_system.hpp"
 
+#include "entt_buffer_base.hpp"
+
 using namespace std;
 
+// entt_wrapper
+//
+
+// entt
+// entt_system - pure class?
+// - Add Entity
+// - Add Component - cannot be virtual >.<
+// - Reflection
+
+// entt_single_buffer_system
+// implement
+
+// entt_triple_buffer_system
+// implement
+
+// entt_single_thread_system
+// entt_multi_thread_system
+
+// entt double buffer
+
 namespace MeowEngine {
-    struct EnttBuffer : public DoubleBuffer<entt::registry> {
+    struct EnttTripleBuffer : public MeowEngine::EnttBufferBase {
     public:
-        EnttBuffer();
+        EnttTripleBuffer();
 
+        entt::registry& GetCurrent() override;
+        entt::registry& GetFinal();
         entt::registry& GetStaging();
-        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& GetPropertyChangeQueue();
 
-        entt::entity AddEntity();
+        void SwapBuffer();
+
+//        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& GetPropertyChangeQueue();
+
+        entt::entity AddEntity() override;
 
         template<typename ComponentType, typename... Args>
         void AddComponent(entt::entity& inEntity, Args &&...inArgs);
@@ -45,7 +72,7 @@ namespace MeowEngine {
          * Any queued property value changes are applied to current(main) & final(render) buffers.
          * Further we queue them for staging(physics)
          */
-        void ApplyPropertyChange();
+        void ApplyPropertyChange() override;
 
         /**
          * Any queued property value changes are applied to staging(physics) buffers.
@@ -64,12 +91,13 @@ namespace MeowEngine {
          */
         void AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics);
 
+        MeowEngine::DoubleBuffer<entt::registry> DoubleBuffer;
         entt::registry Staging;
 
         /**
          * When a property value is changed on Render (ui) we queue in this list
          */
-        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
+//        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
 
     private:
         /**
@@ -89,15 +117,15 @@ namespace MeowEngine {
         moodycamel::ConcurrentQueue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> PhysicsUiInputPropertyChangesQueue;
     };
 
-    template<typename Type, typename... Args>
-    void MeowEngine::EnttBuffer::AddComponent(entt::entity &inEntity, Args &&... inArgs) {
-        Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
-        Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
+    template<typename ComponentType, typename... Args>
+    void MeowEngine::EnttTripleBuffer::AddComponent(entt::entity &inEntity, Args &&... inArgs) {
+        DoubleBuffer.GetCurrent().emplace<ComponentType>(inEntity, std::forward<Args>(inArgs)...);
+        DoubleBuffer.GetFinal().emplace<ComponentType>(inEntity, std::forward<Args>(inArgs)...);
 
         ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::PhysicsSystem* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
-                Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
+                Staging.emplace<ComponentType>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
             }, inArgTuple);
 
             if(Staging.all_of<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity)) {
@@ -108,15 +136,15 @@ namespace MeowEngine {
 
     }
 
-    template<typename Type, typename... Args>
-    void MeowEngine::EnttBuffer::AddComponent(const entt::entity &inEntity, Args &&... inArgs) {
-        Current.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
-        Final.emplace<Type>(inEntity, std::forward<Args>(inArgs)...);
+    template<typename ComponentType, typename... Args>
+    void MeowEngine::EnttTripleBuffer::AddComponent(const entt::entity &inEntity, Args &&... inArgs) {
+        DoubleBuffer.GetCurrent().emplace<ComponentType>(inEntity, std::forward<Args>(inArgs)...);
+        DoubleBuffer.GetFinal().emplace<ComponentType>(inEntity, std::forward<Args>(inArgs)...);
 
         ComponentToAddOnStagingQueue.enqueue([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)](MeowEngine::simulator::PhysicsSystem* inPhysics) {
             std::apply([&](auto&&... inUnpacked) {
 
-                Staging.emplace<Type>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
+                Staging.emplace<ComponentType>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
             }, inArgTuple);
             if(Staging.all_of<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity)) {
                 auto [transform, collider, rigidbody] =  Staging.get<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>(inEntity);
@@ -127,4 +155,4 @@ namespace MeowEngine {
 }
 
 
-#endif //MEOWENGINE_ENTT_BUFFER_HPP
+#endif //MEOWENGINE_ENTT_TRIPLE_BUFFER_HPP

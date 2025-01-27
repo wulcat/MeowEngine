@@ -2,35 +2,47 @@
 // Created by Akira Mujawar on 05/01/25.
 //
 
-#include "entt_buffer.hpp"
+#include "entt_triple_buffer.hpp"
 #include "entt_reflection_wrapper.hpp"
 
-MeowEngine::EnttBuffer::EnttBuffer()
+MeowEngine::EnttTripleBuffer::EnttTripleBuffer()
  : Staging() {}
 
-entt::registry& MeowEngine::EnttBuffer::GetStaging() {
+entt::registry& MeowEngine::EnttTripleBuffer::GetCurrent() {
+    return DoubleBuffer.GetCurrent();
+}
+
+entt::registry& MeowEngine::EnttTripleBuffer::GetFinal() {
+    return DoubleBuffer.GetFinal();
+}
+
+entt::registry& MeowEngine::EnttTripleBuffer::GetStaging() {
     return Staging;
 }
 
-std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& MeowEngine::EnttBuffer::GetPropertyChangeQueue() {
-    return UiInputPropertyChangesQueue;
+void MeowEngine::EnttTripleBuffer::SwapBuffer() {
+    DoubleBuffer.Swap();
 }
 
-entt::entity MeowEngine::EnttBuffer::AddEntity() {
-    entt::entity entity = Current.create();
-    Final.create(entity);
+//std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& MeowEngine::EnttTripleBuffer::GetPropertyChangeQueue() {
+//    return UiInputPropertyChangesQueue;
+//}
+
+entt::entity MeowEngine::EnttTripleBuffer::AddEntity() {
+    entt::entity entity = DoubleBuffer.GetCurrent().create();
+    DoubleBuffer.GetFinal().create(entity);
 
     EntityToAddOnStagingQueue.enqueue(entity);
 
     return entity;
 }
 
-void MeowEngine::EnttBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     AddEntitiesOnStaging();
     AddComponentsOnStaging(inPhysics);
 }
 
-void MeowEngine::EnttBuffer::AddEntitiesOnStaging() {
+void MeowEngine::EnttTripleBuffer::AddEntitiesOnStaging() {
     // If we have anything to dequeue from concurrent queue, we replicate and add in staging buffer
     entt::entity entity;
     while(EntityToAddOnStagingQueue.try_dequeue(entity)) {
@@ -38,7 +50,7 @@ void MeowEngine::EnttBuffer::AddEntitiesOnStaging() {
     }
 }
 
-void MeowEngine::EnttBuffer::AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+void MeowEngine::EnttTripleBuffer::AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     // Adds components with dynamic data parameter passed down from main thread
     std::function<void(MeowEngine::simulator::PhysicsSystem*)> method;
     while(ComponentToAddOnStagingQueue.try_dequeue(method)) {
@@ -46,20 +58,20 @@ void MeowEngine::EnttBuffer::AddComponentsOnStaging(MeowEngine::simulator::Physi
     }
 }
 
-void MeowEngine::EnttBuffer::ApplyPropertyChange() {
+void MeowEngine::EnttTripleBuffer::ApplyPropertyChange() {
     // Apply changes on current and final buffer and push into queue for same changes for staging
     while(!UiInputPropertyChangesQueue.empty()) {
         std::shared_ptr<MeowEngine::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
 
-        MeowEngine::Reflection.ApplyPropertyChange(*change.get(), Current);
-        MeowEngine::Reflection.ApplyPropertyChange(*change.get(), Final);
+        MeowEngine::Reflection.ApplyPropertyChange(*change.get(), DoubleBuffer.GetCurrent());
+        MeowEngine::Reflection.ApplyPropertyChange(*change.get(), DoubleBuffer.GetFinal());
 
         PhysicsUiInputPropertyChangesQueue.enqueue(change);
         UiInputPropertyChangesQueue.pop();
     }
 }
 
-void MeowEngine::EnttBuffer::ApplyPropertyChangeOnStaging() {
+void MeowEngine::EnttTripleBuffer::ApplyPropertyChangeOnStaging() {
     // Apply update physics transform to entities
     auto view = Staging.view<entity::Transform3DComponent, entity::RigidbodyComponent>();
 
