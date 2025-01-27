@@ -58,6 +58,42 @@ add_executable(
     ${CPP_SOURCES}
 )
 
+# BUG: some weird issue here. PHYSX_LIB is somehow already set to a physic common lib path.
+message("${THIRD_PARTY_DIR}/physx/physx/bin/emscripten/release")
+message(STATUS "PhysX library search path: ${THIRD_PARTY_DIR}/physx/physx/bin/emscripten/release")
+get_filename_component(PHYSX_LIB_DIR
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/third-party/physx/physx/bin/emscripten/release"
+        ABSOLUTE
+        )
+
+message(STATUS "PhysX absolute library path: ${PHYSX_LIB_DIR}")
+file(GLOB PHYSX_LIBS "${PHYSX_LIB_DIR}/*.a")
+message(STATUS "PhysX libraries found: ${PHYSX_LIBS}")
+set(PHYSX_LIBS
+        "${PHYSX_LIB_DIR}/libPhysX_static.a"
+        "${PHYSX_LIB_DIR}/libPhysXCommon_static.a"
+        "${PHYSX_LIB_DIR}/libPhysXFoundation_static.a"
+        "${PHYSX_LIB_DIR}/libPhysXExtensions_static.a"
+        )
+
+target_link_libraries(web PUBLIC ${PHYSX_LIBS})
+
+#find_library(PHYSX_LIBRARY NAMES libPhysX_static.a PATHS ${PHYSX_LIB_DIR} NO_DEFAULT_PATH)
+#find_library(PHYSX_COMMON_LIB NAMES libPhysXCommon_static.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/emscripten/release)
+#find_library(PHYSX_FOUNDATION_LIB NAMES libPhysXFoundation_static.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/emscripten/release)
+#find_library(PHYSX_EXTENSIONS_LIB NAMES libPhysXExtensions_static.a PATHS ${THIRD_PARTY_DIR}/physx/physx/bin/emscripten/release)
+
+#message(STATUS "PhysX library: ${PHYSX_LIBRARY}")
+#message(STATUS "PhysX Common library: ${PHYSX_COMMON_LIB}")
+#message(STATUS "PhysX Foundation library: ${PHYSX_FOUNDATION_LIB}")
+#message(STATUS "PhysX Extensions library: ${PHYSX_EXTENSIONS_LIB}")
+#
+#target_link_libraries(web PUBLIC
+#        ${PHYSX_LIBRARY}
+#        ${PHYSX_COMMON_LIB}
+#        ${PHYSX_FOUNDATION_LIB}
+#        ${PHYSX_EXTENSIONS_LIB}
+#        )
 
 # These properties specify what kind of Emscripten build to perform and are assigned to our 'a-simple-triangle' executable target.
 set_target_properties(
