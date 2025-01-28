@@ -14,7 +14,7 @@
 #include "opengl_framebuffer.hpp"
 #include "opengl_asset_manager.hpp"
 #include "input_manager.hpp"
-#include "main_scene.hpp"
+#include "scene_multi_thread.hpp"
 #include "physx_physics_system.hpp"
 #include <frame_rate_counter.hpp>
 #include <string>
@@ -100,17 +100,17 @@ namespace {
         return std::make_shared<MeowEngine::simulator::PhysXPhysicsSystem>();
     }
 
-    std::unique_ptr<MeowEngine::Scene> CreateMainScene(SDL_Window* window, MeowEngine::OpenGLAssetManager& assetManager, MeowEngine::simulator::PhysicsSystem& inPhysics) {
-        std::unique_ptr<MeowEngine::MainScene> mainScene {
-            std::make_unique<MeowEngine::MainScene>(
-                MeowEngine::sdl::GetWindowSize(window)
-            )
-        };
-
-//        mainScene->Create(assetManager, inPhysics);
-
-        return mainScene;
-    }
+//    std::unique_ptr<MeowEngine::Scene> CreateMainScene(SDL_Window* window, MeowEngine::OpenGLAssetManager& assetManager, MeowEngine::simulator::PhysicsSystem& inPhysics) {
+//        std::unique_ptr<MeowEngine::SceneMultiThread> mainScene {
+//            std::make_unique<MeowEngine::SceneMultiThread>(
+//                MeowEngine::sdl::GetWindowSize(window)
+//            )
+//        };
+//
+////        mainScene->Create(assetManager, inPhysics);
+//
+//        return mainScene;
+//    }
 
 } // namespace
 
@@ -123,7 +123,7 @@ struct OpenGLAppSingleThread::Internal {
 
     const std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
     MeowEngine::OpenGLRenderSystem Renderer;
-    std::unique_ptr<MeowEngine::Scene> Scene;
+//    std::unique_ptr<MeowEngine::Scene> Scene;
     std::shared_ptr<MeowEngine::simulator::PhysicsSystem> Physics;
 
     Internal() : Window(MeowEngine::sdl::CreateWindow(SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI)) ,
@@ -148,18 +148,18 @@ struct OpenGLAppSingleThread::Internal {
 //    }
 
     void OnViewportResize(const WindowSize& size) {
-        GetScene().OnWindowResized(size);
+//        GetScene().OnWindowResized(size);
         glViewport(0,0, size.Width,size.Height);
         FrameBuffer.RescaleFrameBuffer(size.Width, size.Height);
     }
-
-    MeowEngine::Scene& GetScene() {
-        if(!Scene) {
-            Scene = ::CreateMainScene(Window, *AssetManager, *Physics);
-        }
-
-        return *Scene;
-    }
+//
+//    MeowEngine::Scene& GetScene() {
+//        if(!Scene) {
+//            Scene = ::CreateMainScene(Window, *AssetManager, *Physics);
+//        }
+//
+//        return *Scene;
+//    }
 
     bool Input(const float& deltaTime) {
         PT_PROFILE_SCOPE;
@@ -211,7 +211,7 @@ struct OpenGLAppSingleThread::Internal {
         // Track keyboard and mouse clicks/hold/drag/position
         InputManager.ProcessInput();
 
-        GetScene().Input(deltaTime, InputManager);
+//        GetScene().Input(deltaTime, InputManager);
 
         return true;
     }
@@ -223,7 +223,7 @@ struct OpenGLAppSingleThread::Internal {
 
     void Update(const float& deltaTime) {
         PT_PROFILE_SCOPE;
-        GetScene().Update(deltaTime);
+//        GetScene().Update(deltaTime);
     }
 
     double targetFrameTime = 1.0 / 240.0;  // Targeting 60 FPS
