@@ -9,7 +9,7 @@
 #include "render_system.hpp"
 
 #include "opengl_asset_manager.hpp"
-#include "imgui_userinterface_system.hpp"
+#include "imgui_user_interface_system.hpp"
 
 #include <memory>
 

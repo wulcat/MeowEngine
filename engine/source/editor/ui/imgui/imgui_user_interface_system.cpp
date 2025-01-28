@@ -11,7 +11,7 @@
 
 #include <log.hpp>
 #include "imgui_wrapper.hpp"
-#include "imgui_userinterface_system.hpp"
+#include "imgui_user_interface_system.hpp"
 #include "bridge_wrapper.hpp"
 //#include "entt_wrapper.hpp"
 //#include <filesystem>
@@ -28,7 +28,31 @@ namespace {
         }
 //        exit(0); // Exit the parent process // shouldn't do this or the application destruction won't happen
     }
+
+    void LoadIniFromFileSystem() {
+        const char* iniPath = "assets/layout.ini"; // Path in the virtual filesystem
+        if (FILE* file = fopen(iniPath, "r")) {
+            fseek(file, 0, SEEK_END);
+            size_t size = ftell(file);
+            rewind(file);
+
+            char* buffer = new char[size + 1];
+            fread(buffer, 1, size, file);
+            buffer[size] = '\0'; // Null-terminate the string
+            fclose(file);
+
+            ImGui::LoadIniSettingsFromMemory(buffer, size);
+            delete[] buffer;
+
+            MeowEngine::Log("ImGUI", "Loaded File");
+        }
+        else {
+            MeowEngine::Log("ImGUI", "Failed to open file");
+        }
+    }
 }
+
+
 ImGuiUserInterfaceSystem::ImGuiUserInterfaceSystem(SDL_Window* window, SDL_GLContext& context)
 //    : isSceneViewportFocused(false)
 //    , SceneViewportSize({0,0})
@@ -52,6 +76,13 @@ ImGuiUserInterfaceSystem::ImGuiUserInterfaceSystem(SDL_Window* window, SDL_GLCon
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 //    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+#ifdef __EMSCRIPTEN__
+    LoadIniFromFileSystem();
+#else
+    io.IniFilename = "assets/layout.ini";
+    ImGui::LoadIniSettingsFromDisk(io.IniFilename);
+#endif
 
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
@@ -169,7 +200,7 @@ void MeowEngine::graphics::ImGuiUserInterfaceSystem::DrawFrame(entt::registry& r
 //    CreateObjectEditorPanel(temp);
 //    CreateLogPanel();
 
-   // ImGui::ShowDemoWindow(&IsRendering);
+//    ImGui::ShowDemoWindow(&IsRendering);
 }
 
 void ImGuiUserInterfaceSystem::RenderFrame() {

@@ -2,8 +2,8 @@
 // Created by Akira Mujawar on 08/07/24.
 //
 
-#ifndef MEOWENGINE_IMGUI_USERINTERFACE_SYSTEM_HPP
-#define MEOWENGINE_IMGUI_USERINTERFACE_SYSTEM_HPP
+#ifndef MEOWENGINE_IMGUI_USER_INTERFACE_SYSTEM_HPP
+#define MEOWENGINE_IMGUI_USER_INTERFACE_SYSTEM_HPP
 
 //#include <scene.hpp>
 #include "opengl_framebuffer.hpp"
@@ -60,4 +60,4 @@ namespace MeowEngine::graphics {
 }
 
 
-#endif //MEOWENGINE_IMGUI_USERINTERFACE_SYSTEM_HPP
+#endif //MEOWENGINE_IMGUI_USER_INTERFACE_SYSTEM_HPP
