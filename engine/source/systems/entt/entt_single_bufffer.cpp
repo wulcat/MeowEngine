@@ -5,7 +5,7 @@
 #include "entt_single_buffer.hpp"
 
 namespace MeowEngine {
-//    EnttSingleBuffer::EnttSingleBuffer() {}
+    EnttSingleBuffer::EnttSingleBuffer() {}
 
     entt::registry &EnttSingleBuffer::GetCurrent() {
         return Current;

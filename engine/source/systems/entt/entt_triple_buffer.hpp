@@ -5,7 +5,6 @@
 #ifndef MEOWENGINE_ENTT_TRIPLE_BUFFER_HPP
 #define MEOWENGINE_ENTT_TRIPLE_BUFFER_HPP
 
-#include "entt_wrapper.hpp"
 #include "double_buffer.hpp"
 #include "queue"
 #include "functional"
@@ -21,25 +20,6 @@
 
 using namespace std;
 
-// entt_wrapper
-//
-
-// entt
-// entt_system - pure class?
-// - Add Entity
-// - Add Component - cannot be virtual >.<
-// - Reflection
-
-// entt_single_buffer_system
-// implement
-
-// entt_triple_buffer_system
-// implement
-
-// entt_single_thread_system
-// entt_multi_thread_system
-
-// entt double buffer
 
 namespace MeowEngine {
     struct EnttTripleBuffer : public MeowEngine::EnttBufferBase {
@@ -51,8 +31,6 @@ namespace MeowEngine {
         entt::registry& GetStaging();
 
         void SwapBuffer();
-
-//        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& GetPropertyChangeQueue();
 
         entt::entity AddEntity() override;
 
@@ -93,11 +71,6 @@ namespace MeowEngine {
 
         MeowEngine::DoubleBuffer<entt::registry> DoubleBuffer;
         entt::registry Staging;
-
-        /**
-         * When a property value is changed on Render (ui) we queue in this list
-         */
-//        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
 
     private:
         /**

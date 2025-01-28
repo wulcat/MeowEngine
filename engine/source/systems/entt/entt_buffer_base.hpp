@@ -20,7 +20,10 @@ namespace MeowEngine {
          * Which are applied at the end of frame at sync point both single / multi threads
          * @return
          */
-        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& GetPropertyChangeQueue();
+        std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& GetPropertyChangeQueue()
+        {
+            return UiInputPropertyChangesQueue;
+        }
 
         virtual entt::registry& GetCurrent() = 0;
 
@@ -44,9 +47,6 @@ namespace MeowEngine {
         std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> UiInputPropertyChangesQueue;
     };
 
-    std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>> &EnttBufferBase::GetPropertyChangeQueue() {
-        return UiInputPropertyChangesQueue;
-    }
 }
 
 #endif //MEOWENGINE_ENTT_BUFFER_BASE_HPP
