@@ -69,8 +69,7 @@ struct SceneMultiThread::Internal {
         assetManager->LoadShaderPipelines({
                                                   assets::ShaderPipelineType::Grid,
                                                   assets::ShaderPipelineType::Default,
-                                                  assets::ShaderPipelineType::Line,
-                                                  assets::ShaderPipelineType::Sky
+                                                  assets::ShaderPipelineType::Line
                                           });
 
         assetManager->LoadStaticMeshes({
@@ -226,20 +225,20 @@ struct SceneMultiThread::Internal {
             assets::ShaderPipelineType::Grid
         );
 
-        const auto skyEntity = RegistryBuffer.AddEntity();
-        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(skyEntity, "sky");
-        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
-                skyEntity,
-                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
-                glm::vec3{0, 0, 0},
-                glm::vec3{1.0, 1.0f, 1.0f},
-                glm::vec3{0.0f, 1.0f, 0.0f},
-                0.0f
-        );
-        RegistryBuffer.AddComponent<entity::SkyBoxComponent>(
-                skyEntity,
-                assets::ShaderPipelineType::Sky
-        );
+//        const auto skyEntity = RegistryBuffer.AddEntity();
+//        RegistryBuffer.AddComponent<entity::LifeObjectComponent>(skyEntity, "sky");
+//        RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+//                skyEntity,
+//                Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+//                glm::vec3{0, 0, 0},
+//                glm::vec3{1.0, 1.0f, 1.0f},
+//                glm::vec3{0.0f, 1.0f, 0.0f},
+//                0.0f
+//        );
+//        RegistryBuffer.AddComponent<entity::SkyBoxComponent>(
+//                skyEntity,
+//                assets::ShaderPipelineType::Sky
+//        );
 
         MeowEngine::Log("Creating", "Created");
     }

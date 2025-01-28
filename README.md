@@ -24,13 +24,9 @@ with modern technologies and architectural concepts.
 |-------------------|--------------------|
 | Unix              | :white_check_mark: |
 | Mac (x84) Rosetta | :construction:     |
-| Web               | :construction:     |
+| Web               | :white_check_mark: |
 | Window            | :soon:             |
 
-
-> [!NOTE]
-> Currently `PhysX` is non-compilable for web. `Web builds` are on halt.
-> Will be revisiting once multithreading is implemented.
 
 ## Building & docs 
 - [Compile Meow Engine](markdowns/how_to_build.md)

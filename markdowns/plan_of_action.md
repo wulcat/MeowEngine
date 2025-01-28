@@ -29,7 +29,9 @@
 - [ ] Basic simulation tests
 - [ ] Able to see physics colliders (or at least primitives)
 - [ ] Break....... Rejuvenating
-- [ ] Updating bash files for supporting physx on mac and web builds
+- [x] Compilation of physx for web
+- [x] Single thread app builds for web
+- [ ] Updating bash files for supporting physx on mac
 - [ ] Creating vehicle using PhysX
 - [ ] Position, Scale, Rotation handles after selecting objects
 - [ ] Add Unit Testing
