@@ -5,6 +5,7 @@
 #ifndef MEOWENGINE_SCENE_SINGLE_THREAD_HPP
 #define MEOWENGINE_SCENE_SINGLE_THREAD_HPP
 
+#include "scene.hpp"
 #include "asset_manager.hpp"
 #include "input_manager.hpp"
 #include "render_system.hpp"
@@ -22,9 +23,9 @@ namespace MeowEngine {
         SceneSingleThread(const MeowEngine::WindowSize&);
 
         void OnWindowResized(const MeowEngine::WindowSize& size);
-        void Load(std::shared_ptr<MeowEngine::AssetManager> assetManager);
-        void Create();
-        void CreateEntitiesForPhysics(MeowEngine::simulator::PhysicsSystem* inPhysics); // we will use queue for this as well similar to multi threading
+        void LoadOnRenderSystem(std::shared_ptr<MeowEngine::AssetManager> assetManager);
+        void CreateSceneOnMainSystem(MeowEngine::simulator::PhysicsSystem* inPhysics);
+
         void Input(const float& deltaTime, const MeowEngine::input::InputManager& inputManager);
         void Update(const float& deltaTime);
         void RenderGameView(MeowEngine::RenderSystem& renderer);
@@ -33,12 +34,12 @@ namespace MeowEngine {
         /**
         * Sync updates from rigidbody to transform component & apply UI inputs to staging(physics) buffer
         */
-        void SyncMain();
+        void ApplyUpdateChanges();
 
         /**
          * Sync updates from transform to rigidbody component
          */
-        void SyncPhysics();
+        void ApplyPhysicSystemChanges();
 
     private:
         struct Internal;

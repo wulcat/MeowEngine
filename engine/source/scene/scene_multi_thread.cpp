@@ -28,7 +28,7 @@
 
 #include "physx_physics_system.hpp"
 
-using MeowEngine::MainScene;
+using MeowEngine::SceneMultiThread;
 
 
 using namespace MeowEngine::assets;
@@ -43,7 +43,7 @@ namespace {
 // this -> type -> value
 // component -> property -> property
 
-struct MainScene::Internal {
+struct SceneMultiThread::Internal {
     MeowEngine::PerspectiveCamera Camera;
     MeowEngine::CameraController CameraController;
 
@@ -448,53 +448,53 @@ struct MainScene::Internal {
     }
 };
 
-MainScene::MainScene(const MeowEngine::WindowSize& size)
+SceneMultiThread::SceneMultiThread(const MeowEngine::WindowSize& size)
     : InternalPointer(MeowEngine::make_internal_ptr<Internal>(size)){}
 
-void MainScene::OnWindowResized(const MeowEngine::WindowSize &size) {
+void SceneMultiThread::OnWindowResized(const MeowEngine::WindowSize &size) {
     InternalPointer->OnWindowResized(size);
 }
 
-void MainScene::LoadOnRenderThread(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
+void SceneMultiThread::LoadOnRenderSystem(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
     InternalPointer->LoadOnRenderThread(assetManager);
 }
-void MainScene::CreateSceneOnMainThread() {
+void SceneMultiThread::CreateSceneOnMainSystem() {
     InternalPointer->CreateSceneOnMainThread();
 }
 
-void MainScene::AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+void SceneMultiThread::AddEntitiesOnPhysicsSystem(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     InternalPointer->AddEntitiesOnPhysicsThread(inPhysics);
 }
 
-void MainScene::Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) {
+void SceneMultiThread::Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) {
     InternalPointer->Input(deltaTime, inputManager);
 }
 
-void MainScene::Update(const float &deltaTime) {
+void SceneMultiThread::Update(const float &deltaTime) {
     InternalPointer->Update(deltaTime);
 }
 
-void MainScene::RenderGameView(MeowEngine::RenderSystem &renderer) {
+void SceneMultiThread::RenderGameView(MeowEngine::RenderSystem &renderer) {
     InternalPointer->RenderGameView(renderer);
 }
 
-void MainScene::RenderUserInterface(MeowEngine::RenderSystem &renderer, unsigned int frameBufferId, const double fps) {
+void SceneMultiThread::RenderUserInterface(MeowEngine::RenderSystem &renderer, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUserInterface(renderer, frameBufferId, fps);
 }
 
-void MainScene::SwapMainAndRenderBufferOnMainThread() {
+void SceneMultiThread::SwapMainAndRenderBufferOnMainSystem() {
     InternalPointer->SwapMainAndRenderBufferOnMainThread();
 }
 
-void MainScene::SyncPhysicsBufferOnMainThread(bool inIsPhysicsThreadWorking) {
+void SceneMultiThread::SyncPhysicsBufferOnMainSystem(bool inIsPhysicsThreadWorking) {
     InternalPointer->SyncPhysicsBufferOnMainThread(inIsPhysicsThreadWorking);
 }
 
-void MainScene::SyncRenderBufferOnMainThread() {
+void SceneMultiThread::SyncRenderBufferOnMainThread() {
     InternalPointer->SyncRenderBufferOnMainThread();
 }
 
-void MainScene::SyncPhysicsBufferOnPhysicsThread() {
+void SceneMultiThread::SyncPhysicsBufferOnPhysicsSystem() {
     InternalPointer->SyncPhysicsBufferOnPhysicsThread();
 }
 

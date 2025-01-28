@@ -87,7 +87,7 @@ namespace MeowEngine {
         }
 
 
-        void Create() {
+        void Create(MeowEngine::simulator::PhysicsSystem* inPhysics) {
             auto entity = RegistryBuffer.AddEntity();
             RegistryBuffer.AddComponent<entity::LifeObjectComponent>(entity, "torus");
             RegistryBuffer.AddComponent<entity::Transform3DComponent>(
@@ -223,12 +223,11 @@ namespace MeowEngine {
                     assets::ShaderPipelineType::Sky
             );
 
-//            // TODO: can we have same class name with different namespaces?
-//            // Creating physics for all bodies in game
-//            for(auto &&[entity, transform, collider, rigidbody]
-//                    : Registry.view<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>().each()) {
-//                inPhysics.AddRigidbody(transform, collider, rigidbody);
-//            }
+            // Creating physics for all bodies in game
+            for(auto &&[entity, transform, collider, rigidbody]
+                    : RegistryBuffer.GetCurrent().view<entity::Transform3DComponent, entity::ColliderComponent, entity::RigidbodyComponent>().each()) {
+                inPhysics->AddRigidbody(transform, collider, rigidbody);
+            }
 
             MeowEngine::Log("Creating", "Created");
         }
@@ -319,7 +318,11 @@ namespace MeowEngine {
             renderer.RenderUserInterface(RegistryBuffer.GetCurrent(), RegistryBuffer.GetPropertyChangeQueue() , frameBufferId, fps);
         }
 
-        void SyncPhysics() {
+        void ApplyUpdateChanges() {
+
+        }
+
+        void ApplyPhysicSystemChanges() {
 //            // Apply update physics transform to entities
 //            auto view = RegistryBuffer.view<entity::Transform3DComponent, entity::RigidbodyComponent>();
 //            for(auto entity: view)
@@ -340,11 +343,11 @@ namespace MeowEngine {
         InternalPointer->OnWindowResized(size);
     }
 
-    void SceneSingleThread::Load(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
+    void SceneSingleThread::LoadOnRenderSystem(std::shared_ptr<MeowEngine::AssetManager> assetManager) {
         InternalPointer->Load(assetManager);
     }
-    void SceneSingleThread::Create() {
-        InternalPointer->Create();
+    void SceneSingleThread::CreateSceneOnMainSystem(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+        InternalPointer->Create(inPhysics);
     }
 
     void SceneSingleThread::Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) {
@@ -361,6 +364,14 @@ namespace MeowEngine {
 
     void SceneSingleThread::RenderUserInterface(MeowEngine::RenderSystem &renderer, unsigned int frameBufferId, const double fps) {
         InternalPointer->RenderUserInterface(renderer, frameBufferId, fps);
+    }
+
+    void SceneSingleThread::ApplyUpdateChanges() {
+        InternalPointer->ApplyUpdateChanges();
+    }
+
+    void SceneSingleThread::ApplyPhysicSystemChanges() {
+        InternalPointer->ApplyPhysicSystemChanges();
     }
 
 
