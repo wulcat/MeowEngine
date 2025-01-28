@@ -7,6 +7,7 @@
 
 #include "vector"
 #include "sdl_wrapper.hpp"
+#include "log.hpp"
 
 namespace MeowEngine {
 // NOTE: Revisit on this
@@ -17,7 +18,12 @@ namespace MeowEngine {
                   frameTimes(sampleSize),
                   currentIndex(0),
                   accumulatedTime(0.0),
-                  DeltaTime(0.0) {}
+                  DeltaTime(0.0) {
+            MeowEngine::Log("FrameRateCounter", "Created");
+        }
+        ~FrameRateCounter() {
+            MeowEngine::Log("FrameRateCounter", "Destroyed");
+        }
 
         void Calculate() {
             // calculate smooth frame rate

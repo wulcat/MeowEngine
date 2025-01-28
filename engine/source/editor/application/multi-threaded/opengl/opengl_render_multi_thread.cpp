@@ -28,7 +28,7 @@ namespace MeowEngine {
         WindowContext.reset();
     }
 
-    void OpenGLRenderMultiThread::SetScene(std::shared_ptr<MeowEngine::Scene> inScene) {
+    void OpenGLRenderMultiThread::SetScene(std::shared_ptr<MeowEngine::SceneMultiThread> inScene) {
         Scene = inScene;
     }
 
@@ -56,7 +56,7 @@ namespace MeowEngine {
         SDL_GL_MakeCurrent(WindowContext->window, WindowContext->context);
 
         // Load Scene Resources like shaders and meshes
-        Scene->LoadOnRenderThread(AssetManager);
+        Scene->LoadOnRenderSystem(AssetManager);
 
         // Render Graphics
         while (SharedState.IsAppRunning) {

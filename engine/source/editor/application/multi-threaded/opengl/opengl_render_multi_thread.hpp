@@ -13,7 +13,7 @@
 #include "asset_manager.hpp"
 #include "opengl_render_system.hpp"
 
-#include "scene.hpp"
+#include "scene_multi_thread.hpp"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ namespace MeowEngine {
         OpenGLRenderMultiThread(MeowEngine::SharedThreadState& inState);
         ~OpenGLRenderMultiThread();
 
-        void SetScene(std::shared_ptr<MeowEngine::Scene> inScene);
+        void SetScene(std::shared_ptr<MeowEngine::SceneMultiThread> inScene);
         void StartThread();
         void EndThread();
 
@@ -63,7 +63,7 @@ namespace MeowEngine {
         std::shared_ptr<MeowEngine::OpenGLAssetManager> AssetManager;
 
         MeowEngine::SharedThreadState& SharedState;
-        std::shared_ptr<MeowEngine::Scene> Scene;
+        std::shared_ptr<MeowEngine::SceneMultiThread> Scene;
     };
 
 } // MeowEngine

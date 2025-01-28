@@ -5,10 +5,12 @@
 #ifndef MEOWENGINE_PHYSICS_MULTI_THREAD_HPP
 #define MEOWENGINE_PHYSICS_MULTI_THREAD_HPP
 
-#include <scene.hpp>
 #include "thread"
 #include "frame_rate_counter.hpp"
+#include "scene_multi_thread.hpp"
+
 #include "physx_physics_system.hpp"
+
 //#include "tracy_wrapper.hpp"
 #include "log.hpp"
 //#include "application_test.hpp"
@@ -30,7 +32,7 @@ namespace MeowEngine {
             FrameRateCounter.reset();
         }
 
-        void SetScene(std::shared_ptr<MeowEngine::Scene> inScene);
+        void SetScene(std::shared_ptr<MeowEngine::SceneMultiThread> inScene);
         void StartThread();
         void EndThread();
 
@@ -43,7 +45,7 @@ namespace MeowEngine {
         std::unique_ptr<MeowEngine::FrameRateCounter> FrameRateCounter;
 
         MeowEngine::SharedThreadState& SharedState;
-        std::shared_ptr<MeowEngine::Scene> Scene;
+        std::shared_ptr<MeowEngine::SceneMultiThread> Scene;
     };
 
 } // MeowEngine

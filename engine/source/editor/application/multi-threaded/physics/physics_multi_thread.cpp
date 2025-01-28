@@ -9,7 +9,7 @@ using namespace std;
 
 namespace MeowEngine {
 
-    void PhysicsMultiThread::SetScene(std::shared_ptr<MeowEngine::Scene> inScene) {
+    void PhysicsMultiThread::SetScene(std::shared_ptr<MeowEngine::SceneMultiThread> inScene) {
         Scene = inScene;
     }
 
@@ -35,11 +35,11 @@ namespace MeowEngine {
 
             FrameRateCounter->Calculate();
 
-            Scene->AddEntitiesOnPhysicsThread(Physics.get());
+            Scene->AddEntitiesOnPhysicsSystem(Physics.get());
             Physics->Update(FrameRateCounter->DeltaTime);
 
             if(SharedState.SyncPointPhysicMutex.try_lock()) {
-                Scene->SyncPhysicsBufferOnPhysicsThread();
+                Scene->SyncPhysicsBufferOnPhysicsSystem();
                 SharedState.SyncPointPhysicMutex.unlock();
             }
 

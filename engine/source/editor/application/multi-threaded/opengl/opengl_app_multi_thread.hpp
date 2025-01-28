@@ -12,6 +12,7 @@
 #include "physics_multi_thread.hpp"
 #include "opengl_render_multi_thread.hpp"
 
+#include "scene_multi_thread.hpp"
 
 using namespace std;
 
@@ -57,7 +58,7 @@ namespace MeowEngine {
          * Active Scene in engine
          * (once we have more than one scene we will think to how to load dynamically)
          */
-        std::shared_ptr<MeowEngine::Scene> Scene;
+        std::shared_ptr<MeowEngine::SceneMultiThread> Scene;
 
         /**
          * Physics Wrapper for simulating in different thread

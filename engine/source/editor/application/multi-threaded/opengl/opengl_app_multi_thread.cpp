@@ -34,7 +34,7 @@ namespace MeowEngine {
         // Create Scene & Setup Main thread
         FrameRateCounter = std::make_unique<MeowEngine::FrameRateCounter>(60, 1); // 60 frames per second
         InputManager = std::make_unique<MeowEngine::input::InputManager>();
-        Scene = std::make_shared<MeowEngine::MainScene>(
+        Scene = std::make_shared<MeowEngine::SceneMultiThread>(
             MeowEngine::sdl::GetWindowSize(RenderThread->WindowContext->window)
         );
 
@@ -73,7 +73,7 @@ namespace MeowEngine {
         // then start
 
         // Create scene objects like cubes, grid and etc...
-        Scene->CreateSceneOnMainThread();
+        Scene->CreateSceneOnMainSystem();
 
         // Purposefully waiting so the render thread loads required shaders & objs
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -191,17 +191,17 @@ namespace MeowEngine {
         // & update staging(physics) buffer with current buffer updates
         if (SharedState.SyncPointPhysicMutex.try_lock()) {
             // Sync staging buffer and apply current buffer updates
-            Scene->SyncPhysicsBufferOnMainThread(false);
+            Scene->SyncPhysicsBufferOnMainSystem(false);
             SharedState.SyncPointPhysicMutex.unlock();
         } else {
             // Cache current buffer updates
             // (which are applied when staging buffer is free)
-            Scene->SyncPhysicsBufferOnMainThread(true);
+            Scene->SyncPhysicsBufferOnMainSystem(true);
         }
 
 
         Scene->SyncRenderBufferOnMainThread();
-        Scene->SwapMainAndRenderBufferOnMainThread();
+        Scene->SwapMainAndRenderBufferOnMainSystem();
     }
 
     void OpenGLAppMultiThread::InitiateAppClose() {
