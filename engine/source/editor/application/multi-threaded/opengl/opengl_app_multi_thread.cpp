@@ -22,11 +22,6 @@ namespace MeowEngine {
         SharedState.SyncPointStartRenderBarrier = std::make_shared<ThreadBarrier>(2);
         SharedState.SyncPointEndRenderBarrier = std::make_shared<ThreadBarrier>(2);
 
-#ifdef __EMSCRIPTEN__
-        //  emscripten_set_main_loop(emscriptenLoop, 60, 1);
-                emscripten_set_main_loop_arg((em_arg_callback_func) ::EmscriptenLoop, this, 60, 1);
-#else
-
          // Create Thread Wrappers with their sub-systems
         RenderThread = std::make_unique<MeowEngine::OpenGLRenderMultiThread>(SharedState);
         PhysicThread = std::make_unique<MeowEngine::PhysicsMultiThread>(SharedState);
@@ -59,7 +54,6 @@ namespace MeowEngine {
         InputManager.reset();
 
         MeowEngine::Log("Application", "Ended");
-#endif
     }
 
     void OpenGLAppMultiThread::EngineLoop() {

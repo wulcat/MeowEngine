@@ -5,6 +5,8 @@
 #ifndef MEOWENGINE_OPENGL_APP_MULTI_THREAD_HPP
 #define MEOWENGINE_OPENGL_APP_MULTI_THREAD_HPP
 
+#include "application.hpp"
+
 #include "input_manager.hpp"
 #include "frame_rate_counter.hpp"
 #include "shared_thread_state.hpp"
@@ -17,12 +19,12 @@
 using namespace std;
 
 namespace MeowEngine {
-    class OpenGLAppMultiThread {
+    class OpenGLAppMultiThread : public MeowEngine::Application{
     public:
         OpenGLAppMultiThread();
 //        ~OpenGLAppMultiThread();
 
-        void CreateApplication();
+        void CreateApplication() override;
 
     private:
         void EngineLoop();

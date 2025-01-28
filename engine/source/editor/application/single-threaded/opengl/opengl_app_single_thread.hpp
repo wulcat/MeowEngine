@@ -14,10 +14,10 @@ namespace MeowEngine {
 
 //        void OnWindowResized() override;
 
-        bool Input(const float& deltaTime) override;
-        void FixedUpdate(const float& inFixedDeltaTime) override;
-        void Update(const float& deltaTime) override;
-        void Render() override;
+        bool Input(const float& deltaTime) ;
+        void FixedUpdate(const float& inFixedDeltaTime) ;
+        void Update(const float& deltaTime) ;
+        void Render() ;
 
     private:
         struct Internal;

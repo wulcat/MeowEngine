@@ -5,6 +5,8 @@
 #ifndef MEOWENGINE_OPENGL_APP_WEB_HPP
 #define MEOWENGINE_OPENGL_APP_WEB_HPP
 
+#include "application.hpp"
+
 #include "memory"
 
 #include "frame_rate_counter.hpp"
@@ -23,7 +25,7 @@ using namespace std;
 
 namespace MeowEngine {
 
-    struct OpenGLAppWeb {
+    struct OpenGLAppWeb : public MeowEngine::Application {
     public:
         OpenGLAppWeb() {
             MeowEngine::Log("Application", "Created");
@@ -32,7 +34,7 @@ namespace MeowEngine {
             MeowEngine::Log("Application", "Destroyed");
         }
         // main
-        void CreateApplication();
+        void CreateApplication() override;
 
         void CreateScene();
         void EngineLoop();
