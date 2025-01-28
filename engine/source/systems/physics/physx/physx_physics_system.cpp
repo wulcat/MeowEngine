@@ -12,7 +12,7 @@ MeowEngine::simulator::PhysXPhysicsSystem::PhysXPhysicsSystem() {
     // create scene
     physx::PxSceneDesc sceneDesc(gPhysics->getTolerancesScale());
     sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
-    sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(2);
+    sceneDesc.cpuDispatcher = physx::PxDefaultCpuDispatcherCreate(0); // can't have more than 1 thread here for web
     sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 
     gScene = gPhysics->createScene(sceneDesc);
