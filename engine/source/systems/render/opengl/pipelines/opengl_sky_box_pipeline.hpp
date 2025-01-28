@@ -34,7 +34,7 @@ namespace MeowEngine::pipeline {
     private:
         const GLuint ShaderProgramID;
         unsigned int VertexArrayID;
-        time_point<high_resolution_clock> StartTime;
+//        time_point<high_resolution_clock> StartTime;
     };
 }
 
