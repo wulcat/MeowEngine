@@ -9,13 +9,15 @@
 
 #include "frame_rate_counter.hpp"
 #include "input_manager.hpp"
-#include "scene_single_thread.hpp"
+//#include "scene_single_thread.hpp"
 #include "sdl_window.hpp"
 #include "imgui_userinterface_system.hpp"
 #include "opengl_render_system.hpp"
 #include "physx_physics_system.hpp"
 
 #include "emscripten_wrapper.hpp"
+
+#include "scene_multi_thread.hpp"
 
 using namespace std;
 
@@ -45,7 +47,7 @@ namespace MeowEngine {
         std::unique_ptr<MeowEngine::input::InputManager> InputManager;
 
         // shared
-        std::shared_ptr<MeowEngine::SceneSingleThread> Scene;
+        std::shared_ptr<MeowEngine::SceneMultiThread> Scene;
 
         // render
         std::unique_ptr<MeowEngine::SDLWindow> WindowContext;

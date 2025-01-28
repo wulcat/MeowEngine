@@ -4,7 +4,7 @@
 
 #include "opengl_app_web.hpp"
 
-#include "scene_single_thread.hpp"
+//#include "scene_single_thread.hpp"
 
 // creation management
 // input management
@@ -61,7 +61,7 @@ namespace MeowEngine {
     }
 
     void OpenGLAppWeb::CreateScene() {
-        Scene = std::make_shared<MeowEngine::SceneSingleThread>(
+        Scene = std::make_shared<MeowEngine::SceneMultiThread>(
                 MeowEngine::sdl::GetWindowSize(WindowContext->window)
         );
 
@@ -69,6 +69,7 @@ namespace MeowEngine {
 
         Scene->LoadOnRenderSystem(AssetManager);
         Scene->CreateSceneOnMainSystem();
+        Scene->AddEntitiesOnPhysicsSystem(Physics.get());
     }
 
     void OpenGLAppWeb::EngineLoop() {
@@ -77,11 +78,14 @@ namespace MeowEngine {
         ProcessDeviceEvents(FrameRateCounter->DeltaTime);
 
         Scene->Update(FrameRateCounter->DeltaTime);
-        Scene->SyncPhysicsBufferOnMainSystem();
+        Scene->SyncPhysicsBufferOnMainSystem(false);
+        Scene->SyncRenderBufferOnMainThread();
+        Scene->SwapMainAndRenderBufferOnMainSystem();
 
         Scene->AddEntitiesOnPhysicsSystem(Physics.get());
         Physics->Update(FrameRateCounter->DeltaTime);
         Scene->SyncPhysicsBufferOnPhysicsSystem();
+//        Scene->SyncPhysicsBufferOnPhysicsSystem();
 
         RenderGameView();
         RenderUserInterface();
@@ -98,6 +102,10 @@ namespace MeowEngine {
 
             switch (event.type)
             {
+                case SDL_MOUSEBUTTONDOWN:
+                    InputManager->SetMouseDown();
+                    break;
+
                 case SDL_WINDOWEVENT:
 //                    if(event.window.event == SDL_WINDOWEVENT_RESIZED) {
 //                        OnWindowResized();
