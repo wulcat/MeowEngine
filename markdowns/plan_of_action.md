@@ -1,19 +1,6 @@
 ## Plan of action
-- [x] Setting up project for cross-platform build support
-- [x] Import mesh/textures
-- [x] Rendering in a scene
-- [x] Keyboard & Mouse inputs
-- [x] Window resize
-- [x] Importing c# written fluid-simulation in this engine
-- [x] Migrating 2D spatial hashing
-- [x] Shader pipeline
-- [x] Support for mac
-- [x] Find a way to debug coding after built application
-- [x] Add Proper logging & profiler system
-- [x] Create Basic UI elements like a button and text
-- [x] Documentation & UML Diagrams
-- [x] Auto UML Creator tool
-- [x] Implement ECS
+
+## Meow Engine v0.4
 - [x] Add physics library (jolt / physx / box2d / bullet3) -> physx
 - [x] Add FPS Counter
 - [x] Implementing PhysX (left handed or right handed)
@@ -29,6 +16,8 @@
 - [ ] Basic simulation tests
 - [ ] Able to see physics colliders (or at least primitives)
 - [ ] Break....... Rejuvenating
+
+## Meow Engine v0.5
 - [x] Compilation of physx for web
 - [x] Single thread app builds for web
 - [ ] Updating bash files for supporting physx on mac
@@ -54,3 +43,25 @@
 - [ ] Simple tool for importing files like textures/meshes
 - [ ] Setting up Vulkan
 - [ ] Creating 3D spatial hashing (showcase & in-built)
+
+# Previous Versions
+## Meow Engine v0.1
+- [x] Setting up project for cross-platform build support
+- [x] Import mesh/textures
+- [x] Rendering in a scene
+- [x] Keyboard & Mouse inputs
+- [x] Window resize
+
+## Meow Engine v0.2
+- [x] Support for mac
+- [x] Importing c# written fluid-simulation in this engine
+- [x] Migrating 2D spatial hashing
+- [x] Shader pipeline
+
+## Meow Engine v0.3
+- [x] Find a way to debug coding after built application
+- [x] Add Proper logging & profiler system
+- [x] Create Basic UI elements like a button and text
+- [x] Documentation & UML Diagrams
+- [x] Auto UML Creator tool
+- [x] Implement ECS

@@ -18,6 +18,9 @@ with modern technologies and architectural concepts.
 ## Demo [(web v0.4 build)](http://wulcat.com/meow-engine/index.html)
 <img src="screenshots/engine_v0.4.gif" width="700">
 
+## Profiling
+<img src="screenshots/engine_profiling.png" width="700">
+
 ## Compatibility 
 
 | Platform          | Support            |
