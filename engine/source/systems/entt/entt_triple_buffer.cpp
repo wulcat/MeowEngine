@@ -24,10 +24,6 @@ void MeowEngine::EnttTripleBuffer::SwapBuffer() {
     DoubleBuffer.Swap();
 }
 
-//std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& MeowEngine::EnttTripleBuffer::GetPropertyChangeQueue() {
-//    return UiInputPropertyChangesQueue;
-//}
-
 entt::entity MeowEngine::EnttTripleBuffer::AddEntity() {
     entt::entity entity = DoubleBuffer.GetCurrent().create();
     DoubleBuffer.GetFinal().create(entity);
@@ -50,6 +46,13 @@ void MeowEngine::EnttTripleBuffer::AddEntitiesOnStaging() {
     }
 }
 
+void MeowEngine::EnttTripleBuffer::AddComponentOnCurrentFinal() {
+    while(!ComponentToAddOnMainRenderQueue.empty()) {
+        ComponentToAddOnMainRenderQueue.front()();
+        ComponentToAddOnMainRenderQueue.pop();
+    }
+}
+
 void MeowEngine::EnttTripleBuffer::AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     // Adds components with dynamic data parameter passed down from main thread
     std::function<void(MeowEngine::simulator::PhysicsSystem*)> method;
@@ -63,8 +66,8 @@ void MeowEngine::EnttTripleBuffer::ApplyPropertyChange() {
     while(!UiInputPropertyChangesQueue.empty()) {
         std::shared_ptr<MeowEngine::ReflectionPropertyChange> change = UiInputPropertyChangesQueue.front();
 
-        MeowEngine::Reflection.ApplyPropertyChange(*change.get(), DoubleBuffer.GetCurrent());
-        MeowEngine::Reflection.ApplyPropertyChange(*change.get(), DoubleBuffer.GetFinal());
+        MeowEngine::Reflection.ApplyPropertyChange(*change, DoubleBuffer.GetCurrent());
+        MeowEngine::Reflection.ApplyPropertyChange(*change, DoubleBuffer.GetFinal());
 
         PhysicsUiInputPropertyChangesQueue.enqueue(change);
         UiInputPropertyChangesQueue.pop();

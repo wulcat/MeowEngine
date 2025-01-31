@@ -99,6 +99,16 @@ struct SceneMultiThread::Internal {
         REGISTER_ENTT_COMPONENT(LineRenderComponent);
         REGISTER_ENTT_COMPONENT(MeshRenderComponent);
         REGISTER_ENTT_COMPONENT(SkyBoxComponent);
+
+        RegistryBuffer.RegisterComponent<LifeObjectComponent>();
+        RegistryBuffer.RegisterComponent<Transform2DComponent>();
+        RegistryBuffer.RegisterComponent<Transform3DComponent>();
+        RegistryBuffer.RegisterComponent<ColliderComponent>();
+        RegistryBuffer.RegisterComponent<RigidbodyComponent>();
+        RegistryBuffer.RegisterComponent<RenderComponentBase>();
+        RegistryBuffer.RegisterComponent<LineRenderComponent>();
+        RegistryBuffer.RegisterComponent<MeshRenderComponent>();
+        RegistryBuffer.RegisterComponent<SkyBoxComponent>();
     }
 
     void AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
@@ -242,6 +252,10 @@ struct SceneMultiThread::Internal {
         );
 
         MeowEngine::Log("Creating", "Created");
+    }
+
+    void AddRemoveEntitiesOnMainThread() {
+        RegistryBuffer.AddComponentOnCurrentFinal();
     }
 
     void Input(const float& delta, const MeowEngine::input::InputManager& inputManager) {
@@ -460,6 +474,10 @@ void SceneMultiThread::LoadOnRenderSystem(std::shared_ptr<MeowEngine::AssetManag
 }
 void SceneMultiThread::CreateSceneOnMainSystem() {
     InternalPointer->CreateSceneOnMainThread();
+}
+
+void SceneMultiThread::AddRemoveEntitiesOnMainThread() {
+    InternalPointer->AddRemoveEntitiesOnMainThread();
 }
 
 void SceneMultiThread::AddEntitiesOnPhysicsSystem(MeowEngine::simulator::PhysicsSystem* inPhysics) {

@@ -28,6 +28,8 @@ namespace MeowEngine {
          */
         void CreateSceneOnMainSystem();
 
+        void AddRemoveEntitiesOnMainThread();
+
         /**
         * When a entity is created on main thread, out buffer queues the entity to be created on physics thread
         * and adds to staging(physics) buffer
