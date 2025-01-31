@@ -89,12 +89,6 @@ namespace MeowEngine {
 
             SyncThreads();
 
-            // Halt Main thread to lock a frame rate
-            FrameRateCounter->LockFrameRate();
-
-            // Wait until buffers are synced
-            // Ideally since other threads are waiting this should release all of them automatically
-            SharedState.SyncPointEndRenderBarrier->Wait();
         }
 
         MeowEngine::Log("Main Thread", "Waiting for other threads to end");
@@ -196,6 +190,14 @@ namespace MeowEngine {
 
         Scene->SyncRenderBufferOnMainThread();
         Scene->SwapMainAndRenderBufferOnMainSystem();
+        Scene->AddRemoveEntitiesOnMainThread();
+
+        // Halt Main thread to lock a frame rate
+        FrameRateCounter->LockFrameRate();
+
+        // Wait until buffers are synced
+        // Ideally since other threads are waiting this should release all of them automatically
+        SharedState.SyncPointEndRenderBarrier->Wait();
     }
 
     void OpenGLAppMultiThread::InitiateAppClose() {
