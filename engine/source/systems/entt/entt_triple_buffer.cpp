@@ -48,8 +48,11 @@ void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator
     // Destroys entities from staging (queued while destroying from current final from main thread)
     entt::entity entityToRemove;
     while(EntityToRemoveOnStagingQueue.try_dequeue(entityToRemove)) {
-        auto rigidbody = Staging.get<entity::RigidbodyComponent>(entityToRemove);
-        inPhysics->RemoveRigidbody(rigidbody);
+        // only destroy if rigidbody exists
+        if(Staging.all_of<entity::RigidbodyComponent>(entityToRemove)) {
+            auto rigidbody = Staging.get<entity::RigidbodyComponent>(entityToRemove);
+            inPhysics->RemoveRigidbody(rigidbody);
+        }
 
         GetStaging().destroy(entityToRemove);
     }
