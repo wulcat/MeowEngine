@@ -33,9 +33,26 @@ entt::entity MeowEngine::EnttTripleBuffer::AddEntity() {
     return entity;
 }
 
+void MeowEngine::EnttTripleBuffer::RemoveEntity(entt::entity &inEntity) {
+    EntityToRemoveOnMainRenderQueue.push(inEntity);
+}
+
+void MeowEngine::EnttTripleBuffer::RemoveEntity(const entt::entity &inEntity) {
+    EntityToRemoveOnMainRenderQueue.push(inEntity);
+}
+
 void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
     AddEntitiesOnStaging();
     AddComponentsOnStaging(inPhysics);
+
+    // Destroys entities from staging (queued while destroying from current final from main thread)
+    entt::entity entityToRemove;
+    while(EntityToRemoveOnStagingQueue.try_dequeue(entityToRemove)) {
+        auto rigidbody = Staging.get<entity::RigidbodyComponent>(entityToRemove);
+        inPhysics->RemoveRigidbody(rigidbody);
+
+        GetStaging().destroy(entityToRemove);
+    }
 }
 
 void MeowEngine::EnttTripleBuffer::AddEntitiesOnStaging() {
@@ -46,10 +63,23 @@ void MeowEngine::EnttTripleBuffer::AddEntitiesOnStaging() {
     }
 }
 
-void MeowEngine::EnttTripleBuffer::AddComponentOnCurrentFinal() {
+void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnCurrentFinal() {
+    // Adds component on current & final buffer through AddComponent cached method.
+    // It further queues up to be added for physics
     while(!ComponentToAddOnMainRenderQueue.empty()) {
         ComponentToAddOnMainRenderQueue.front()();
         ComponentToAddOnMainRenderQueue.pop();
+    }
+
+    // Destroys entities from current & final buffer and queues for staging
+    while(!EntityToRemoveOnMainRenderQueue.empty()) {
+        entt::entity entity = EntityToRemoveOnMainRenderQueue.front();
+        EntityToRemoveOnMainRenderQueue.pop();
+
+        GetCurrent().destroy(entity);
+        GetFinal().destroy(entity);
+
+        EntityToRemoveOnStagingQueue.enqueue(entity);
     }
 }
 

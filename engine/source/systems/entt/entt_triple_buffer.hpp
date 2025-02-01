@@ -33,7 +33,8 @@ namespace MeowEngine {
         void SwapBuffer();
 
         entt::entity AddEntity() override;
-//        void RemoveEntity();
+        void RemoveEntity(entt::entity& inEntity);
+        void RemoveEntity(const entt::entity& inEntity);
 
         /**
          * Registers components to keep the storage in order,
@@ -65,11 +66,17 @@ namespace MeowEngine {
         template<typename ComponentType, typename... Args>
         void AddComponent(const entt::entity& inEntity, Args &&...inArgs);
 
+        template<typename ComponentType>
+        void RemoveComponent(entt::entity& inEntity);
+
+        template<typename ComponentType>
+        void RemoveComponent(const entt::entity& inEntity);
+
         /**
          * At sync point, we add any pending requests for adding components to final & current buffers
          * - done from main thread
          */
-        void AddComponentOnCurrentFinal();
+        void ApplyAddRemoveOnCurrentFinal();
 
         /**
          * Add / Remove entities & components on staging buffer which are queued from main thread
@@ -126,6 +133,8 @@ namespace MeowEngine {
         entt::registry Staging;
 
     private:
+        //-------- Adding
+
         /**
          * When a entity is added on main thread, we queue it and add it async on physics thread
          */
@@ -143,6 +152,12 @@ namespace MeowEngine {
          */
         moodycamel::ConcurrentQueue<std::function<void(MeowEngine::simulator::PhysicsSystem*)>> ComponentToAddOnStagingQueue;
 
+        //-------- Removal
+
+        std::queue<entt::entity> EntityToRemoveOnMainRenderQueue;
+        moodycamel::ConcurrentQueue<entt::entity> EntityToRemoveOnStagingQueue;
+
+        //-------- Property Changes
         /**
          * Any queued property value changes are applied to staging(physics) buffer
          */
@@ -159,8 +174,6 @@ namespace MeowEngine {
     void MeowEngine::EnttTripleBuffer::AddComponent(entt::entity &inEntity, Args &&... inArgs) {
         ComponentToAddOnMainRenderQueue.push([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)]() {
             std::apply([&](auto&&... inUnpacked) {
-                MeowEngine::Log("well wll", static_cast<int>(inEntity));
-
                 DoubleBuffer.GetCurrent().emplace<ComponentType>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
                 DoubleBuffer.GetFinal().emplace<ComponentType>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
 
@@ -173,8 +186,6 @@ namespace MeowEngine {
     void MeowEngine::EnttTripleBuffer::AddComponent(const entt::entity &inEntity, Args &&... inArgs) {
         ComponentToAddOnMainRenderQueue.push([&, inEntity, inArgTuple = std::make_tuple(std::forward<Args>(inArgs)...)]() {
             std::apply([&](auto&&... inUnpacked) {
-                MeowEngine::Log("const well wll", static_cast<int>(inEntity));
-
                 DoubleBuffer.GetCurrent().emplace<ComponentType>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
                 DoubleBuffer.GetFinal().emplace<ComponentType>(inEntity, std::forward<decltype(inUnpacked)>(inUnpacked)...);
 
@@ -210,6 +221,12 @@ namespace MeowEngine {
             }
         });
     }
+
+    template<typename ComponentType>
+    void MeowEngine::EnttTripleBuffer::RemoveComponent(entt::entity &inEntity) {}
+
+    template<typename ComponentType>
+    void MeowEngine::EnttTripleBuffer::RemoveComponent(const entt::entity &inEntity) {}
 }
 
 

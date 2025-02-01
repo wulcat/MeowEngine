@@ -71,4 +71,10 @@ void MeowEngine::simulator::PhysXPhysicsSystem::AddRigidbody(entity::Transform3D
 
     rigidbody.SetPhysicsBody(actor);
     gScene->addActor(*actor);
+
+
+}
+
+void MeowEngine::simulator::PhysXPhysicsSystem::RemoveRigidbody(entity::RigidbodyComponent& inRigidbody) {
+    gScene->removeActor(*inRigidbody.GetPhysicsBody());
 }

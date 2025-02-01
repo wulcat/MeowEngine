@@ -32,7 +32,9 @@ namespace MeowEngine::entity {
 
         void AddDelta(MeowEngine::math::Vector3 inDelta);
         void CacheDelta(MeowEngine::math::Vector3 inDelta);
+
         void SetPhysicsBody(physx::PxRigidDynamic* inBody);
+        physx::PxRigidDynamic* GetPhysicsBody();
 
     private:
         physx::PxRigidDynamic* DynamicBody;

@@ -19,6 +19,10 @@ void MeowEngine::entity::RigidbodyComponent::SetPhysicsBody(physx::PxRigidDynami
     DynamicBody = inBody;
 }
 
+physx::PxRigidDynamic* MeowEngine::entity::RigidbodyComponent::GetPhysicsBody() {
+    return DynamicBody;
+}
+
 void RigidbodyComponent::UpdateTransform(Transform3DComponent &inTransform) {
     auto pose = DynamicBody->getGlobalPose();
     inTransform.Position.X = pose.p.x + Delta.X;

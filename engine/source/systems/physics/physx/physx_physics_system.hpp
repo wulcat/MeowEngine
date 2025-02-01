@@ -20,7 +20,7 @@ namespace MeowEngine::simulator {
         void Update(float inFixedDeltaTime) override;
 
         void AddRigidbody(entity::Transform3DComponent& transform, entity::ColliderComponent& collider, entity::RigidbodyComponent& rigidbody) override;
-
+        void RemoveRigidbody(entity::RigidbodyComponent& inRigidbodyComponent) override;
     private:
         // PhysX Foundation
         physx::PxDefaultAllocator gAllocator;

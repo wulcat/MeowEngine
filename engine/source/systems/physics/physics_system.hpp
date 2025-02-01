@@ -17,6 +17,7 @@ namespace MeowEngine::simulator {
         virtual void Update(float inFixedDeltaTime) = 0;
 
         virtual void AddRigidbody(entity::Transform3DComponent& transform, entity::ColliderComponent& collider, entity::RigidbodyComponent& rigidbody) = 0;
+        virtual void RemoveRigidbody(entity::RigidbodyComponent& rigidbody) = 0;
     };
 }
 
