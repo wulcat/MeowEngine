@@ -400,7 +400,7 @@ struct SceneMultiThread::Internal {
 
         if(inIsPhysicsThreadWorking) {
             // since physics is working on its buffer (staging) we cache the main thread updates
-            for(entt::entity entity : stagingView) {
+            for(entt::entity entity : currentView) {
 
                 auto& staging = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
                 auto final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
@@ -411,7 +411,7 @@ struct SceneMultiThread::Internal {
         }
         else {
             // since physics is not working, we can update rigidbody in physics thread
-            for (entt::entity entity: stagingView) {
+            for (entt::entity entity: currentView) {
                 auto staging = stagingView.get<MeowEngine::entity::Transform3DComponent>(entity);
                 auto &rigidbody = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
                 auto &final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
