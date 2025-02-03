@@ -34,8 +34,6 @@ namespace MeowEngine {
             PT_PROFILE_SCOPE;
 
             FrameRateCounter->Calculate();
-
-            Scene->AddEntitiesOnPhysicsSystem(Physics.get());
             Physics->Update(FrameRateCounter->DeltaTime);
 
             if(SharedState.SyncPointPhysicMutex.try_lock()) {
@@ -43,6 +41,10 @@ namespace MeowEngine {
                 SharedState.SyncPointPhysicMutex.unlock();
             }
 
+            // if a change is made unpause (in our case it will unpause main thread)
+            if(Scene->AddEntitiesOnPhysicsSystem(Physics.get())) {
+                SharedState.AddRemovePhysicsPause->Release();
+            }
             FrameRateCounter->LockFrameRate();
         }
 

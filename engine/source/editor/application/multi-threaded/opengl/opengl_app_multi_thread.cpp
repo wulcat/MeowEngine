@@ -21,6 +21,7 @@ namespace MeowEngine {
         SharedState.IsAppRunning = true;
         SharedState.SyncPointStartRenderBarrier = std::make_shared<ThreadBarrier>(2);
         SharedState.SyncPointEndRenderBarrier = std::make_shared<ThreadBarrier>(2);
+        SharedState.AddRemovePhysicsPause = std::make_shared<ThreadPause>();
 
          // Create Thread Wrappers with their sub-systems
         RenderThread = std::make_unique<MeowEngine::OpenGLRenderMultiThread>(SharedState);
@@ -74,6 +75,7 @@ namespace MeowEngine {
 
         // Simulating Scene
         while (SharedState.IsAppRunning) {
+            PT_PROFILE_SCOPE_N("Engine Update");
             // Calculate Delta Time
             FrameRateCounter->Calculate();
 
@@ -190,7 +192,11 @@ namespace MeowEngine {
 
         Scene->SyncRenderBufferOnMainThread();
         Scene->SwapMainAndRenderBufferOnMainSystem();
-        Scene->AddRemoveEntitiesOnMainThread();
+        
+        // If a change is made, we pause this thread until physics thread gets reflected with changes
+        if(Scene->AddRemoveEntitiesOnMainThread()) {
+            SharedState.AddRemovePhysicsPause->Pause();
+        }
 
         // Halt Main thread to lock a frame rate
         FrameRateCounter->LockFrameRate();

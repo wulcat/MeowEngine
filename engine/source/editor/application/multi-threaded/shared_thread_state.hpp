@@ -12,6 +12,7 @@
 #include "double_buffer.hpp"
 #include "thread_barrier.hpp"
 #include "thread_wait.hpp"
+#include "thread_pause.hpp"
 
 #include "sdl_wrapper.hpp"
 
@@ -23,6 +24,8 @@ namespace MeowEngine {
         std::atomic<bool> IsAppRunning;
         std::shared_ptr<ThreadBarrier> SyncPointStartRenderBarrier;
         std::shared_ptr<ThreadBarrier> SyncPointEndRenderBarrier;
+
+        std::shared_ptr<ThreadPause> AddRemovePhysicsPause;
         std::mutex SyncPointPhysicMutex;
 
         MeowEngine::ThreadWait<int> ActiveWaitThread;
