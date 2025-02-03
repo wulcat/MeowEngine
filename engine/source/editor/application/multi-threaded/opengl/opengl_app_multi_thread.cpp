@@ -192,7 +192,7 @@ namespace MeowEngine {
 
         Scene->SyncRenderBufferOnMainThread();
         Scene->SwapMainAndRenderBufferOnMainSystem();
-        
+
         // If a change is made, we pause this thread until physics thread gets reflected with changes
         if(Scene->AddRemoveEntitiesOnMainThread()) {
             SharedState.AddRemovePhysicsPause->Pause();

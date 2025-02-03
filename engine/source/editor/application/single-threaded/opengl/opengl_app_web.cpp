@@ -87,6 +87,9 @@ namespace MeowEngine {
         Scene->SyncPhysicsBufferOnPhysicsSystem();
 //        Scene->SyncPhysicsBufferOnPhysicsSystem();
 
+        Scene->AddRemoveEntitiesOnMainThread();
+        Scene->AddEntitiesOnPhysicsSystem(Physics.get());
+
         RenderGameView();
         RenderUserInterface();
         WindowContext->SwapWindow();
