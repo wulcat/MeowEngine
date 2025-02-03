@@ -10,6 +10,7 @@
 - [x] Adding property changes to track UI updates
 - [x] Creating objects in runtime (on start/end of main thread)
 - [x] Bringing back VSync & Delta Time Calculations
+- [x] Managing lifecycle of object and components
 - [ ] Creating library for performing maths functions
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
@@ -20,6 +21,7 @@
 ## Meow Engine v0.5
 - [x] Compilation of physx for web
 - [x] Single thread app builds for web
+- [ ] Research on making dev/debug builds for in-depth testing
 - [ ] Updating bash files for supporting physx on mac
 - [ ] Creating vehicle using PhysX
 - [ ] Position, Scale, Rotation handles after selecting objects
