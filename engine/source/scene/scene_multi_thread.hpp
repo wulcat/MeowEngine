@@ -28,14 +28,14 @@ namespace MeowEngine {
          */
         void CreateSceneOnMainSystem();
 
-        void AddRemoveEntitiesOnMainThread();
+        bool AddRemoveEntitiesOnMainThread();
 
         /**
         * When a entity is created on main thread, out buffer queues the entity to be created on physics thread
         * and adds to staging(physics) buffer
         * @param inPhysics
         */
-        void AddEntitiesOnPhysicsSystem(MeowEngine::simulator::PhysicsSystem* inPhysics);
+        bool AddEntitiesOnPhysicsSystem(MeowEngine::simulator::PhysicsSystem* inPhysics);
 
         // -----------------------------
         void Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager);

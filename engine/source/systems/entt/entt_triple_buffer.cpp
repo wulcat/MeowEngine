@@ -41,13 +41,29 @@ void MeowEngine::EnttTripleBuffer::RemoveEntity(const entt::entity &inEntity) {
     EntityToRemoveOnMainRenderQueue.push(inEntity);
 }
 
-void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
-    AddEntitiesOnStaging();
-    AddComponentsOnStaging(inPhysics);
+bool MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+    bool isEntityOrComponentChanged = false;
+
+    // If we have anything to dequeue from concurrent queue, we replicate and add in staging buffer
+    // Add / Remove entities from staging (physics) buffer - from physics thread
+    entt::entity entity;
+    while(EntityToAddOnStagingQueue.try_dequeue(entity)) {
+        isEntityOrComponentChanged = true;
+        Staging.create(entity);
+    }
+
+    // Adds components with dynamic data parameter passed down from main thread
+    // Add / Remove components from staging (physics) buffer - from physics thread
+    std::function<void(MeowEngine::simulator::PhysicsSystem*)> method;
+    while(ComponentToAddOnStagingQueue.try_dequeue(method)) {
+        isEntityOrComponentChanged = true;
+        method(inPhysics);
+    }
 
     // Destroys entities from staging (queued while destroying from current final from main thread)
     entt::entity entityToRemove;
     while(EntityToRemoveOnStagingQueue.try_dequeue(entityToRemove)) {
+        isEntityOrComponentChanged = true;
         // only destroy if rigidbody exists
         if(Staging.all_of<entity::RigidbodyComponent>(entityToRemove)) {
             auto rigidbody = Staging.get<entity::RigidbodyComponent>(entityToRemove);
@@ -56,22 +72,20 @@ void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnStaging(MeowEngine::simulator
 
         GetStaging().destroy(entityToRemove);
     }
+
+    return isEntityOrComponentChanged;
 }
 
-void MeowEngine::EnttTripleBuffer::AddEntitiesOnStaging() {
-    // If we have anything to dequeue from concurrent queue, we replicate and add in staging buffer
-    entt::entity entity;
-    while(EntityToAddOnStagingQueue.try_dequeue(entity)) {
-        Staging.create(entity);
-    }
-}
-
-void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnCurrentFinal() {
+bool MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnCurrentFinal() {
     // Adds component on current & final buffer through AddComponent cached method.
     // It further queues up to be added for physics
+    bool isEntityOrComponentChanged = false;
+
     while(!ComponentToAddOnMainRenderQueue.empty()) {
         ComponentToAddOnMainRenderQueue.front()();
         ComponentToAddOnMainRenderQueue.pop();
+
+        isEntityOrComponentChanged = true;
     }
 
     // Destroys entities from current & final buffer and queues for staging
@@ -83,15 +97,11 @@ void MeowEngine::EnttTripleBuffer::ApplyAddRemoveOnCurrentFinal() {
         GetFinal().destroy(entity);
 
         EntityToRemoveOnStagingQueue.enqueue(entity);
-    }
-}
 
-void MeowEngine::EnttTripleBuffer::AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics) {
-    // Adds components with dynamic data parameter passed down from main thread
-    std::function<void(MeowEngine::simulator::PhysicsSystem*)> method;
-    while(ComponentToAddOnStagingQueue.try_dequeue(method)) {
-        method(inPhysics);
+        isEntityOrComponentChanged = true;
     }
+
+    return isEntityOrComponentChanged;
 }
 
 void MeowEngine::EnttTripleBuffer::ApplyPropertyChange() {

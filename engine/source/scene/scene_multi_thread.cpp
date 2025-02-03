@@ -111,8 +111,8 @@ struct SceneMultiThread::Internal {
         RegistryBuffer.RegisterComponent<SkyBoxComponent>();
     }
 
-    void AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
-        RegistryBuffer.ApplyAddRemoveOnStaging(inPhysics);
+    bool AddEntitiesOnPhysicsThread(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+        return RegistryBuffer.ApplyAddRemoveOnStaging(inPhysics);
     }
 
     void CreateSceneOnMainThread() {
@@ -254,8 +254,8 @@ struct SceneMultiThread::Internal {
         MeowEngine::Log("Creating", "Created");
     }
 
-    void AddRemoveEntitiesOnMainThread() {
-        RegistryBuffer.AddComponentOnCurrentFinal();
+    bool AddRemoveEntitiesOnMainThread() {
+        return RegistryBuffer.ApplyAddRemoveOnCurrentFinal();
     }
 
     void Input(const float& delta, const MeowEngine::input::InputManager& inputManager) {
@@ -476,12 +476,12 @@ void SceneMultiThread::CreateSceneOnMainSystem() {
     InternalPointer->CreateSceneOnMainThread();
 }
 
-void SceneMultiThread::AddRemoveEntitiesOnMainThread() {
-    InternalPointer->AddRemoveEntitiesOnMainThread();
+bool SceneMultiThread::AddRemoveEntitiesOnMainThread() {
+    return InternalPointer->AddRemoveEntitiesOnMainThread();
 }
 
-void SceneMultiThread::AddEntitiesOnPhysicsSystem(MeowEngine::simulator::PhysicsSystem* inPhysics) {
-    InternalPointer->AddEntitiesOnPhysicsThread(inPhysics);
+bool SceneMultiThread::AddEntitiesOnPhysicsSystem(MeowEngine::simulator::PhysicsSystem* inPhysics) {
+    return InternalPointer->AddEntitiesOnPhysicsThread(inPhysics);
 }
 
 void SceneMultiThread::Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager) {

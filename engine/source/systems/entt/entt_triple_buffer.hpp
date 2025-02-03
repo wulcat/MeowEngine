@@ -75,14 +75,15 @@ namespace MeowEngine {
         /**
          * At sync point, we add any pending requests for adding components to final & current buffers
          * - done from main thread
+         * returns true if anything added or removed
          */
-        void ApplyAddRemoveOnCurrentFinal();
+        bool ApplyAddRemoveOnCurrentFinal();
 
         /**
          * Add / Remove entities & components on staging buffer which are queued from main thread
          * @param inPhysics
          */
-        void ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics);
+        bool ApplyAddRemoveOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics);
 
         /**
          * Any queued property value changes are applied to current(main) & final(render) buffers.
@@ -96,17 +97,6 @@ namespace MeowEngine {
         void ApplyPropertyChangeOnStaging();
 
     protected:
-        /**
-         * Add / Remove entities from staging (physics) buffer - from physics thread
-         */
-        void AddEntitiesOnStaging();
-
-        /**
-         * Add / Remove components from staging (physics) buffer - from physics thread
-         * @param inPhysics
-         */
-        void AddComponentsOnStaging(MeowEngine::simulator::PhysicsSystem* inPhysics);
-
         /**
          * Adds component to staging (physics) buffer after its been added to current/final successfully
          * - from main thread
