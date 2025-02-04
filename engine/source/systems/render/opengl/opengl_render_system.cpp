@@ -9,11 +9,13 @@
 #include "opengl_line_pipeline.hpp"
 #include "opengl_grid_pipeline.hpp"
 #include "opengl_sky_box_pipeline.hpp"
+#include "opengl_collider_pipeline.hpp"
 
 using MeowEngine::OpenGLRenderSystem;
 
 using namespace MeowEngine::pipeline;
 using namespace MeowEngine::entity;
+
 using MeowEngine::assets::ShaderPipelineType;
 
 struct OpenGLRenderSystem::Internal {
@@ -119,7 +121,7 @@ struct OpenGLRenderSystem::Internal {
     }
 
     void RenderPhysics(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
-
+        AssetManager->GetShaderPipeline<OpenGLCollidePipeline>(ShaderPipelineType::PHYSICS_COLLIDER)->Render();
     }
 };
 

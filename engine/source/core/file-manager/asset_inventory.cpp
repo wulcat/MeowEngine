@@ -17,6 +17,8 @@ std::string MeowEngine::assets::ResolveShaderPipelinePath(const MeowEngine::asse
             return "grid";
         case MeowEngine::assets::ShaderPipelineType::Sky:
             return "sky";
+        case MeowEngine::assets::ShaderPipelineType::PHYSICS_COLLIDER:
+            return "physics_collider";
     }
 }
 

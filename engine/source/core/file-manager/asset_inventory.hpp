@@ -15,7 +15,8 @@ namespace MeowEngine::assets {
         Default,
         Line,
         Grid,
-        Sky
+        Sky,
+        PHYSICS_COLLIDER
     };
 
     enum class StaticMeshType {
