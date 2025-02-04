@@ -21,6 +21,8 @@ namespace MeowEngine {
         void RenderGameView(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) override;
         void RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) override;
 
+        void RenderPhysics(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) override;
+
     private:
         struct Internal;
         MeowEngine::internal_ptr<Internal> InternalPointer;

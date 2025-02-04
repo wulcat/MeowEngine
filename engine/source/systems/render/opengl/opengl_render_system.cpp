@@ -117,6 +117,10 @@ struct OpenGLRenderSystem::Internal {
     void RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
         UI.get()->Render(registry, inUIInputQueue, frameBufferId, fps);
     }
+
+    void RenderPhysics(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
+
+    }
 };
 
 OpenGLRenderSystem::OpenGLRenderSystem(const std::shared_ptr<MeowEngine::OpenGLAssetManager>& assetManager,
@@ -130,4 +134,8 @@ void OpenGLRenderSystem::RenderGameView(MeowEngine::PerspectiveCamera* cameraObj
 
 void OpenGLRenderSystem::RenderUserInterface(entt::registry& registry, std::queue<std::shared_ptr<MeowEngine::ReflectionPropertyChange>>& inUIInputQueue, unsigned int frameBufferId, const double fps) {
     InternalPointer->RenderUserInterface(registry, inUIInputQueue, frameBufferId, fps);
+}
+
+void OpenGLRenderSystem::RenderPhysics(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
+    InternalPointer->RenderPhysics(cameraObject, registry);
 }
