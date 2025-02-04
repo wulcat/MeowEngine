@@ -33,6 +33,7 @@ void MeowEngine::simulator::PhysXPhysicsSystem::Create() {
 
     physx::PxRigidStatic* groundPlane = physx::PxCreatePlane(*gPhysics, physx::PxPlane(0,1,0,0), *gPhysics->createMaterial(0.0f, 0.0f, 0.6f));
     gScene->addActor(*groundPlane);
+
 //groundPlane->getGlobalPose()
   //  physx::PxShape* test =  gPhysics->createShape(physx::PxBoxGeometry(), *gPhysics->createMaterial(0.5f, 0.5f, 0.6f));
   //  physx::PxCreateStatic(*gPhysics, physx::PxTransform(), *test);
@@ -70,6 +71,8 @@ void MeowEngine::simulator::PhysXPhysicsSystem::AddRigidbody(entity::Transform3D
     physx::PxRigidDynamic* actor = physx::PxCreateDynamic(*gPhysics, physicsTransform, geometry, *gPhysics->createMaterial(0.5f, 0.5f, 0.6f), density);
 
     rigidbody.SetPhysicsBody(actor);
+    collider.SetPhysicsBody(actor);
+
     gScene->addActor(*actor);
 
 

@@ -21,3 +21,7 @@ ColliderComponent::ColliderComponent(entity::ColliderType inType, entity::BoxCol
 physx::PxGeometry& ColliderComponent::GetGeometry() {
     return Data->GetGeometry();
 }
+
+void ColliderComponent::SetPhysicsBody(physx::PxActor *inActor) {
+    Body = inActor;
+}

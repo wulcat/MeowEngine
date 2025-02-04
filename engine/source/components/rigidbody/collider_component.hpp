@@ -21,10 +21,12 @@ namespace MeowEngine::entity {
         virtual ~ColliderComponent() = default;
 
         physx::PxGeometry& GetGeometry();
+        void SetPhysicsBody(physx::PxActor* inActor);
 
     private:
         entity::ColliderType Type;
         entity::ColliderData* Data;
+        physx::PxActor* Body;
     };
 }
 

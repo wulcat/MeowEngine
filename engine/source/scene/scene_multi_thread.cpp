@@ -70,7 +70,8 @@ struct SceneMultiThread::Internal {
                                                   assets::ShaderPipelineType::Grid,
                                                   assets::ShaderPipelineType::Default,
                                                   assets::ShaderPipelineType::Line,
-                                                  assets::ShaderPipelineType::Sky
+                                                  assets::ShaderPipelineType::Sky,
+                                                  assets::ShaderPipelineType::PHYSICS_COLLIDER
                                           });
 
         assetManager->LoadStaticMeshes({
