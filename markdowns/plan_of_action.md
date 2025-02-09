@@ -15,7 +15,7 @@
 - [ ] Reworking camera system and merging rotations with other objects in game using new custom math library
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
 - [ ] Basic simulation tests
-- [ ] Able to see physics colliders (or at least primitives)
+- [x] Able to see physics colliders (or at least primitives)
 - [ ] Break....... Rejuvenating
 
 ## Meow Engine v0.5
