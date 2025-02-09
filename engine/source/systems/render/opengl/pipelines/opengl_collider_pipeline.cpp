@@ -3,9 +3,8 @@
 //
 
 #include "opengl_collider_pipeline.hpp"
-
-#include "physx_physics_system.hpp"
-
+#include "transform3d_component.hpp"
+#include "collider_component.hpp"
 
 namespace MeowEngine {
 
@@ -75,7 +74,9 @@ namespace MeowEngine {
         glDisable(GL_CULL_FACE);
         glUniformMatrix4fv(glGetUniformLocation(ShaderProgramID, "u_view"), 1, GL_FALSE, &cameraObject->GetViewMatrix()[0][0]);
         glUniformMatrix4fv(glGetUniformLocation(ShaderProgramID, "u_projection"), 1, GL_FALSE, &cameraObject->GetProjectionMatrix()[0][0]);
+#ifndef USING_GLES
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#endif
         glBindVertexArray(VAO);
 
         // NOTE: need to recheck this as layout in shader doesn't work for web builds
@@ -86,7 +87,9 @@ namespace MeowEngine {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, colliders.size());
+#ifndef USING_GLES
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
         glBindVertexArray(0);
     }
 } // MeowEngine
