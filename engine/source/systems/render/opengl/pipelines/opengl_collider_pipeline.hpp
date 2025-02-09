@@ -5,10 +5,11 @@
 #ifndef MEOWENGINE_OPENGL_COLLIDER_PIPELINE_HPP
 #define MEOWENGINE_OPENGL_COLLIDER_PIPELINE_HPP
 
-#include "glm_wrapper.hpp"
 #include "graphics_wrapper.hpp"
 
 #include "opengl_pipeline_base.hpp"
+#include "perspective_camera.hpp"
+#include "entt_wrapper.hpp"
 
 namespace MeowEngine {
 
@@ -17,10 +18,15 @@ namespace MeowEngine {
         ~OpenGLCollidePipeline() override;
 
     public:
-        void Render();
+        void Render(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry);
 
     private:
         const GLuint ShaderProgramID;
+
+        unsigned int VAO;
+        unsigned int VBO;
+        unsigned int EBO;
+        unsigned int instanceVBO;
     };
 
 } // MeowEngine
