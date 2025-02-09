@@ -121,7 +121,7 @@ struct OpenGLRenderSystem::Internal {
     }
 
     void RenderPhysics(MeowEngine::PerspectiveCamera* cameraObject, entt::registry& registry) {
-        AssetManager->GetShaderPipeline<OpenGLCollidePipeline>(ShaderPipelineType::PHYSICS_COLLIDER)->Render();
+        AssetManager->GetShaderPipeline<OpenGLCollidePipeline>(ShaderPipelineType::PHYSICS_COLLIDER)->Render(cameraObject, registry);
     }
 };
 

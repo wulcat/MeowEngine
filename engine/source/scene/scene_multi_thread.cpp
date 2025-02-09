@@ -384,6 +384,7 @@ struct SceneMultiThread::Internal {
 //            renderer.Render(&Camera, &lifeObject);
 //        }
         renderer.RenderGameView(&Camera, RegistryBuffer.GetFinal());
+        renderer.RenderPhysics(&Camera, RegistryBuffer.GetFinal());
     }
 
     void RenderUserInterface(MeowEngine::RenderSystem& renderer, unsigned int frameBufferId, const double fps) {
