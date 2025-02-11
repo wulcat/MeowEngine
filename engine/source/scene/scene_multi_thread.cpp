@@ -414,13 +414,16 @@ struct SceneMultiThread::Internal {
         else {
             // since physics is not working, we can update rigidbody in physics thread
             for (entt::entity entity: currentView) {
-                auto staging = stagingView.get<MeowEngine::entity::Transform3DComponent>(entity);
-                auto &rigidbody = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
                 auto &final = finalView.get<MeowEngine::entity::Transform3DComponent>(entity);
-
                 auto &current = currentView.get<MeowEngine::entity::Transform3DComponent>(entity);
 
+                auto staging = stagingView.get<MeowEngine::entity::Transform3DComponent>(entity);
+                auto &rigidbody = stagingView.get<MeowEngine::entity::RigidbodyComponent>(entity);
+
+                // Update physics body with transformation updates from main / final buffers
                 rigidbody.AddDelta(current.Position - final.Position);
+
+                // Update main buffer with rigidbody transformations
                 current.Position = staging.Position;
             }
         }

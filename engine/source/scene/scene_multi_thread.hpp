@@ -41,7 +41,7 @@ namespace MeowEngine {
         void Input(const float &deltaTime, const MeowEngine::input::InputManager& inputManager);
 
         // -----------------------------
-        void Update(const float& deltaTime);
+        virtual void Update(const float& deltaTime);
 
         // -----------------------------
         void RenderGameView(MeowEngine::RenderSystem& renderer);
