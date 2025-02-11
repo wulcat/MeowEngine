@@ -6,5 +6,6 @@
 #define MEOWENGINE_MATH_WRAPPER_HPP
 
 #include "vector3.hpp"
+#include "quaternion.hpp"
 
 #endif //MEOWENGINE_MATH_WRAPPER_HPP
