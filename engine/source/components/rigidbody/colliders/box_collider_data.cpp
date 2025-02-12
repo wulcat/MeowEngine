@@ -7,10 +7,12 @@
 
 using namespace MeowEngine::entity;
 
-BoxColliderData::BoxColliderData()
-{
-    //physx::PxTransform transform = physx::PxTransform(physx::PxVec3(0,10,0));
+BoxColliderData::BoxColliderData() {
     Geometry = physx::PxBoxGeometry(physx::PxVec3(0.5f, 0.5f, 0.5f));
+}
+
+BoxColliderData::BoxColliderData(MeowEngine::math::Vector3 inSize) {
+    Geometry = physx::PxBoxGeometry(physx::PxVec3(inSize.X, inSize.Y, inSize.Z));
 }
 
 physx::PxGeometry& BoxColliderData::GetGeometry() {

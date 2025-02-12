@@ -212,7 +212,7 @@ struct SceneMultiThread::Internal {
             RegistryBuffer.AddComponent<entity::ColliderComponent>(
                     cubeTest,
                     entity::ColliderType::BOX,
-                    new entity::BoxColliderData()
+                    new entity::BoxColliderData(MeowEngine::math::Vector3(0.7f, 0.7f, 0.7f))
             );
             RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
                     cubeTest
