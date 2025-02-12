@@ -10,7 +10,21 @@
 namespace MeowEngine {
 
     class SphereColliderData : public entity::ColliderData {
+    public:
+        // using explicit prevents any implicit conerstion / copy-init
+        // SphereColliderData data = 0 // error
+        // SphereColliderData data(); // success
+        explicit SphereColliderData();
+        explicit SphereColliderData(float inRadius);
 
+        virtual ~SphereColliderData() = default;
+
+        physx::PxGeometry& GetGeometry() override;
+
+    private:
+        float Radius;
+
+        physx::PxSphereGeometry Geometry;
     };
 
 } // MeowEngine

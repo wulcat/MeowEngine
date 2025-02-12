@@ -68,6 +68,13 @@ namespace MeowEngine {
         std::vector<glm::mat4> colliders;
         for(auto &&[entity, transform, collider]: registry.view<entity::Transform3DComponent, entity::ColliderComponent>().each()) {
             colliders.push_back(transform.TransformMatrix);
+            // cannot any more use transform matrix
+            // we will take the position, rotation & pick size collider data & create our own transform matrix
+            // this we can decouple and keep different sizes/positions
+            // when building transform matrix,
+            // position =transform position + collider offset
+            // rotation = transform rotation
+            // scale = transform scale * collider scale
         }
 
         glUseProgram(ShaderProgramID);

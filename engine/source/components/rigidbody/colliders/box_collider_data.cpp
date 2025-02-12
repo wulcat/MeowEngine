@@ -12,6 +12,7 @@ BoxColliderData::BoxColliderData() {
 }
 
 BoxColliderData::BoxColliderData(MeowEngine::math::Vector3 inSize) {
+    Size = inSize;
     Geometry = physx::PxBoxGeometry(physx::PxVec3(inSize.X, inSize.Y, inSize.Z));
 }
 
