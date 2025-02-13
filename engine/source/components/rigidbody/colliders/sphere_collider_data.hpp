@@ -21,8 +21,8 @@ namespace MeowEngine {
 
         physx::PxGeometry& GetGeometry() override;
 
-    private:
         float Radius;
+    private:
 
         physx::PxSphereGeometry Geometry;
     };

@@ -16,6 +16,7 @@
 - [ ] Implement Tracy throughout engine especially for tracking memory allocations
 - [ ] Basic simulation tests
 - [x] Able to see physics colliders (or at least primitives)
+- [ ] Different shapes of colliders
 - [ ] Break....... Rejuvenating
 
 ## Meow Engine v0.5

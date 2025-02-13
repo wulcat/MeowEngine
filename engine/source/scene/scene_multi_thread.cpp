@@ -190,7 +190,7 @@ struct SceneMultiThread::Internal {
                 cubeEntity1
         );
 
-        for(int i = 0 ; i < 2500; i++){
+        for(int i = 0 ; i < 1000; i++){
             const auto cubeTest = RegistryBuffer.AddEntity();
             RegistryBuffer.AddComponent<entity::LifeObjectComponent>(cubeTest, "cube");
             RegistryBuffer.AddComponent<entity::Transform3DComponent>(
@@ -218,6 +218,37 @@ struct SceneMultiThread::Internal {
                     cubeTest
             );
         }
+
+        for(int i = 0 ; i < 1000; i++){
+            const auto sphereTest = RegistryBuffer.AddEntity();
+            RegistryBuffer.AddComponent<entity::LifeObjectComponent>(sphereTest, "sphere");
+            RegistryBuffer.AddComponent<entity::Transform3DComponent>(
+                    sphereTest,
+                    Camera.GetProjectionMatrix() * Camera.GetViewMatrix(),
+                    glm::vec3{0.0f, 20.0f + i, 2},
+                    glm::vec3{0.5f, 0.5f,0.5f},
+                    glm::vec3{0.0f, 1.0f, 0.0f},
+                    0
+            );
+            RegistryBuffer.AddComponent<entity::MeshRenderComponent>(
+                    sphereTest,
+                    assets::ShaderPipelineType::Default,
+                    new MeowEngine::StaticMeshInstance{
+                            assets::StaticMeshType::Sphere,
+                            assets::TextureType::Pattern
+                    }
+            );
+            RegistryBuffer.AddComponent<entity::ColliderComponent>(
+                    sphereTest,
+                    entity::ColliderType::SPHERE,
+                    new SphereColliderData(1.0f)
+            );
+            RegistryBuffer.AddComponent<entity::RigidbodyComponent>(
+                    sphereTest
+            );
+        }
+
+
 
         // setup object
         // later query for all rigidbody, get the physx, get the collider and construct for physics

@@ -7,21 +7,27 @@
 
 using namespace MeowEngine::entity;
 
-void MeowEngine::entity::ColliderComponent::Reflect(){
+namespace MeowEngine {
+    void entity::ColliderComponent::Reflect() {
 //    REGISTER_PROPERTY(RigidbodyComponent, Position, MeowEngine::math::Vector3);
 
-    MeowEngine::Log("Reflected", "ColliderComponent");
-}
+        MeowEngine::Log("Reflected", "ColliderComponent");
+    }
 
-ColliderComponent::ColliderComponent(entity::ColliderType inType, entity::BoxColliderData* inData) {
-    Type = inType;
-    Data = inData;
-}
+    ColliderComponent::ColliderComponent(entity::ColliderType inType, entity::ColliderData *inData) {
+        Type = inType;
+        Data = inData;
+    }
 
-physx::PxGeometry& ColliderComponent::GetGeometry() {
-    return Data->GetGeometry();
-}
+    entity::ColliderType &ColliderComponent::GetType() {
+        return Type;
+    }
 
-void ColliderComponent::SetPhysicsBody(physx::PxActor *inActor) {
-    Body = inActor;
+    physx::PxGeometry &ColliderComponent::GetGeometry() {
+        return Data->GetGeometry();
+    }
+
+    void ColliderComponent::SetPhysicsBody(physx::PxActor *inActor) {
+        Body = inActor;
+    }
 }

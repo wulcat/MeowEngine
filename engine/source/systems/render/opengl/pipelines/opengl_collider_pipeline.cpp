@@ -75,6 +75,24 @@ namespace MeowEngine {
             // position =transform position + collider offset
             // rotation = transform rotation
             // scale = transform scale * collider scale
+            glm::mat4 transformMatrix = glm::translate(transform.IdentityMatrix, glm::vec3(transform.Position.X, transform.Position.Y, transform.Position.Z))
+                                        * glm::rotate(transform.IdentityMatrix, glm::radians(transform.RotationDegrees), transform.RotationAxis);
+            switch (collider.GetType()) {
+                case entity::BOX: {
+                    auto &data = collider.GetData<entity::BoxColliderData>();
+                    transformMatrix *= glm::scale(transform.IdentityMatrix, glm::vec3(data.Size.X, data.Size.Y, data.Size.Z));
+                    break;
+                }
+                case entity::SPHERE: {
+                    auto &data = collider.GetData<SphereColliderData>();
+                    transformMatrix *= glm::scale(transform.IdentityMatrix, glm::vec3(data.Radius, data.Radius, data.Radius));
+                    break;
+                }
+                default:
+                    break;
+            }
+
+
         }
 
         glUseProgram(ShaderProgramID);

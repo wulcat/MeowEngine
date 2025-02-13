@@ -19,9 +19,10 @@ namespace MeowEngine::entity {
         virtual ~BoxColliderData() = default;
 
         physx::PxGeometry& GetGeometry() override;
-    private:
+
         MeowEngine::math::Vector3 Size; // could a different class
 
+    private:
         physx::PxBoxGeometry Geometry;
     };
 }
